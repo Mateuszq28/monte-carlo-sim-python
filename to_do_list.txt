@@ -1,0 +1,11 @@
+plot zamiast scatter wykresów
+
+plot surface
+
+scipy plot
+
+matplotlib plot
+
+poprawić slice'y
+
+vispy

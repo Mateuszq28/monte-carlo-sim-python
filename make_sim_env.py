@@ -106,6 +106,9 @@ class PropEnv:
         return new_env
 
     def vizualize(self):
+        self.vizualize_plt()
+
+    def vizualize_plt2(self):
         """
         Plot 3D interactive plot using Matplotlib of self.Env
         :return: None
@@ -116,12 +119,133 @@ class PropEnv:
         # colors
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
         color_idx = 0
-        color_idx_limit = len(color_bufor)+1
+        color_idx_limit = len(color_bufor)
         for series in self.composition["points_series"]:
             x_series = series[:, 0]
             y_series = series[:, 1]
             z_series = series[:, 2]
             ax.scatter(x_series, y_series, z_series, c=color_bufor[color_idx], alpha=1)
+            color_idx = (color_idx+1) % color_idx_limit
+        plt.show()
+
+    def vizualize_vispy(self):
+        """
+        Plot 3D interactive plot using Matplotlib of self.Env
+        :return: None
+        """
+        import PIL
+        from PIL import ImageColor
+        self.make3d_points_series()
+
+
+        import sys
+        from vispy import app, visuals, scene
+
+        # build your visuals, that's all
+        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+        # The real-things : plot using scene
+        # build canvas
+        canvas = scene.SceneCanvas(keys="interactive", show=True)
+
+        # Add a ViewBox to let the user zoom/rotate
+        view = canvas.central_widget.add_view()
+        view.camera = "turntable"
+        view.camera.fov = 45
+        view.camera.distance = 500
+
+        # data
+        color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933',
+                       '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
+        counter = 0
+        pos_list = []
+        colrs_list = []
+        for series in self.composition["points_series"]:
+            pos_list.append(series)
+            n = len(series)
+            colors = np.ones((n, 4), dtype=np.float32)
+            rgb = PIL.ImageColor.getrgb(color_names[counter % len(color_names)])
+            rgb_norm = np.array(rgb) / 255.0
+            for i in range(n):
+                colors[i,0:3] = rgb_norm
+                colors[i,3] = 1
+            counter += 1
+            colrs_list.append(colors)
+
+        pos = np.concatenate(pos_list)
+        colrs = np.concatenate(colrs_list)
+
+        # plot ! note the parent parameter
+        p1 = Scatter3D(parent=view.scene)
+        p1.set_gl_state("translucent", blend=True, depth_test=True)
+        p1.set_data(
+            pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
+        )
+
+        # run
+        if sys.flags.interactive != 1:
+            app.run()
+
+    def vizualize_vispy2(self):
+        """
+        Plot 3D interactive plot using Matplotlib of self.Env
+        :return: None
+        """
+        self.make3d_points_series()
+
+
+        import sys
+        from vispy import app, visuals, scene
+
+        # build your visuals, that's all
+        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+        # The real-things : plot using scene
+        # build canvas
+        canvas = scene.SceneCanvas(keys="interactive", show=True)
+
+        # Add a ViewBox to let the user zoom/rotate
+        view = canvas.central_widget.add_view()
+        view.camera = "turntable"
+        view.camera.fov = 45
+        view.camera.distance = 500
+
+        # data
+        pos = self.composition["points_series"][0]
+        n = len(pos)
+        colors = np.ones((n, 4), dtype=np.float32)
+        for i in range(n):
+            colors[i] = (i / n, 1.0 - i / n, 0, 0.8)
+
+        # plot ! note the parent parameter
+        p1 = Scatter3D(parent=view.scene)
+        p1.set_gl_state("translucent", blend=True, depth_test=True)
+        p1.set_data(
+            pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue"
+        )
+
+        # run
+        if sys.flags.interactive != 1:
+            app.run()
+
+    def vizualize_plt(self):
+        """
+        Plot 3D interactive plot using Matplotlib of self.Env
+        :return: None
+        """
+        self.make3d_points_series()
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        # colors
+        color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
+        color_idx = 0
+        color_idx_limit = len(color_bufor)
+        for series in self.composition["points_series"]:
+            x_series = series[:, 0]
+            y_series = series[:, 1]
+            z_series = series[:, 2]
+            ax.scatter(x_series, y_series, z_series, c=color_bufor[color_idx], alpha=1)
+            # ax.plot_surface(x_series, y_series, z_series, c=color_bufor[color_idx], alpha=1)
             color_idx = (color_idx+1) % color_idx_limit
         plt.show()
 
