@@ -268,19 +268,18 @@ class PropEnv:
         :return: None
         """
         if not ((fill_rec is None) ^ (end_p is None)):
-            raise Exception("You have to choose fillRec or end_p")
+            raise Exception("You have to choose fillRec xor end_p")
         elif end_p is None:
             end_p = start_p + fill_rec
 
         # if points are fractions of dimensions, count positions
         for point in [start_p, end_p]:
-            for c in point:
-                for i in range(3):
-                    if isinstance(point[i], float):
-                        point[i] = int(point[i] * self.shape[i])
+            for i in range(3):
+                if isinstance(point[i], float):
+                    point[i] = int(point[i] * self.shape[i])
 
         # block for input correctness
-        for dimIdx in range(len(end_p)): # it is constant range(3)
+        for dimIdx in range(3):
             if end_p[dimIdx] < start_p[dimIdx]:
                 raise Exception("end_p can't be smaller than startP")
             # if endP is not in Cube, we cut it to Cube's borders
@@ -292,6 +291,21 @@ class PropEnv:
             for j in range(start_p[1], end_p[1]):
                 for k in range(start_p[2], end_p[2]):
                     self.Env[i, j, k] = fill
+
+
+
+
+
+
+
+    def make_default_env(self):
+        propEnv = self.PropEnv()
+        propEnv.fill_cube(1, [0, 0, 0], end_p=[1.0, 1.0, 0.25])
+        return propEnv
+
+
+
+
 
 
 

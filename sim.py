@@ -10,17 +10,25 @@ class Sim():
 
             # make propagation environment
             if config['make_default_env']:
-                config['env_in_filename']
-                propEnv = self.make_default_env()
+                prop_env_path = config['default_env_path']
+                propEnv = make_sim_env.make_default_env()
             else:
-                prop_env_filename = config['make_default_env']
-                propEnv = make_sim_env.load_json()
-
-                if config['env_filename']:
+                prop_env_path = config['non_default_env_path']
+                propEnv = make_sim_env.load_env_json(prop_env_path)
                 
+            # make propagation environment
             if config['start_point'] is None:
                             half_depth = 
                             start_point = ()
+
+        
+
+            self.prop_env_filename = prop_env_path
+            self.propEnv = propEnv
+
+
+
+
                             
 
     def start_sim(self):
@@ -30,7 +38,8 @@ class Sim():
     def propagate_photon(self, start_point, ):
         pass
 
-    def make_default_env(self):
-        propEnv = make_sim_env.PropEnv()
-        propEnv.fill_cube(1, [0, 0, 0], end_p=[1.0, 1.0, 0.25])
-        return propEnv
+    
+
+
+
+        
