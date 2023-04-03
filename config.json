@@ -1,0 +1,16 @@
+{
+    "flag_make_default_env": true,
+    "flag_make_default_light_source": true,
+    "flag_make_default_prop_setup_file": true,
+
+    "flag_use_default_env": true,
+    "alternative_env_path": "",
+    "flag_use_default_light_surce": true,
+    "alternative_light_source_path": "",
+    "flag_use_default_prop_setup": true,
+    "alternative_prop_setup_path": "",
+
+    "flag_make_prop_setup_from_componentes": false,
+
+    "number_of_photons": 10
+}

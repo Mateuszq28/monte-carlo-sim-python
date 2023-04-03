@@ -1,0 +1,3 @@
+pomidory 04.03.2023: 3
+pomidory 05.03.2023: 7
+pomidory 06.03.2023: 6
