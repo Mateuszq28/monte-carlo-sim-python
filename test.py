@@ -812,8 +812,14 @@ class Test():
 
 def main():
     test = Test()
-    test.test13()
-    test.test14()
+
+    # generator liczb losowych
+    test.test8()
+    test.test9()
+
+    # wizualizacja i slice
+    # test.test13()
+    # test.test14()
 
 if __name__ == '__main__':
     main()
