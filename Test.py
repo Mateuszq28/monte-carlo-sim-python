@@ -246,8 +246,8 @@ class Test():
             else:
                 plt.plot(scope, y)
             t0 = "generator II"
-            t1 = r"$\mathregular{roots(parabola1(s) - RND)}$"
-            t2 = r'$\mathregular{roots(-s^2+\pi^2 - RND)}$ dla s $\in$ $<-\pi, \pi>$'
+            t1 = r"$\mathregular{roots(F(s) - RND)}$"
+            t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$'
             title = ' = '.join([t0, t1, t2])
             plt.title(title)
             plt.xlabel("rnd = F(S)")
@@ -492,8 +492,8 @@ class Test():
                 plt.plot(scope, y)
             # title = "roots(poly) = roots(parabola1(s) - RND) dla s w <{}, {}>".format(min_s_scope, max_s_scope)
             t0 = "generator II"
-            t1 = r"$\mathregular{roots(parabola1(s) - RND)}$"
-            t2 = r'$\mathregular{roots(-s^2+\pi^2 - RND)}$ dla s $\in$ ' + '<{}, {}>'.format(round(min_s_scope, 2), round(max_s_scope, 2))
+            t1 = r"$\mathregular{roots(F(s) - RND)}$"
+            t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$' + '<{}, {}>'.format(round(min_s_scope, 2), round(max_s_scope, 2))
             title = ' = '.join([t0, t1, t2])
             plt.title(title)
             plt.xlabel("rnd = F(S)")
