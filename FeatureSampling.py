@@ -227,7 +227,7 @@ class FunSampling():
         s = -math.log(rnd) / a #flipped
         return s
     
-    def parabola1(self, rnd=None, filt_roots=True, debug=True,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi):
+    def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi):
         """"
         constant integration scope <-pi, s> (in distribution)
         these values should not be changed:
