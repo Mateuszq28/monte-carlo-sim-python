@@ -1,4 +1,4 @@
 from Object3D import Object3D
 
 class PropEnv(Object3D):
-    pass
+    def __

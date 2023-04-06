@@ -799,8 +799,8 @@ class Test():
             propEnv.fill_cube(1, [0, 0, 0], end_p=[1.0, 0.25, 0.5])
             mat = ByMatplotlib()
             vis = ByVispy()
-            mat.show_stride(propEnv, stride=(20, 20, 20))
-            vis.show_stride(propEnv, stride=(20, 20, 20))
+            # mat.show_stride(propEnv, stride=(20, 20, 20))
+            # vis.show_stride(propEnv, stride=(20, 20, 20))
             mat.show_stride(propEnv, stride=10)
             vis.show_stride(propEnv, stride=10)
 
@@ -811,6 +811,7 @@ class Test():
 
         def slice_arr3p(self):
             a = np.arange(0,100**3).astype(int).reshape(100,100,100)
+            a_obj = Object3D(arr = a)
             slice = Slice()
             a_slice = slice.slice_arr3p(a)
             a_slice3d = a_slice.reshape(a_slice.shape[0],a_slice.shape[1],-1)

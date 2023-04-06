@@ -1,3 +1,8 @@
+poprawić slice
+poprawić projection
+poprawić test związany z slice i projection
+
+
 plot zamiast scatter wykresów
 
 plot surface
