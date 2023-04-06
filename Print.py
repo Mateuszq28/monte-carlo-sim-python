@@ -1,7 +1,6 @@
 from Object3D import Object3D
 import numpy as np
 import os
-import PIL
 from PIL import ImageColor, Image
 
 class Print(Object3D):
