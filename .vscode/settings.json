@@ -1,6 +1,6 @@
 {
     "workbench.preferredDarkColorTheme": "Default High Contrast Light",
-    "workbench.colorTheme": "Material Theme Palenight",
+    "workbench.colorTheme": "Material Theme Palenight High Contrast",
     "python.analysis.typeCheckingMode": "basic",
     "workbench.iconTheme": "vs-seti"
 }

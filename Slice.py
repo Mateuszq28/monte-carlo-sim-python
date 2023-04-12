@@ -4,6 +4,7 @@ import PIL
 from PIL import ImageColor, Image
 import os
 import math
+from typing import List
 
 class Slice(Object3D):
     def __init__(self):
@@ -77,7 +78,7 @@ class Slice(Object3D):
         return int_p_arr
 
 
-    def p3_to_normal_vec(self, p1, p2, p3):
+    def p3_to_normal_vec(self, p1:List[int], p2:List[int], p3:List[int]):
         """
         Gets three points that spread the plane and return a normal vector of this plane
         """
@@ -100,7 +101,13 @@ class Slice(Object3D):
         D = plane_equation[3]
         dist = np.abs(np.dot(p, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
         return dist
+    
 
+    def dist_p_to_plane_by_norm_vec(self, p_out_plane, p_in_plane, plane_normal_vec):
+        eq = self.plane_equation(p_in_plane, plane_normal_vec)
+        dist = self.dist_p_to_plane(p_out_plane, eq)
+        return dist
+    
 
     def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle"):
         b = object3D.body
@@ -108,12 +115,12 @@ class Slice(Object3D):
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_point_decoder(p1, p2, p3, b.shape)
         normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
         sh = b.shape
         for i in range(sh[0]):
             for j in range(sh[1]):
                 for k in range(sh[2]):
                     particle = [i,j,k]
-                    plane_equation = self.plane_equation(p1, normal_vec)
                     dist_from_plane = self.dist_p_to_plane(particle, plane_equation)
 
 
