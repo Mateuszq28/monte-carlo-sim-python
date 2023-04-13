@@ -48,6 +48,16 @@ class Object3D():
         self.shape = [self.depth, self.width, self.height]
 
 
+    def rebuild_from_array(self, arr):
+        del self.body
+        del self.bodyThumb
+        del self.composition
+        self.initialize_body_from_array(arr)
+        self.bodyThumb = None
+        self.composition = dict()
+        self.analize_materials()
+
+
     def analize_materials(self):
         """
         Save unique values found in self.body to self.composition["labels"].

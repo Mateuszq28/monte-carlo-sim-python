@@ -2,8 +2,10 @@ from Object3D import Object3D
 import numpy as np
 
 class Projection(Object3D):
-    def __init__(self):
+    def __init__(self, x=100, y=100, z=100, arr=None):
+        super().__init__(x, y, z, arr)
         self.ommit = [0]
+        self.reset_val = 0
 
     def x_high(self, object3D:Object3D):
         self.throw(object3D, 0, -1)
@@ -40,7 +42,7 @@ class Projection(Object3D):
         # array with flag if value was already sampled from body
         is_sampled = np.full((lvl_ax1_len, lvl_ax2_len), False)
         # array with values sampled from body (projected on the plane)
-        samples = np.zeros((lvl_ax1_len, lvl_ax2_len))
+        samples = np.full((lvl_ax1_len, lvl_ax2_len), self.reset_val)
         if xray == 1:
             proj_ax_range = range(proj_ax_len)
         elif xray == -1:

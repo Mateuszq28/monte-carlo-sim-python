@@ -1,6 +1,7 @@
 poprawić slice
 poprawić projection
 poprawić test związany z slice i projection
+test odległośći punktu od płaszczyzny slice
 
 
 plot zamiast scatter wykresów
