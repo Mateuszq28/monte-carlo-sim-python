@@ -14,7 +14,7 @@ from vispy import app, visuals, scene
 
 class ByVispy(View):
     def __init__(self):
-        pass
+        super().__init__()
 
     def show_body(self, object3D: Object3D):
         return self.show_body1(object3D)

@@ -16,11 +16,11 @@ class LightSourcePoint():
         self.photon_limit = photon_limit
 
 class LightSource(Object3D):
-    
-    def __init__(self, label=-1):
-        super()
-        self.light_label = label
 
+    def __init__(self, x=100, y=100, z=100, arr=None, label=-1):
+        super().__init__(x, y, z, arr)
+        self.light_label = label
+        
     
     def initialize_source(self, body_type, body, flag_individual_tropic, tropic, flag_isotropic):
         if body_type == "rectangular":
