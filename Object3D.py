@@ -149,7 +149,20 @@ class Object3D():
         with open(path, 'w') as f:
             d = json.load(f)
         return Object3D(arr=d["body"])
+    
 
+    def float_shape_to_int(self, float_point):
+        int_point = []
+        for i in range(3):
+            if isinstance(float_point[i], float):
+                int_point.append(int(float_point[i] * self.shape[i]))
+            elif isinstance(float_point[i], int) or isinstance(float_point[i], np.int32):
+                int_point.append(float_point[i])
+            else:
+                print(type(float_point[i]))
+                raise ValueError("float_point should be int or float")
+        return int_point
+                
 
     def fill_cube(self, fill, start_p, fill_rec=None, end_p=None):
         """
@@ -165,25 +178,25 @@ class Object3D():
         if not ((fill_rec is None) ^ (end_p is None)):
             raise Exception("You have to choose fillRec xor end_p")
         elif end_p is None:
-            end_p = start_p + fill_rec
+            start_pi = self.float_shape_to_int(start_p)
+            fill_reci = self.float_shape_to_int(fill_rec)
+            end_p = np.array(start_pi) + np.array(fill_reci)
 
         # if points are fractions of dimensions, count positions
-        for point in [start_p, end_p]:
-            for i in range(3):
-                if isinstance(point[i], float):
-                    point[i] = int(point[i] * self.shape[i])
+        start_pi = self.float_shape_to_int(start_p)
+        end_pi = self.float_shape_to_int(end_p)
 
         # block for input correctness
         for dimIdx in range(3):
-            if end_p[dimIdx] < start_p[dimIdx]:
+            if end_pi[dimIdx] < start_pi[dimIdx]:
                 raise Exception("end_p can't be smaller than startP")
             # if endP is not in Cube, we cut it to Cube's borders
-            if end_p[dimIdx] > self.shape[dimIdx]:
-                end_p[dimIdx] = self.shape[dimIdx]
+            if end_pi[dimIdx] > self.shape[dimIdx]:
+                end_pi[dimIdx] = self.shape[dimIdx]
 
         # fill in loop
-        for i in range(start_p[0], end_p[0]):
-            for j in range(start_p[1], end_p[1]):
-                for k in range(start_p[2], end_p[2]):
+        for i in range(start_pi[0], end_pi[0]):
+            for j in range(start_pi[1], end_pi[1]):
+                for k in range(start_pi[2], end_pi[2]):
                     self.body[i, j, k] = fill
         

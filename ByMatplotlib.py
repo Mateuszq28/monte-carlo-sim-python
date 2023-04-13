@@ -7,20 +7,20 @@ class ByMatplotlib(View):
     def __init__(self):
         super().__init__()
 
-    def show_body(self, object3D: Object3D):
-        return self.show_body1(object3D)
+    def show_body(self, object3D: Object3D, title=""):
+        return self.show_body1(object3D, title=title)
     
-    def show_body_surface(self, object3D: Object3D):
-        return self.show_body_surface1(object3D)
+    def show_body_surface(self, object3D: Object3D, title=""):
+        return self.show_body_surface1(object3D, title=title)
 
     # NEEDS_REFACTOR
-    def show_body_surface1(self, object3D:Object3D):
+    def show_body_surface1(self, object3D:Object3D, title=""):
         """
         Plot 3D interactive plot using Matplotlib of object3D.body
         :return: None
         """
         object3D.make3d_points_series()
-        fig = plt.figure()
+        fig = plt.figure(num=title)
         ax = fig.add_subplot(111, projection='3d')
         # colors
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
@@ -35,13 +35,13 @@ class ByMatplotlib(View):
             color_idx = (color_idx+1) % color_idx_limit
         plt.show()
 
-    def show_body1(self, object3D:Object3D):
+    def show_body1(self, object3D:Object3D, title=""):
         """
         Plot 3D interactive plot using Matplotlib of object3D.body
         :return: None
         """
         object3D.make3d_points_series()
-        fig = plt.figure()
+        fig = plt.figure(num=title)
         ax = fig.add_subplot(111, projection='3d')
         # colors
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']

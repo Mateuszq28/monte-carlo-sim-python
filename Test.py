@@ -804,42 +804,75 @@ class Test():
             mat.show_stride(propEnv, stride=10)
             vis.show_stride(propEnv, stride=10)
 
+        def obj3d_array_for_tests(self, method="end_p"):
+            ob = [Object3D() for _ in range(7)]
+            if method == "end_p" or method == "end_p_float":
+                ob[0].fill_cube(fill=1, start_p=(0.,0.,0.), fill_rec=None, end_p=(0.2, 0.2, 0.2))
+                ob[1].fill_cube(fill=1, start_p=(0,0,0), fill_rec=None, end_p=(0.5, 0.5, 0.5))
+                ob[1].fill_cube(fill=1, start_p=(0.5,0.5,0.5), fill_rec=None, end_p=(1.0, 1.0, 1.0))
+                ob[2].fill_cube(fill=2, start_p=(0,0,0), fill_rec=None, end_p=(0.5, 0.5, 0.5))
+                ob[2].fill_cube(fill=3, start_p=(0.5,0.5,0.5), fill_rec=None, end_p=(1.0, 1.0, 1.0))
+                ob[3].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=None, end_p=(0.75, 0.9, 0.5))
+                ob[4].fill_cube(fill=1, start_p=(0,0,0), fill_rec=None, end_p=(0.8, 0.2, 0.4))
+                ob[5].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=None, end_p=(0.75, 0.75, 0.75))
+                ob[6].fill_cube(fill=1, start_p=(0.2,0.2,0.2), fill_rec=None, end_p=(0.8, 0.8, 0.8))
+            elif method == "end_p_int":
+                ob[0].fill_cube(fill=1, start_p=(0.,0.,0.), fill_rec=None, end_p=(20, 20, 20))
+                ob[1].fill_cube(fill=1, start_p=(0,0,0), fill_rec=None, end_p=(50, 50, 50))
+                ob[1].fill_cube(fill=1, start_p=(0.5,0.5,0.5), fill_rec=None, end_p=(100, 100, 100))
+                ob[2].fill_cube(fill=2, start_p=(0,0,0), fill_rec=None, end_p=(50, 50, 50))
+                ob[2].fill_cube(fill=3, start_p=(0.5,0.5,0.5), fill_rec=None, end_p=(100, 100, 100))
+                ob[3].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=None, end_p=(75, 90, 50))
+                ob[4].fill_cube(fill=1, start_p=(0,0,0), fill_rec=None, end_p=(80, 20, 40))
+                ob[5].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=None, end_p=(75, 75, 75))
+                ob[6].fill_cube(fill=1, start_p=(0.2,0.2,0.2), fill_rec=None, end_p=(80, 80, 80))
+            elif method == "fill_rec" or method == "fill_rec_int":
+                ob[0].fill_cube(fill=1, start_p=(0,0,0), fill_rec=(20, 20, 20))
+                ob[1].fill_cube(fill=1, start_p=(0,0,0), fill_rec=(50, 50, 50))
+                ob[1].fill_cube(fill=1, start_p=(0.5,0.5,0.5), fill_rec=(50, 50, 50))
+                ob[2].fill_cube(fill=2, start_p=(0,0,0), fill_rec=(50, 50, 50))
+                ob[2].fill_cube(fill=3, start_p=(0.5,0.5,0.5), fill_rec=(50, 50, 50))
+                ob[3].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=(50, 65, 25))
+                ob[4].fill_cube(fill=1, start_p=(0,0,0), fill_rec=(80, 20, 40))
+                ob[5].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=(50,50,50))
+                ob[6].fill_cube(fill=1, start_p=(0.2,0.2,0.2), fill_rec=(60,60,60))
+            elif method == "fill_rec_float":
+                ob[0].fill_cube(fill=1, start_p=(0.,0.,0.), fill_rec=(0.2, 0.2, 0.2))
+                ob[1].fill_cube(fill=1, start_p=(0,0,0), fill_rec=(0.5, 0.5, 0.5))
+                ob[1].fill_cube(fill=1, start_p=(0.5,0.5,0.5), fill_rec=(0.5, 0.5, 0.5))
+                ob[2].fill_cube(fill=2, start_p=(0,0,0), fill_rec=(0.5, 0.5, 0.5))
+                ob[2].fill_cube(fill=3, start_p=(0.5,0.5,0.5), fill_rec=(0.5, 0.5, 0.5))
+                ob[3].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=(0.5, 0.65, 0.25))
+                ob[4].fill_cube(fill=1, start_p=(0,0,0), fill_rec=(0.8, 0.2, 0.4))
+                ob[5].fill_cube(fill=1, start_p=(0.25,0.25,0.25), fill_rec=(0.5,0.5,0.5))
+                ob[6].fill_cube(fill=1, start_p=(0.2,0.2,0.2), fill_rec=(0.6,0.6,0.6))
+            else:
+                raise ValueError("bad method string")
+            return ob
+
 
     class Test_Slice():
         def __init__(self):
             pass
 
-        def slice_arr3p(self):
-            a = np.arange(0,100**3).astype(int).reshape(100,100,100)
-            a_obj = Object3D(arr = a)
-            slice = Slice()
-            a_slice = slice.slice_arr3p(a)
-            a_slice3d = a_slice.reshape(a_slice.shape[0],a_slice.shape[1],-1)
-            propEnv = PropEnv(arr=a_slice3d)
+        def fromObj3D(self):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # ob = ob[5:]
+            # visualize
             vis = ByVispy()
-            vis.show_stride(propEnv, 20)
+            matplot = ByMatplotlib()
+            for i in range(len(ob)):
+                o = ob[i]
+                title = "ob" + str(i)
+                # vis.show_body(o, title=title)
+                matplot.show_stride(o, stride=10, title=title)
+                
 
-        def save_slice_image1(self):
-            a = np.arange(0,100**3).astype(int).reshape(100,100,100)
-            slice = Slice()
-            a_slice = slice.slice_arr3p(a)
-            slice.save_slice_image(a_slice, filename="slice1.png")
 
-        def save_slice_image2(self):
-            propEnv = PropEnv()
-            propEnv.fill_cube(1, [0, 0, 0], end_p=[1.0, 0.25, 0.5])
-            a = propEnv.body
-            slice = Slice()
-            a_slice = slice.slice_arr3p(a)
-            slice.save_slice_image(a_slice, filename="slice2.png")
 
-        def save_slice_image3(self):
-            propEnv = PropEnv()
-            propEnv.fill_cube(1, [0, 0, 0], end_p=[1.0, 0.25, 0.5])
-            a = propEnv.body
-            a_slice = a[:,:,0]
-            slice = Slice()
-            slice.save_slice_image(a_slice, filename="slice3.png")
+
 
     def test1(self):
         test_FunOrigin = self.Test_FunOrigin()
@@ -915,18 +948,15 @@ class Test():
 
     def test14(self):
         t = self.Test_Slice()
-        t.slice_arr3p()
-        t.save_slice_image1()
-        t.save_slice_image2()
-        t.save_slice_image3()
+        t.fromObj3D()
 
 
 def main():
     test = Test()
 
     # generator liczb losowych
-    test.test8()
-    test.test9()
+    # test.test8()
+    # test.test9()
 
     # generator liczb losowych scope
     # test.test10()
@@ -934,7 +964,7 @@ def main():
 
     # wizualizacja i slice
     # test.test13()
-    # test.test14()
+    test.test14()
 
 if __name__ == '__main__':
     main()

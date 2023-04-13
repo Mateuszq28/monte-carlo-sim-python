@@ -1,12 +1,12 @@
-poprawić slice
-poprawić projection
-poprawić test związany z slice i projection
+poprawić test związany z slice i projection i print
 test odległośći punktu od płaszczyzny slice
 
 
 plot zamiast scatter wykresów
 
-plot surface
+plot surface w ByMatplotLib
+plot surface w Vispy
+poeksperymentować z różnymi plotamio Vispy
 
 scipy plot
 

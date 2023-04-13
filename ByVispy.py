@@ -16,10 +16,10 @@ class ByVispy(View):
     def __init__(self):
         super().__init__()
 
-    def show_body(self, object3D: Object3D):
-        return self.show_body1(object3D)
+    def show_body(self, object3D: Object3D, title=""):
+        return self.show_body1(object3D, title)
 
-    def show_body1(self, object3D:Object3D):
+    def show_body1(self, object3D:Object3D, title=""):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
@@ -31,7 +31,7 @@ class ByVispy(View):
 
         # The real-things : plot using scene
         # build canvas
-        canvas = scene.SceneCanvas(keys="interactive", show=True)
+        canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
 
         # Add a ViewBox to let the user zoom/rotate
         view = canvas.central_widget.add_view()
@@ -71,7 +71,7 @@ class ByVispy(View):
         if sys.flags.interactive != 1:
             app.run()
 
-    def show_body2(self, object3D:Object3D):
+    def show_body2(self, object3D:Object3D, title=""):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
@@ -83,7 +83,7 @@ class ByVispy(View):
 
         # The real-things : plot using scene
         # build canvas
-        canvas = scene.SceneCanvas(keys="interactive", show=True)
+        canvas = scene.SceneCanvas(keys="interactive", title=title, show=True)
 
         # Add a ViewBox to let the user zoom/rotate
         view = canvas.central_widget.add_view()
