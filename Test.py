@@ -32,15 +32,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "exp1(a,s) = math.exp(-a*s)/a |a={}| = math.exp(-{}*s)/{}".format(a_round,a_round,a_round)
-            # title = r'$\mathregular{{p(s) = exp1(a,s) = \frac{{e^{{-a\cdot{{s}}}}}}{{a}}; |a={}| = \frac{{e^{{-{}\cdot{{s}}}}}}{{{}}}}}$'.format(a_round,a_round,a_round)
-            t_ps = r'$\mathregular{p(s)}$'
-            t_exp = r'$\mathregular{exp1(a,s)}$'
-            t_undf = r'$\mathregular{\frac{e^{-a\cdot{s}}}{a}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{e^{-a1\cdot{s}}}{a1}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_ps, t_exp, t_undf, t_df])
+            title = monteCarloSampling.exp1.function_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.function_label.xlabel
+            ylabel = monteCarloSampling.exp1.function_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("p(s)")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funIntegral scope
@@ -55,16 +52,11 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "(-math.exp(-a*s))/a**2 |a={}| = (-math.exp(-{}*s))/{}**2".format(a_round,a_round,a_round)
-            # title = r'$\mathregular{\int exp1(a,s) \,ds = \int \frac{e^{-a\cdot{s}}}{a} \,ds = \frac{-e^{-a\cdot{s}}}{a^{2}}; |a=a1| = \frac{-e^{-a1\cdot{s}}}{a1^{2}}}$'.replace('a1', str(a_round))
-            t_int = r'$\mathregular{\int exp1(a,s) \,ds}$'
-            t_int_undf = r'$\mathregular{\int \frac{e^{-a\cdot{s}}}{a} \,ds}$'
-            t_undf = r'$\mathregular{\frac{-e^{-a\cdot{s}}}{a^{2}}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{-e^{-a1\cdot{s}}}{a1^{2}}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_int, t_int_undf, t_undf, t_df])
+            title = monteCarloSampling.exp1.integral_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.integral_label.xlabel
+            ylabel = monteCarloSampling.exp1.integral_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            # ylabel = "Integral(exp1(a,s))ds"
-            ylabel = r'$\int exp1(a,s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             plt.show()
 
@@ -80,16 +72,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "F(s) = RND = (1 - exp(-as))/a**2 |a={}| = (1 - exp(-{}s))/{}**2".format(a_round,a_round,a_round)
-            title = r"$\mathregular{F(s) = RND = \frac{1 - e^{-a\cdot{s}}}{a^2}; |a=a1| = \frac{1 - e^{-a1\cdot{s}}}{a1^2}}$".replace("a1",str(a_round))
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_0 ^s \frac{e^{-a\cdot{s}}}{a} \,ds}$'
-            t_undf = r'$\mathregular{\frac{1 - e^{-a\cdot{s}}}{a^2}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{1 - e^{-a1\cdot{s}}}{a1^2}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
+            title = monteCarloSampling.exp1.distribution_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.distribution_label.xlabel
+            ylabel = monteCarloSampling.exp1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funSampling
@@ -106,14 +94,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
-            # title = r"$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1| = \frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$".replace("a1",str(a_round))
-            t_gen = 'generator I'
-            t_undf = r'$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_gen, t_undf, t_df])
+            title = monteCarloSampling.exp1.functionForSampling_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.functionForSampling_label.xlabel
+            ylabel = monteCarloSampling.exp1.functionForSampling_label.ylabel
             plt.title(title)
-            plt.xlabel("rnd = F(S)")
-            plt.ylabel("s")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
 
@@ -130,13 +116,12 @@ class Test():
             else:
                 plt.plot(scope/math.pi, y)
             # title = "p(s) = parabola1(s) = -s**2 + math.pi**2"
-            t_ps = 'p(s)'
-            t_parab = r'$\mathregular{parabola1(s)}$'
-            t_df = r'$\mathregular{-s^2+\pi^2}$'
-            title = ' = '.join([t_ps, t_parab, t_df])
+            title = monteCarloSampling.parabola1.function_label.title
+            xlabel = monteCarloSampling.parabola1.function_label.xlabel
+            ylabel = monteCarloSampling.parabola1.function_label.ylabel
             plt.title(title)
-            plt.xlabel(r"$\pi\cdot{s}$")
-            plt.ylabel("p(s) = parabola1(s)")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funIntegral
@@ -149,13 +134,11 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "(math.pi**2)*x-(x**3)/3"
-            t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
-            t_int_undf = r'$\mathregular{\int (-s^2+\pi^2) \,ds}$'
-            t_undf = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x}$'
-            title = ' = '.join([t_int, t_int_undf, t_undf])
+            title = monteCarloSampling.parabola1.integral_label.title
+            xlabel = monteCarloSampling.parabola1.integral_label.xlabel
+            ylabel = monteCarloSampling.parabola1.integral_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            ylabel = r'$\int parabola1(s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             # lines that show how roots of the equation will be changing with adding (-rnd) value
             int_max = monteCarloSampling.parabola1.integral(s=math.pi)
@@ -176,15 +159,12 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_{-\pi} ^s (-s^2+\pi^2) \,ds}$'
-            t_1 = r'$\mathregular{-\frac{1}{3}(x-2\pi)(x+\pi)^2}$'
-            t_2 = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3}$'
-            title = ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+            title = monteCarloSampling.parabola1.distribution_label.title
+            xlabel = monteCarloSampling.parabola1.distribution_label.xlabel
+            ylabel = monteCarloSampling.parabola1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             # lines that show how roots of the equation will be changing with adding (-rnd) value
             rnd_max = monteCarloSampling.parabola1.distribution(s=math.pi)
             plt.plot([-math.pi, math.pi], [0, 0], 'g--')
@@ -202,14 +182,11 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "(math.pi**2)*x-(x**3)/3"
-            t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
-            t_int_undf = r'$\mathregular{\int (-s^2+\pi^2) \,ds}$'
-            t_undf = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x}$'
-            title = ' = '.join([t_int, t_int_undf, t_undf])
+            title = monteCarloSampling.parabola1.integral_label.title
+            xlabel = monteCarloSampling.parabola1.integral_label.xlabel
+            ylabel = monteCarloSampling.parabola1.integral_label.ylabel
             plt.title(title)
-            plt.title(title)
-            plt.xlabel("s")
-            ylabel = r'$\int parabola1(s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             plt.show()
 
@@ -223,15 +200,12 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_{-\pi} ^s (-s^2+\pi^2) \,ds}$'
-            t_1 = r'$\mathregular{-\frac{1}{3}(x-2\pi)(x+\pi)^2}$'
-            t_2 = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3}$'
-            title = ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+            title = monteCarloSampling.parabola1.distribution_label.title
+            xlabel = monteCarloSampling.parabola1.distribution_label.xlabel
+            ylabel = monteCarloSampling.parabola1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funSampling
@@ -245,13 +219,12 @@ class Test():
                 plt.scatter(scope, y)
             else:
                 plt.plot(scope, y)
-            t0 = "generator II"
-            t1 = r"$\mathregular{roots(F(s) - RND)}$"
-            t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$'
-            title = ' = '.join([t0, t1, t2])
+            title = monteCarloSampling.parabola1.function_label.title
+            xlabel = monteCarloSampling.parabola1.function_label.xlabel
+            ylabel = monteCarloSampling.parabola1.function_label.ylabel
             plt.title(title)
-            plt.xlabel("rnd = F(S)")
-            plt.ylabel("s")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
 
@@ -273,14 +246,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "exp1(a,s) = math.exp(-a*s)/a |a={}| = math.exp(-{}*s)/{}".format(a_round,a_round,a_round)
-            t_ps = r'$\mathregular{p(s)}$'
-            t_exp = r'$\mathregular{exp1(a,s)}$'
-            t_undf = r'$\mathregular{\frac{e^{-a\cdot{s}}}{a}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{e^{-a1\cdot{s}}}{a1}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_ps, t_exp, t_undf, t_df])
+            title = monteCarloSampling.exp1.function_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.function_label.xlabel
+            ylabel = monteCarloSampling.exp1.function_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("p(s)")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funIntegral scope
@@ -294,15 +265,11 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
-            # title = r"$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1| = \frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$".replace("a1",str(a_round))
-            t_gen = 'generator I'
-            t_undf = r'$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_gen, t_undf, t_df])
+            title = monteCarloSampling.exp1.integral_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.integral_label.xlabel
+            ylabel = monteCarloSampling.exp1.integral_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            # ylabel = "Integral(exp1(a,s))ds"
-            ylabel = r'$\int exp1(a,s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             plt.show()
 
@@ -317,16 +284,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "F(s) = RND = (1 - exp(-as))/a**2 |a={}| = (1 - exp(-{}s))/{}**2".format(a_round,a_round,a_round)
-            title = r"$\mathregular{F(s) = RND = \frac{1 - e^{-a\cdot{s}}}{a^2}; |a=a1| = \frac{1 - e^{-a1\cdot{s}}}{a1^2}}$".replace("a1",str(a_round))
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_0 ^s \frac{e^{-a\cdot{s}}}{a} \,ds}$'
-            t_undf = r'$\mathregular{\frac{1 - e^{-a\cdot{s}}}{a^2}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{1 - e^{-a1\cdot{s}}}{a1^2}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
+            title = monteCarloSampling.exp1.distribution_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.distribution_label.xlabel
+            ylabel = monteCarloSampling.exp1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funSampling
@@ -344,14 +307,12 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
-            # title = r"$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1| = \frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$".replace("a1",str(a_round))
-            t_gen = 'generator I'
-            t_undf = r'$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1|}$'.replace('a1', str(a_round))
-            t_df = r'$\mathregular{\frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$'.replace('a1', str(a_round))
-            title = ' = '.join([t_gen, t_undf, t_df])
+            title = monteCarloSampling.exp1.functionForSampling_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1.functionForSampling_label.xlabel
+            ylabel = monteCarloSampling.exp1.functionForSampling_label.ylabel
             plt.title(title)
-            plt.xlabel("rnd = F(S)")
-            plt.ylabel("s")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
 
@@ -372,13 +333,12 @@ class Test():
             else:
                 plt.plot(scope/math.pi, y)
             # title = "p(s) = parabola1(s) = -s**2 + math.pi**2"
-            t_ps = 'p(s)'
-            t_parab = r'$\mathregular{parabola1(s)}$'
-            t_df = r'$\mathregular{-s^2+\pi^2}$'
-            title = ' = '.join([t_ps, t_parab, t_df])
+            title = monteCarloSampling.parabola1.function_label.title
+            xlabel = monteCarloSampling.parabola1.function_label.xlabel
+            ylabel = monteCarloSampling.parabola1.function_label.ylabel
             plt.title(title)
-            plt.xlabel(r"$\pi\cdot{s}$")
-            plt.ylabel("p(s) = parabola1(s)")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funIntegral
@@ -392,13 +352,11 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "(math.pi**2)*x-(x**3)/3"
-            t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
-            t_int_undf = r'$\mathregular{\int (-s^2+\pi^2) \,ds}$'
-            t_undf = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x}$'
-            title = ' = '.join([t_int, t_int_undf, t_undf])
+            title = monteCarloSampling.parabola1.integral_label.title
+            xlabel = monteCarloSampling.parabola1.integral_label.xlabel
+            ylabel = monteCarloSampling.parabola1.integral_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            ylabel = r'$\int parabola1(s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             # lines that show how roots of the equation will be changing with adding (-rnd) value
             int_min = monteCarloSampling.parabola1.integral(s=min_s_scope)
@@ -420,15 +378,12 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_{-\pi} ^s (-s^2+\pi^2) \,ds}$'
-            t_1 = r'$\mathregular{-\frac{1}{3}(x-2\pi)(x+\pi)^2}$'
-            t_2 = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3}$'
-            title = ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+            title = monteCarloSampling.parabola1.distribution_label.title
+            xlabel = monteCarloSampling.parabola1.distribution_label.xlabel
+            ylabel = monteCarloSampling.parabola1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             # lines that show how roots of the equation will be changing with adding (-rnd) value
             rnd_min = monteCarloSampling.parabola1.distribution(s=min_s_scope)
             rnd_max = monteCarloSampling.parabola1.distribution(s=max_s_scope)
@@ -448,13 +403,11 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "(math.pi**2)*x-(x**3)/3"
-            t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
-            t_int_undf = r'$\mathregular{\int (-s^2+\pi^2) \,ds}$'
-            t_undf = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x}$'
-            title = ' = '.join([t_int, t_int_undf, t_undf])
+            title = monteCarloSampling.parabola1.integral_label.title
+            xlabel = monteCarloSampling.parabola1.integral_label.xlabel
+            ylabel = monteCarloSampling.parabola1.integral_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            ylabel = r'$\int parabola1(s) \,ds$'
+            plt.xlabel(xlabel)
             plt.ylabel(ylabel)
             plt.show()
 
@@ -468,15 +421,12 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
-            t_fs = r'$\mathregular{F(s)}$'
-            t_rnd = r'$\mathregular{RND}$'
-            t_int = r'$\mathregular{\int_{-\pi} ^s (-s^2+\pi^2) \,ds}$'
-            t_1 = r'$\mathregular{-\frac{1}{3}(x-2\pi)(x+\pi)^2}$'
-            t_2 = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3}$'
-            title = ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+            title = monteCarloSampling.parabola1.distribution_label.title
+            xlabel = monteCarloSampling.parabola1.distribution_label.xlabel
+            ylabel = monteCarloSampling.parabola1.distribution_label.ylabel
             plt.title(title)
-            plt.xlabel("s")
-            plt.ylabel("F(s) = distribution")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
             # funSampling
@@ -491,13 +441,12 @@ class Test():
             else:
                 plt.plot(scope, y)
             # title = "roots(poly) = roots(parabola1(s) - RND) dla s w <{}, {}>".format(min_s_scope, max_s_scope)
-            t0 = "generator II"
-            t1 = r"$\mathregular{roots(F(s) - RND)}$"
-            t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$' + '<{}, {}>'.format(round(min_s_scope, 2), round(max_s_scope, 2))
-            title = ' = '.join([t0, t1, t2])
+            title = monteCarloSampling.parabola1.function_label.title
+            xlabel = monteCarloSampling.parabola1.function_label.xlabel
+            ylabel = monteCarloSampling.parabola1.function_label.ylabel
             plt.title(title)
-            plt.xlabel("rnd = F(S)")
-            plt.ylabel("s")
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
             plt.show()
 
 
@@ -955,19 +904,19 @@ def main():
     test = Test()
 
     # generator liczb losowych
-    # test.test8()
-    # test.test9()
+    test.test8()
+    test.test9()
 
     # generator liczb losowych scope
-    # test.test10()
-    # test.test11()
+    test.test10()
+    test.test11()
 
     # wizualizacja i slice
     # test.test13()
     # test.test14()
 
     # testy generatory raport
-    test.test1()
+    # test.test1()
 
 if __name__ == '__main__':
     main()

@@ -33,22 +33,121 @@ class FeatureSampling():
 
 class MonteCarloSampling():
     def __init__(self):
+        # 1. classes interfaces
         funOrigin = FunOrigin()
         funIntegral = FunIntegral()
         funDistibution = FunDistibution()
         funSampling = FunSampling()
-
+        # 2. mathematical functions
         self.exp1 = FunInterface(funOrigin.exp1, funIntegral.exp1, funDistibution.exp1, funSampling.exp1)
         self.exp1_d = FunInterface(funOrigin.exp1, funIntegral.exp1, funDistibution.exp1_d, funSampling.exp1_d)
         self.parabola1 = FunInterface(funOrigin.parabola1, funIntegral.parabola1, funDistibution.parabola1, funSampling.parabola1)
+        # 3. functions labels
+
+        # 3.1. exp1
+
+        # 3.1.1. function origin
+        t_ps = r'$\mathregular{p(s)}$'
+        t_exp = r'$\mathregular{exp1(a,s)}$'
+        t_undf = r'$\mathregular{\frac{e^{-a\cdot{s}}}{a}; |a=a1|}$'
+        t_df = r'$\mathregular{\frac{e^{-a1\cdot{s}}}{a1}}$'
+        title = ' = '.join([t_ps, t_exp, t_undf, t_df])
+        xlabel = "s"
+        ylabel = "p(s)"
+        self.exp1.function_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.1.2. integral
+        t_int = r'$\mathregular{\int exp1(a,s) \,ds}$'
+        t_int_undf = r'$\mathregular{\int \frac{e^{-a\cdot{s}}}{a} \,ds}$'
+        t_undf = r'$\mathregular{\frac{-e^{-a\cdot{s}}}{a^{2}}; |a=a1|}$'
+        t_df = r'$\mathregular{\frac{-e^{-a1\cdot{s}}}{a1^{2}}}$'
+        title = ' = '.join([t_int, t_int_undf, t_undf, t_df])
+        xlabel = "s"
+        # ylabel = "Integral(exp1(a,s))ds"
+        ylabel = r'$\int exp1(a,s) \,ds$'
+        self.exp1.integral_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.1.3. distribution
+        t_fs = r'$\mathregular{F(s)}$'
+        t_rnd = r'$\mathregular{RND}$'
+        t_int = r'$\mathregular{\int_0 ^s \frac{e^{-a\cdot{s}}}{a} \,ds}$'
+        t_undf = r'$\mathregular{\frac{1 - e^{-a\cdot{s}}}{a^2}; |a=a1|}$'
+        t_df = r'$\mathregular{\frac{1 - e^{-a1\cdot{s}}}{a1^2}}$'
+        title = ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
+        xlabel = "s"
+        ylabel = "F(s) = distribution"
+        self.exp1.distribution_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.1.4. functionForSampling
+        t_gen = 'generator I'
+        t_undf = r'$\mathregular{\frac{\ln{(1 - a^2 \cdot{RND})}}{-a}; |a=a1|}$'
+        t_df = r'$\mathregular{\frac{\ln{(1-a1^2\cdot{RND})}}{-a1}}$'
+        title = ' = '.join([t_gen, t_undf, t_df])
+        xlabel = "rnd = F(S)"
+        ylabel = "s"
+        self.exp1.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.2. parabola1
+
+        # 3.2.1. function origin
+        t_ps = 'p(s)'
+        t_parab = r'$\mathregular{parabola1(s)}$'
+        t_df = r'$\mathregular{-s^2+\pi^2}$'
+        title = ' = '.join([t_ps, t_parab, t_df])
+        xlabel = r"$\pi\cdot{s}$"
+        ylabel = "p(s) = parabola1(s)"
+        self.parabola1.function_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.2.2. integral
+        t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
+        t_int_undf = r'$\mathregular{\int (-s^2+\pi^2) \,ds}$'
+        t_undf = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x}$'
+        title = ' = '.join([t_int, t_int_undf, t_undf])
+        xlabel = "s"
+        ylabel = r'$\int parabola1(s) \,ds$'
+        self.parabola1.integral_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.2.3. distribution
+        t_fs = r'$\mathregular{F(s)}$'
+        t_rnd = r'$\mathregular{RND}$'
+        t_int = r'$\mathregular{\int_{-\pi} ^s (-s^2+\pi^2) \,ds}$'
+        t_1 = r'$\mathregular{-\frac{1}{3}(x-2\pi)(x+\pi)^2}$'
+        t_2 = r'$\mathregular{-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3}$'
+        title = ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+        xlabel = "s"
+        ylabel = "F(s) = distribution"
+        self.parabola1.distribution_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.2.4. funSampling
+        t0 = "generator II"
+        t1 = r"$\mathregular{roots(F(s) - RND)}$"
+        t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$'
+        title = ' = '.join([t0, t1, t2])
+        xlabel = "rnd = F(S)"
+        ylabel = "s"
+        self.parabola1.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
+
 
 
 class FunInterface():
     def __init__(self, fun, integral, distribution, funSamp):
+        # mathematical functions
         self.function = fun
         self.integral = integral
         self.distribution = distribution
         self.functionForSampling = funSamp
+        # functions labels
+        self.function_label = ChartLabel()
+        self.integral_label = ChartLabel()
+        self.distribution_label = ChartLabel()
+        self.functionForSampling_label = ChartLabel()
+
+
+class ChartLabel():
+    def __init__(self, xlabel="", ylabel="", title=""):
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.title = title
 
 
 class FunOrigin():
