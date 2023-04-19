@@ -1,5 +1,6 @@
+dodać opis exp2 w klamrze
+
 Rozkład normalny 
-Exp1 na minusie orqz calka -+nieskończoność.
 
 przeczytać zakładki te o generatorach
 przerobić funkcje na gęstości prawdopodobieństwa (mnożenie + ograniczenie skokiem jednostkowym lub ifem)

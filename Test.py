@@ -103,6 +103,92 @@ class Test():
             plt.show()
 
 
+        def exp2(self):
+            monteCarloSampling = MonteCarloSampling()
+
+            # funOrigin
+            a = 1
+            scope = np.arange(-5,15,0.01)
+            y = [monteCarloSampling.exp2.function(a=a, s=s) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            a_round = round(a, 3)
+            # title = "exp1(a,s) = math.exp(-a*s)/a |a={}| = math.exp(-{}*s)/{}".format(a_round,a_round,a_round)
+            title = monteCarloSampling.exp2.function_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp2.function_label.xlabel
+            ylabel = monteCarloSampling.exp2.function_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funIntegral scope
+            scope = np.arange(-5,15,0.01)
+            a = 1
+            y = [monteCarloSampling.exp2.integral(a=a, s=s) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            a_round = round(a, 3)
+            # title = "(-math.exp(-a*s))/a**2 |a={}| = (-math.exp(-{}*s))/{}**2".format(a_round,a_round,a_round)
+            title = monteCarloSampling.exp2.integral_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp2.integral_label.xlabel
+            ylabel = monteCarloSampling.exp2.integral_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funDistribution scope
+            scope = np.arange(-5,15,0.01)
+            a = 1
+            y = [monteCarloSampling.exp2.distribution(a=a, s=s) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            a_round = round(a, 3)
+            # title = "F(s) = RND = (1 - exp(-as))/a**2 |a={}| = (1 - exp(-{}s))/{}**2".format(a_round,a_round,a_round)
+            title = monteCarloSampling.exp2.distribution_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp2.distribution_label.xlabel
+            ylabel = monteCarloSampling.exp2.distribution_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funSampling
+            a = 1
+            rnd_min = monteCarloSampling.exp2.distribution(a=a, s=0)
+            rnd_max = monteCarloSampling.exp2.distribution(a=a, s=10)
+            scope = np.append(np.arange(rnd_min, rnd_max, 0.01), rnd_max)
+            y = [monteCarloSampling.exp2.functionForSampling(a=a, rnd=x) for x in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            a_round = round(a, 3)
+            # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
+            title = monteCarloSampling.exp2.functionForSampling_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp2.functionForSampling_label.xlabel
+            ylabel = monteCarloSampling.exp2.functionForSampling_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+
         def parabola1(self):
             monteCarloSampling = MonteCarloSampling()
 
@@ -246,9 +332,9 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "exp1(a,s) = math.exp(-a*s)/a |a={}| = math.exp(-{}*s)/{}".format(a_round,a_round,a_round)
-            title = monteCarloSampling.exp1.function_label.title.replace('a1', str(a_round))
-            xlabel = monteCarloSampling.exp1.function_label.xlabel
-            ylabel = monteCarloSampling.exp1.function_label.ylabel
+            title = monteCarloSampling.exp1_d.function_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1_d.function_label.xlabel
+            ylabel = monteCarloSampling.exp1_d.function_label.ylabel
             plt.title(title)
             plt.xlabel(xlabel)
             plt.ylabel(ylabel)
@@ -265,9 +351,9 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
-            title = monteCarloSampling.exp1.integral_label.title.replace('a1', str(a_round))
-            xlabel = monteCarloSampling.exp1.integral_label.xlabel
-            ylabel = monteCarloSampling.exp1.integral_label.ylabel
+            title = monteCarloSampling.exp1_d.integral_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1_d.integral_label.xlabel
+            ylabel = monteCarloSampling.exp1_d.integral_label.ylabel
             plt.title(title)
             plt.xlabel(xlabel)
             plt.ylabel(ylabel)
@@ -284,9 +370,9 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "F(s) = RND = (1 - exp(-as))/a**2 |a={}| = (1 - exp(-{}s))/{}**2".format(a_round,a_round,a_round)
-            title = monteCarloSampling.exp1.distribution_label.title.replace('a1', str(a_round))
-            xlabel = monteCarloSampling.exp1.distribution_label.xlabel
-            ylabel = monteCarloSampling.exp1.distribution_label.ylabel
+            title = monteCarloSampling.exp1_d.distribution_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1_d.distribution_label.xlabel
+            ylabel = monteCarloSampling.exp1_d.distribution_label.ylabel
             plt.title(title)
             plt.xlabel(xlabel)
             plt.ylabel(ylabel)
@@ -307,9 +393,9 @@ class Test():
                 plt.plot(scope, y)
             a_round = round(a, 3)
             # title = "math.log(1 - a**2 * RND) / -a |a={}| = math.log(1 - {}**2 * RND) / -{}".format(a_round,a_round,a_round)
-            title = monteCarloSampling.exp1.functionForSampling_label.title.replace('a1', str(a_round))
-            xlabel = monteCarloSampling.exp1.functionForSampling_label.xlabel
-            ylabel = monteCarloSampling.exp1.functionForSampling_label.ylabel
+            title = monteCarloSampling.exp1_d.functionForSampling_label.title.replace('a1', str(a_round))
+            xlabel = monteCarloSampling.exp1_d.functionForSampling_label.xlabel
+            ylabel = monteCarloSampling.exp1_d.functionForSampling_label.ylabel
             plt.title(title)
             plt.xlabel(xlabel)
             plt.ylabel(ylabel)
@@ -899,24 +985,28 @@ class Test():
         t = self.Test_Slice()
         t.fromObj3D()
 
+    def test_MonteCarloSampling_exp2(self):
+        test_MonteCarloSampling = self.Test_MonteCarloSampling()
+        test_MonteCarloSampling.exp2()
+
 
 def main():
     test = Test()
 
     # generator liczb losowych
-    test.test8()
-    test.test9()
+    # test.test8()
+    # test.test9()
 
     # generator liczb losowych scope
-    test.test10()
-    test.test11()
+    # test.test10()
+    # test.test11()
 
     # wizualizacja i slice
     # test.test13()
     # test.test14()
 
-    # testy generatory raport
-    # test.test1()
+    # poprawione generatory (stały przedział)
+    test.test_MonteCarloSampling_exp2()
 
 if __name__ == '__main__':
     main()
