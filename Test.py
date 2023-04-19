@@ -964,7 +964,10 @@ def main():
 
     # wizualizacja i slice
     # test.test13()
-    test.test14()
+    # test.test14()
+
+    # testy generatory raport
+    test.test1()
 
 if __name__ == '__main__':
     main()
