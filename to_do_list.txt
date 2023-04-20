@@ -1,4 +1,10 @@
 dodać opis exp2 w klamrze
+Stała k mnożenie zamiast całego rownania w exp
+
+Górna granica funkcji odcięcie inne niż 0 w parabola
+Stała k mnożenie zamiast całego rownania w parabola
+Zapis w klamerkwch w parabola
+
 
 Rozkład normalny 
 

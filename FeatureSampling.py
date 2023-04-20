@@ -260,7 +260,9 @@ class FunIntegral():
         return (-math.exp(-a*s))/a**2
     
     def exp2(self, a, s):
-        if 0 <= s <= 10:
+        if s < 0:
+            res = 0
+        elif s <= 10:
             top = - math.exp(-a*s)
             down = 1 - math.exp(-10*a)
             res = top/down
@@ -289,12 +291,14 @@ class FunDistibution():
     
     def exp2(self, a, s):
         # constant integration scope <0, 10> (in distribution)
-        if 0 <= s <= 10:
+        if s < 0:
+            res = 0
+        elif s <= 10:
             top = 1 - math.exp(-a*s)
             down = 1 - math.exp(-10*a)
             res = top/down
         else:
-            res = 0
+            res = 1
         return res
     
     def exp3(self, a, s):

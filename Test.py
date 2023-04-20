@@ -103,11 +103,10 @@ class Test():
             plt.show()
 
 
-        def exp2(self):
+        def exp2(self, a=1):
             monteCarloSampling = MonteCarloSampling()
 
             # funOrigin
-            a = 1
             scope = np.arange(-5,15,0.01)
             y = [monteCarloSampling.exp2.function(a=a, s=s) for s in scope]
             print('y[0] =', y[0])
@@ -128,7 +127,6 @@ class Test():
 
             # funIntegral scope
             scope = np.arange(-5,15,0.01)
-            a = 1
             y = [monteCarloSampling.exp2.integral(a=a, s=s) for s in scope]
             print('y[0] =', y[0])
             print('y[-1] =', y[-1])
@@ -148,7 +146,6 @@ class Test():
 
             # funDistribution scope
             scope = np.arange(-5,15,0.01)
-            a = 1
             y = [monteCarloSampling.exp2.distribution(a=a, s=s) for s in scope]
             print('y[0] =', y[0])
             print('y[-1] =', y[-1])
@@ -167,7 +164,6 @@ class Test():
             plt.show()
 
             # funSampling
-            a = 1
             rnd_min = monteCarloSampling.exp2.distribution(a=a, s=0)
             rnd_max = monteCarloSampling.exp2.distribution(a=a, s=10)
             scope = np.append(np.arange(rnd_min, rnd_max, 0.01), rnd_max)
