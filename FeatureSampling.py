@@ -139,44 +139,49 @@ class MonteCarloSampling():
         self.parabola1.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.5. exp2
+        k_const = r'$\mathregular{k = \frac{a^2}{1-e^{-10a}} ,}$' + " "
 
         # 3.5.1. function origin
+        k_c = k_const
         t_ps = r'$\mathregular{p(s)}$'
         t_exp = r'$\mathregular{exp1(a,s)}$'
-        t_undf = r'$\mathregular{\frac{a\cdot{e^{-a\cdot{s}}}}{1-e^{-10a}}; |a=a1|}$'
-        t_df = r'$\mathregular{\frac{a1\cdot{e^{-a1\cdot{s}}}}{1-e^{-10\cdot{a1}}}}$'
-        title = ' = '.join([t_ps, t_exp, t_undf, t_df])
+        t_undf = r'$\mathregular{k \cdot{ \frac{e^{-a\cdot{s}}}{a} }; |a=a1|}$'
+        t_df = r'$\mathregular{k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } }$'
+        title = k_c + ' = '.join([t_ps, t_exp, t_undf, t_df])
         xlabel = "s"
         ylabel = "p(s)"
         self.exp2.function_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.5.2. integral
+        k_c = k_const
         t_int = r'$\mathregular{\int exp1(a,s) \,ds}$'
-        t_int_undf = r'$\mathregular{ \int \frac{a\cdot{e^{-a\cdot{s}}}}{1-e^{-10\cdot{a}}} \,ds }$'
-        t_undf = r'$\mathregular{\frac{-e^{-a\cdot{s}}}{1-e^{-10\cdot{a}}}; |a=a1|}$'
-        t_df = r'$\mathregular{ \frac{-e^{-a1\cdot{s}}}{1-e^{-10\cdot{a1}}} }$'
-        title = ' = '.join([t_int, t_int_undf, t_undf, t_df])
+        t_int_undf = r'$\mathregular{\int k \cdot{ \frac{e^{-a\cdot{s}}}{a} } \,ds}$'
+        t_undf = r'$\mathregular{ k \cdot{ \frac{-e^{-a\cdot{s}}}{a^{2}} }; |a=a1|}$'
+        t_df = r'$\mathregular{ k \cdot{ \frac{-e^{-a1\cdot{s}}}{a1^{2}} } }$'
+        title = k_c + ' = '.join([t_int, t_int_undf, t_undf, t_df])
         xlabel = "s"
         # ylabel = "Integral(exp1(a,s))ds"
         ylabel = r'$\int exp1(a,s) \,ds$'
         self.exp2.integral_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.5.3. distribution
+        k_c = k_const
         t_fs = r'$\mathregular{F(s)}$'
         t_rnd = r'$\mathregular{RND}$'
-        t_int = r'$\mathregular{ \int_0 ^s \frac{a\cdot{e^{-a\cdot{s}}}}{1-e^{-10\cdot{a}}} \,ds }$'
-        t_undf = r'$\mathregular{\frac{1 - e^{-a\cdot{s}}}{1-e^{-10*a}}; |a=a1|}$'
-        t_df = r'$\mathregular{\frac{1 - e^{-a1\cdot{s}}}{1-e^{-10*a1}} }$'
-        title = ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
+        t_int = r'$\mathregular{\int_0 ^s k \cdot{ \frac{e^{-a\cdot{s}}}{a} } \,ds}$'
+        t_undf = r'$\mathregular{ k \cdot{ \frac{1 - e^{-a\cdot{s}}}{a^2} }; |a=a1|}$'
+        t_df = r'$\mathregular{ k \cdot{ \frac{1 - e^{-a1\cdot{s}}}{a1^2} } }$'
+        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
         xlabel = "s"
         ylabel = "F(s) = distribution"
         self.exp2.distribution_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.5.4. functionForSampling
+        k_c = k_const
         t_gen = 'generator I'
-        t_undf = r'$\mathregular{\frac{\ln{(1 - RND \cdot{(1 - e^{-10\cdot{a}})})}}{-a}; |a=a1|}$'
-        t_df = r'$\mathregular{\frac{\ln{(1 - RND \cdot{(1 - e^{-10\cdot{a1}})})}}{-a1}}$'
-        title = ' = '.join([t_gen, t_undf, t_df])
+        t_undf = r'$\mathregular{\frac{\ln{(1 - \frac{a^2 \cdot{RND}}{k})}}{-a}; |a=a1|}$'
+        t_df = r'$\mathregular{\frac{\ln{(1 - \frac{ a1^2\cdot{RND} }{k} )}}{-a1}}$'
+        title = k_c + ' = '.join([t_gen, t_undf, t_df])
         xlabel = "rnd = F(S)"
         ylabel = "s"
         self.exp2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
