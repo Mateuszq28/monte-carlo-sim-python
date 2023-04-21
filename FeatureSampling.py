@@ -147,7 +147,7 @@ class MonteCarloSampling():
         t_exp = r'$\mathregular{exp1(a,s)}$'
         t_undf = r'$\mathregular{ \left\{ { \genfrac{}{}{0}{}{k \cdot{ \frac{e^{-a\cdot{s}}}{a} },\/a=1 comment1}{0 comment2} }\right. }$'
         comment1 = '\/dla\/ x \in <0,10>'
-        comment2 = '\/dla\/ x \in (-\infty,0) \cup (10,\infty)'
+        comment2 = '\/dla\/ x \in (-\infty,0) \cap (10,\infty)'
         t_undf = t_undf.replace('comment1', comment1)
         t_undf = t_undf.replace('comment2', comment2)
         t_df = r'$\mathregular{ \left\{ { \genfrac{}{}{0}{}{ k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } comment1}{0 comment2} }\right. }$'
