@@ -145,8 +145,14 @@ class MonteCarloSampling():
         k_c = k_const
         t_ps = r'$\mathregular{p(s)}$'
         t_exp = r'$\mathregular{exp1(a,s)}$'
-        t_undf = r'$\mathregular{k \cdot{ \frac{e^{-a\cdot{s}}}{a} }; |a=a1|}$'
-        t_df = r'$\mathregular{k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } }$'
+        t_undf = r'$\mathregular{ \left\{ { \genfrac{}{}{0}{}{k \cdot{ \frac{e^{-a\cdot{s}}}{a} },\/a=1 comment1}{0 comment2} }\right. }$'
+        comment1 = '\/dla\/ x \in <0,10>'
+        comment2 = '\/dla\/ x \in (-\infty,0) \cap (10,\infty)'
+        t_undf = t_undf.replace('comment1', comment1)
+        t_undf = t_undf.replace('comment2', comment2)
+        t_df = r'$\mathregular{ \left\{ { \genfrac{}{}{0}{}{ k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } comment1}{0 comment2} }\right. }$'
+        t_df = t_df.replace('comment1', comment1)
+        t_df = t_df.replace('comment2', comment2)
         title = k_c + ' = '.join([t_ps, t_exp, t_undf, t_df])
         xlabel = "s"
         ylabel = "p(s)"
