@@ -44,7 +44,7 @@ class MonteCarloSampling():
         self.exp1_aprox = FunInterface(funOrigin.exp1, funIntegral.exp1, funDistibution.exp1, funSampling.exp1_aprox)
         self.parabola1 = FunInterface(funOrigin.parabola1, funIntegral.parabola1, funDistibution.parabola1, funSampling.parabola1)
         self.exp2 = FunInterface(funOrigin.exp2, funIntegral.exp2, funDistibution.exp2, funSampling.exp2)
-        # self.parabola2 = FunInterface(funOrigin.parabola2, funIntegral.parabola2, funDistibution.parabola2, funSampling.parabola2)
+        self.parabola2 = FunInterface(funOrigin.parabola2, funIntegral.parabola2, funDistibution.parabola2, funSampling.parabola2)
         # 3. functions labels
 
         # 3.1-3. exp1 and exp1_d and exp_aprox
@@ -186,6 +186,52 @@ class MonteCarloSampling():
         ylabel = "s"
         self.exp2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
 
+        # 3.6. parabola2
+        k_const = r'$\mathregular{k = \frac{3}{4\pi^3}} ,}$' + " "
+        # k = 3/(4*(math.pi**3))
+
+        # 3.6.1. function origin
+        k_c = k_const
+        t_ps = 'p(s)'
+        t_parab = r'$\mathregular{parabola1(s)}$'
+        t_df = r'$\mathregular{k\cdot{(-s^2+\pi^2)}}$'
+        title = k_c + ' = '.join([t_ps, t_parab, t_df])
+        xlabel = r"$\pi\cdot{s}$"
+        ylabel = "p(s) = parabola1(s)"
+        self.parabola2.function_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.6.2. integral
+        k_c = k_const
+        t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
+        t_int_undf = r'$\mathregular{\int k\cdot{(-s^2+\pi^2)} \,ds}$'
+        t_undf = r'$\mathregular{k\cdot{ (-\frac{1}{3}x^3 + \pi^2 x) } }$'
+        title = k_c + ' = '.join([t_int, t_int_undf, t_undf])
+        xlabel = "s"
+        ylabel = r'$\int parabola1(s) \,ds$'
+        self.parabola2.integral_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.6.3. distribution
+        k_c = k_const
+        t_fs = r'$\mathregular{F(s)}$'
+        t_rnd = r'$\mathregular{RND}$'
+        t_int = r'$\mathregular{\int_{-\pi} ^s k\cdot{ (-s^2+\pi^2) } \,ds}$'
+        t_1 = r'$\mathregular{k\cdot{ (-\frac{1}{3}(x-2\pi)(x+\pi)^2) }}$'
+        t_2 = r'$\mathregular{k\cdot{ (-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3) }}$'
+        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+        xlabel = "s"
+        ylabel = "F(s) = distribution"
+        self.parabola2.distribution_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.6.4. funSampling
+        k_c = k_const
+        t0 = "generator II"
+        t1 = r"$\mathregular{roots(F(s) - RND)}$"
+        t2 = r'$\mathregular{roots(k\cdot{ -\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND })}$ dla s $\in$ $<-\pi, \pi>$'
+        title = k_c + ' = '.join([t0, t1, t2])
+        xlabel = "rnd = F(S)"
+        ylabel = "s"
+        self.parabola2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
+
 
 
 class FunInterface():
@@ -255,6 +301,13 @@ class FunOrigin():
         b = 0
         c = math.pi**2
         return a*x**2 + b*x + c
+    
+    def parabola2(self, x):
+        k = 3/(4*(math.pi**3))
+        a = -1
+        b = 0
+        c = math.pi**2
+        return k * ( a*x**2 + b*x + c )
 
 
 class FunIntegral():
@@ -282,6 +335,16 @@ class FunIntegral():
     
     def parabola1(self, s):
         return (math.pi**2)*s-(s**3)/3
+    
+    def parabola2(self, s):
+        k = 3/(4*(math.pi**3))
+        if -math.pi > s:
+            res = 0
+        elif s <= math.pi:
+            res = k * ( (math.pi**2)*s - (s**3)/3 )
+        else:
+            res = 0
+        return res
 
 
 class FunDistibution():
@@ -308,7 +371,8 @@ class FunDistibution():
     
     def exp3(self, a, s):
         # constant integration scope <0, 10> (in distribution)
-        top = -a*s - math.exp(-a*(x-10) + math.exp(10*a))
+        # f(X) = k(f'(x)-f'(10))
+        top = -a*s - math.exp(-a*(s-10) + math.exp(10*a))
         down = 10*a - math.exp(10*a) + 1
         return top/down
     
@@ -323,7 +387,17 @@ class FunDistibution():
         polyval = np.polynomial.polynomial.polyval(s, [2/3*(math.pi**3), math.pi**2, 0, -1/3])
         return polyval
 
-
+    def parabola2(self, s):
+        # constant integration scope <-pi, s> (in distribution)
+        if s < -math.pi:
+            res = 0
+        elif s <= math.pi:
+            k = 3/(4*(math.pi**3))
+            polyval = np.polynomial.polynomial.polyval(s, [2/3*(math.pi**3), math.pi**2, 0, -1/3])
+            res = k * polyval
+        else:
+            res = 1
+        return res
 
 
 class FunSampling():
@@ -477,6 +551,38 @@ class FunSampling():
         if filt_roots:
             filt1 = min_scope <= roots_real
             filt2 = roots_real <= max_scope
+            filt = filt1 & filt2
+            roots_scope = roots_real[filt]
+            if debug:
+                print(roots_scope)
+            if len(roots_scope) > 1:
+                result = roots_scope[1]
+            elif len(roots_scope) < 1:
+                raise NotADirectoryError("roots are not in scope")
+            else:
+                result = roots_scope[0]
+        else:
+            result = roots_real
+        return result
+    
+    def parabola2(self, rnd=None, filt_roots=True, debug=False):
+        """"
+        constant integration scope <-pi, s> (in distribution)  
+        """
+        prec = self.precision
+        if rnd is None:
+            myRandom = MyRandom()
+            rnd = myRandom.wiawib(a=0, b=1, precision=prec)
+        # else rnd is given for test reasons as a parameter
+        k = 3/(4*(math.pi**3))
+        poly = np.polynomial.polynomial.Polynomial([k * (2/3*(math.pi**3)) - rnd, k * (math.pi**2), 0, k * (-1/3) ])
+        roots = poly.roots()
+        if debug:
+            print(roots)
+        roots_real = np.real(roots)
+        if filt_roots:
+            filt1 = -math.pi <= roots_real
+            filt2 = roots_real <= math.pi
             filt = filt1 & filt2
             roots_scope = roots_real[filt]
             if debug:

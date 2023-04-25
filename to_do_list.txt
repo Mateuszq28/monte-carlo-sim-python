@@ -1,8 +1,6 @@
-dodać opis exp2 w klamrze
-
 Górna granica funkcji odcięcie inne niż 0 w parabola
 Stała k mnożenie zamiast całego rownania w parabola
-Zapis w klamerkwch w parabola
+dodać należy do w każdym wykresie
 
 
 Rozkład normalny 
