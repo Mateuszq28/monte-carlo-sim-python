@@ -1122,8 +1122,8 @@ def main():
     # test.test9()
 
     # generator liczb losowych scope
-    test.test10()
-    test.test11()
+    # test.test10()
+    # test.test11()
 
     # wizualizacja i slice
     # test.test13()

@@ -132,7 +132,7 @@ class MonteCarloSampling():
         # 3.4.4. funSampling
         t0 = "generator II"
         t1 = r"$\mathregular{roots(F(s) - RND)}$"
-        t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$ dla s $\in$ $<-\pi, \pi>$'
+        t2 = r'$\mathregular{roots(-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND)}$'
         title = ' = '.join([t0, t1, t2])
         xlabel = "rnd = F(S)"
         ylabel = "s"
@@ -140,6 +140,7 @@ class MonteCarloSampling():
 
         # 3.5. exp2
         k_const = r'$\mathregular{k = \frac{a^2}{1-e^{-10a}} ,}$' + " "
+        end_tit = "$\mathregular{\/ dla \/ s \/ \in <0, 10>}$"
 
         # 3.5.1. function origin
         k_c = k_const
@@ -147,7 +148,7 @@ class MonteCarloSampling():
         t_exp = r'$\mathregular{exp1(a,s)}$'
         t_undf = r'$\mathregular{k \cdot{ \frac{e^{-a\cdot{s}}}{a} }; |a=a1|}$'
         t_df = r'$\mathregular{k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } }$'
-        title = k_c + ' = '.join([t_ps, t_exp, t_undf, t_df])
+        title = k_c + ' = '.join([t_ps, t_exp, t_undf, t_df]) + end_tit
         xlabel = "s"
         ylabel = "p(s)"
         self.exp2.function_label = ChartLabel(xlabel, ylabel, title)
@@ -158,7 +159,7 @@ class MonteCarloSampling():
         t_int_undf = r'$\mathregular{\int k \cdot{ \frac{e^{-a\cdot{s}}}{a} } \,ds}$'
         t_undf = r'$\mathregular{ k \cdot{ \frac{-e^{-a\cdot{s}}}{a^{2}} }; |a=a1|}$'
         t_df = r'$\mathregular{ k \cdot{ \frac{-e^{-a1\cdot{s}}}{a1^{2}} } }$'
-        title = k_c + ' = '.join([t_int, t_int_undf, t_undf, t_df])
+        title = k_c + ' = '.join([t_int, t_int_undf, t_undf, t_df]) + end_tit
         xlabel = "s"
         # ylabel = "Integral(exp1(a,s))ds"
         ylabel = r'$\int exp1(a,s) \,ds$'
@@ -171,7 +172,7 @@ class MonteCarloSampling():
         t_int = r'$\mathregular{\int_0 ^s k \cdot{ \frac{e^{-a\cdot{s}}}{a} } \,ds}$'
         t_undf = r'$\mathregular{ k \cdot{ \frac{1 - e^{-a\cdot{s}}}{a^2} }; |a=a1|}$'
         t_df = r'$\mathregular{ k \cdot{ \frac{1 - e^{-a1\cdot{s}}}{a1^2} } }$'
-        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df])
+        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_undf, t_df]) + end_tit
         xlabel = "s"
         ylabel = "F(s) = distribution"
         self.exp2.distribution_label = ChartLabel(xlabel, ylabel, title)
@@ -181,7 +182,7 @@ class MonteCarloSampling():
         t_gen = 'generator I'
         t_undf = r'$\mathregular{\frac{\ln{(1 - \frac{a^2 \cdot{RND}}{k})}}{-a}; |a=a1|}$'
         t_df = r'$\mathregular{\frac{\ln{(1 - \frac{ a1^2\cdot{RND} }{k} )}}{-a1}}$'
-        title = k_c + ' = '.join([t_gen, t_undf, t_df])
+        title = k_c + ' = '.join([t_gen, t_undf, t_df]) + end_tit
         xlabel = "rnd = F(S)"
         ylabel = "s"
         self.exp2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
@@ -189,13 +190,14 @@ class MonteCarloSampling():
         # 3.6. parabola2
         k_const = r'$\mathregular{k = \frac{3}{4\pi^3}} ,}$' + " "
         # k = 3/(4*(math.pi**3))
+        end_tit = "$\mathregular{\/ dla \/ s \/ \in <-\pi, \pi>}$"
 
         # 3.6.1. function origin
         k_c = k_const
         t_ps = 'p(s)'
         t_parab = r'$\mathregular{parabola1(s)}$'
         t_df = r'$\mathregular{k\cdot{(-s^2+\pi^2)}}$'
-        title = k_c + ' = '.join([t_ps, t_parab, t_df])
+        title = k_c + ' = '.join([t_ps, t_parab, t_df]) + end_tit
         xlabel = r"$\pi\cdot{s}$"
         ylabel = "p(s) = parabola1(s)"
         self.parabola2.function_label = ChartLabel(xlabel, ylabel, title)
@@ -205,7 +207,7 @@ class MonteCarloSampling():
         t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
         t_int_undf = r'$\mathregular{\int k\cdot{(-s^2+\pi^2)} \,ds}$'
         t_undf = r'$\mathregular{k\cdot{ (-\frac{1}{3}x^3 + \pi^2 x) } }$'
-        title = k_c + ' = '.join([t_int, t_int_undf, t_undf])
+        title = k_c + ' = '.join([t_int, t_int_undf, t_undf]) + end_tit
         xlabel = "s"
         ylabel = r'$\int parabola1(s) \,ds$'
         self.parabola2.integral_label = ChartLabel(xlabel, ylabel, title)
@@ -217,7 +219,7 @@ class MonteCarloSampling():
         t_int = r'$\mathregular{\int_{-\pi} ^s k\cdot{ (-s^2+\pi^2) } \,ds}$'
         t_1 = r'$\mathregular{k\cdot{ (-\frac{1}{3}(x-2\pi)(x+\pi)^2) }}$'
         t_2 = r'$\mathregular{k\cdot{ (-\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3) }}$'
-        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_1, t_2])
+        title = k_c + ' = '.join([t_fs, t_rnd, t_int, t_1, t_2]) + end_tit
         xlabel = "s"
         ylabel = "F(s) = distribution"
         self.parabola2.distribution_label = ChartLabel(xlabel, ylabel, title)
@@ -226,8 +228,8 @@ class MonteCarloSampling():
         k_c = k_const
         t0 = "generator II"
         t1 = r"$\mathregular{roots(F(s) - RND)}$"
-        t2 = r'$\mathregular{roots(k\cdot{ -\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND })}$ dla s $\in$ $<-\pi, \pi>$'
-        title = k_c + ' = '.join([t0, t1, t2])
+        t2 = r'$\mathregular{roots(k\cdot{ -\frac{1}{3}x^3 + \pi^2 x + \frac{2}{3} \pi^3 - RND })}$'
+        title = k_c + ' = '.join([t0, t1, t2]) + end_tit
         xlabel = "rnd = F(S)"
         ylabel = "s"
         self.parabola2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
