@@ -13,7 +13,7 @@ class MyRandom():
         Generate random number from closed interval <a, b>
         (WIth A WIth B)
         """
-        rnd = random.randint(a, (b-a)*10 ** precision) / float((b-a)*10 ** precision)
+        rnd = random.randint(a, (b-a) * (10 ** precision)) / float((b-a) * (10 ** precision))
         return rnd
         
 

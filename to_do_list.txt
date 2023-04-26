@@ -1,12 +1,6 @@
-Górna granica funkcji odcięcie inne niż 0 w parabola
-Stała k mnożenie zamiast całego rownania w parabola
-dodać należy do w każdym wykresie
-
-
 Rozkład normalny 
 
 przeczytać zakładki te o generatorach
-przerobić funkcje na gęstości prawdopodobieństwa (mnożenie + ograniczenie skokiem jednostkowym lub ifem)
 odpowiedzieć promotorowi
 
 
