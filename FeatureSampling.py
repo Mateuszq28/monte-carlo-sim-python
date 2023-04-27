@@ -2,6 +2,8 @@ import random
 import json
 import math
 import numpy as np
+from scipy.stats import norm
+from scipy.special import erf
 
 class MyRandom():
 
@@ -45,6 +47,7 @@ class MonteCarloSampling():
         self.parabola1 = FunInterface(funOrigin.parabola1, funIntegral.parabola1, funDistibution.parabola1, funSampling.parabola1)
         self.exp2 = FunInterface(funOrigin.exp2, funIntegral.exp2, funDistibution.exp2, funSampling.exp2)
         self.parabola2 = FunInterface(funOrigin.parabola2, funIntegral.parabola2, funDistibution.parabola2, funSampling.parabola2)
+        self.normal = FunInterface(funOrigin.normal, funIntegral.normal, funDistibution.normal, funSampling.normal)
         # 3. functions labels
 
         # 3.1-3. exp1 and exp1_d and exp_aprox
@@ -145,7 +148,7 @@ class MonteCarloSampling():
         # 3.5.1. function origin
         k_c = k_const
         t_ps = r'$\mathregular{p(s)}$'
-        t_exp = r'$\mathregular{exp1(a,s)}$'
+        t_exp = r'$\mathregular{exp2(a,s)}$'
         t_undf = r'$\mathregular{k \cdot{ \frac{e^{-a\cdot{s}}}{a} }; |a=a1|}$'
         t_df = r'$\mathregular{k \cdot{ \frac{e^{-a1\cdot{s}}}{a1} } }$'
         title = k_c + ' = '.join([t_ps, t_exp, t_undf, t_df]) + end_tit
@@ -155,14 +158,14 @@ class MonteCarloSampling():
 
         # 3.5.2. integral
         k_c = k_const
-        t_int = r'$\mathregular{\int exp1(a,s) \,ds}$'
+        t_int = r'$\mathregular{\int exp2(a,s) \,ds}$'
         t_int_undf = r'$\mathregular{\int k \cdot{ \frac{e^{-a\cdot{s}}}{a} } \,ds}$'
         t_undf = r'$\mathregular{ k \cdot{ \frac{-e^{-a\cdot{s}}}{a^{2}} }; |a=a1|}$'
         t_df = r'$\mathregular{ k \cdot{ \frac{-e^{-a1\cdot{s}}}{a1^{2}} } }$'
         title = k_c + ' = '.join([t_int, t_int_undf, t_undf, t_df]) + end_tit
         xlabel = "s"
-        # ylabel = "Integral(exp1(a,s))ds"
-        ylabel = r'$\int exp1(a,s) \,ds$'
+        # ylabel = "Integral(exp2(a,s))ds"
+        ylabel = r'$\int exp2(a,s) \,ds$'
         self.exp2.integral_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.5.3. distribution
@@ -195,21 +198,21 @@ class MonteCarloSampling():
         # 3.6.1. function origin
         k_c = k_const
         t_ps = 'p(s)'
-        t_parab = r'$\mathregular{parabola1(s)}$'
+        t_parab = r'$\mathregular{parabola2(s)}$'
         t_df = r'$\mathregular{k\cdot{(-s^2+\pi^2)}}$'
         title = k_c + ' = '.join([t_ps, t_parab, t_df]) + end_tit
         xlabel = r"$\pi\cdot{s}$"
-        ylabel = "p(s) = parabola1(s)"
+        ylabel = "p(s) = parabola2(s)"
         self.parabola2.function_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.6.2. integral
         k_c = k_const
-        t_int = r'$\mathregular{\int parabola1(s) \,ds}$'
+        t_int = r'$\mathregular{\int parabola2(s) \,ds}$'
         t_int_undf = r'$\mathregular{\int k\cdot{(-s^2+\pi^2)} \,ds}$'
         t_undf = r'$\mathregular{k\cdot{ (-\frac{1}{3}x^3 + \pi^2 x) } }$'
         title = k_c + ' = '.join([t_int, t_int_undf, t_undf]) + end_tit
         xlabel = "s"
-        ylabel = r'$\int parabola1(s) \,ds$'
+        ylabel = r'$\int parabola2(s) \,ds$'
         self.parabola2.integral_label = ChartLabel(xlabel, ylabel, title)
 
         # 3.6.3. distribution
@@ -233,6 +236,41 @@ class MonteCarloSampling():
         xlabel = "rnd = F(S)"
         ylabel = "s"
         self.parabola2.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.7. normal
+
+        # 3.7.1. function origin
+        t_ps = 'p(s)'
+        t_df = r'$\mathregular{ \frac{1}{ \sigma \sqrt{2 \pi} } exp( \frac{-(x-\mu)^2}{ 2 \sigma^2 } ) }$'
+        title = ' = '.join([t_ps, t_df])
+        xlabel = r"$s$"
+        ylabel = "p(s) = normal(s)"
+        self.normal.function_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.7.2. integral
+        t_int = r'$\mathregular{\int normal(s) \,ds}$'
+        t_int_df = r'$\mathregular{ -\frac{1}{2} erf( \frac{\mu - x}{\sqrt{2}\sigma} ) }$'
+        title = ' = '.join([t_int, t_int_df])
+        xlabel = "s"
+        ylabel = r'$\int normal(s) \,ds$'
+        self.normal.integral_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.7.3. distribution
+        t_fs = r'$\mathregular{F(s)}$'
+        t_rnd = r'$\mathregular{RND}$'
+        t_int = r'$\mathregular{\int _{- \infty} ^x \frac{1}{\sigma \sqrt{2 \pi}} exp( \frac{-(s - \mu)^2}{2 \sigma^2} )  \,ds}$'
+        title = ' = '.join([t_fs, t_rnd, t_int])
+        xlabel = "s"
+        ylabel = "F(s) = distribution"
+        self.normal.distribution_label = ChartLabel(xlabel, ylabel, title)
+
+        # 3.7.4. funSampling
+        t0 = "generator III"
+        t1 = r"$\mathregular{X \sim N(\mu, \sigma^2)}$"
+        title = ' - '.join([t0, t1])
+        xlabel = "sorted sample idx"
+        ylabel = "s"
+        self.normal.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
 
 
 
@@ -310,7 +348,9 @@ class FunOrigin():
         b = 0
         c = math.pi**2
         return k * ( a*x**2 + b*x + c )
-
+    
+    def normal(self, x, loc=0, scale=1):
+        return norm.pdf(x, loc=loc, scale=scale)
 
 class FunIntegral():
     def __init__(self):
@@ -347,6 +387,9 @@ class FunIntegral():
         else:
             res = 0
         return res
+    
+    def normal(self, x, loc=0, scale=1):
+        return -1/2 * erf((loc - x)/(math.sqrt(2) * scale))
 
 
 class FunDistibution():
@@ -401,6 +444,8 @@ class FunDistibution():
             res = 1
         return res
 
+    def normal(self, x, loc=0, scale=1):
+        return norm.cdf(x, loc=loc, scale=scale)
 
 class FunSampling():
 
@@ -598,3 +643,10 @@ class FunSampling():
         else:
             result = roots_real
         return result
+    
+    def normal(self, loc=0, scale=1, size=1):
+        n = norm.rvs(loc=loc, scale=scale, size=size)
+        if size == 1:
+            return n[0]
+        else:
+            return n

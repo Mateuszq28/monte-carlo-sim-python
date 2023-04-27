@@ -434,6 +434,136 @@ class Test():
             plt.show()
 
 
+        def normal_scope(self, min_s_scope=-math.pi, max_s_scope=math.pi, loc=0, scale=1):
+            monteCarloSampling = MonteCarloSampling()
+
+            # funOrigin
+            scope = np.append(np.arange(min_s_scope, max_s_scope, 0.01), max_s_scope)
+            y = [monteCarloSampling.normal.function(x=x, loc=loc, scale=scale) for x in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "p(s) = parabola1(s) = -s**2 + math.pi**2"
+            title = monteCarloSampling.normal.function_label.title
+            xlabel = monteCarloSampling.normal.function_label.xlabel
+            ylabel = monteCarloSampling.normal.function_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funIntegral
+            m = max(abs(min_s_scope), abs(max_s_scope))
+            scope = np.arange(-m*2.5,m*2.5,0.01)
+            y = [monteCarloSampling.normal.integral(x=x, loc=loc, scale=scale) for x in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "(math.pi**2)*x-(x**3)/3"
+            title = monteCarloSampling.normal.integral_label.title
+            xlabel = monteCarloSampling.normal.integral_label.xlabel
+            ylabel = monteCarloSampling.normal.integral_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            # lines that show how roots of the equation will be changing with adding (-rnd) value
+            int_min = monteCarloSampling.normal.integral(x=min_s_scope, loc=loc, scale=scale)
+            int_max = monteCarloSampling.normal.integral(x=max_s_scope, loc=loc, scale=scale)
+            avg = (int_min + int_max)/2
+            plt.plot([min_s_scope, max_s_scope], [int_min, int_min], 'g--')
+            plt.plot([min_s_scope, max_s_scope], [avg, avg], 'g--')
+            plt.plot([min_s_scope, max_s_scope], [int_max, int_max], 'g--')
+            plt.show()
+
+            # funDistribution
+            m = max(abs(min_s_scope), abs(max_s_scope))
+            scope = np.arange(-m*2.5,m*2.5,0.01)
+            y = [monteCarloSampling.normal.distribution(x=s, loc=loc, scale=scale) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
+            title = monteCarloSampling.normal.distribution_label.title
+            xlabel = monteCarloSampling.normal.distribution_label.xlabel
+            ylabel = monteCarloSampling.normal.distribution_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            # lines that show how roots of the equation will be changing with adding (-rnd) value
+            rnd_min = monteCarloSampling.normal.distribution(x=min_s_scope, loc=loc, scale=scale)
+            rnd_max = monteCarloSampling.normal.distribution(x=max_s_scope, loc=loc, scale=scale)
+            avg = (rnd_min + rnd_max)/2
+            plt.plot([min_s_scope, max_s_scope], [rnd_min, rnd_min], 'g--')
+            plt.plot([min_s_scope, max_s_scope], [avg, avg], 'g--')
+            plt.plot([min_s_scope, max_s_scope], [rnd_max, rnd_max], 'g--')
+            plt.show()
+
+            # funIntegral scope
+            scope = np.append(np.arange(min_s_scope, max_s_scope, 0.01), max_s_scope)
+            y = [monteCarloSampling.normal.integral(x=s, loc=loc, scale=scale) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "(math.pi**2)*x-(x**3)/3"
+            title = monteCarloSampling.normal.integral_label.title
+            xlabel = monteCarloSampling.normal.integral_label.xlabel
+            ylabel = monteCarloSampling.normal.integral_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funDistribution scope
+            scope = np.append(np.arange(min_s_scope, max_s_scope, 0.01), max_s_scope)
+            y = [monteCarloSampling.normal.distribution(x=s, loc=loc, scale=scale) for s in scope]
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "F(s) = RND = -1/3(x-2*pi)(x+pi)^2 = -1/3x^3 + pi^2*x + 2/3*pi^3"
+            title = monteCarloSampling.normal.distribution_label.title
+            xlabel = monteCarloSampling.normal.distribution_label.xlabel
+            ylabel = monteCarloSampling.normal.distribution_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+            # funSampling
+            scope = np.arange(0, 1000, 1)
+            y = monteCarloSampling.normal.functionForSampling(loc=loc, scale=scale, size=len(scope))
+            y.sort()
+            print('y[0] =', y[0])
+            print('y[-1] =', y[-1])
+            if len(y) == 1:
+                plt.scatter(scope, y)
+            else:
+                plt.plot(scope, y)
+            # title = "roots(poly) = roots(parabola1(s) - RND) dla s w <{}, {}>".format(min_s_scope, max_s_scope)
+            title = monteCarloSampling.normal.functionForSampling_label.title
+            xlabel = monteCarloSampling.normal.functionForSampling_label.xlabel
+            ylabel = monteCarloSampling.normal.functionForSampling_label.ylabel
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+        
+
         def exp1_scope(self, min_s_scope=0, max_s_scope=10, a=1):
             """
             using FunDistibution.exp1_d and FunSampling.exp1_d
@@ -1113,6 +1243,10 @@ class Test():
         test_MonteCarloSampling = self.Test_MonteCarloSampling()
         test_MonteCarloSampling.parabola2()
 
+    def test_MonteCarloSampling_normal_scope(self):
+        test_MonteCarloSampling = self.Test_MonteCarloSampling()
+        test_MonteCarloSampling.normal_scope(loc=0, scale=1)
+
 
 def main():
     test = Test()
@@ -1128,6 +1262,9 @@ def main():
     # wizualizacja i slice
     # test.test13()
     # test.test14()
+
+    # normal generator
+    test.test_MonteCarloSampling_normal_scope()
 
     # poprawione generatory (stały przedział)
     print("exp2")
