@@ -644,7 +644,10 @@ class FunSampling():
             result = roots_real
         return result
     
-    def normal(self, loc=0, scale=1, size=1):
+    def normal(self, loc=0, scale=1):
+        return norm.rvs(loc=loc, scale=scale)
+        
+    def normals(self, loc=0, scale=1, size=1):
         n = norm.rvs(loc=loc, scale=scale, size=size)
         if size == 1:
             return n[0]

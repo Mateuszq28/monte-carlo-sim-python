@@ -545,7 +545,8 @@ class Test():
 
             # funSampling
             scope = np.arange(0, 1000, 1)
-            y = monteCarloSampling.normal.functionForSampling(loc=loc, scale=scale, size=len(scope))
+            # y = monteCarloSampling.normal.functionForSampling(loc=loc, scale=scale, size=len(scope))
+            y = [monteCarloSampling.normal.functionForSampling(loc=loc, scale=scale) for _ in scope]
             y.sort()
             print('y[0] =', y[0])
             print('y[-1] =', y[-1])
