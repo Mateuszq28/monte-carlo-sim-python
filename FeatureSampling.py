@@ -432,6 +432,13 @@ class FunDistibution():
         polyval = np.polynomial.polynomial.polyval(s, [2/3*(math.pi**3), math.pi**2, 0, -1/3])
         return polyval
 
+    def parabola2_2(self, s):
+        # constant integration scope <-pi, s> (in distribution)
+        k = 3/(4*(math.pi**3))
+        polyval = np.polynomial.polynomial.polyval(s, [2/3*(math.pi**3), math.pi**2, 0, -1/3])
+        res = k * polyval
+        return res
+    
     def parabola2(self, s):
         # constant integration scope <-pi, s> (in distribution)
         if s < -math.pi:

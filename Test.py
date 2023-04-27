@@ -1265,11 +1265,11 @@ def main():
     # test.test14()
 
     # normal generator
-    test.test_MonteCarloSampling_normal_scope()
+    # test.test_MonteCarloSampling_normal_scope()
 
     # poprawione generatory (stały przedział)
     print("exp2")
-    test.test_MonteCarloSampling_exp2()
+    # test.test_MonteCarloSampling_exp2()
     print("parabola2")
     test.test_MonteCarloSampling_parabola2()
 
