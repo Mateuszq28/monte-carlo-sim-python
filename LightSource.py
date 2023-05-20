@@ -17,11 +17,15 @@ class LightSourcePoint():
 
 class LightSource(Object3D):
 
-    def __init__(self, x=100, y=100, z=100, arr=None, label=-1):
+    def __init__(self, x=10, y=10, z=1, arr=None, label=-1):
         super().__init__(x, y, z, arr)
         self.light_label = label
         
     
     def initialize_source(self, body_type, body, flag_individual_tropic, tropic, flag_isotropic):
+
+        # mark localizations, where LightSourcePoints will be put 
         if body_type == "rectangular":
-            self.fill_cube(self.light_label, start_p=[], fill_rec=None, end_p=None)
+            self.fill_cube(self.light_label, start_p=[0.,0.,0.], fill_rec=None, end_p=[1.,1.,1.])
+
+        

@@ -1135,6 +1135,15 @@ class Test():
             else:
                 raise ValueError("bad method string")
             return ob
+        
+        def visualize_Obj3d_list(self, oblist):
+            vis = ByVispy()
+            matplot = ByMatplotlib()
+            for i in range(len(oblist)):
+                o = oblist[i]
+                title = "ob" + str(i)
+                vis.show_body(o, title=title)
+                # matplot.show_stride(o, stride=10, title=title)
 
 
     class Test_Slice():
@@ -1147,13 +1156,7 @@ class Test():
             ob = test_Object3D.obj3d_array_for_tests(method="end_p")
             # ob = ob[5:]
             # visualize
-            vis = ByVispy()
-            matplot = ByMatplotlib()
-            for i in range(len(ob)):
-                o = ob[i]
-                title = "ob" + str(i)
-                # vis.show_body(o, title=title)
-                matplot.show_stride(o, stride=10, title=title)
+            test_Object3D.visualize_Obj3d_list(ob)
                 
 
 
@@ -1260,18 +1263,20 @@ def main():
     # test.test10()
     # test.test11()
 
-    # wizualizacja i slice
+    # wizualizacja
     # test.test13()
-    # test.test14()
+
+    # slice
+    test.test14()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()
 
     # poprawione generatory (stały przedział)
-    print("exp2")
+    # print("exp2")
     # test.test_MonteCarloSampling_exp2()
-    print("parabola2")
-    test.test_MonteCarloSampling_parabola2()
+    # print("parabola2")
+    # test.test_MonteCarloSampling_parabola2()
 
 if __name__ == '__main__':
     main()

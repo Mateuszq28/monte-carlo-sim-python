@@ -199,4 +199,6 @@ class Object3D():
             for j in range(start_pi[1], end_pi[1]):
                 for k in range(start_pi[2], end_pi[2]):
                     self.body[i, j, k] = fill
+
+        self.analize_materials()
         

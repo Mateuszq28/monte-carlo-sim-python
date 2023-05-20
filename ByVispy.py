@@ -16,14 +16,19 @@ class ByVispy(View):
     def __init__(self):
         super().__init__()
 
-    def show_body(self, object3D: Object3D, title=""):
-        return self.show_body1(object3D, title)
+    def show_body(self, object3D: Object3D, title="", omit_labels="default"):
+        return self.show_body2(object3D, title, omit_labels=omit_labels)
 
-    def show_body1(self, object3D:Object3D, title=""):
+    def show_body1(self, object3D:Object3D, title="", omit_labels="default"):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
         """
+
+        # make array to omit particles with this labels
+        if omit_labels == "default":
+            omit_labels = View.omit_labels
+
         object3D.make3d_points_series()
 
         # build your visuals, that's all
@@ -45,17 +50,18 @@ class ByVispy(View):
         counter = 0
         pos_list = []
         colrs_list = []
-        for series in object3D.composition["points_series"]:
-            pos_list.append(series)
-            n = len(series)
-            colors = np.ones((n, 4), dtype=np.float32)
-            rgb = PIL.ImageColor.getrgb(color_names[counter % len(color_names)])
-            rgb_norm = np.array(rgb) / 255.0
-            for i in range(n):
-                colors[i,0:3] = rgb_norm
-                colors[i,3] = 1
-            counter += 1
-            colrs_list.append(colors)
+        for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]):
+            if label not in omit_labels:
+                pos_list.append(series)
+                n = len(series)
+                colors = np.ones((n, 4), dtype=np.float32)
+                rgb = PIL.ImageColor.getrgb(color_names[counter % len(color_names)])
+                rgb_norm = np.array(rgb) / 255.0
+                for i in range(n):
+                    colors[i,0:3] = rgb_norm
+                    colors[i,3] = 1
+                counter += 1
+                colrs_list.append(colors)
 
         pos = np.concatenate(pos_list)
         colrs = np.concatenate(colrs_list)
@@ -71,11 +77,16 @@ class ByVispy(View):
         if sys.flags.interactive != 1:
             app.run()
 
-    def show_body2(self, object3D:Object3D, title=""):
+    def show_body2(self, object3D:Object3D, title="", omit_labels="default"):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
         """
+
+        # make array to omit particles with this labels
+        if omit_labels == "default":
+            omit_labels = View.omit_labels
+
         object3D.make3d_points_series()
 
         # build your visuals, that's all
@@ -92,7 +103,11 @@ class ByVispy(View):
         view.camera.distance = 500
 
         # data
-        pos = object3D.composition["points_series"][0]
+
+        # this line to delete
+        # pos = object3D.composition["points_series"][0]
+
+        pos = np.concatenate([series for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]) if label not in omit_labels])
         n = len(pos)
         colors = np.ones((n, 4), dtype=np.float32)
         for i in range(n):

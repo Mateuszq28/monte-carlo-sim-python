@@ -1,13 +1,4 @@
-Rozkład normalny 
-
-przeczytać zakładki te o generatorach
-odpowiedzieć promotorowi
-
-
-0 transparent color w view
 przyporządkowanie kolorów do labeli
-ommit 0 przy scatter view
-ommit 0 przy kompozycji składników object3d
 
 poprawić test związany z slice i projection i print
 test odległośći punktu od płaszczyzny slice

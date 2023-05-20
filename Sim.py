@@ -58,7 +58,7 @@ class Sim():
             self.propagate_photon()
             
 
-    def propagate_photon(self, start_point, ):
+    def propagate_photon(self):
         raise NotImplementedError()
     
 
