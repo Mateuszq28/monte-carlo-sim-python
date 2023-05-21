@@ -122,6 +122,10 @@ class Slice(Object3D):
     def dist_p_to_plane(self, p, plane_equation):
         plane_norm_vec = plane_equation[0:3]
         D = plane_equation[3]
+        print(type(p[0]))
+        print(len(p[0][0][0][0]))
+        print(len(p[1][0][0]))
+        print(len(p[2][0][0]))
         dist = np.abs(np.dot(p, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
         return dist
     
@@ -132,6 +136,65 @@ class Slice(Object3D):
         return dist
     
 
+    def fromObj3D_slow(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+        # slower vesion
+        b = object3D.body
+        b_result = b.copy()
+        if preset is not None:
+            p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
+        p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
+        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
+        sh = b.shape
+        # --- this block is made faster in fromObj3D ---
+        for i in range(sh[0]):
+            for j in range(sh[1]):
+                for k in range(sh[2]):
+                    particle = [i,j,k]
+                    dist_from_plane = self.dist_p_to_plane(particle, plane_equation)
+                    if dist_from_plane > min_dist:
+                        b_result[i,j,k] = reset_val
+        # ---
+        self.rebuild_from_array(b_result)
+        self.set_plane_points(p1, p2, p3)
+        return self
+    
+    def fromObj3D_slow2(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+        b = object3D.body
+        b_result = b.copy()
+        if preset is not None:
+            p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
+        p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
+        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
+        sh = b.shape
+        # --- this block is made slower ---
+        reset_flag = np.array([self.dist_p_to_plane([i,j,k], plane_equation) > min_dist for i in range(sh[0]) for j in range(sh[1]) for k in range(sh[2])]).reshape(sh)
+        b_result[reset_flag] = reset_val
+        # ---
+        self.rebuild_from_array(b_result)
+        self.set_plane_points(p1, p2, p3)
+        return self
+    
+    def fromObj3D_slow3(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+        b = object3D.body
+        b_result = b.copy()
+        if preset is not None:
+            p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
+        p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
+        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
+        sh = b.shape
+        # --- this block is made slower in fromObj3D_slow ---
+        check_reset_flag_fun = lambda i,j,k: self.dist_p_to_plane([i,j,k], plane_equation) > min_dist
+        i, j, k = np.indices(b.shape)
+        reset_flag_mtx = np.array(list(map(check_reset_flag_fun, i.flatten(), j.flatten(), k.flatten()))).reshape(sh)
+        b_result[reset_flag_mtx] = reset_val
+        # ---
+        self.rebuild_from_array(b_result)
+        self.set_plane_points(p1, p2, p3)
+        return self
+    
     def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
         b = object3D.body
         b_result = b.copy()
@@ -141,13 +204,12 @@ class Slice(Object3D):
         normal_vec = self.p3_to_normal_vec(p1, p2, p3)
         plane_equation = self.plane_equation(p1, normal_vec)
         sh = b.shape
-        for i in range(sh[0]):
-            for j in range(sh[1]):
-                for k in range(sh[2]):
-                    particle = [i,j,k]
-                    dist_from_plane = self.dist_p_to_plane(particle, plane_equation)
-                    if dist_from_plane > min_dist:
-                        b_result[i,j,k] = reset_val
+        # --- this block is made slower in fromObj3D_slow ---
+        check_reset_flag_fun = lambda i,j,k: self.dist_p_to_plane([i,j,k], plane_equation) > min_dist
+        reset_flag_mtx = np.fromfunction(check_reset_flag_fun, sh, dtype=int)
+        print(reset_flag_mtx.shape)
+        b_result[reset_flag_mtx] = reset_val
+        # ---
         self.rebuild_from_array(b_result)
         self.set_plane_points(p1, p2, p3)
         return self

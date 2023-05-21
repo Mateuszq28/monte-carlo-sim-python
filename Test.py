@@ -1160,7 +1160,11 @@ class Test():
             # test_Object3D.visualize_Obj3d_list(ob)
             print("1")
             # slice list
+            start = time.time()
             sl1 = [Slice().fromObj3D(o, preset='max_cross_middle', min_dist=0.2) for o in ob]
+            end = time.time()
+            making_slice_time = end - start
+            print(making_slice_time)
             # sl2 = [Slice().fromObj3D(o, preset='xy') for o in ob]
             # sl3 = [Slice().fromObj3D(o, preset='xz') for o in ob]
             # sl4 = [Slice().fromObj3D(o, preset='yz') for o in ob]
