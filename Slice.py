@@ -101,7 +101,7 @@ class Slice(Object3D):
         return int_arr
 
 
-    def p3_to_normal_vec(self, p1:List[int], p2:List[int], p3:List[int]):
+    def p3_to_normal_vec(self, p1:list[int], p2:list[int], p3:list[int]):
         """
         Gets three points that spread the plane and return a normal vector of this plane
         """
@@ -132,7 +132,7 @@ class Slice(Object3D):
         return dist
     
 
-    def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)):
+    def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
         b = object3D.body
         b_result = b.copy()
         if preset is not None:

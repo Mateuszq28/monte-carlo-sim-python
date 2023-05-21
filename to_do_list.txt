@@ -1,3 +1,5 @@
+puszczanie fotonu
+
 przyporządkowanie kolorów do labeli
 
 poprawić test związany z slice i projection i print

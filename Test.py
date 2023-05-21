@@ -1155,9 +1155,21 @@ class Test():
             test_Object3D = Test.Test_Object3D()
             ob = test_Object3D.obj3d_array_for_tests(method="end_p")
             # ob = ob[5:]
-            # visualize
-            test_Object3D.visualize_Obj3d_list(ob)
-                
+            ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob)
+            print("1")
+            # slice list
+            sl1 = [Slice().fromObj3D(o, preset='max_cross_middle', min_dist=0.2) for o in ob]
+            # sl2 = [Slice().fromObj3D(o, preset='xy') for o in ob]
+            # sl3 = [Slice().fromObj3D(o, preset='xz') for o in ob]
+            # sl4 = [Slice().fromObj3D(o, preset='yz') for o in ob]
+            # sl5 = [Slice().fromObj3D(o, preset='max_cross_up') for o in ob]
+            # sl6 = [Slice().fromObj3D(o, preset='max_cross_down') for o in ob]
+            sl = sl1
+            # visualize slices
+            print("lol")
+            test_Object3D.visualize_Obj3d_list(sl)
 
 
 

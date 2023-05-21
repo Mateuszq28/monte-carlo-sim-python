@@ -17,7 +17,7 @@ class ByVispy(View):
         super().__init__()
 
     def show_body(self, object3D: Object3D, title="", omit_labels="default"):
-        return self.show_body2(object3D, title, omit_labels=omit_labels)
+        return self.show_body1(object3D, title, omit_labels=omit_labels)
 
     def show_body1(self, object3D:Object3D, title="", omit_labels="default"):
         """
@@ -104,7 +104,7 @@ class ByVispy(View):
 
         # data
 
-        # this line to delete
+        # this line can be deleted - shows "air"/0 label
         # pos = object3D.composition["points_series"][0]
 
         pos = np.concatenate([series for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]) if label not in omit_labels])
