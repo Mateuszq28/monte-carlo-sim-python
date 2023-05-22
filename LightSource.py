@@ -10,7 +10,7 @@ class LightSourcePoint():
         self.dir_vec = dir_vec
         #self.probability function
         self.probaFun = probaFun
-        # emit frequency - how many photons release, the rest will be ommited
+        # emit frequency - how many photons release, the rest will be omited
         self.emit_freq = emit_freq
         # photons limit
         self.photon_limit = photon_limit

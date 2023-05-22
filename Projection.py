@@ -4,7 +4,7 @@ import numpy as np
 class Projection(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
         super().__init__(x, y, z, arr)
-        self.ommit = [0]
+        self.omit = [0]
         self.reset_val = 0
 
     def x_high(self, object3D:Object3D):
@@ -27,7 +27,7 @@ class Projection(Object3D):
 
     def throw(self, object3D:Object3D, axis, xray):
         """
-        The function will take first value from object3D.body, which is different then values in self.ommit, seen perpendicularly to axis.
+        The function will take first value from object3D.body, which is different then values in self.omit, seen perpendicularly to axis.
         :param axis: observer's axis
         :param xray: If 1, observer is looking at the body from the start of the axis (axis[0]). If -1, observer is looking at the body from the end of the axis (axis[-1]).
 
@@ -62,11 +62,11 @@ class Projection(Object3D):
                         else:
                             b_val = None
                             ValueError("axis must be in {0,1,2}")
-                        if b_val not in self.ommit:
+                        if b_val not in self.omit:
                             is_sampled[j,k] = True
                             samples[j,k] = b_val
         samples3d = samples.reshape(lvl_ax1_len,lvl_ax2_len,1)
-        self.body = samples3d
+        self.rebuild_from_array(samples3d)
 
                     
         
