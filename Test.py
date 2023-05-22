@@ -1154,25 +1154,20 @@ class Test():
             # create objects
             test_Object3D = Test.Test_Object3D()
             ob = test_Object3D.obj3d_array_for_tests(method="end_p")
-            # ob = ob[5:]
-            ob = ob[0:1]
+            # choose some
+            ob = ob[:5]
+            # ob = ob[0:1]
             # visualize raw data
             # test_Object3D.visualize_Obj3d_list(ob)
-            print("1")
             # slice list
+            all_preset_list = ["max_cross_middle", "xy", "xz", "yz", "max_cross_up", "max_cross_down"]
+            preset = all_preset_list[2]
             start = time.time()
-            sl1 = [Slice().fromObj3D_4(o, preset='max_cross_middle', min_dist=0.2) for o in ob]
+            sl = [Slice().fromObj3D_4(o, preset=preset, min_dist=0.2) for o in ob]
             end = time.time()
             making_slice_time = end - start
-            print(making_slice_time)
-            # sl2 = [Slice().fromObj3D(o, preset='xy') for o in ob]
-            # sl3 = [Slice().fromObj3D(o, preset='xz') for o in ob]
-            # sl4 = [Slice().fromObj3D(o, preset='yz') for o in ob]
-            # sl5 = [Slice().fromObj3D(o, preset='max_cross_up') for o in ob]
-            # sl6 = [Slice().fromObj3D(o, preset='max_cross_down') for o in ob]
-            sl = sl1
+            print("making_slice_time", making_slice_time)
             # visualize slices
-            print("lol")
             test_Object3D.visualize_Obj3d_list(sl)
 
 

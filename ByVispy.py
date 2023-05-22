@@ -31,19 +31,6 @@ class ByVispy(View):
 
         object3D.make3d_points_series()
 
-        # build your visuals, that's all
-        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
-
-        # The real-things : plot using scene
-        # build canvas
-        canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
-
-        # Add a ViewBox to let the user zoom/rotate
-        view = canvas.central_widget.add_view()
-        view.camera = "turntable"
-        view.camera.fov = 45
-        view.camera.distance = 500
-
         # data
         color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933',
                        '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
@@ -63,19 +50,37 @@ class ByVispy(View):
                 counter += 1
                 colrs_list.append(colors)
 
-        pos = np.concatenate(pos_list)
-        colrs = np.concatenate(colrs_list)
+        if len(pos_list) > 0:
+            pos = np.concatenate(pos_list)
+            colrs = np.concatenate(colrs_list)
 
-        # plot ! note the parent parameter
-        p1 = Scatter3D(parent=view.scene)
-        p1.set_gl_state("translucent", blend=True, depth_test=True)
-        p1.set_data(
-            pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
-        )
+            # build your visuals, that's all
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
 
-        # run
-        if sys.flags.interactive != 1:
-            app.run()
+            # The real-things : plot using scene
+            # build canvas
+            canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
+
+            # Add a ViewBox to let the user zoom/rotate
+            view = canvas.central_widget.add_view()
+            view.camera = "turntable"
+            view.camera.fov = 45
+            view.camera.distance = 500
+
+            # plot ! note the parent parameter
+            p1 = Scatter3D(parent=view.scene)
+            p1.set_gl_state("translucent", blend=True, depth_test=True)
+            p1.set_data(
+                pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
+            )
+
+            # run
+            if sys.flags.interactive != 1:
+                app.run()
+
+        else:
+            print("Can not show empty object3D - " + title)
+
 
     def show_body2(self, object3D:Object3D, title="", omit_labels="default"):
         """
@@ -89,39 +94,45 @@ class ByVispy(View):
 
         object3D.make3d_points_series()
 
-        # build your visuals, that's all
-        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
-
-        # The real-things : plot using scene
-        # build canvas
-        canvas = scene.SceneCanvas(keys="interactive", title=title, show=True)
-
-        # Add a ViewBox to let the user zoom/rotate
-        view = canvas.central_widget.add_view()
-        view.camera = "turntable"
-        view.camera.fov = 45
-        view.camera.distance = 500
-
         # data
 
-        # this line can be deleted - shows "air"/0 label
+        # this commented line can be deleted - shows "air"/0 label
         # pos = object3D.composition["points_series"][0]
 
-        pos = np.concatenate([series for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]) if label not in omit_labels])
-        n = len(pos)
-        colors = np.ones((n, 4), dtype=np.float32)
-        for i in range(n):
-            colors[i] = (i / n, 1.0 - i / n, 0, 0.8)
+        pos_not_conc = [series for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]) if label not in omit_labels]
 
-        # plot ! note the parent parameter
-        p1 = Scatter3D(parent=view.scene)
-        p1.set_gl_state("translucent", blend=True, depth_test=True)
-        p1.set_data(
-            pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue"
-        )
+        if len(pos_not_conc) > 0:
+            pos = np.concatenate(pos_not_conc)
+            n = len(pos)
+            colors = np.ones((n, 4), dtype=np.float32)
+            for i in range(n):
+                colors[i] = (i / n, 1.0 - i / n, 0, 0.8)
 
-        # run
-        if sys.flags.interactive != 1:
-            app.run()
+            # build your visuals, that's all
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+            # The real-things : plot using scene
+            # build canvas
+            canvas = scene.SceneCanvas(keys="interactive", title=title, show=True)
+
+            # Add a ViewBox to let the user zoom/rotate
+            view = canvas.central_widget.add_view()
+            view.camera = "turntable"
+            view.camera.fov = 45
+            view.camera.distance = 500
+
+            # plot ! note the parent parameter
+            p1 = Scatter3D(parent=view.scene)
+            p1.set_gl_state("translucent", blend=True, depth_test=True)
+            p1.set_data(
+                pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue"
+            )
+
+            # run
+            if sys.flags.interactive != 1:
+                app.run()
+
+        else:
+            print("Can not show empty object3D - " + title)
 
      
