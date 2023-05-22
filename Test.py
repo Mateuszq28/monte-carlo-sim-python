@@ -1161,7 +1161,7 @@ class Test():
             print("1")
             # slice list
             start = time.time()
-            sl1 = [Slice().fromObj3D(o, preset='max_cross_middle', min_dist=0.2) for o in ob]
+            sl1 = [Slice().fromObj3D_4(o, preset='max_cross_middle', min_dist=0.2) for o in ob]
             end = time.time()
             making_slice_time = end - start
             print(making_slice_time)
