@@ -1233,7 +1233,32 @@ class Test():
             test_Object3D.print_png_Obj3d_list(proj, prefix_title=fun_name, dir=fun_name)
 
 
+    class Test_Print():
+        def __init__(self):
+            pass
 
+        def simple_prints(self):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # choose some
+            # ob = ob[:5]
+            # ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
+            # print preset functions
+            all_fun_name_list = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+            start = time.time()
+            for i in range(len(all_fun_name_list)):
+                fun_name = all_fun_name_list[i]
+                for j in range(len(ob)):
+                    dirname = os.path.join("slice_img", "print", fun_name)
+                    filename = fun_name + "-ob" + str(j) + ".png"
+                    fun = getattr(Print(), fun_name)
+                    fun(ob[j], dir=dirname, filename=filename)
+            end = time.time()
+            making_png_prints_time = end - start
+            print("making_png_prints_time", making_png_prints_time)
 
 
 
@@ -1349,6 +1374,11 @@ class Test():
         t = self.Test_Projection()
         t.simple_projections()
 
+    def test21(self):
+        # simple png prints (x_high, x_low...)
+        t = self.Test_Print()
+        t.simple_prints()
+
 
 def main():
     test = Test()
@@ -1375,6 +1405,9 @@ def main():
 
     # Projections test
     # test.test20()
+
+    # # simple png prints (x_high, x_low...)
+    test.test21()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()
