@@ -8,22 +8,22 @@ class Projection(Object3D):
         self.reset_val = 0
 
     def x_high(self, object3D:Object3D):
-        self.throw(object3D, 0, -1)
+        return self.throw(object3D, 0, -1)
 
     def x_low(self, object3D:Object3D):
-        self.throw(object3D, 0, 1)
+        return self.throw(object3D, 0, 1)
 
     def y_high(self, object3D:Object3D):
-        self.throw(object3D, 1, -1)
+        return self.throw(object3D, 1, -1)
 
     def y_low(self, object3D:Object3D):
-        self.throw(object3D, 1, 1)
+        return self.throw(object3D, 1, 1)
 
     def z_high(self, object3D:Object3D):
-        self.throw(object3D, 2, -1)
+        return self.throw(object3D, 2, -1)
 
     def z_low(self, object3D:Object3D):
-        self.throw(object3D, 2, 1)
+        return self.throw(object3D, 2, 1)
 
     def throw(self, object3D:Object3D, axis, xray):
         """
@@ -67,6 +67,7 @@ class Projection(Object3D):
                             samples[j,k] = b_val
         samples3d = samples.reshape(lvl_ax1_len,lvl_ax2_len,1)
         self.rebuild_from_array(samples3d)
+        return self
 
                     
         

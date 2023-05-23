@@ -9,6 +9,7 @@ from PropEnv import *
 from ByMatplotlib import *
 from ByVispy import *
 from Print import *
+from Projection import *
 
 class Test():
     def __init__(self):
@@ -1146,12 +1147,13 @@ class Test():
                 vis.show_body(o, title=title)
                 # matplot.show_stride(o, stride=10, title=title)
 
-        def print_png_Obj3d_list(self, oblist, prefix_title=""):
+        def print_png_Obj3d_list(self, oblist, prefix_title="", dir="tests"):
             print_obj = Print()
+            dirname = os.path.join("slice_img", dir)
             for i in range(len(oblist)):
                 o = oblist[i]
                 title = prefix_title + "_ob" + str(i) + ".png"
-                print_obj.obj3D_to_png(o, axis=2, xray=1, dir="slice_img", filename=title)
+                print_obj.obj3D_to_png(o, axis=2, xray=1, dir=dirname, filename=title)
 
 
     class Test_Slice():
@@ -1192,7 +1194,7 @@ class Test():
             # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
             # projection list
             all_preset_list = ["max_cross_middle", "xy", "xz", "yz", "max_cross_up", "max_cross_down"]
-            preset = all_preset_list[5]
+            preset = all_preset_list[0]
             start = time.time()
             slice = Slice()
             sl = [slice.fromObj3D_to_projection(o, preset=preset) for o in ob]
@@ -1202,8 +1204,33 @@ class Test():
             # visualize projections
             test_Object3D.visualize_Obj3d_list(sl, prefix_title=preset)
             # print png images
-            test_Object3D.print_png_Obj3d_list(sl, prefix_title=preset)
+            test_Object3D.print_png_Obj3d_list(sl, prefix_title=preset, dir=preset)
 
+    class Test_Projection():
+        def __init__(self):
+            pass
+
+        def simple_projections(self):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # choose some
+            # ob = ob[:5]
+            # ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
+            # projection list
+            all_fun_name_list = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+            fun_name = all_fun_name_list[5]
+            start = time.time()
+            proj = [getattr(Projection(), fun_name)(o) for o in ob]
+            end = time.time()
+            making_projection_time = end - start
+            print("making_projection_time", making_projection_time)
+            # visualize projections
+            test_Object3D.visualize_Obj3d_list(proj, prefix_title=fun_name)
+            # print png images
+            test_Object3D.print_png_Obj3d_list(proj, prefix_title=fun_name, dir=fun_name)
 
 
 
@@ -1317,6 +1344,11 @@ class Test():
         t = self.Test_Slice()
         t.test_fromObj3D(method="fast")
 
+    def test20(self):
+        # simple projections test (x_high, x_low...)
+        t = self.Test_Projection()
+        t.simple_projections()
+
 
 def main():
     test = Test()
@@ -1333,13 +1365,16 @@ def main():
     # test.test13()
 
     # slice method by equation - faster, but not accurate
-    test.test14()
+    # test.test14()
 
     # slice
     # test.test19()
 
     # Slice.fromObj3D_to_projection
     # test.test18()
+
+    # Projections test
+    # test.test20()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()
@@ -1349,6 +1384,8 @@ def main():
     # test.test_MonteCarloSampling_exp2()
     # print("parabola2")
     # test.test_MonteCarloSampling_parabola2()
+
+
 
 if __name__ == '__main__':
     main()
