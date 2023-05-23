@@ -1206,6 +1206,40 @@ class Test():
             # print png images
             test_Object3D.print_png_Obj3d_list(sl, prefix_title=preset, dir=preset)
 
+        def test_middle_slices(self, method="default"):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # choose some
+            # ob = ob[:5]
+            # ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
+            # slice list
+            all_preset_list = ["xy-middle", "xz-middle", "yz-middle"]
+            all_print_preset = [2, 1, 0]
+            choice_idx = 2
+            preset = all_preset_list[choice_idx]
+            start = time.time()
+            if method == "default":
+                sl = [Slice().fromObj3D(o, preset=preset, min_dist=0.2) for o in ob]
+            else:
+                sl = [Slice().fromObj3D_byPlaneEq(o, preset=preset) for o in ob]
+            end = time.time()
+            making_slice_time = end - start
+            print("making_slice_time", making_slice_time)
+            # visualize slices
+            # test_Object3D.visualize_Obj3d_list(sl, prefix_title=preset)
+            # print png images
+            print_obj = Print()
+            ax = all_print_preset[choice_idx]
+            dirname = os.path.join("slice_img", preset)
+            for i in range(len(sl)):
+                filename = preset + "-ob" + str(i) + ".png"
+                proj = Projection().throw(sl[i], axis=ax, xray=1)
+                print_obj.obj3D_to_png(proj, axis=2, xray=1, dir=dirname, filename=filename)
+
+
     class Test_Projection():
         def __init__(self):
             pass
@@ -1379,6 +1413,11 @@ class Test():
         t = self.Test_Print()
         t.simple_prints()
 
+    def test22(self):
+        # middle xy xz yz slices + print
+        t = self.Test_Slice()
+        t.test_middle_slices()
+
 
 def main():
     test = Test()
@@ -1406,8 +1445,11 @@ def main():
     # Projections test
     # test.test20()
 
-    # # simple png prints (x_high, x_low...)
-    test.test21()
+    # simple png prints (x_high, x_low...)
+    # test.test21()
+
+    # middle xy xz yz slices + print
+    test.test22()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()

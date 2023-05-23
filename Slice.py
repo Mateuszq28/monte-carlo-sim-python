@@ -65,6 +65,18 @@ class Slice(Object3D):
             p1 = [p1[0], 0., 0.]
             p2 = [p1[0], 1., 0.]
             p3 = [p1[0], 0., 1.]
+        elif preset in ['xy-middle', 'yx-middle']:
+            p1 = [0., 0., 0.5]
+            p2 = [1., 0., 0.5]
+            p3 = [0., 1., 0.5]
+        elif preset in ['xz-middle', 'zx-middle']:
+            p1 = [0., 0.5, 0.]
+            p2 = [1., 0.5, 0.]
+            p3 = [0., 0.5, 1.]
+        elif preset in ['yz-middle', 'zy-middle']:
+            p1 = [0.5, 0., 0.]
+            p2 = [0.5, 1., 0.]
+            p3 = [0.5, 0., 1.]
         elif preset == "max_cross_middle":
             p3 = self.farthest_from_p(p1, arr_shape)
             middle = int(round((p1[2]+p3[2])/2, 0))
