@@ -4,7 +4,7 @@ przyporządkowanie kolorów do labeli - osobna klasa ShowColors
 
 poprawić test związany z slice i projection i print
 test odległośći punktu od płaszczyzny slice
-zamienić np.zeros na full(reset val)
+
 
 
 
@@ -22,3 +22,5 @@ matplotlib plot
 poprawić slice'y
 
 vispy
+
+zamienić np.zeros na full(reset val) - tam gdzie inicjalizowane body object3D (zmieniałem to, ale może doszło coś nowego)

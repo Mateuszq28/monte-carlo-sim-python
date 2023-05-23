@@ -22,6 +22,7 @@ class Object3D():
         :param z: self.height
         :param arr: ready to use body array
         """
+        self.reset_val = 0
         if arr is None:
             self.initialize_body_from_xyz(x, y, z)
         else:
@@ -33,7 +34,7 @@ class Object3D():
 
 
     def initialize_body_from_xyz(self, x, y, z):
-        self.body = np.zeros(shape=[x, y, z], dtype=int)
+        self.body = np.full(shape=[x, y, z], fill_value=self.reset_val, dtype=int)
         self.depth = x
         self.width = y
         self.height = z
