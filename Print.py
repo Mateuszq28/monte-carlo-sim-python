@@ -56,6 +56,10 @@ class Print(Object3D):
         p = os.path.join(dir, filename)
         img.save(p)
 
+    def arr2D_to_png(self, arr2D, dir="slice_img", filename="slice.png"):
+        img = self.arr2D_to_img(arr2D)
+        self.img2png(img, dir, filename)
+
     def obj3D_to_png(self, object3D:Object3D, axis, xray, dir="slice_img", filename="slice.png"):
         if xray == 1:
             ax = 0

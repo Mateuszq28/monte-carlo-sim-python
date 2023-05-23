@@ -1239,6 +1239,34 @@ class Test():
                 proj = Projection().throw(sl[i], axis=ax, xray=1)
                 print_obj.obj3D_to_png(proj, axis=2, xray=1, dir=dirname, filename=filename)
 
+        def test_simple_middle_slices(self):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # choose some
+            # ob = ob[:5]
+            # ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
+            # slice list
+            start = time.time()
+            sl_xy = [o.body[:,:,49] for o in ob]
+            sl_xz = [o.body[:,49,:] for o in ob]
+            sl_yz = [o.body[49,:,:] for o in ob]
+            end = time.time()
+            making_slice_time = end - start
+            print("making_slice_time", making_slice_time)
+            # print png images - prepare to loop
+            print_obj = Print()
+            sl = [sl_xy, sl_xz, sl_yz]
+            seria_name = ["xy-middle_simple", "xz-middle_simple", "yz-middle_simple"]
+            # print png images - loop
+            for s, sn in zip(sl, seria_name):
+                dirname = os.path.join("slice_img", sn)
+                for i in range(len(s)):
+                    filename = sn + "-ob" + str(i) + ".png"
+                    print_obj.arr2D_to_png(s[i], dir="slice_img", filename="slice.png")
+
 
     class Test_Projection():
         def __init__(self):
@@ -1418,6 +1446,11 @@ class Test():
         t = self.Test_Slice()
         t.test_middle_slices()
 
+    def test23(self):
+        # (simple method) middle xy xz yz print
+        t = self.Test_Slice()
+        t.test_simple_middle_slices()
+
 
 def main():
     test = Test()
@@ -1449,7 +1482,10 @@ def main():
     # test.test21()
 
     # middle xy xz yz slices + print
-    test.test22()
+    # test.test22()
+
+    # simple middle xy xz yz print
+    test.test23()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()
