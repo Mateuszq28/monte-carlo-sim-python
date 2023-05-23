@@ -1250,9 +1250,9 @@ class Test():
             # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
             # slice list
             start = time.time()
-            sl_xy = [o.body[:,:,49] for o in ob]
-            sl_xz = [o.body[:,49,:] for o in ob]
-            sl_yz = [o.body[49,:,:] for o in ob]
+            sl_xy = [o.body[:,:,50] for o in ob]
+            sl_xz = [o.body[:,50,:] for o in ob]
+            sl_yz = [o.body[50,:,:] for o in ob]
             end = time.time()
             making_slice_time = end - start
             print("making_slice_time", making_slice_time)
@@ -1265,7 +1265,7 @@ class Test():
                 dirname = os.path.join("slice_img", sn)
                 for i in range(len(s)):
                     filename = sn + "-ob" + str(i) + ".png"
-                    print_obj.arr2D_to_png(s[i], dir="slice_img", filename="slice.png")
+                    print_obj.arr2D_to_png(s[i], dir=dirname, filename=filename)
 
 
     class Test_Projection():
