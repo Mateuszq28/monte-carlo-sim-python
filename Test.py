@@ -8,6 +8,7 @@ from Object3D import *
 from PropEnv import *
 from ByMatplotlib import *
 from ByVispy import *
+from Print import *
 
 class Test():
     def __init__(self):
@@ -1136,21 +1137,28 @@ class Test():
                 raise ValueError("bad method string")
             return ob
         
-        def visualize_Obj3d_list(self, oblist):
+        def visualize_Obj3d_list(self, oblist, prefix_title=""):
             vis = ByVispy()
             matplot = ByMatplotlib()
             for i in range(len(oblist)):
                 o = oblist[i]
-                title = "ob" + str(i)
+                title = prefix_title + "_ob" + str(i)
                 vis.show_body(o, title=title)
                 # matplot.show_stride(o, stride=10, title=title)
+
+        def print_png_Obj3d_list(self, oblist, prefix_title=""):
+            print_obj = Print()
+            for i in range(len(oblist)):
+                o = oblist[i]
+                title = prefix_title + "_ob" + str(i) + ".png"
+                print_obj.obj3D_to_png(o, axis=2, xray=1, dir="slice_img", filename=title)
 
 
     class Test_Slice():
         def __init__(self):
             pass
 
-        def fromObj3D(self):
+        def test_fromObj3D(self, method="default"):
             # create objects
             test_Object3D = Test.Test_Object3D()
             ob = test_Object3D.obj3d_array_for_tests(method="end_p")
@@ -1158,17 +1166,45 @@ class Test():
             ob = ob[:5]
             # ob = ob[0:1]
             # visualize raw data
-            # test_Object3D.visualize_Obj3d_list(ob)
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
             # slice list
             all_preset_list = ["max_cross_middle", "xy", "xz", "yz", "max_cross_up", "max_cross_down"]
-            preset = all_preset_list[2]
+            preset = all_preset_list[0]
             start = time.time()
-            sl = [Slice().fromObj3D_4(o, preset=preset, min_dist=0.2) for o in ob]
+            if method == "default":
+                sl = [Slice().fromObj3D(o, preset=preset, min_dist=0.2) for o in ob]
+            else:
+                sl = [Slice().fromObj3D_byPlaneEq(o, preset=preset) for o in ob]
             end = time.time()
             making_slice_time = end - start
             print("making_slice_time", making_slice_time)
             # visualize slices
-            test_Object3D.visualize_Obj3d_list(sl)
+            test_Object3D.visualize_Obj3d_list(sl, prefix_title=preset)
+
+        def test_fromObj3D_to_projection(self):
+            # create objects
+            test_Object3D = Test.Test_Object3D()
+            ob = test_Object3D.obj3d_array_for_tests(method="end_p")
+            # choose some
+            # ob = ob[:5]
+            # ob = ob[0:1]
+            # visualize raw data
+            # test_Object3D.visualize_Obj3d_list(ob, prefix_title=preset)
+            # projection list
+            all_preset_list = ["max_cross_middle", "xy", "xz", "yz", "max_cross_up", "max_cross_down"]
+            preset = all_preset_list[5]
+            start = time.time()
+            slice = Slice()
+            sl = [slice.fromObj3D_to_projection(o, preset=preset) for o in ob]
+            end = time.time()
+            making_slice_projection_time = end - start
+            print("making_slice_projection_time", making_slice_projection_time)
+            # visualize projections
+            test_Object3D.visualize_Obj3d_list(sl, prefix_title=preset)
+            # print png images
+            test_Object3D.print_png_Obj3d_list(sl, prefix_title=preset)
+
+
 
 
 
@@ -1248,7 +1284,7 @@ class Test():
 
     def test14(self):
         t = self.Test_Slice()
-        t.fromObj3D()
+        t.test_fromObj3D()
 
     def test_MonteCarloSampling_exp2(self):
         test_MonteCarloSampling = self.Test_MonteCarloSampling()
@@ -1261,6 +1297,25 @@ class Test():
     def test_MonteCarloSampling_normal_scope(self):
         test_MonteCarloSampling = self.Test_MonteCarloSampling()
         test_MonteCarloSampling.normal_scope(loc=0, scale=1)
+
+    def test15(self):
+        self.test_MonteCarloSampling_exp2()
+        
+    def test16(self):
+        self.test_MonteCarloSampling_parabola2()
+
+    def test17(self):
+        self.test_MonteCarloSampling_normal_scope()
+
+    def test18(self):
+        # Slice.fromObj3D_to_projection
+        t = self.Test_Slice()
+        t.test_fromObj3D_to_projection()
+
+    def test19(self):
+        # slice method by equation - faster, but not accurate
+        t = self.Test_Slice()
+        t.test_fromObj3D(method="fast")
 
 
 def main():
@@ -1277,8 +1332,14 @@ def main():
     # wizualizacja
     # test.test13()
 
-    # slice
+    # slice method by equation - faster, but not accurate
     test.test14()
+
+    # slice
+    # test.test19()
+
+    # Slice.fromObj3D_to_projection
+    # test.test18()
 
     # normal generator
     # test.test_MonteCarloSampling_normal_scope()

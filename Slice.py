@@ -14,6 +14,8 @@ class Slice(Object3D):
         self.p1 = None
         self.p2 = None
         self.p3 = None
+        self.omit = [0]
+        self.reset_val = 0
 
     
     def set_plane_points(self, p1, p2, p3):
@@ -131,6 +133,19 @@ class Slice(Object3D):
         dist = self.dist_p_to_plane(p_out_plane, eq)
         return dist
     
+    def find_first_non_omit_z_idx(self, arr3d, x_idx, y_idx, plane_equation):
+        A = plane_equation[0]
+        B = plane_equation[1]
+        C = plane_equation[2]
+        D = plane_equation[3]
+        z_column = arr3d[x_idx, y_idx]
+        z_idx = None
+        for i in range(len(z_column)):
+            if A*x_idx + B*y_idx + C*i + D == 0:
+                if z_column[i] not in self.omit:
+                    z_idx = i
+                    break
+        return z_idx
 
     def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
         # slower vesion
@@ -212,9 +227,11 @@ class Slice(Object3D):
         return self
 
 
-    def fromObj3D_to_projection(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0):
+    def fromObj3D_to_projection(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=None):
+        if reset_val is None:
+            reset_val = self.reset_val
         b = object3D.body
-        arr2d_result = np.array(b.shape[:2])
+        arr2d_result = np.zeros(b.shape[:2])
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
@@ -227,15 +244,69 @@ class Slice(Object3D):
         sh = b.shape
         for x_idx in range(sh[0]):
             for y_idx in range(sh[1]):
-                z_idx = -(A*x_idx + B*y_idx + D)/C
-                z_idx = int(round(z_idx, 0))
-                if (0 <= z_idx <= sh[2]-1):
-                    arr2d_result[x_idx, y_idx] = b[x_idx, y_idx, z_idx]
+
+                if C != 0:
+                    z_idx = -(A*x_idx + B*y_idx + D)/C
+                else:
+                    # xz/yz plane is perpendicular to xz plane
+                    # here z_idx can become None
+                    z_idx = self.find_first_non_omit_z_idx(b, x_idx, y_idx, plane_equation)
+                    
+                if z_idx is not None:
+                    z_idx = int(round(z_idx, 0))
+                    if (0 <= z_idx <= sh[2]-1):
+                        arr2d_result[x_idx, y_idx] = b[x_idx, y_idx, z_idx]
+                    else:
+                        arr2d_result[x_idx, y_idx] = reset_val
                 else:
                     arr2d_result[x_idx, y_idx] = reset_val
+        if C == 0:
+            print("C in plane equation is zero, used first finded z_idx.")
         b_result = arr2d_result.reshape(sh[0],sh[1], 1)
         self.rebuild_from_array(b_result)
         self.set_plane_points(p1, p2, p3)
         projection = Projection(arr = b_result)
         projection.reset_val = reset_val
         return projection
+    
+
+    def fromObj3D_byPlaneEq(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=None):
+        # faster method, but not accurate
+        # especially in plane xz/yz it will be just projection on xy plane - 1d line
+        if reset_val is None:
+            reset_val = self.reset_val
+        b = object3D.body
+        arr3d_result = np.zeros(b.shape)
+        if preset is not None:
+            p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
+        p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
+        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
+        A = plane_equation[0]
+        B = plane_equation[1]
+        C = plane_equation[2]
+        D = plane_equation[3]
+        sh = b.shape
+        for x_idx in range(sh[0]):
+            for y_idx in range(sh[1]):
+
+                if C != 0:
+                    z_idx = -(A*x_idx + B*y_idx + D)/C
+                else:
+                    # xz/yz plane is perpendicular to xz plane
+                    # here z_idx can become None
+                    z_idx = self.find_first_non_omit_z_idx(b, x_idx, y_idx, plane_equation)
+                    
+                if z_idx is not None:
+                    z_idx = int(round(z_idx, 0))
+                    if (0 <= z_idx <= sh[2]-1):
+                        arr3d_result[x_idx, y_idx, z_idx] = b[x_idx, y_idx, z_idx]
+                    else:
+                        arr3d_result[x_idx, y_idx, z_idx] = reset_val
+                else:
+                    arr3d_result[x_idx, y_idx, z_idx] = reset_val
+        if C == 0:
+            print("C in plane equation is zero, used first finded z_idx.")
+        self.rebuild_from_array(arr3d_result)
+        self.set_plane_points(p1, p2, p3)
+        return self

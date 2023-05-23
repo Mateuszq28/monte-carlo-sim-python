@@ -16,17 +16,17 @@ class ByVispy(View):
     def __init__(self):
         super().__init__()
 
-    def show_body(self, object3D: Object3D, title="", omit_labels="default"):
+    def show_body(self, object3D: Object3D, title="", omit_labels=None):
         return self.show_body1(object3D, title, omit_labels=omit_labels)
 
-    def show_body1(self, object3D:Object3D, title="", omit_labels="default"):
+    def show_body1(self, object3D:Object3D, title="", omit_labels=None):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
         """
 
         # make array to omit particles with this labels
-        if omit_labels == "default":
+        if omit_labels is None:
             omit_labels = View.omit_labels
 
         object3D.make3d_points_series()
@@ -82,14 +82,14 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_body2(self, object3D:Object3D, title="", omit_labels="default"):
+    def show_body2(self, object3D:Object3D, title="", omit_labels=None):
         """
         Plot 3D interactive plot using Vispy of object3D.body
         :return: None
         """
 
         # make array to omit particles with this labels
-        if omit_labels == "default":
+        if omit_labels is None:
             omit_labels = View.omit_labels
 
         object3D.make3d_points_series()
