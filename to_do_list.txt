@@ -2,9 +2,6 @@ puszczanie fotonu
 
 przyporządkowanie kolorów do labeli - osobna klasa ShowColors
 
-poprawić test związany z slice i projection i print
-test odległośći punktu od płaszczyzny slice
-
 
 
 

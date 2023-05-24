@@ -2,7 +2,7 @@ from Object3D import Object3D
 
 class LightSourcePoint():
 
-    def __init__(self, loc_point, dir_vec, probaFun, photon_limit, emit_freq=1):
+    def __init__(self, loc_point, dir_vec, dir_phi, dir_theta, probaFun_phi, probaFun_theta, photon_limit, emit_freq=1):
 
         # localization vector
         self.loc_point = loc_point
