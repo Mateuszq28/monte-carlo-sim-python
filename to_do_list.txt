@@ -2,6 +2,7 @@ puszczanie fotonu
 
 przyporządkowanie kolorów do labeli - osobna klasa ShowColors
 
+commit wypróbować konflikt
 
 
 
@@ -21,3 +22,7 @@ poprawić slice'y
 vispy
 
 zamienić np.zeros na full(reset val) - tam gdzie inicjalizowane body object3D (zmieniałem to, ale może doszło coś nowego)
+
+przyspieszenia funkcji - wektoryzacja
+
+przyspieszenie gpu
