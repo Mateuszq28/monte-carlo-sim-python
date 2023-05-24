@@ -1174,7 +1174,7 @@ class Test():
             preset = all_preset_list[3]
             start = time.time()
             if method == "default":
-                sl = [Slice().fromObj3D_4(o, preset=preset, min_dist=0.2) for o in ob]
+                sl = [Slice().fromObj3D(o, preset=preset, min_dist=0.2) for o in ob]
             else:
                 sl = [Slice().fromObj3D_byPlaneEq(o, preset=preset) for o in ob]
             end = time.time()
