@@ -322,3 +322,5 @@ class Slice(Object3D):
         self.rebuild_from_array(arr3d_result)
         self.set_plane_points(p1, p2, p3)
         return self
+    
+    # lol
