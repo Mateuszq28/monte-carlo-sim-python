@@ -131,6 +131,13 @@ class Slice(Object3D):
         eq = plane_normal_vec.copy()
         eq = np.append(eq, D)
         return eq
+    
+    def dist_p_to_plane_VEC(self, p_vec, plane_equation):
+        # works on vectors
+        plane_norm_vec = plane_equation[0:3]
+        D = plane_equation[3]
+        dist_vec = np.abs(np.dot(p_vec, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
+        return dist_vec
 
 
     def dist_p_to_plane(self, p, plane_equation):
@@ -159,7 +166,7 @@ class Slice(Object3D):
                     break
         return z_idx
 
-    def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+    def fromObj3D_1(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
         # slower vesion
         b = object3D.body
         b_result = b.copy()
@@ -218,7 +225,26 @@ class Slice(Object3D):
         self.set_plane_points(p1, p2, p3)
         return self
     
-    def fromObj3D_4(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+    def fromObj3D(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
+        b = object3D.body
+        b_result = b.copy()
+        if preset is not None:
+            p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
+        p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
+        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = self.plane_equation(p1, normal_vec)
+        sh = b.shape
+        # --- this block is the difference between other fromObj3D functions ---
+        X, Y, Z = np.indices(b.shape)
+        p_vec = np.column_stack([X.flatten(), Y.flatten(), Z.flatten()])
+        reset_flag_mtx = self.dist_p_to_plane_VEC(p_vec, plane_equation).reshape(sh) > min_dist
+        b_result[reset_flag_mtx] = reset_val
+        # ---
+        self.rebuild_from_array(b_result)
+        self.set_plane_points(p1, p2, p3)
+        return self
+    
+    def fromObj3D_5(self, object3D:Object3D, p1=(0,0,0), p2=None, p3=None, preset="max_cross_middle", reset_val=0, min_dist=math.sqrt(2)/2):
         b = object3D.body
         b_result = b.copy()
         if preset is not None:

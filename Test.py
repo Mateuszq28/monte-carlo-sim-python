@@ -1168,7 +1168,7 @@ class Test():
             ob = ob[:5]
             # ob = ob[0:1]
             # visualize raw data
-            test_Object3D.visualize_Obj3d_list(ob)
+            # test_Object3D.visualize_Obj3d_list(ob)
             # slice list
             all_preset_list = ["max_cross_middle", "xy", "xz", "yz", "max_cross_up", "max_cross_down"]
             preset = all_preset_list[3]
