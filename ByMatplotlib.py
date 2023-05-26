@@ -31,7 +31,7 @@ class ByMatplotlib(View):
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
         color_idx = 0
         color_idx_limit = len(color_bufor)
-        for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]):
+        for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])):
             if label not in omit_labels:
                 x_series = series[:, 0]
                 y_series = series[:, 1]
@@ -58,7 +58,7 @@ class ByMatplotlib(View):
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
         color_idx = 0
         color_idx_limit = len(color_bufor)
-        for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]):
+        for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])):
             if label not in omit_labels:
                 x_series = series[:, 0]
                 y_series = series[:, 1]

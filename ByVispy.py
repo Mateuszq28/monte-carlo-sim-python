@@ -37,7 +37,7 @@ class ByVispy(View):
         counter = 0
         pos_list = []
         colrs_list = []
-        for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]):
+        for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])):
             if label not in omit_labels:
                 pos_list.append(series)
                 n = len(series)
@@ -99,7 +99,7 @@ class ByVispy(View):
         # this commented line can be deleted - shows "air"/0 label
         # pos = object3D.composition["points_series"][0]
 
-        pos_not_conc = [series for series, label in zip(object3D.composition["points_series"], object3D.composition["labels"]) if label not in omit_labels]
+        pos_not_conc = [series for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])) if label not in omit_labels]
 
         if len(pos_not_conc) > 0:
             pos = np.concatenate(pos_not_conc)

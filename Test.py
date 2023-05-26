@@ -1261,7 +1261,7 @@ class Test():
             sl = [sl_xy, sl_xz, sl_yz]
             seria_name = ["xy-middle_simple", "xz-middle_simple", "yz-middle_simple"]
             # print png images - loop
-            for s, sn in zip(sl, seria_name):
+            for s, sn in list(zip(sl, seria_name)):
                 dirname = os.path.join("slice_img", sn)
                 for i in range(len(s)):
                     filename = sn + "-ob" + str(i) + ".png"
