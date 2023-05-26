@@ -35,14 +35,6 @@ class Make():
         raise NotImplementedError()
 
 
-    
-
-
-
-# make propagation environment
-if config['start_point'] is None:
-half_depth =
-start_point = ()
 
 
 
