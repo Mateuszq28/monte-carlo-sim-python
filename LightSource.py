@@ -1,6 +1,7 @@
 from Object3D import Object3D
 from Space3dTools import Space3dTools
 from FeatureSampling import FeatureSampling
+import json
 
 class LightSourcePoint():
 
@@ -37,8 +38,19 @@ class LightSource(Object3D):
         super().__init__(x, y, z, arr)
         self.light_source_label = light_source_label
         self.light_source_list = None
+        self.body_type = None
+        self.tropic = None
+        self.flag_isotropic = None
+        self.photon_limit = None
+        self.photon_limits_list = None
         
-    def initialize_source(self, body_type="from self body", body=None, tropic=None, flag_isotropic=False, photon_limit=10):
+    def initialize_source(self, body_type="from self body", body=None, tropic=None, flag_isotropic=False, photon_limit=10, light_source_label=-1):
+        # object variables
+        self.body_type = body_type
+        self.tropic = tropic
+        self.flag_isotropic = flag_isotropic
+        self.photon_limit = photon_limit
+        self.light_source_label = light_source_label
 
         # light rays tropic (direction vector)
         if tropic is None:
@@ -77,12 +89,53 @@ class LightSource(Object3D):
         sources_count = len(light_points_xyz)
         distrib2every = photon_limit // sources_count
         distrib2first = sources_count - distrib2every * sources_count
-        photon_limits = [distrib2every+1 for _ in range(distrib2first)] + [distrib2every for _ in range(sources_count-distrib2first)]
+        self.photon_limits_list = [distrib2every+1 for _ in range(distrib2first)] + [distrib2every for _ in range(sources_count-distrib2first)]
 
         # Make LightSourcePoint list
-        self.light_source_list = [LightSourcePoint(probaFun_phi, probaFun_theta, ph_lim, loc_point, dir_vec=tropic, dir_phi=None, dir_theta=None) for ph_lim, loc_point in list(zip(photon_limits, light_points_xyz))]
+        self.light_source_list = [LightSourcePoint(probaFun_phi, probaFun_theta, ph_lim, loc_point, dir_vec=tropic, dir_phi=None, dir_theta=None) for ph_lim, loc_point in list(zip(self.photon_limits_list, light_points_xyz))]
 
 
+    def save_json(self, path, additional=True):
+        d = {
+            "body": self.body,
+            "light_source_label": self.light_source_label,
+            "light_source_list": self.light_source_list,
+            "body_type": self.body_type,
+            "tropic": self.tropic,
+            "flag_isotropic": self.flag_isotropic,
+            "photon_limit": self.photon_limit,
+            "photon_limits_list": self.photon_limits_list
+        }
+        if additional:
+            d["self.height"] = self.height
+            d["self.width"] = self.width
+            d["self.depth"] = self.depth
+            d["self.shape"] = self.shape
+            d["composition"] = self.composition
+        with open(path, 'w') as f:
+            json.dump(d, f)
+
+
+    @staticmethod
+    def load_json(path):
+        with open(path, 'w') as f:
+            d = json.load(f)
+        if d["photon_limit"] is None:
+            d["photon_limit"] = sum(d["photon_limits_list"])
+        lightSource = LightSource(arr=d["body"])
+        if d["light_source_list"] is not None:
+            lightSource.body = d["body"]
+            lightSource.light_source_label = d["light_source_label"]
+            lightSource.light_source_list = d["light_source_list"]
+            lightSource.body_type = d["body_type"]
+            lightSource.tropic = d["tropic"]
+            lightSource.flag_isotropic = d["flag_isotropic"]
+            lightSource.photon_limit = d["photon_limit"]
+            lightSource.photon_limits_list = d["photon_limits_list"]
+        else:
+            lightSource.initialize_source(body_type="from self body", body=None, tropic=d["tropic"], flag_isotropic=d["flag_isotropic"], photon_limit=d["photon_limit"], light_source_label=d["light_source_label"])
+        return lightSource
+    
 
 
 
