@@ -62,14 +62,14 @@ class Object3D():
     def analize_materials(self):
         """
         Save unique values found in self.body to self.composition["labels"].
-        Then counts num of their occurrences and saves to self.composition["labels_num"].
+        Then counts number of their occurrences and saves to self.composition["labels_count"].
         :return: None
         """
         self.composition = dict()
         self.composition["labels"] = np.unique(self.body).tolist()
-        self.composition["labels_num"] = []
+        self.composition["labels_count"] = []
         for label in self.composition["labels"]:
-            self.composition["labels_num"].append(np.count_nonzero(self.body == label))
+            self.composition["labels_count"].append(np.count_nonzero(self.body == label))
 
 
     def make3d_points_series(self):
@@ -84,7 +84,7 @@ class Object3D():
         # list of np.array [point number, xyz]
         self.composition["points_series"] = []
         for i in range(len(self.composition["labels"])):
-            self.composition["points_series"].append(np.zeros(shape=(self.composition["labels_num"][i], 3)))
+            self.composition["points_series"].append(np.zeros(shape=(self.composition["labels_count"][i], 3)))
         # counter to change values in arrays - list of free ID's
         array_id_counter = [0 for _ in range(len(self.composition["points_series"]))]
         for i in range(self.depth):

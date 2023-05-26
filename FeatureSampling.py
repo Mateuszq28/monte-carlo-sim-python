@@ -10,13 +10,18 @@ class MyRandom():
     def __init__(self):
         pass
 
-    def wiawib(self, a, b, precision):
+    def uniform_closed(self, a, b, precision):
         """
         Generate random number from closed interval <a, b>
-        (WIth A WIth B)
         """
         rnd = random.randint(a, (b-a) * (10 ** precision)) / float((b-a) * (10 ** precision))
         return rnd
+    
+    def uniform_half_open(self, a, b):
+        """
+        Generate random number from half-open interval <a, b)
+        """
+        return random.random()
         
 
 class FeatureSampling():
@@ -27,10 +32,31 @@ class FeatureSampling():
             config = json.load(f)
         random.seed = config["random_seed"]
         self.precision = config["precision"]
+        self.max_photon_hop = config["max_photon_hop"]
         self.funSampling = FunSampling(self.precision)
+        self.myRandom = MyRandom()
+
+    def photon_hop(self):
+        scale = self.max_photon_hop / 10
+        hop = self.funSampling.exp2(a=1) * scale
+        return hop
     
-    def light_source_point_sampling(self):
-        return self.funSampling.exp1(2)
+    def photon_theta(self):
+        theta = self.funSampling.normal(scale=1.0)
+        # theta = self.funSampling.exp2(a=1) * math.pi
+        return theta
+
+    def photon_theta_isotropic(self):
+        phi = self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
+
+    def photon_phi(self):
+        phi = self.myRandom.uniform_half_open(-math.pi, math.pi)
+    
+    def photon_phi_isotropic(self):
+        phi = self.myRandom.uniform_half_open(-math.pi, math.pi)
+
+    
+
 
 
 class MonteCarloSampling():
@@ -490,7 +516,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1(a,s=min_scope)
-            rnd = myRandom.wiawib(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
         # else rnd is given for test reasons as a parameter
         s = math.log(1 - a**2 * rnd) / -a
         return s
@@ -499,7 +525,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.wiawib(a=0, b=1, precision=prec)
+            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
         # else rnd is given for test reasons as a parameter
         s = -math.log(1 - rnd*(1 - math.exp(-10*a))) / a
         return s
@@ -534,7 +560,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1_d(a, s1=min_scope, s=min_scope)
-            rnd = myRandom.wiawib(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
         # else rnd is given for test reasons as a parameter
         s = math.log(math.exp(-a*min_scope) - a**2 * rnd) / -a
         return s
@@ -571,7 +597,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1(a,s=min_scope)
-            rnd = myRandom.wiawib(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
         # else rnd is given for test reasons as a parameter
         # s = -math.log(1-rnd) / a
         s = -math.log(rnd) / a #flipped
@@ -595,7 +621,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.parabola1(s=min_scope)
-            rnd = myRandom.wiawib(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
         # else rnd is given for test reasons as a parameter
         poly = np.polynomial.polynomial.Polynomial([2/3*(math.pi**3)-rnd, math.pi**2, 0, -1/3])
         roots = poly.roots()
@@ -626,7 +652,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.wiawib(a=0, b=1, precision=prec)
+            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
         # else rnd is given for test reasons as a parameter
         k = 3/(4*(math.pi**3))
         poly = np.polynomial.polynomial.Polynomial([k * (2/3*(math.pi**3)) - rnd, k * (math.pi**2), 0, k * (-1/3) ])
@@ -651,7 +677,7 @@ class FunSampling():
             result = roots_real
         return result
     
-    def normal(self, loc=0, scale=1):
+    def normal(self, loc=0., scale=1.):
         return norm.rvs(loc=loc, scale=scale)
         
     def normals(self, loc=0, scale=1, size=1):

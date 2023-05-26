@@ -2,7 +2,7 @@ puszczanie fotonu
 
 przyporządkowanie kolorów do labeli - osobna klasa ShowColors
 
-commit wypróbować konflikt
+przeczytać mcx coś tam kod
 
 
 
