@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 class Space3dTools():
     def __init__(self):
@@ -33,4 +34,49 @@ class Space3dTools():
         yn = y/R
         zn = z/R
         return xn, yn, zn
+    
+    @staticmethod
+    def reflect_vector(incident_vec, normal_vec):
+        # https://en.wikipedia.org/wiki/Specular_reflection
+        id = np.array(incident_vec)
+        id = id / np.linalg.norm(id)
+        n = n / np.linalg.norm(n)
+        n = np.array(normal_vec)
+        return id - 2*n * np.dot(n,id)
+    
+    @staticmethod
+    def negative_vector(vec):
+        return -np.array(vec)
+    
+    @staticmethod
+    def angle_between_vectors(vec1, vec2):
+        a = np.array(vec1)
+        b = np.array(vec2)
+        alfa = math.acos(np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+        return alfa
+    
+    @staticmethod
+    def refraction_vec(incident_vec, normal_vec, n1, n2):
+        # https://en.wikipedia.org/wiki/Snell%27s_law
+        # https://stackoverflow.com/questions/29758545/how-to-find-refraction-vector-from-incoming-vector-and-surface-normal
+        l = np.array(incident_vec)
+        l = l / np.linalg.norm(l)
+        n = np.array(normal_vec)
+        n = n / np.linalg.norm(n)
+        r = n1/n2
+        c = -np.dot(n,l)
+        refraction = r*l + (r*c - math.sqrt(1 - r**2 * (1 - c**2))) * n
+        return refraction
+    
+    @staticmethod
+    def internal_reflectance(theta1, theta2):
+        t1 = theta1
+        t2 = theta2
+        temp1 = (math.sin(t1)*math.cos(t2) - math.cos(t1)*math.sin(t2))**2/2
+        temp2 = (math.cos(t1)*math.cos(t2) + math.sin(t1)*math.sin(t2))**2 + (math.cos(t1)*math.cos(t2) - math.sin(t1)*math.sin(t2))**2
+        temp3 = (math.sin(t1)*math.cos(t2) + math.cos(t1)*math.sin(t2))**2
+        temp4 = (math.cos(t1)*math.cos(t2) + math.sin(t1)*math.sin(t2))**2
+        R = temp1 * temp2 / (temp3 * temp4)
+        return R
+
 

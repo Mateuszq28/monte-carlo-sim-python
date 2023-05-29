@@ -1,7 +1,11 @@
 import json
+import numpy as np
+import math
 from Make import Make
 from PropSetup import PropSetup
 from Photon import Photon
+from Space3dTools import Space3dTools
+
 
 class Sim():
 
@@ -66,20 +70,86 @@ class Sim():
 
     def propagate_photon(self, photon: Photon):
         pos_x, pos_y, pos_z = photon.pos
-        mu_s, mu_a = self.propSetup.propEnv.get_properties(pos_x, pos_y, pos_z)
 
-        
+        while photon.weight > 0:
+            mu_a, mu_s = self.propSetup.propEnv.get_properties(pos_x, pos_y, pos_z)
+            mu_t = mu_a + mu_s
+            ux, uy, uz = self.hop(photon, mu_t)
+            
 
-        albedo = mu_s / (mu_s + mu_a);
-        rs = (n-1.0)*(n-1.0)/(n+1.0)/(n+1.0);	/* specular reflection */
-        crit_angle = sqrt(1.0-1.0/n/n);			/* cos of critical angle */
-        bins_per_mfp = 1e4/microns_per_bin/(mu_a+mu_s);
-        
+            albedo = mu_s / (mu_s + mu_a);
+            rs = (n-1.0)*(n-1.0)/(n+1.0)/(n+1.0);	/* specular reflection */
+            crit_angle = sqrt(1.0-1.0/n/n);			/* cos of critical angle */
+            bins_per_mfp = 1e4/microns_per_bin/(mu_a+mu_s);
+            
 
-            launch ();
-            while (weight > 0) {
-                move ();
-                absorb ();
-                scatter ();
-            }
- 
+                launch ();
+                while (weight > 0) {
+                    move ();
+                    absorb ();
+                    scatter ();
+                }
+            
+    def hop(self, photon: Photon, mu_t):
+        distance = photon.fun_hop(mu_t=mu_t)
+        self.try_move(photon, distance)
+
+
+    def try_move(self, photon:Photon, distance):
+        step = [distance * ax for ax in photon.dir]
+        next_pos = np.array(photon.pos) + np.array(step)
+
+        # check if there was change of a material
+        boundary_pos, boundary_change, n1, n2 = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+        # check if photon is in env range
+        if boundary_change:
+            env_boundary_exceeded = False
+        else:
+            env_boundary_exceeded = self.propSetup.propEnv.env_boundary_check(next_pos)
+
+        if not env_boundary_exceeded:
+            if boundary_change:
+                label_in = self.propSetup.propEnv.get_label_from_float(photon.pos)
+                plane_boundary_normal_vec = self.propSetup.propEnv.plane_normal_vec(boundary_pos, label_in)
+                incident_vec = np.array(boundary_pos) - np.array(photon.pos)
+                reflect_vec = Space3dTools.reflect_vector(incident_vec, plane_boundary_normal_vec)
+
+                # Total internal reflection
+                R = 0
+                neg_incident_vec = Space3dTools.negative_vector(incident_vec)
+                alpha = Space3dTools.angle_between_vectors(neg_incident_vec, plane_boundary_normal_vec)
+                refraction_vec = None
+                if n2 > n1:
+                    critical_alpha = math.asin(n2 / n1)
+                    if alpha > critical_alpha:
+                        # internal reflectance
+                        R = 1.
+
+                if n2 <= n1 or R == 0:
+                    refraction_vec = Space3dTools.refraction_vec(incident_vec, plane_boundary_normal_vec, n1, n2)
+                    neg_normal_vec = Space3dTools.negative_vector(plane_boundary_normal_vec)
+                    beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
+                    R = Space3dTools.internal_reflectance(alpha, beta)
+
+                if R < 1.:
+                    traveled_dist = math.dist(photon.pos, boundary_pos)
+                    rest_dist = distance - traveled_dist
+                    # penetration ray - refraction
+                    # new photon to track
+                    refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1-R))
+                    self.try_move(refraction_photon, rest_dist)
+                    self.propagate_photon(refraction_photon)
+                    # update old photon
+                    photon.pos = boundary_pos
+                    photon.weight *= R
+                    photon.dir = reflect_vec
+                    self.try_move(photon, rest_dist)
+            
+            else:
+                photon.pos = next_pos
+        # else ignore - photon escape
+
+    
+
+
+    
