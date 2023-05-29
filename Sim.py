@@ -1,8 +1,11 @@
 import json
 from Make import Make
 from PropSetup import PropSetup
+from Photon import Photon
 
 class Sim():
+
+    propSetup: PropSetup
 
     def __init__(self):
         with open("config.json") as f:
@@ -41,42 +44,42 @@ class Sim():
 
         # make propagation setup (environment + light source)
         if self.config["flag_make_prop_setup_from_componentes"]:
-             self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
+            self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
         else:
-             self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
+            self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
 
-
-
-
-
-
-
-                            
 
     def start_sim(self):
-        for _ in range(self.config["number_of_photons"]):
-            self.propagate_photon()
-            
+        photon_limits_list = self.propSetup.lightSource.photon_limits_list
+        if photon_limits_list is not None:
+            for i in range(len(photon_limits_list)):
+                for j in range(photon_limits_list[i]):
+                    ls = self.propSetup.lightSource.light_source_list
+                    if ls is not None:
+                        photon = ls[i].emit()
+                        self.propagate_photon(photon)
+                    else:
+                        raise ValueError("ls is None")
+        else:
+            raise ValueError("photon_limits_list is None")
 
-    def propagate_photon(self):
-        raise NotImplementedError()
-    
 
+    def propagate_photon(self, photon: Photon):
+        pos_x, pos_y, pos_z = photon.pos
+        mu_s, mu_a = self.propSetup.propEnv.get_properties(pos_x, pos_y, pos_z)
 
+        
 
+        albedo = mu_s / (mu_s + mu_a);
+        rs = (n-1.0)*(n-1.0)/(n+1.0)/(n+1.0);	/* specular reflection */
+        crit_angle = sqrt(1.0-1.0/n/n);			/* cos of critical angle */
+        bins_per_mfp = 1e4/microns_per_bin/(mu_a+mu_s);
+        
 
-'''
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser(fromfile_prefix_chars='@')
-    ap.add_argument('-l', '--lol', help="nazwa pliku jsona do podziału", metavar='String', default=filename_in)
-    ap.add_argument('-tr', '--train', help='nazwa pliku jsona wyjściowego - train', metavar='String', default=filename_out_train)
-    ap.add_argument('-te', '--test', help='nazwa pliku jsona wyjściowego - test', metavar='String', default=filename_out_test)
-    ap.add_argument('-r', '--ratio', help='stosunek zbioru testowego do całości', metavar=float, default=split_ratio)
-
-    args = vars(ap.parse_args())
-
-    arg_input = args['input']
-    arg_train = args['train']
-    arg_test = args['test']
-    arg_ratio = args['ratio']
-'''
+            launch ();
+            while (weight > 0) {
+                move ();
+                absorb ();
+                scatter ();
+            }
+ 

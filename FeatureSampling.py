@@ -5,6 +5,8 @@ import numpy as np
 from scipy.stats import norm
 from scipy.special import erf
 
+# --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
+
 class MyRandom():
 
     def __init__(self):
@@ -25,6 +27,9 @@ class MyRandom():
         
 
 class FeatureSampling():
+    """
+        In this class all random functions are assigned to the simulation
+    """
 
     def __init__(self):
         with open("config.json") as f:
@@ -36,35 +41,59 @@ class FeatureSampling():
         self.funSampling = FunSampling(self.precision)
         self.myRandom = MyRandom()
 
-    def photon_hop(self):
-        scale = self.max_photon_hop / 10
-        hop = self.funSampling.exp2(a=1) * scale
+    def photon_hop(self, mu_t):
+        # try other functiuons
+        # scale = self.max_photon_hop / 10
+        # hop = self.funSampling.exp2(a=1) * scale
+        hop = self.funSampling.exp1_aprox(a=mu_t)
         return hop
     
     def photon_theta(self):
-        theta = self.funSampling.normal(scale=1.0)
-        # theta = self.funSampling.exp2(a=1) * math.pi
-        return theta
+        # try other functiuons
+        return self.funSampling.normal(scale=1.0)
+        # return self.funSampling.exp2(a=1) * math.pi
 
     def photon_theta_isotropic(self):
-        phi = self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
+        return self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
+    
+    def photon_theta_constant(self, const=0):
+        return const
 
     def photon_phi(self):
-        phi = self.myRandom.uniform_half_open(-math.pi, math.pi)
+        # try other functiuons
+        return self.myRandom.uniform_half_open(-math.pi, math.pi)
     
     def photon_phi_isotropic(self):
-        phi = self.myRandom.uniform_half_open(-math.pi, math.pi)
+        return self.myRandom.uniform_half_open(-math.pi, math.pi)
 
+    def photon_phi_constant(self, const=0):
+        return const
     
+    def start_loc_shift_x_0(self):
+        return 0
+    
+    def start_loc_shift_y_0(self):
+        return 0
+    
+    def start_loc_shift_z_0(self):
+        return 0
+
+# --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
 
 
+
+
+
+
+
+# --- 2. INTERFACE THAT COLLECTS RANDOM FUNCTIONS AND THEIR TRANSFORMATIONS ---
 
 class MonteCarloSampling():
     def __init__(self):
         # 1. classes interfaces
-        funOrigin = FunOrigin()
+        funOrigin = FunOrigin() # PDF - probability density function (or simmilar)
         funIntegral = FunIntegral()
-        funDistibution = FunDistibution()
+        funDistibution = FunDistibution() # CDF - cumulative distribution function (or simmilar)
         funSampling = FunSampling()
         # 2. mathematical functions
         self.exp1 = FunInterface(funOrigin.exp1, funIntegral.exp1, funDistibution.exp1, funSampling.exp1)
@@ -299,7 +328,6 @@ class MonteCarloSampling():
         self.normal.functionForSampling_label = ChartLabel(xlabel, ylabel, title)
 
 
-
 class FunInterface():
     def __init__(self, fun, integral, distribution, funSamp):
         # mathematical functions
@@ -320,6 +348,9 @@ class ChartLabel():
         self.ylabel = ylabel
         self.title = title
 
+# --- 2. INTERFACE THAT COLLECTS RANDOM FUNCTIONS AND THEIR TRANSFORMATIONS ---
+
+# --- 3. ALL RANDOM FUNCTIONS ---
 
 class FunOrigin():
 
@@ -377,6 +408,7 @@ class FunOrigin():
     
     def normal(self, x, loc=0, scale=1):
         return norm.pdf(x, loc=loc, scale=scale)
+
 
 class FunIntegral():
     def __init__(self):
@@ -480,6 +512,7 @@ class FunDistibution():
     def normal(self, x, loc=0, scale=1):
         return norm.cdf(x, loc=loc, scale=scale)
 
+
 class FunSampling():
 
     def __init__(self, precision=6):
@@ -565,38 +598,26 @@ class FunSampling():
         s = math.log(math.exp(-a*min_scope) - a**2 * rnd) / -a
         return s
     
-    def exp1_aprox(self, a, rnd=None, min_rnd=0, max_rnd=1-math.exp(-10), min_scope=0, max_scope=10):
+    def exp1_aprox(self, a, rnd=None, min_rnd=0, max_rnd=1):
         """
-        constant integration scope <0, s> (in distribution)
-        min_rnd=0 and min_scope=0 should not be changed
-        these is because of constant integration scope <0, s> (in distribution)
-
         variant from the literature
         
         p(s) = exp(-as)/a
         F(s) = RND = (1 - exp(-as))/a**2
         F(s) - distribution function
-        s = exp1()
+        s = exp1_aprox()
         s - value of the feature
         p(s) - probability of value s of the feature
         RND - random number <0,1>
-        a - parameter
-        :param a: parameter
+        a - parameter mu_t - total attenuation coefficient. mu_t = mu_a + mu_s
+        :param a: parameter mu_t, total attenuation coefficient
         :param rnd: if None (default), algorithm will rand this number from <0,1>
-        :param min_rnd: minimum value used in uniform random number generator = distribution(min_scope), if None count auto using min_scope
-        :param max_rnd: maximum value used in uniform random number generator = distribution(max_scope), if None count auto using max_scope
-        :param min_scope: minimum value of feature s, that will be generated
-        :param max_scope: maximum value of feature s, that will be generated
+        :param min_rnd: minimum value used in uniform random number generator
+        :param max_rnd: maximum value used in uniform random number generator
         """
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            if max_rnd is None:
-                funDistibution = FunDistibution()
-                max_rnd = funDistibution.exp1(a,s=max_scope)
-            if min_rnd is None:
-                funDistibution = FunDistibution()
-                min_rnd = funDistibution.exp1(a,s=min_scope)
             rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
         # else rnd is given for test reasons as a parameter
         # s = -math.log(1-rnd) / a
@@ -686,3 +707,5 @@ class FunSampling():
             return n[0]
         else:
             return n
+        
+# --- 3. ALL RANDOM FUNCTIONS ---

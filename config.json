@@ -12,8 +12,6 @@
 
     "flag_make_prop_setup_from_componentes": false,
 
-    "number_of_photons": 10,
-
     "random_seed": 0,
     "precision": 8,
     "max_photon_hop": 10

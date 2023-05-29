@@ -4,7 +4,7 @@ from Object3D import Object3D
 import json
 
 class PropSetup:
-    def __init__(self, propEnv, lightSource, offset):
+    def __init__(self, propEnv: PropEnv, lightSource: LightSource, offset):
         self.propEnv = propEnv
         self.lightSource = lightSource
         self.offset = offset
@@ -58,4 +58,4 @@ class PropSetup:
 
     @staticmethod
     def from_file(prop_setup_path):
-        PropEnv.load_json(prop_setup_path)
+        return PropSetup.load_json(prop_setup_path)
