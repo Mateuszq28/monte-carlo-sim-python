@@ -2,6 +2,7 @@ from LightSource import LightSource
 from PropEnv import PropEnv
 from Object3D import Object3D
 import json
+import numpy as np
 
 class PropSetup:
     def __init__(self, propEnv: PropEnv, lightSource: LightSource, offset):
@@ -11,6 +12,8 @@ class PropSetup:
         self.preview = None
         self.env_path = None
         self.light_source_path = None
+        self.resultEnv = None
+        self.resultRecords = None
 
     def makePreview(self):
         arr3d = self.propEnv.body.copy()
@@ -18,6 +21,26 @@ class PropSetup:
         sh = self.lightSource.shape
         arr3d[ox:ox+sh[0], oy:oy+sh[1], oz:oz+sh[2]] = self.lightSource
         self.preview = Object3D(arr=arr3d)
+
+    def save2result_env(self, xyz, weight):
+        if self.resultEnv is None:
+            sh = self.propEnv.shape
+            arr = np.full(shape=sh, fill_value=0.)
+            self.resultEnv = PropEnv(arr=arr)
+        xyz_int = self.resultEnv.round_xyz(xyz)
+        self.resultEnv.body[xyz[0], xyz[1], xyz[2]] += weight
+        
+    def save2resultRecords(self, xyz, weight, round=True):
+        if self.resultRecords is None:
+            self.resultRecords = []
+        if round:
+            xyz_save = PropEnv.round_xyz(xyz)
+        else:
+            xyz_save = xyz.copy()
+        if isinstance(xyz_save,np.ndarray):
+            xyz_save = xyz_save.tolist()
+        record = xyz_save + [weight]
+        self.resultRecords.append(record)
 
     @staticmethod
     def auto_offset(env_shape, lightSource_shape):

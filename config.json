@@ -14,5 +14,5 @@
 
     "random_seed": 0,
     "precision": 8,
-    "max_photon_hop": 10
+    "bins_per_1_cm": 500
 }

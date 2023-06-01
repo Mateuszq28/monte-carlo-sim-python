@@ -4,29 +4,23 @@ import json
 class PropEnv(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
         super().__init__(x, y, z, arr)
+    
+    def get_label_from_float(self, xyz):
+        xyz_int = self.round_xyz(xyz)
+        label = self.body[xyz_int[0], xyz_int[1], xyz_int[2]]
+        return label
 
-    def get_properties(self, x, y, z):
+    def get_properties(self, xyz):
         raise NotImplementedError()
     
-    def get_label_from_float(self, xf=None, yf=None, zf=None, xyz=None):
-        if xyz is not None:
-             xf = xyz[0]
-             yf = xyz[1]
-             zf = xyz[2]
-
-        if xf is not None and xf is not None and zf is not None:
-            int_x = int(xf)
-            int_y = int(yf)
-            int_z = int(zf)
-            label = self.body[int_x, int_y, int_z]
-        else:
-            raise ValueError("too many None values")
-        return label
+    def get_refractive_index(self, xyz):
+        raise NotImplementedError()
     
-    def env_boundary_check(self, pos):
+    def env_boundary_check(self, xyz):
+        xyz_int = self.round_xyz(xyz)
         env_boundary_exceeded = False
         for i in range(3):
-            if pos[i] > self.shape[i]:
+            if xyz_int[i] > self.shape[i]:
                 env_boundary_exceeded = True
                 break
         return env_boundary_exceeded
@@ -36,4 +30,9 @@ class PropEnv(Object3D):
         with open(path, 'w') as f:
             d = json.load(f)
         return PropEnv(arr=d["body"])
+
+    @staticmethod
+    def round_xyz(xyz):
+        xyz_int = [round(val) for val in xyz]
+        return xyz_int
     

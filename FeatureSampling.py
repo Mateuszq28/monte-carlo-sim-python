@@ -37,19 +37,28 @@ class FeatureSampling():
             config = json.load(f)
         random.seed = config["random_seed"]
         self.precision = config["precision"]
-        self.max_photon_hop = config["max_photon_hop"]
+        # 1 voxel
+        # dx, dy, dz = 1 cm / bins_per_1_cm
+        # 1 / mu_t - average step size of photon
+        # for mu_t = 100: average step size of photon = 1/100 cm
+        #
+        # popular photon step: <0; 4/100> cm
+        # bins_per_1_cm = 500
+        self.bins_per_1_cm = config["bins_per_1_cm"] # [N/cm]
         self.funSampling = FunSampling(self.precision)
         self.myRandom = MyRandom()
 
     def photon_hop(self, mu_t):
+        # mu_t [1/cm]
         # try other functiuons
-        # scale = self.max_photon_hop / 10
-        # hop = self.funSampling.exp2(a=1) * scale
-        hop = self.funSampling.exp1_aprox(a=mu_t)
+        # hop = self.funSampling.exp2(a=mu_t) # [cm]
+        hop = self.funSampling.exp1_aprox(a=mu_t) # [cm]
+        # calculations in bins (voxels)
+        hop *= self.bins_per_1_cm # [cm * N/cm = N]
         return hop
     
     def photon_theta(self):
-        # try other functiuons
+        # try other functions
         return self.funSampling.normal(scale=1.0)
         # return self.funSampling.exp2(a=1) * math.pi
 
@@ -60,7 +69,7 @@ class FeatureSampling():
         return const
 
     def photon_phi(self):
-        # try other functiuons
+        # try other functions
         return self.myRandom.uniform_half_open(-math.pi, math.pi)
     
     def photon_phi_isotropic(self):
@@ -618,7 +627,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_closed(a=min_rnd+prec, b=max_rnd, precision=prec) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
         # s = -math.log(1-rnd) / a
         s = -math.log(rnd) / a #flipped

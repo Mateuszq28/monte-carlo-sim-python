@@ -72,9 +72,12 @@ class Sim():
         pos_x, pos_y, pos_z = photon.pos
 
         while photon.weight > 0:
-            mu_a, mu_s = self.propSetup.propEnv.get_properties(pos_x, pos_y, pos_z)
-            mu_t = mu_a + mu_s
-            ux, uy, uz = self.hop(photon, mu_t)
+            mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+            # move photon to new position
+            self.hop(photon, mu_t)
+            # absorb light in medium
+            self.drop(photon, mu_a, mu_s, mu_t)
+            
             
 
             albedo = mu_s / (mu_s + mu_a);
@@ -100,7 +103,7 @@ class Sim():
         next_pos = np.array(photon.pos) + np.array(step)
 
         # check if there was change of a material
-        boundary_pos, boundary_change, n1, n2 = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+        boundary_pos, boundary_change = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
         # check if photon is in env range
         if boundary_change:
             env_boundary_exceeded = False
@@ -109,7 +112,10 @@ class Sim():
 
         if not env_boundary_exceeded:
             if boundary_change:
-                label_in = self.propSetup.propEnv.get_label_from_float(photon.pos)
+                # save photon position with no absorb weight
+                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.)
+
+                label_in = self.propSetup.propEnv.get_label_from_float(xyz=photon.pos)
                 plane_boundary_normal_vec = self.propSetup.propEnv.plane_normal_vec(boundary_pos, label_in)
                 incident_vec = np.array(boundary_pos) - np.array(photon.pos)
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, plane_boundary_normal_vec)
@@ -119,6 +125,9 @@ class Sim():
                 neg_incident_vec = Space3dTools.negative_vector(incident_vec)
                 alpha = Space3dTools.angle_between_vectors(neg_incident_vec, plane_boundary_normal_vec)
                 refraction_vec = None
+                    # refractive indices
+                n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
+                n2 = self.propSetup.propEnv.get_refractive_index(xyz=boundary_pos)
                 if n2 > n1:
                     critical_alpha = math.asin(n2 / n1)
                     if alpha > critical_alpha:
@@ -148,6 +157,15 @@ class Sim():
             else:
                 photon.pos = next_pos
         # else ignore - photon escape
+
+
+    def drop(self, photon:Photon, mu_a, mu_s, mu_t):
+        w_drop = photon.weight * (mu_a / mu_t)
+        self.propSetup.save2result_env(photon.pos, w_drop)
+        self.propSetup.save2resultRecords(xyz=photon.pos, weight=w_drop)
+        photon.weight = photon.weight * (mu_s / mu_t)
+
+        
 
     
 
