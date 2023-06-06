@@ -1,10 +1,22 @@
 from PropEnv import PropEnv
+from LightSource import LightSource
+from PropSetup import PropSetup
+import json
 
 
 class Make():
 
     def __init__(self):
-        pass
+        self.default_env_path = None
+        self.default_light_surce_path = None
+        self.default_prop_setup_path = None
+
+
+    def pass_default_paths(self, default_env_path, default_light_surce_path, default_prop_setup_path):
+        self.default_env_path = default_env_path
+        self.default_light_surce_path = default_light_surce_path
+        self.default_prop_setup_path = default_prop_setup_path
+
 
     def default_env_file(self, path):
         propEnv = self.default_env()
@@ -28,11 +40,16 @@ class Make():
 
 
     def default_light_source(self):
-        raise NotImplementedError()
+        lightSource = LightSource()
+        lightSource.initialize_source()
+        return lightSource
 
 
     def default_prop_setup(self):
-        raise NotImplementedError()
+        env_path = self.default_env_path
+        light_source_path = self.default_light_surce_path
+        propSetup = PropSetup.from_components(env_path, light_source_path)
+        return propSetup
 
 
 

@@ -5,6 +5,8 @@ from Make import Make
 from PropSetup import PropSetup
 from Photon import Photon
 from Space3dTools import Space3dTools
+from FeatureSampling import FeatureSampling
+import random
 
 
 class Sim():
@@ -18,11 +20,14 @@ class Sim():
 
         # interface to class, that makes Object3D instances, fills it and saves them to files
         make = Make()
+        # interface to random functions
+        self.featureSampling = FeatureSampling()
 
         # default paths
         self.default_env_path = "envs/DefaultEnv.json"
         self.default_light_surce_path = "lightSources/DefaultLightSource.json"
         self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
+        make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
 
         # make default settings files from scratch
         if self.config["flag_make_default_env"]:
@@ -69,29 +74,17 @@ class Sim():
 
 
     def propagate_photon(self, photon: Photon):
-        pos_x, pos_y, pos_z = photon.pos
-
         while photon.weight > 0:
             mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
             # move photon to new position
             self.hop(photon, mu_t)
             # absorb light in medium
             self.drop(photon, mu_a, mu_s, mu_t)
-            
-            
+            self.spin(photon)
+            flag_terminate = self.terminate(photon)
+            if flag_terminate:
+                break
 
-            albedo = mu_s / (mu_s + mu_a);
-            rs = (n-1.0)*(n-1.0)/(n+1.0)/(n+1.0);	/* specular reflection */
-            crit_angle = sqrt(1.0-1.0/n/n);			/* cos of critical angle */
-            bins_per_mfp = 1e4/microns_per_bin/(mu_a+mu_s);
-            
-
-                launch ();
-                while (weight > 0) {
-                    move ();
-                    absorb ();
-                    scatter ();
-                }
             
     def hop(self, photon: Photon, mu_t):
         distance = photon.fun_hop(mu_t=mu_t)
@@ -164,6 +157,61 @@ class Sim():
         self.propSetup.save2result_env(photon.pos, w_drop)
         self.propSetup.save2resultRecords(xyz=photon.pos, weight=w_drop)
         photon.weight = photon.weight * (mu_s / mu_t)
+
+
+    def spin(self, photon):
+        theta = self.featureSampling.photon_theta()
+        phi = self.featureSampling.photon_phi()
+        ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
+
+        do_method_from_book = False
+
+        # from Chapter 5 5.3.5
+        # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
+        if do_method_from_book:
+            if np.isclose(ux, 0) and np.isclose(uy, 0):
+                uxx = math.sin(theta) * math.cos(phi)
+                uyy = math.sin(theta) * math.sin(phi)
+                if uz > 0:
+                    uzz = math.cos(theta)
+                else:
+                    uzz = -math.cos(theta)
+            else:
+                temp = math.sqrt(1 - uz**2)
+                uxx = math.sin(theta) * (ux * uz * math.cos(phi) - uy * math.sin(phi)) / temp + ux * math.cos(theta)
+                uyy = math.sin(theta) * (uy * uz * math.cos(phi) + ux * math.sin(phi)) / temp + uy * math.cos(theta)
+                uzz = -math.sin(theta) * math.cos(phi) * temp + uz * math.cos(theta)
+
+        # (my simple idea) why not that?
+        else:
+            _, old_phi, old_theta = Space3dTools.cartesian2spherical(ux, uy, uz)
+            new_phi = old_phi + phi
+            new_theta = old_theta + theta
+            uxx, uyy, uzz = Space3dTools.spherical2cartesian(R=1., theta=new_theta, phi=new_phi)
+
+        # update dir vec
+        photon.dir = [uxx, uyy, uzz]
+
+
+    def terminate(self, photon:Photon):
+        """
+        Roulette Method
+        from Chapter 5 5.3.6
+        Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
+        """
+        threshold = self.config["photon_weight_threshold"]
+        chance = self.config["photon_chance"]
+        rnd = random.random()
+        flag_terminate = False
+        if photon.weight < threshold:
+            if rnd <= chance:
+                photon.weight = photon.weight / chance
+            else:
+                flag_terminate = True
+        return flag_terminate
+
+
+
 
         
 

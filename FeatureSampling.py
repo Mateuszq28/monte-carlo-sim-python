@@ -14,16 +14,16 @@ class MyRandom():
 
     def uniform_closed(self, a, b, precision):
         """
-        Generate random number from closed interval <a, b>
+        Generate random number from closed interval [a, b]
         """
         rnd = random.randint(a, (b-a) * (10 ** precision)) / float((b-a) * (10 ** precision))
         return rnd
     
     def uniform_half_open(self, a, b):
         """
-        Generate random number from half-open interval <a, b)
+        Generate random number from half-open interval [a, b)
         """
-        return random.random()
+        return np.random.uniform(low=a, high=b)
         
 
 class FeatureSampling():
@@ -45,6 +45,7 @@ class FeatureSampling():
         # popular photon step: <0; 4/100> cm
         # bins_per_1_cm = 500
         self.bins_per_1_cm = config["bins_per_1_cm"] # [N/cm]
+        self.anisotropy_of_scattering_g = config["anisotropy_of_scattering_g"]
         self.funSampling = FunSampling(self.precision)
         self.myRandom = MyRandom()
 
@@ -61,6 +62,7 @@ class FeatureSampling():
         # try other functions
         return self.funSampling.normal(scale=1.0)
         # return self.funSampling.exp2(a=1) * math.pi
+        # return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
 
     def photon_theta_isotropic(self):
         return self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
@@ -69,7 +71,6 @@ class FeatureSampling():
         return const
 
     def photon_phi(self):
-        # try other functions
         return self.myRandom.uniform_half_open(-math.pi, math.pi)
     
     def photon_phi_isotropic(self):
@@ -86,6 +87,12 @@ class FeatureSampling():
     
     def start_loc_shift_z_0(self):
         return 0
+    
+    def start_dir_theta(self):
+        return self.photon_theta()
+    
+    def start_dir_phi(self):
+        return self.photon_phi()
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
 
@@ -417,6 +424,16 @@ class FunOrigin():
     
     def normal(self, x, loc=0, scale=1):
         return norm.pdf(x, loc=loc, scale=scale)
+    
+    def henyey_greenstein(self, theta, g):
+        """
+        :param theta: deflection angle
+        :param g: anisotropy of scattering
+        """
+        temp1 = 1 - g**2
+        temp2 = (1 + g**2 - 2*g*math.cos(theta))**(3/2)
+        return 0.5*temp1/temp2
+        
 
 
 class FunIntegral():
@@ -627,7 +644,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=min_rnd+prec, b=max_rnd, precision=prec) # rand from (a,b]
+            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) + 10**(-prec) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
         # s = -math.log(1-rnd) / a
         s = -math.log(rnd) / a #flipped
@@ -716,5 +733,26 @@ class FunSampling():
             return n[0]
         else:
             return n
+        
+    def henyey_greenstein(self, g, rnd=None, min_rnd=0, max_rnd=1):
+        """
+        :param g: anisotropy of scattering
+        """
+        if rnd is None:
+            myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) # rand from [a,b]
+        if g == 0:
+            # theta = math.acos(2*rnd - 1)
+            theta = rnd * math.pi
+        elif g == 1:
+            # theta = math.acos(1)
+            theta = 0.
+        else:
+            temp1 = 1 + g**2
+            temp2 = 1 - g**2
+            temp3 = 1 - g + 2*g*rnd
+            temp4 = (temp1 - (temp2/temp3)**2) / (2*g)
+            theta = math.acos(temp4)
+        return theta
         
 # --- 3. ALL RANDOM FUNCTIONS ---

@@ -14,5 +14,17 @@
 
     "random_seed": 0,
     "precision": 8,
-    "bins_per_1_cm": 500
+    "bins_per_1_cm": 500,
+    "anisotropy_of_scattering_g": 0.5,
+    "photon_weight_threshold": 1e-4,
+    "photon_chance": 0.1,
+    "tissue_properties": {
+        "0": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "Vacuum"},
+        "1": {"mu_a": 5, "mu_s": 95, "n": 1.000293, "name": "Air"},
+        "2": {"mu_a": 5, "mu_s": 95, "n": 1.333, "name": "Water"},
+        "3": {"mu_a": 5, "mu_s": 95, "n": 1.47, "name": "Olive oil"},
+        "4": {"mu_a": 5, "mu_s": 95, "n": 1.52, "name": "Window glass"},
+        "5": {"mu_a": 5, "mu_s": 95, "n": 1.31, "name": "Ice"},
+        "6": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Diamond"}
+    }
 }

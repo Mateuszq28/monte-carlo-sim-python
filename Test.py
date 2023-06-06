@@ -10,6 +10,7 @@ from ByMatplotlib import *
 from ByVispy import *
 from Print import *
 from Projection import *
+from Sim import Sim
 
 class Test():
     def __init__(self):
@@ -1467,7 +1468,7 @@ def main():
     # test.test13()
 
     # slice
-    test.test14()
+    # test.test14()
 
     # slice method by equation - faster, but not accurate
     # test.test19()
@@ -1496,6 +1497,9 @@ def main():
     # print("parabola2")
     # test.test_MonteCarloSampling_parabola2()
 
+    # SYMULACJA FOTONU
+    sim = Sim()
+    sim.start_sim()
 
 
 if __name__ == '__main__':

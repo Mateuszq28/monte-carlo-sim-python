@@ -96,6 +96,7 @@ class Object3D():
                     self.composition["points_series"][idx2append][point_id_in_series, 0:3] = np.array([i, j, k])
                     # this ID is now used, so increment the table of free ID's
                     array_id_counter[idx2append] += 1
+        self.composition["points_series"] = [ps.tolist() for ps in self.composition["points_series"]]
 
 
     def stride(self, stride=(1, 1, 1), overwrite_thumb=True):
@@ -132,7 +133,7 @@ class Object3D():
 
     def save_json(self, path, additional=True):
         d = {
-            "body": self.body            
+            "body": self.body.tolist()            
         }
         if additional:
             d["self.height"] = self.height
@@ -147,9 +148,10 @@ class Object3D():
 
     @staticmethod
     def load_json(path):
-        with open(path, 'w') as f:
+        with open(path, 'r') as f:
             d = json.load(f)
-        return Object3D(arr=d["body"])
+        arr = np.array(d["body"])
+        return Object3D(arr=arr)
     
 
     def float_shape_to_int(self, float_point):

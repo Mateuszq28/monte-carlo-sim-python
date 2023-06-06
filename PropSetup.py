@@ -74,7 +74,7 @@ class PropSetup:
 
     @staticmethod
     def load_json(path):
-        with open(path, 'w') as f:
+        with open(path, 'r') as f:
             d = json.load(f)
         propSetup = PropSetup.from_components(d["env_path"], d["light_source_path"], d["offset"])
         return propSetup

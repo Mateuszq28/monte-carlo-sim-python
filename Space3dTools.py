@@ -70,6 +70,8 @@ class Space3dTools():
     
     @staticmethod
     def internal_reflectance(theta1, theta2):
+        # from Chapter 5 5.3.3.2, formula 5.36
+        # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
         t1 = theta1
         t2 = theta2
         temp1 = (math.sin(t1)*math.cos(t2) - math.cos(t1)*math.sin(t2))**2/2
