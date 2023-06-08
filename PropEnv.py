@@ -44,16 +44,26 @@ class PropEnv(Object3D):
     
     def boundary_check(self, xyz, xyz_next):
         label_in = self.get_label_from_float(xyz)
-        round_xyz = np.array(self.round_xyz(xyz))
-        round_xyz_next = np.array(self.round_xyz(xyz_next))
-        vec = round_xyz_next - round_xyz
+
+        # data type correctness
+        if isinstance(xyz, np.ndarray):
+            arr_xyz = xyz.copy()
+        else:
+            arr_xyz = np.array(xyz)
+        if isinstance(xyz_next, np.ndarray):
+            arr_xyz_next = xyz_next.copy()
+        else:
+            arr_xyz_next = np.array(xyz_next)
+
+        vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
+        # photon steps from position xyz to xyz_next 
         linspace = np.linspace(0.0, dist, num=int(dist)+1)
         boundary_pos = xyz_next
         boundary_change = False
         for lin in linspace:
             t = lin/dist
-            check_pos = round_xyz + vec * t
+            check_pos = arr_xyz + vec * t
             label_check = self.get_label_from_float(check_pos)
             if label_in != label_check:
                 boundary_change = True

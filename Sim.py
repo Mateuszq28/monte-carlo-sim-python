@@ -93,7 +93,7 @@ class Sim():
 
     def try_move(self, photon:Photon, distance):
         step = [distance * ax for ax in photon.dir]
-        next_pos = np.array(photon.pos) + np.array(step)
+        next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
         # check if there was change of a material
         boundary_pos, boundary_change = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
@@ -110,7 +110,7 @@ class Sim():
 
                 label_in = self.propSetup.propEnv.get_label_from_float(xyz=photon.pos)
                 plane_boundary_normal_vec = self.propSetup.propEnv.plane_normal_vec(boundary_pos, label_in)
-                incident_vec = np.array(boundary_pos) - np.array(photon.pos)
+                incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, plane_boundary_normal_vec)
 
                 # Total internal reflection

@@ -40,9 +40,10 @@ class Space3dTools():
         # https://en.wikipedia.org/wiki/Specular_reflection
         id = np.array(incident_vec)
         id = id / np.linalg.norm(id)
-        n = n / np.linalg.norm(n)
         n = np.array(normal_vec)
-        return id - 2*n * np.dot(n,id)
+        n = n / np.linalg.norm(n)
+        reflected = id - 2*n * np.dot(n,id)
+        return reflected.tolist()
     
     @staticmethod
     def negative_vector(vec):
