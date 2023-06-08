@@ -97,7 +97,7 @@ class Sim():
 
         # check if there was change of a material
         boundary_pos, boundary_change = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
-        # check if photon is in env range
+        # check if photon is in env shape range
         if boundary_change:
             env_boundary_exceeded = False
         else:
@@ -108,8 +108,7 @@ class Sim():
                 # save photon position with no absorb weight
                 self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.)
 
-                label_in = self.propSetup.propEnv.get_label_from_float(xyz=photon.pos)
-                plane_boundary_normal_vec = self.propSetup.propEnv.plane_normal_vec(boundary_pos, label_in)
+                plane_boundary_normal_vec = self.propSetup.propEnv.plane_boundary_normal_vec(photon.pos, boundary_pos)
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, plane_boundary_normal_vec)
 

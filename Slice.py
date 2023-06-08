@@ -121,7 +121,7 @@ class Slice(Object3D):
         """
         p12 = np.array(p2) - np.array(p1)
         p13 = np.array(p3) - np.array(p1)
-        vec = np.cross(p13, p12)
+        vec = np.cross(p12, p13)
         normal_vec = vec/np.linalg.norm(vec)
         return normal_vec
 
