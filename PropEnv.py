@@ -2,7 +2,7 @@ from Object3D import Object3D
 import json
 import numpy as np
 import math
-from MarchingCubes import *
+from MarchingCubes import MarchingCubes
 
 class PropEnv(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
@@ -92,15 +92,15 @@ class PropEnv(Object3D):
         # iter through marching cubes, find plane stretched on triangles,
         # check if the ray crosses this plane, find its norm vector
         for cent, dist in list(zip(marching_cubes_centroids, marching_cubes_distances)):
-            corners = marching_cube_corners_from_centroid(cent)
+            corners = MarchingCubes.marching_cube_corners_from_centroid(cent)
             # if corner has the same label, it's the part of the plane
             corner_full_binary_code = [self.get_label_from_float(co) == boundary_pos_label for co in corners]
             corner_full_decimal = sum([2**bit for bit, val in zip(range(7,-1,-1), corner_full_binary_code) if val == True])
             # all triangles corners in one list
-            triangles = TriangleTable[corner_full_decimal].copy()
+            triangles = MarchingCubes.TriangleTable[corner_full_decimal].copy()
             # split into triangles
             triangles = [triangles[x:x+3] for x in range(0, len(triangles)-1, 3)]
-            triangles_coordinates = [[triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
+            triangles_coordinates = [[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
             
 
 
