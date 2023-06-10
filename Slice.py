@@ -6,6 +6,8 @@ import os
 import math
 from typing import List, Tuple
 from Projection import Projection
+import math
+from Space3dTools import Space3dTools
 
 
 class Slice(Object3D):
@@ -24,12 +26,6 @@ class Slice(Object3D):
         self.p3 = p3
 
 
-    def points_dist(self, p1, p2):
-        # dist = math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2 + (p2[2]-p1[2])**2)
-        dist = np.linalg.norm(np.array(p2) - np.array(p1))
-        return dist
-
-
     def farthest_from_p(self, p, arr_shape):
         arr_max_idx = [x-1 for x in arr_shape]
         c0 = [0,0,0]
@@ -41,10 +37,10 @@ class Slice(Object3D):
         c6 = [arr_max_idx[0],arr_max_idx[1],0]
         c7 = [arr_max_idx[0],arr_max_idx[1],arr_max_idx[2]]
         farthest = c0
-        farthest_dist = self.points_dist(p, c0)
+        farthest_dist = math.dist(p, c0)
         corners = [c1, c2, c3, c4, c5, c6, c7]
         for c in corners:
-            d = self.points_dist(p, c)
+            d = math.dist(p, c)
             if d > farthest_dist:
                 farthest = c
                 farthest_dist = d
@@ -114,43 +110,6 @@ class Slice(Object3D):
                 raise TypeError("p should be int or float type")
         return int_arr
 
-
-    def p3_to_normal_vec(self, p1:list[int], p2:list[int], p3:list[int]):
-        """
-        Gets three points that spread the plane and return a normal vector of this plane
-        """
-        p12 = np.array(p2) - np.array(p1)
-        p13 = np.array(p3) - np.array(p1)
-        vec = np.cross(p12, p13)
-        normal_vec = vec/np.linalg.norm(vec)
-        return normal_vec
-
-
-    def plane_equation(self, plane_point, plane_normal_vec):
-        D = -np.dot(plane_normal_vec, plane_point)
-        eq = plane_normal_vec.copy()
-        eq = np.append(eq, D)
-        return eq
-    
-    def dist_p_to_plane_VEC(self, p_vec, plane_equation):
-        # works on vectors
-        plane_norm_vec = plane_equation[0:3]
-        D = plane_equation[3]
-        dist_vec = np.abs(np.dot(p_vec, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
-        return dist_vec
-
-
-    def dist_p_to_plane(self, p, plane_equation):
-        plane_norm_vec = plane_equation[0:3]
-        D = plane_equation[3]
-        dist = np.abs(np.dot(p, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
-        return dist
-    
-
-    def dist_p_to_plane_by_norm_vec(self, p_out_plane, p_in_plane, plane_normal_vec):
-        eq = self.plane_equation(p_in_plane, plane_normal_vec)
-        dist = self.dist_p_to_plane(p_out_plane, eq)
-        return dist
     
     def find_first_non_omit_z_idx(self, arr3d, x_idx, y_idx, plane_equation):
         A = plane_equation[0]
@@ -173,15 +132,15 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         sh = b.shape
         # --- this block is the difference between other fromObj3D functions ---
         for i in range(sh[0]):
             for j in range(sh[1]):
                 for k in range(sh[2]):
                     particle = [i,j,k]
-                    dist_from_plane = self.dist_p_to_plane(particle, plane_equation)
+                    dist_from_plane = Space3dTools.dist_p_to_plane(particle, plane_equation)
                     if dist_from_plane > min_dist:
                         b_result[i,j,k] = reset_val
         # ---
@@ -195,11 +154,11 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         sh = b.shape
         # --- this block is the difference between other fromObj3D functions ---
-        reset_flag = np.array([self.dist_p_to_plane([i,j,k], plane_equation) > min_dist for i in range(sh[0]) for j in range(sh[1]) for k in range(sh[2])]).reshape(sh)
+        reset_flag = np.array([Space3dTools.dist_p_to_plane([i,j,k], plane_equation) > min_dist for i in range(sh[0]) for j in range(sh[1]) for k in range(sh[2])]).reshape(sh)
         b_result[reset_flag] = reset_val
         # ---
         self.rebuild_from_array(b_result)
@@ -212,11 +171,11 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         sh = b.shape
         # --- this block is the difference between other fromObj3D functions ---
-        check_reset_flag_fun = lambda i,j,k: self.dist_p_to_plane([i,j,k], plane_equation) > min_dist
+        check_reset_flag_fun = lambda i,j,k: Space3dTools.dist_p_to_plane([i,j,k], plane_equation) > min_dist
         X, Y, Z = np.indices(b.shape)
         reset_flag_mtx = np.array(list(map(check_reset_flag_fun, X.flatten(), Y.flatten(), Z.flatten()))).reshape(sh)
         b_result[reset_flag_mtx] = reset_val
@@ -231,13 +190,13 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         sh = b.shape
         # --- this block is the difference between other fromObj3D functions ---
         X, Y, Z = np.indices(b.shape)
         p_vec = np.column_stack([X.flatten(), Y.flatten(), Z.flatten()])
-        reset_flag_mtx = self.dist_p_to_plane_VEC(p_vec, plane_equation).reshape(sh) > min_dist
+        reset_flag_mtx = Space3dTools.dist_p_to_plane_VEC(p_vec, plane_equation).reshape(sh) > min_dist
         b_result[reset_flag_mtx] = reset_val
         # ---
         self.rebuild_from_array(b_result)
@@ -250,11 +209,11 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         sh = b.shape
         # --- this block is the difference between other fromObj3D functions ---
-        check_reset_flag_fun = lambda i,j,k: self.dist_p_to_plane([i,j,k], plane_equation) > min_dist
+        check_reset_flag_fun = lambda i,j,k: Space3dTools.dist_p_to_plane([i,j,k], plane_equation) > min_dist
         def mapper(X, Y, Z):
             return np.array(list(map(check_reset_flag_fun, X.flatten(), Y.flatten(), Z.flatten()))).reshape(sh)
         reset_flag_mtx = np.fromfunction(mapper, sh, dtype=int)
@@ -273,8 +232,8 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         A = plane_equation[0]
         B = plane_equation[1]
         C = plane_equation[2]
@@ -318,8 +277,8 @@ class Slice(Object3D):
         if preset is not None:
             p1, p2, p3 = self.preset_decoder(p1, preset, b.shape)
         p1, p2, p3 = self.float2int_3points_decoder(p1, p2, p3, b.shape)
-        normal_vec = self.p3_to_normal_vec(p1, p2, p3)
-        plane_equation = self.plane_equation(p1, normal_vec)
+        normal_vec = Space3dTools.p3_to_normal_vec(p1, p2, p3)
+        plane_equation = Space3dTools.plane_equation(p1, normal_vec)
         A = plane_equation[0]
         B = plane_equation[1]
         C = plane_equation[2]

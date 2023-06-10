@@ -3,6 +3,7 @@ import numpy as np
 import os
 from PIL import ImageColor, Image
 
+
 class Print(Object3D):
     def __init__(self):
         pass

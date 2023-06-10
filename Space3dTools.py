@@ -47,7 +47,7 @@ class Space3dTools():
     
     @staticmethod
     def negative_vector(vec):
-        return -np.array(vec)
+        return [-val for val in vec]
     
     @staticmethod
     def angle_between_vectors(vec1, vec2):
@@ -67,7 +67,7 @@ class Space3dTools():
         r = n1/n2
         c = -np.dot(n,l)
         refraction = r*l + (r*c - math.sqrt(1 - r**2 * (1 - c**2))) * n
-        return refraction
+        return refraction.tolist()
     
     @staticmethod
     def internal_reflectance(theta1, theta2):
@@ -81,5 +81,50 @@ class Space3dTools():
         temp4 = (math.cos(t1)*math.cos(t2) + math.sin(t1)*math.sin(t2))**2
         R = temp1 * temp2 / (temp3 * temp4)
         return R
+    
 
 
+
+
+
+
+
+
+    @staticmethod
+    def p3_to_normal_vec(p1, p2, p3):
+        """
+        Gets three points that spread the plane and return a normal vector of this plane
+        """
+        p12 = np.array(p2) - np.array(p1)
+        p13 = np.array(p3) - np.array(p1)
+        vec = np.cross(p12, p13)
+        normal_vec = vec/np.linalg.norm(vec)
+        return normal_vec.tolist()
+
+    @staticmethod
+    def plane_equation(plane_point, plane_normal_vec):
+        D = -np.dot(plane_normal_vec, plane_point)
+        eq = plane_normal_vec.copy()
+        eq.append(D)
+        return eq
+    
+    @staticmethod
+    def dist_p_to_plane_VEC(p_vec, plane_equation):
+        # works on vectors
+        plane_norm_vec = plane_equation[0:3]
+        D = plane_equation[3]
+        dist_vec = np.abs(np.dot(p_vec, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
+        return dist_vec
+
+    @staticmethod
+    def dist_p_to_plane(p, plane_equation):
+        plane_norm_vec = plane_equation[0:3]
+        D = plane_equation[3]
+        dist = np.abs(np.dot(p, plane_norm_vec) + D)/np.linalg.norm(plane_norm_vec)
+        return dist
+    
+    @staticmethod
+    def dist_p_to_plane_by_norm_vec(p_out_plane, p_in_plane, plane_normal_vec):
+        eq = Space3dTools.plane_equation(p_in_plane, plane_normal_vec)
+        dist = Space3dTools.dist_p_to_plane(p_out_plane, eq)
+        return dist
