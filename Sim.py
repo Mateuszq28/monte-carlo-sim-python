@@ -96,7 +96,7 @@ class Sim():
         next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
         # check if there was change of a material
-        boundary_pos, boundary_change = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+        boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
         # check if photon is in env shape range
         if boundary_change:
             env_boundary_exceeded = False
@@ -108,14 +108,13 @@ class Sim():
                 # save photon position with no absorb weight
                 self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.)
 
-                plane_boundary_normal_vec = self.propSetup.propEnv.plane_boundary_normal_vec(photon.pos, boundary_pos)
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
-                reflect_vec = Space3dTools.reflect_vector(incident_vec, plane_boundary_normal_vec)
+                reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
 
                 # Total internal reflection
                 R = 0
                 neg_incident_vec = Space3dTools.negative_vector(incident_vec)
-                alpha = Space3dTools.angle_between_vectors(neg_incident_vec, plane_boundary_normal_vec)
+                alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
                 refraction_vec = None
                     # refractive indices
                 n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
@@ -127,8 +126,8 @@ class Sim():
                         R = 1.
 
                 if n2 <= n1 or R == 0:
-                    refraction_vec = Space3dTools.refraction_vec(incident_vec, plane_boundary_normal_vec, n1, n2)
-                    neg_normal_vec = Space3dTools.negative_vector(plane_boundary_normal_vec)
+                    refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
+                    neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
                     beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
                     R = Space3dTools.internal_reflectance(alpha, beta)
 

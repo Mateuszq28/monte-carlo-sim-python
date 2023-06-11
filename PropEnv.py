@@ -62,17 +62,22 @@ class PropEnv(Object3D):
         dist = np.linalg.norm(vec)
         # photon steps from position xyz to xyz_next 
         linspace = np.linspace(0.0, dist, num=int(dist)+1)
+        # start values
         boundary_pos = xyz_next
         boundary_change = False
+        boundary_norm_vec = None
         for lin in linspace:
             t = lin/dist
             check_pos = arr_xyz + vec * t
             label_check = self.get_label_from_float(check_pos)
             if label_in != label_check:
-                boundary_change = True
-                boundary_pos = check_pos.tolist()
-                break
-        return boundary_pos, boundary_change
+                proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
+                if proposed_norm_vec is not None:
+                    boundary_change = True
+                    boundary_pos = proposed_boundary_pos
+                    boundary_norm_vec = proposed_norm_vec
+                    break
+        return boundary_pos, boundary_change, boundary_norm_vec
     
     def plane_boundary_normal_vec(self, last_pos, boundary_pos):
         boundary_pos_label = self.get_label_from_float(boundary_pos)
@@ -92,6 +97,7 @@ class PropEnv(Object3D):
 
         # iter through marching cubes, find plane stretched on triangles,
         # check if the ray intersect this plane, find its norm vector and intersection point
+        # start values
         return_norm_vec = None
         return_boundary_pos = boundary_pos
         for cent in marching_cubes_centroids:
