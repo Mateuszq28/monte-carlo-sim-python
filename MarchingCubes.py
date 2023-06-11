@@ -3,6 +3,7 @@ import numpy as np
 
 class MarchingCubes():
 
+
 	Tringle_corner_offset_table = [
 			[0, -0.5, -0.5], #0
 			[0.5, -0.5, 0], #1

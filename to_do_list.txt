@@ -1,3 +1,5 @@
+dopisać :list w funkcjach
+
 wykresy Henyey-Greenstein (HG) function
 
 puszczanie fotonu

@@ -35,7 +35,6 @@ class FeatureSampling():
         with open("config.json") as f:
             # get simulation config parameters
             config = json.load(f)
-        random.seed = config["random_seed"]
         self.precision = config["precision"]
         # 1 voxel
         # dx, dy, dz = 1 cm / bins_per_1_cm

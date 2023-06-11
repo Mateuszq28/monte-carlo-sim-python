@@ -28,7 +28,7 @@ class PropSetup:
             arr = np.full(shape=sh, fill_value=0.)
             self.resultEnv = PropEnv(arr=arr)
         xyz_int = self.resultEnv.round_xyz(xyz)
-        self.resultEnv.body[xyz[0], xyz[1], xyz[2]] += weight
+        self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         
     def save2resultRecords(self, xyz, weight, round=True):
         if self.resultRecords is None:

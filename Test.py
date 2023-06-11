@@ -1323,6 +1323,43 @@ class Test():
             making_png_prints_time = end - start
             print("making_png_prints_time", making_png_prints_time)
 
+    
+    class Test_Space3dTools():
+        def __init__(self):
+            pass
+
+        def internal_reflectance(self):
+            n1 = 1.1
+            n2 = 1.5
+            # n1 = n2 = 1.000293
+            theta1 = [i/100*math.pi/2 for i in range(1,101)]
+
+            if n1 > n2:
+                # Total internal reflection angle
+                theta1_critical = math.asin(n2 / n1)
+                theta1 = [t1 for t1 in theta1 if t1 <= theta1_critical]
+
+            theta2 = [math.asin(math.sin(t1)*n1/n2) for t1 in theta1] 
+            ref = [Space3dTools.internal_reflectance(t1, t2) for t1, t2 in zip(theta1, theta2)]
+
+            theta1_deg = [t*180/math.pi for t in theta1]
+            theta2_deg = [t*180/math.pi for t in theta2]
+            plt.plot(theta1_deg, ref)
+
+            # error debugging
+            # theta1_err = 2.168525411247653
+            # theta2_err = 0.9730672423421401
+            # plt.scatter(theta1_err*180/math.pi, Space3dTools.internal_reflectance(theta1_err, theta1_err))
+
+            plt.xlabel('theta1 [deg]')
+            plt.ylabel('internal_reflectance')
+            plt.show()
+
+            plt.plot(theta1_deg, theta2_deg)
+            plt.xlabel('theta1 [deg]')
+            plt.ylabel('theta2 [deg]')
+            plt.show()
+
 
 
     def test1(self):
@@ -1452,6 +1489,11 @@ class Test():
         t = self.Test_Slice()
         t.test_simple_middle_slices()
 
+    def test24(self):
+        # Reflectance function
+        t = self.Test_Space3dTools()
+        t.internal_reflectance()
+
 
 def main():
     test = Test()
@@ -1496,6 +1538,9 @@ def main():
     # test.test_MonteCarloSampling_exp2()
     # print("parabola2")
     # test.test_MonteCarloSampling_parabola2()
+
+    # Reflectance function
+    test.test24()
 
     # SYMULACJA FOTONU
     sim = Sim()

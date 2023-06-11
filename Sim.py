@@ -18,6 +18,9 @@ class Sim():
             # get simulation config parameters
             self.config = json.load(f)
 
+        random.seed(self.config["random_seed"])
+        np.random.seed(self.config["random_seed"])
+
         # interface to class, that makes Object3D instances, fills it and saves them to files
         make = Make()
         # interface to random functions
@@ -99,6 +102,7 @@ class Sim():
         boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
         # check if photon is in env shape range
         if boundary_change:
+            # photon interact with the tissue earlier
             env_boundary_exceeded = False
         else:
             env_boundary_exceeded = self.propSetup.propEnv.env_boundary_check(next_pos)
@@ -119,7 +123,7 @@ class Sim():
                     # refractive indices
                 n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
                 n2 = self.propSetup.propEnv.get_refractive_index(xyz=boundary_pos)
-                if n2 > n1:
+                if n2 < n1:
                     critical_alpha = math.asin(n2 / n1)
                     if alpha > critical_alpha:
                         # internal reflectance
@@ -129,6 +133,8 @@ class Sim():
                     refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
                     neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
                     beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
+                    # print("n1:", n1)
+                    # print("n2:", n2)
                     R = Space3dTools.internal_reflectance(alpha, beta)
 
                 if R < 1.:
