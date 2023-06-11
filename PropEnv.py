@@ -3,6 +3,7 @@ import json
 import numpy as np
 import math
 from MarchingCubes import MarchingCubes
+from Space3dTools import Space3dTools
 
 class PropEnv(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
@@ -90,8 +91,10 @@ class PropEnv(Object3D):
         marching_cubes_centroids = np.array(marching_cubes_centroids)[sorted_indices]
 
         # iter through marching cubes, find plane stretched on triangles,
-        # check if the ray crosses this plane, find its norm vector
-        for cent, dist in list(zip(marching_cubes_centroids, marching_cubes_distances)):
+        # check if the ray intersect this plane, find its norm vector and intersection point
+        return_norm_vec = None
+        return_boundary_pos = boundary_pos
+        for cent in marching_cubes_centroids:
             corners = MarchingCubes.marching_cube_corners_from_centroid(cent)
             # if corner has the same label, it's the part of the plane
             corner_full_binary_code = [self.get_label_from_float(co) == boundary_pos_label for co in corners]
@@ -101,7 +104,24 @@ class PropEnv(Object3D):
             # split into triangles
             triangles = [triangles[x:x+3] for x in range(0, len(triangles)-1, 3)]
             triangles_coordinates = [[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
+            # pp is list of three triangle corners
+            triangles_planes = [Space3dTools.plane_equation(plane_point=pp[0], plane_normal_vec=Space3dTools.p3_to_normal_vec(pp[0], pp[1], pp[2])) for pp in triangles_coordinates]
+            ray_intersect_planes = [Space3dTools.line_intersect_plane_point(pl_eq=tri_plane, l_p0=last_pos, l_p1=boundary_pos) for tri_plane in triangles_planes]
+            # normal vec + intersection point, filter out None values
+            normal_vec_and_intersect = [[plane_eq[:3], intersect] for plane_eq, intersect in zip(triangles_planes, ray_intersect_planes) if intersect is not None]
+            # remove intersection points that are not in range of marching cube with centroid in cent 
+            normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + 0.5 and p[0] >= cent[0] - 0.5 and p[1] <= cent[1] + 0.5 and p[1] >= cent[1] - 0.5 and p[2] <= cent[2] + 0.5 and p[2] >= cent[2] - 0.5)]
+
+            if len(normal_vec_and_intersect_in_marching_cube) == 0:
+                continue
+            else:
+                return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0]
+                return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1]
+                break
+        return return_norm_vec, return_boundary_pos
+
             
+
 
 
 

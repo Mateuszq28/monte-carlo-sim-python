@@ -128,3 +128,87 @@ class Space3dTools():
         eq = Space3dTools.plane_equation(p_in_plane, plane_normal_vec)
         dist = Space3dTools.dist_p_to_plane(p_out_plane, eq)
         return dist
+    
+
+
+
+    @staticmethod
+    def line_intersect_plane_point(pl_eq, l_p0, l_p1):
+        """
+        Returns intersection point of plane and line if it exists. If they are paraller, returns None.
+        :param pl_eq: plane equation [A, B, C, D], (Ax + By + Cz + D = 0), [A, B, C] is plane normal vec
+        :param l_p0: first point that belongs to line crossing the plane
+        :param l_p1: second point that belongs to line crossing the plane
+        """
+        
+        """
+        CALCULATION PROOF
+        
+        ray_vec - vector l_p0 -> l_p1
+
+        x = l_p0[0] + ray_vec[0] * t
+        y = l_p0[1] + ray_vec[1] * t
+        z = l_p0[1] + ray_vec[2] * t
+        pl_eq[0] * x + pl_eq[1] * y + pl_eq[2] * z + pl_eq[3] = 0
+
+        pl_eq[0] * (l_p0[0] + ray_vec[0] * t) + pl_eq[1] * (l_p0[1] + ray_vec[1] * t) + pl_eq[2] * (l_p0[2] + ray_vec[2] * t) + pl_eq[3] = 0
+
+          pl_eq[0] * l_p0[0] + pl_eq[0] * ray_vec[0] * t
+        + pl_eq[1] * l_p0[1] + pl_eq[1] * ray_vec[1] * t
+        + pl_eq[2] * l_p0[2] + pl_eq[2] * ray_vec[2] * t
+        + pl_eq[3]
+        =
+        0
+
+          pl_eq[0] * ray_vec[0] * t
+        + pl_eq[1] * ray_vec[1] * t
+        + pl_eq[2] * ray_vec[2] * t
+        =
+        - (pl_eq[3] + pl_eq[0] * l_p0[0] + pl_eq[1] * l_p0[1] + pl_eq[2] * l_p0[2])
+
+        t = - (pl_eq[3] + pl_eq[0] * l_p0[0] + pl_eq[1] * l_p0[1] + pl_eq[2] * l_p0[2]) / (pl_eq[0] * ray_vec[0] + pl_eq[1] * ray_vec[1] + pl_eq[2] * ray_vec[2])
+
+        t = - (pl_eq[3] + np.dot(pl_eq[:3], l_p0)) / np.dot(pl_eq[:3], ray_vec)
+
+        intersect_point = np.array(l_p0) + ray_vec * t
+        """
+        ray_vec = np.array(l_p1) - np.array(l_p0)
+        epsilon=1e-6
+        # dor product (scalar product) of plane normal vector and line direction vector
+        # if this dot product is equal to 0, line and plane normal vec are perpendicular;
+        # if line and plane normal vec are perpendicular, plane is paraller to line
+        ndotu = np.dot(pl_eq[:3], ray_vec)
+        if abs(ndotu) < epsilon:
+            # plane is paraller to line; no intersection
+            return None
+        else:
+            t = - (pl_eq[3] + np.dot(pl_eq[:3], l_p0)) / ndotu
+            intersect_point = np.array(l_p0) + ray_vec * t
+            return intersect_point.tolist()
+        
+    @staticmethod
+    def line_intersect_plane_point2(plane_normal, plane_point, line_p0, line_p1):
+        """
+        Returns intersection point of plane and line if it exists. If they are paraller, returns None.
+        :param plane_normal: plane normal vector
+        :param plane_point: point that belongs to the plane
+        :param line_p0: first point that belongs to line crossing the plane
+        :param line_p1: second point that belongs to line crossing the plane
+        """
+        # https://stackoverflow.com/questions/5666222/3d-line-plane-intersection
+        ray_vec = np.array(line_p1) - np.array(line_p0)
+        epsilon=1e-6
+        # dor product (scalar product) of plane normal vector and line direction vector
+        # if this dot product is equal to 0, line and plane normal vec are perpendicular;
+        # if line and plane normal vec are perpendicular, plane is paraller to line
+        ndotu = np.dot(plane_normal, ray_vec)
+        if abs(ndotu) < epsilon:
+            # plane is paraller to line; no intersection
+            return None
+        else:
+            w = np.array(line_p0) - np.array(plane_point)
+            si = -np.dot(plane_normal, w) / ndotu
+            Psi = w + si * ray_vec + np.array(plane_point)
+            return Psi.tolist()
+        
+
