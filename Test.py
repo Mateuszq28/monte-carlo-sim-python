@@ -1540,7 +1540,7 @@ def main():
     # test.test_MonteCarloSampling_parabola2()
 
     # Reflectance function
-    test.test24()
+    # test.test24()
 
     # SYMULACJA FOTONU
     sim = Sim()
