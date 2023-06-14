@@ -46,6 +46,8 @@ class PropEnv(Object3D):
         return env_boundary_exceeded
     
     def boundary_check(self, xyz:list, xyz_next:list):
+        if type(xyz) != list or type(xyz_next) != list:
+            raise ValueError("xyz and xyz_next should be lists")
         label_in = self.get_label_from_float(xyz)
         arr_xyz = np.array(xyz)
         arr_xyz_next = np.array(xyz_next)
@@ -68,12 +70,18 @@ class PropEnv(Object3D):
                 proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
                 if proposed_norm_vec is not None:
                     boundary_change = True
-                    boundary_pos = proposed_boundary_pos
+                    boundary_pos = check_pos.tolist()
                     boundary_norm_vec = proposed_norm_vec
                     break
+                else:
+                    print("Photon was very close to the tissue boundary, but there was not intersection")
         return boundary_pos, boundary_change, boundary_norm_vec
     
     def plane_boundary_normal_vec(self, last_pos, boundary_pos):
+        """
+        Finds normal vector to the boundary tissue plane using
+        Estimates the plane using Marching Cubes algorithm (8 marching cubes) in one local point (boundary_pos)
+        """
         boundary_pos_label = self.get_label_from_float(boundary_pos)
         # suggest cubes surrounding boundary point
         # max 8, less if some cube's points are not in env shape range
@@ -117,6 +125,12 @@ class PropEnv(Object3D):
             else:
                 return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0].copy()
                 return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1].copy()
+                # to be sure, that norm ector is directed outwards boundary plane
+                ray_vec_out = (np.array(last_pos) - np.array(boundary_pos)).tolist()
+                alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
+                # alfa should be in <0,90> deg
+                if alfa > math.pi / 2:
+                    return_norm_vec = -return_norm_vec
                 break
         return return_norm_vec, return_boundary_pos
 

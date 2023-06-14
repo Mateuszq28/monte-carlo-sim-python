@@ -74,7 +74,7 @@ class LightSourcePoint():
         offset_theta = self.probaFun_theta()
         emit_dir = Space3dTools.spherical2cartesian(1., self.dir_theta + offset_theta, self.dir_phi + offset_phi)
         self.photon_scattered += 1
-        return Photon(emit_pos, emit_dir)
+        return Photon(emit_pos.tolist(), emit_dir)
     
 
     def serialize(self):

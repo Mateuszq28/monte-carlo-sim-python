@@ -10,7 +10,7 @@ class Space3dTools():
         x = R * math.sin(theta) * math.cos(phi)
         y = R * math.sin(theta) * math.sin(phi)
         z = R * math.cos(theta)
-        return x, y, z
+        return [x, y, z]
     
     @staticmethod
     def cartesian2spherical(x, y, z):
@@ -72,6 +72,8 @@ class Space3dTools():
     @staticmethod
     def internal_reflectance(theta1, theta2):
         if np.isclose(theta1, 0.):
+            # my trick because
+            # sin(0) = 0 -> temp3 = 0 -> division by 0
             return 0.
         # from Chapter 5 5.3.3.2, formula 5.36
         # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)

@@ -78,10 +78,14 @@ class Sim():
 
     def propagate_photon(self, photon: Photon):
         while photon.weight > 0:
-            mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+            _, _, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
             # move photon to new position
             self.hop(photon, mu_t)
+            # photon.weight is set to 0 when photon escape env
+            if photon.weight == 0:
+                break
             # absorb light in medium
+            mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
             self.drop(photon, mu_a, mu_s, mu_t)
             self.spin(photon)
             flag_terminate = self.terminate(photon)
@@ -110,13 +114,13 @@ class Sim():
         if not env_boundary_exceeded:
             if boundary_change:
                 # save photon position with no absorb weight
-                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.)
+                self.propSetup.save2result_records(xyz=boundary_pos, weight=0.)
 
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
 
                 # Total internal reflection
-                R = 0
+                R = 0 # init value
                 neg_incident_vec = Space3dTools.negative_vector(incident_vec)
                 alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
                 refraction_vec = None
@@ -129,7 +133,9 @@ class Sim():
                         # internal reflectance
                         R = 1.
 
-                if n2 <= n1 or R == 0:
+                # if R was not set
+                # (if there was not total internal reflection)
+                if R == 0:
                     refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
                     neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
                     beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
@@ -137,29 +143,36 @@ class Sim():
                     print("n2:", n2)
                     R = Space3dTools.internal_reflectance(alpha, beta)
 
+                traveled_dist = math.dist(photon.pos, boundary_pos)
+                rest_dist = distance - traveled_dist
+
                 if R < 1.:
-                    traveled_dist = math.dist(photon.pos, boundary_pos)
-                    rest_dist = distance - traveled_dist
+                    # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
                     # penetration ray - refraction
                     # new photon to track
                     refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1-R))
                     self.try_move(refraction_photon, rest_dist)
                     self.propagate_photon(refraction_photon)
                     # update old photon
-                    photon.pos = boundary_pos
                     photon.weight *= R
-                    photon.dir = reflect_vec
-                    self.try_move(photon, rest_dist)
+
+                # update old photon
+                photon.pos = boundary_pos
+                photon.dir = reflect_vec
+                self.try_move(photon, rest_dist)
             
             else:
                 photon.pos = next_pos
-        # else ignore - photon escape
+        else:
+            # ignore - photon escape
+            photon.weight = 0
+            photon.pos = next_pos
+            self.propSetup.save2result_records(xyz=next_pos, weight=photon.weight)
 
 
     def drop(self, photon:Photon, mu_a, mu_s, mu_t):
         w_drop = photon.weight * (mu_a / mu_t)
-        self.propSetup.save2result_env(photon.pos, w_drop)
-        self.propSetup.save2resultRecords(xyz=photon.pos, weight=w_drop)
+        self.propSetup.save2result_env_and_records(xyz=photon.pos, weight=w_drop)
         photon.weight = photon.weight * (mu_s / mu_t)
 
 

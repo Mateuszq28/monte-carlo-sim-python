@@ -1332,7 +1332,7 @@ class Test():
             n1 = 1.1
             n2 = 1.5
             # n1 = n2 = 1.000293
-            theta1 = [i/100*math.pi/2 for i in range(1,101)]
+            theta1 = [i/100*math.pi/2 for i in range(0,101)]
 
             if n1 > n2:
                 # Total internal reflection angle

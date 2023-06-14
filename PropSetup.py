@@ -22,6 +22,10 @@ class PropSetup:
         arr3d[ox:ox+sh[0], oy:oy+sh[1], oz:oz+sh[2]] = self.lightSource
         self.preview = Object3D(arr=arr3d)
 
+    def save2result_env_and_records(self, xyz, weight, round=True):
+        self.save2result_env(xyz, weight)
+        self.save2result_records(xyz, weight, round)
+
     def save2result_env(self, xyz, weight):
         if self.resultEnv is None:
             sh = self.propEnv.shape
@@ -30,7 +34,7 @@ class PropSetup:
         xyz_int = self.resultEnv.round_xyz(xyz)
         self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         
-    def save2resultRecords(self, xyz, weight, round=True):
+    def save2result_records(self, xyz, weight, round=True):
         if self.resultRecords is None:
             self.resultRecords = []
         if round:
