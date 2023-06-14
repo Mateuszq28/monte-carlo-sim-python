@@ -6,11 +6,14 @@ class Photon():
     fun_hop = featureSampling.photon_hop
     fun_theta = featureSampling.photon_theta
     fun_phi = featureSampling.photon_phi
+    static_photon_id_counter = 0
 
     
     def __init__(self, emit_pos, emit_dir, weight=1.):
         self.pos = emit_pos
         self.dir = emit_dir
         self.weight = weight
+        self.id = Photon.static_photon_id_counter
+        Photon.static_photon_id_counter += 1
 
 

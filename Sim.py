@@ -30,6 +30,7 @@ class Sim():
         self.default_env_path = "envs/DefaultEnv.json"
         self.default_light_surce_path = "lightSources/DefaultLightSource.json"
         self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
+        self.result_folder = "resultRecords"
         make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
 
         # make default settings files from scratch
@@ -69,11 +70,14 @@ class Sim():
                     ls = self.propSetup.lightSource.light_source_list
                     if ls is not None:
                         photon = ls[i].emit()
+                        photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
                         self.propagate_photon(photon)
                     else:
                         raise ValueError("ls is None")
         else:
             raise ValueError("photon_limits_list is None")
+        self.propSetup.save_result_json(self.result_folder)
+        self.propSetup.show_results()
 
 
     def propagate_photon(self, photon: Photon):
@@ -114,7 +118,7 @@ class Sim():
         if not env_boundary_exceeded:
             if boundary_change:
                 # save photon position with no absorb weight
-                self.propSetup.save2result_records(xyz=boundary_pos, weight=0.)
+                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0., photon_id=photon.id)
 
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
@@ -167,12 +171,12 @@ class Sim():
             # ignore - photon escape
             photon.weight = 0
             photon.pos = next_pos
-            self.propSetup.save2result_records(xyz=next_pos, weight=photon.weight)
+            self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id)
 
 
     def drop(self, photon:Photon, mu_a, mu_s, mu_t):
         w_drop = photon.weight * (mu_a / mu_t)
-        self.propSetup.save2result_env_and_records(xyz=photon.pos, weight=w_drop)
+        self.propSetup.save2result_env_and_records(xyz=photon.pos, weight=w_drop, photon_id=photon.id)
         photon.weight = photon.weight * (mu_s / mu_t)
 
 

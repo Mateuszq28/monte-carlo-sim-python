@@ -128,7 +128,7 @@ class PropEnv(Object3D):
                 alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
                 # alfa should be in <0,90> deg
                 if alfa > math.pi / 2:
-                    return_norm_vec = -return_norm_vec
+                    return_norm_vec = (-np.array(return_norm_vec)).tolist()
                 break
         return return_norm_vec, return_boundary_pos
 

@@ -1544,6 +1544,10 @@ def main():
 
     # SYMULACJA FOTONU
     sim = Sim()
+    # vis = ByVispy()
+    # sim.propSetup.makePreview()
+    # o = sim.propSetup.preview
+    # vis.show_body(o)
     sim.start_sim()
 
 

@@ -3,8 +3,11 @@ from PropEnv import PropEnv
 from Object3D import Object3D
 import json
 import numpy as np
+import os
+from ByVispy import ByVispy
 
 class PropSetup:
+
     def __init__(self, propEnv: PropEnv, lightSource: LightSource, offset):
         self.propEnv = propEnv
         self.lightSource = lightSource
@@ -19,14 +22,19 @@ class PropSetup:
         arr3d = self.propEnv.body.copy()
         ox, oy, oz = self.offset
         sh = self.lightSource.shape
-        arr3d[ox:ox+sh[0], oy:oy+sh[1], oz:oz+sh[2]] = self.lightSource
+        arr3d[ox:ox+sh[0], oy:oy+sh[1], oz:oz+sh[2]] = self.lightSource.body
         self.preview = Object3D(arr=arr3d)
 
-    def save2result_env_and_records(self, xyz, weight, round=True):
-        self.save2result_env(xyz, weight)
-        self.save2result_records(xyz, weight, round)
+    def show_results(self):
+        if self.resultEnv is not None:
+            vis = ByVispy()
+            vis.show_body(self.resultEnv, title="Absorbed energy in volume")
 
-    def save2result_env(self, xyz, weight):
+    def save2result_env_and_records(self, xyz, weight, photon_id, round=True):
+        self.save2resultEnv(xyz, weight)
+        self.save2resultRecords(xyz, weight, photon_id, round)
+
+    def save2resultEnv(self, xyz, weight):
         if self.resultEnv is None:
             sh = self.propEnv.shape
             arr = np.full(shape=sh, fill_value=0.)
@@ -34,7 +42,7 @@ class PropSetup:
         xyz_int = self.resultEnv.round_xyz(xyz)
         self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         
-    def save2result_records(self, xyz, weight, round=True):
+    def save2resultRecords(self, xyz, weight, photon_id, round=True):
         if self.resultRecords is None:
             self.resultRecords = []
         if round:
@@ -43,8 +51,23 @@ class PropSetup:
             xyz_save = xyz.copy()
         if isinstance(xyz_save,np.ndarray):
             xyz_save = xyz_save.tolist()
-        record = xyz_save + [weight]
+        record = [photon_id] + xyz_save + [weight]
         self.resultRecords.append(record)
+
+    def save_result_json(self, folder):
+        if self.resultEnv is not None:
+            re = self.resultEnv.body.tolist()
+        else:
+            re = None
+        d_resultEnv = {"resultEnv": re}
+        d_resultRecords = {"resultRecords": self.resultRecords}
+        path_resultEnv = os.path.join(folder, "resultEnv.json")
+        path_resultRecords = os.path.join(folder, "resultRecords.json")
+        with open(path_resultEnv, "w") as f:
+            json.dump(d_resultEnv, f)
+        with open(path_resultRecords, "w") as f:
+            json.dump(d_resultRecords, f)
+
 
     @staticmethod
     def auto_offset(env_shape, lightSource_shape):
