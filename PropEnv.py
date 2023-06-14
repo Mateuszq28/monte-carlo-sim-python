@@ -69,12 +69,6 @@ class PropEnv(Object3D):
                 if proposed_norm_vec is not None:
                     boundary_change = True
                     boundary_pos = proposed_boundary_pos
-                    print("check_pos.tolist()", check_pos.tolist())
-                    print("check_pos.tolist() round", self.round_xyz(check_pos))
-                    print("check_pos.tolist() label", self.get_label_from_float(check_pos.tolist()))
-                    print("boundary_pos", boundary_pos)
-                    print("boundary_pos round", self.round_xyz(boundary_pos))
-                    print("boundary_pos label", self.get_label_from_float(boundary_pos))
                     boundary_norm_vec = proposed_norm_vec
                     break
         return boundary_pos, boundary_change, boundary_norm_vec

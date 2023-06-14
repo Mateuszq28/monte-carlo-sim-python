@@ -3,24 +3,20 @@ import numpy as np
 
 class MarchingCubes():
 
-	epsilon = 1e-6
-	# border_limit_value
-	# it can't be 0.5, because of round() function in next steps
-	bv = 0.5 - epsilon
 
 	Tringle_corner_offset_table = [
-			[0, -bv, -bv], #0
-			[bv, -bv, 0], #1
-			[0, -bv, bv],
-			[-bv, -bv, 0],
-			[0, bv, -bv],
-			[bv, bv, 0],
-			[0, bv, bv],
-			[-bv, bv, 0],
-			[-bv, 0, -bv],
-			[bv, 0, -bv],
-			[bv, 0, bv],
-			[-bv, 0, bv]
+			[0, -0.5, -0.5], #0
+			[0.5, -0.5, 0], #1
+			[0, -0.5, 0.5],
+			[-0.5, -0.5, 0],
+			[0, 0.5, -0.5],
+			[0.5, 0.5, 0],
+			[0, 0.5, 0.5],
+			[-0.5, 0.5, 0],
+			[-0.5, 0, -0.5],
+			[0.5, 0, -0.5],
+			[0.5, 0, 0.5],
+			[-0.5, 0, 0.5]
 		]
 
 	@staticmethod
@@ -29,15 +25,14 @@ class MarchingCubes():
 		sets up cube vertices coordinates
 		:param centroid: centroid of Marching Cube coordinates
 		"""
-		bv = 0.5
-		c0 = [centroid[0]-bv, centroid[0]-bv, centroid[0]-bv]
-		c1 = [centroid[0]+bv, centroid[0]-bv, centroid[0]-bv]
-		c2 = [centroid[0]-bv, centroid[0]-bv, centroid[0]+bv]
-		c3 = [centroid[0]+bv, centroid[0]-bv, centroid[0]+bv]
-		c4 = [centroid[0]-bv, centroid[0]+bv, centroid[0]-bv]
-		c5 = [centroid[0]+bv, centroid[0]+bv, centroid[0]-bv]
-		c6 = [centroid[0]-bv, centroid[0]+bv, centroid[0]+bv]
-		c7 = [centroid[0]+bv, centroid[0]+bv, centroid[0]+bv]
+		c0 = [centroid[0]-0.5, centroid[0]-0.5, centroid[0]-0.5]
+		c1 = [centroid[0]+0.5, centroid[0]-0.5, centroid[0]-0.5]
+		c2 = [centroid[0]-0.5, centroid[0]-0.5, centroid[0]+0.5]
+		c3 = [centroid[0]+0.5, centroid[0]-0.5, centroid[0]+0.5]
+		c4 = [centroid[0]-0.5, centroid[0]+0.5, centroid[0]-0.5]
+		c5 = [centroid[0]+0.5, centroid[0]+0.5, centroid[0]-0.5]
+		c6 = [centroid[0]-0.5, centroid[0]+0.5, centroid[0]+0.5]
+		c7 = [centroid[0]+0.5, centroid[0]+0.5, centroid[0]+0.5]
 		corners = [c7, c6, c5, c4, c3, c2, c1, c0]
 		return corners
 
