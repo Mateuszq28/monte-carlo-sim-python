@@ -64,12 +64,14 @@ class Sim():
 
     def start_sim(self):
         photon_limits_list = self.propSetup.lightSource.photon_limits_list
+        ls = self.propSetup.lightSource.light_source_list
         if photon_limits_list is not None:
             for i in range(len(photon_limits_list)):
-                for j in range(photon_limits_list[i]):
-                    ls = self.propSetup.lightSource.light_source_list
+                for _ in range(photon_limits_list[i]):
                     if ls is not None:
+                        # local coordiantes
                         photon = ls[i].emit()
+                        # global coordinates
                         photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
                         self.propagate_photon(photon)
                     else:
@@ -77,7 +79,8 @@ class Sim():
         else:
             raise ValueError("photon_limits_list is None")
         self.propSetup.save_result_json(self.result_folder)
-        self.propSetup.show_results()
+        # self.propSetup.show_results()
+        return self.propSetup
 
 
     def propagate_photon(self, photon: Photon):

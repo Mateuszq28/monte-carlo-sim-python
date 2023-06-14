@@ -34,14 +34,14 @@ class Make():
 
 
     def default_env(self):
-        propEnv = PropEnv()
+        propEnv = PropEnv(x=100, y=100, z=100)
         propEnv.fill_cube(fill=1, start_p=[0, 0, 0], end_p=[1.0, 1.0, 0.25])
         return propEnv
 
 
     def default_light_source(self):
-        lightSource = LightSource()
-        lightSource.initialize_source()
+        lightSource = LightSource(x=1, y=1, z=1)
+        lightSource.initialize_source(photon_limit=10)
         return lightSource
 
 

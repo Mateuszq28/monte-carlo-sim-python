@@ -1548,7 +1548,11 @@ def main():
     # sim.propSetup.makePreview()
     # o = sim.propSetup.preview
     # vis.show_body(o)
-    sim.start_sim()
+    start_time = time.time()
+    propSetup = sim.start_sim()
+    end_time = time.time()
+    print("time:", end_time-start_time)
+    propSetup.show_results()
 
 
 if __name__ == '__main__':

@@ -120,7 +120,7 @@ class LightSourcePoint():
 
 class LightSource(Object3D):
 
-    def __init__(self, x=10, y=10, z=1, arr=None, light_source_label=-1):
+    def __init__(self, x=10, y=10, z=10, arr=None, light_source_label=-1):
         if arr is None:
             arr = np.full((x,y,z), fill_value=light_source_label)
         super().__init__(x, y, z, arr)
@@ -133,7 +133,7 @@ class LightSource(Object3D):
         self.photon_limits_list = None
 
     
-    def initialize_source(self, body_type="from self body", body=None, tropic=None, source_type="straight", source_anchor="point", photon_limit=10, light_source_label=-1):
+    def initialize_source(self, body_type="from self body", body=None, tropic=None, source_type="straight", source_anchor="point", photon_limit=100, light_source_label=-1):
         # object variables
         self.body_type = body_type
         self.tropic = tropic
@@ -169,7 +169,7 @@ class LightSource(Object3D):
         # ditribute photon limits
         sources_count = len(light_points_xyz)
         distrib2every = photon_limit // sources_count
-        distrib2first = sources_count - distrib2every * sources_count
+        distrib2first = photon_limit - distrib2every * sources_count
         self.photon_limits_list = [distrib2every+1 for _ in range(distrib2first)] + [distrib2every for _ in range(sources_count-distrib2first)]
 
         # Make LightSourcePoint list

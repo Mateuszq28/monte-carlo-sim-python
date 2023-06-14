@@ -27,8 +27,10 @@ class PropSetup:
 
     def show_results(self):
         if self.resultEnv is not None:
+            arr = self.resultEnv.body + self.propEnv.body
+            show_prop = PropEnv(arr=arr)
             vis = ByVispy()
-            vis.show_body(self.resultEnv, title="Absorbed energy in volume")
+            vis.show_body(show_prop, title="Absorbed energy in volume")
 
     def save2result_env_and_records(self, xyz, weight, photon_id, round=True):
         self.save2resultEnv(xyz, weight)
