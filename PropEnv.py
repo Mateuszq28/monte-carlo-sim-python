@@ -88,9 +88,7 @@ class PropEnv(Object3D):
         marching_cubes_centroids = self.cubes_surrounding_point(boundary_pos)
         
         # centroids distances from last_pos
-        marching_cubes_distances = []
-        for cent in marching_cubes_centroids:
-            marching_cubes_distances.append(math.dist(last_pos, cent))
+        marching_cubes_distances = [math.dist(last_pos, cent) for cent in marching_cubes_centroids]
         
         # sort centroids by distances
         sorted_indices = np.argsort(marching_cubes_distances)
