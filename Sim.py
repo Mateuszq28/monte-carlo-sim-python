@@ -78,6 +78,11 @@ class Sim():
                         raise ValueError("ls is None")
         else:
             raise ValueError("photon_limits_list is None")
+        # normalize output [photon weight / bin] -> absorbed fraction [1/cm^3]
+        photon_num = sum(photon_limits_list)
+        bins_per_1_cm = self.config["bins_per_1_cm"] # [N/cm]
+        volume_per_bin = (1/bins_per_1_cm)**3
+        self.propSetup.normalize_resultEnv(photon_num, volume_per_bin)
         self.propSetup.save_result_json(self.result_folder)
         # self.propSetup.show_results()
         return self.propSetup

@@ -1,5 +1,7 @@
 from Object3D import Object3D
 import numpy as np
+from Print import Print
+import os
 
 class Projection(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
@@ -68,6 +70,12 @@ class Projection(Object3D):
         samples3d = samples.reshape(lvl_ax1_len,lvl_ax2_len,1)
         self.rebuild_from_array(samples3d)
         return self
+    
+    def save_png(self, dir=None, filename="projection.png"):
+        if dir is None:
+            dir = os.path.join("slice_img", "projection_img")
+        Print().z_high(self, dir, filename)
+        
 
                     
         

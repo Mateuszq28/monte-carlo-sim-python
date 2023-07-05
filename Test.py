@@ -1145,7 +1145,7 @@ class Test():
             for i in range(len(oblist)):
                 o = oblist[i]
                 title = prefix_title + "_ob" + str(i)
-                vis.show_body(o, title=title)
+                vis.show_body(o, title=title, omit_labels=[0])
                 # matplot.show_stride(o, stride=10, title=title)
 
         def print_png_Obj3d_list(self, oblist, prefix_title="", dir="tests"):

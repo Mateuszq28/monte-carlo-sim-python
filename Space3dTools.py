@@ -86,6 +86,27 @@ class Space3dTools():
         R = temp1 * temp2 / (temp3 * temp4)
         return R
     
+    @staticmethod
+    def change_axis2print_mode(arr2d):
+        """
+        Input arr2d axis:
+        arr2d[ x_idx, y_idx ]
+        ^ y
+        |
+        |
+        .----------> x
+
+        Output arr2d axis:
+        out[ y_idx, -x_idx ]
+        .----------> y
+        |
+        |
+        + x
+        """
+        out = np.moveaxis(arr2d, source=0, destination=-1)
+        out = np.flip(out, axis=1)
+        return out
+    
 
 
 
