@@ -1,4 +1,5 @@
 from FeatureSampling import *
+from SumProjection import SumProjection
 import matplotlib.pyplot as plt
 import math
 import numpy as np
@@ -1544,7 +1545,7 @@ def main():
 
     # SYMULACJA FOTONU
     sim = Sim()
-    # vis = ByVispy()
+    vis = ByVispy()
     # sim.propSetup.makePreview()
     # o = sim.propSetup.preview
     # vis.show_body(o)
@@ -1553,6 +1554,21 @@ def main():
     end_time = time.time()
     print("time:", end_time-start_time)
     propSetup.show_results()
+    # SumProjections
+    sump = SumProjection()
+    x_high = sump.x_high(propSetup.resultEnv)
+    x_low = sump.x_low(propSetup.resultEnv)
+    y_high = sump.y_high(propSetup.resultEnv)
+    y_low = sump.y_low(propSetup.resultEnv)
+    z_high = sump.z_high(propSetup.resultEnv)
+    z_low = sump.z_low(propSetup.resultEnv)
+    projs = [x_high, x_low, y_high, y_low, z_high, z_low]
+    projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+    for proj, name in zip(projs, projs_names):
+        vis.show_body(proj)
+        dir = os.path.join("slice_img", "sum_projection_img")
+        proj.save_png(dir=dir, filename=name+".png")
+
 
 
 if __name__ == '__main__':

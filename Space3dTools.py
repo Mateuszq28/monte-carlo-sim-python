@@ -87,7 +87,7 @@ class Space3dTools():
         return R
     
     @staticmethod
-    def change_axis2print_mode(arr2d):
+    def change_axis2print_mode(arr2d) -> np.ndarray:
         """
         Input arr2d axis:
         arr2d[ x_idx, y_idx ]
@@ -97,14 +97,34 @@ class Space3dTools():
         .----------> x
 
         Output arr2d axis:
-        out[ y_idx, -x_idx ]
+        out[ -y_idx, x_idx ]
         .----------> y
         |
         |
         + x
         """
         out = np.moveaxis(arr2d, source=0, destination=-1)
-        out = np.flip(out, axis=1)
+        out = np.flip(out, axis=0)
+        return out
+    
+    @staticmethod
+    def change_axis2print_mode2(arr2d) -> np.ndarray:
+        """
+        Input arr2d axis:
+        arr2d[ y_idx, x_idx ]
+        .----------> x
+        |
+        |
+        + y
+
+        Output arr2d axis:
+        out[ x_idx, y_idx ]
+        .----------> y
+        |
+        |
+        + x
+        """
+        out = np.moveaxis(arr2d, source=0, destination=-1)
         return out
     
 

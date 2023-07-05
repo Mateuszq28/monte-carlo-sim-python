@@ -17,7 +17,8 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
 
     def x_low(self, object3D:Object3D):
@@ -30,7 +31,8 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
 
     def y_high(self, object3D:Object3D):
@@ -43,7 +45,8 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
 
     def y_low(self, object3D:Object3D):
@@ -56,7 +59,8 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
 
     def z_high(self, object3D:Object3D):
@@ -69,7 +73,8 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
 
     def z_low(self, object3D:Object3D):
@@ -82,6 +87,7 @@ class SumProjection():
         # FLIP TO \/X ->Y
         proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
         # reshape to 3d object plane (floor)
-        proj_arr3d = proj_arr2d.reshape(sh[1], sh[2], 1)
+        sh2 = proj_arr2d.shape
+        proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
         
