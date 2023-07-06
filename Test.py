@@ -12,6 +12,8 @@ from ByVispy import *
 from Print import *
 from Projection import *
 from Sim import Sim
+import matplotlib.pyplot as plt
+import numpy as np
 
 class Test():
     def __init__(self):
@@ -1544,6 +1546,42 @@ def main():
     # test.test24()
 
     # SYMULACJA FOTONU
+    def heatmap2d(arr: np.ndarray, bins_per_cm):
+        plt.imshow(arr, cmap='viridis')
+        plt.title("absorbed fraction")
+        cb = plt.colorbar()
+        cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
+        # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
+        # plt.ylabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
+        plt.show()
+
+    def heatmap2d_(arr: np.ndarray, bins_per_cm):
+        fig, ax = plt.subplots(1,1)
+
+        # img = ax.imshow(arr, extent=[-1,1,-1,1])
+        img = ax.imshow(arr)
+
+        x_label_list = ax.get_xticks() / bins_per_cm
+        y_label_list = ax.get_yticks() / bins_per_cm
+
+        print(ax.get_xticks())
+        print(ax.get_yticks())
+
+        # ax.set_xticks([-0.75,-0.25,0.25,0.75])
+        # ax.set_yticks([-0.75,-0.25,0.25,0.75])
+
+        ax.set_xticklabels(x_label_list)
+        ax.set_yticklabels(y_label_list)
+
+        cb = fig.colorbar(img)
+
+        cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
+
+        ax.set_xlabel("cm")
+        ax.set_ylabel("cm")
+
+
+
     sim = Sim()
     vis = ByVispy()
     # sim.propSetup.makePreview()
@@ -1566,6 +1604,9 @@ def main():
     projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
     for proj, name in zip(projs, projs_names):
         vis.show_body(proj)
+
+        heatmap2d(proj.body[:,:,0], bins_per_cm=sim.config["bins_per_1_cm"])
+
         dir = os.path.join("slice_img", "sum_projection_img")
         proj.save_png(dir=dir, filename=name+".png")
 
