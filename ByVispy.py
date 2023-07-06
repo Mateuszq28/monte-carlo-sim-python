@@ -74,6 +74,9 @@ class ByVispy(View):
                 pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
             )
 
+            # Add a 3D axis to keep us oriented
+            scene.visuals.XYZAxis(parent=view.scene)
+
             # run
             if sys.flags.interactive != 1:
                 app.run()
@@ -127,6 +130,9 @@ class ByVispy(View):
             p1.set_data(
                 pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue"
             )
+
+            # Add a 3D axis to keep us oriented
+            scene.visuals.XYZAxis(parent=view.scene)
 
             # run
             if sys.flags.interactive != 1:

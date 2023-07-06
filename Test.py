@@ -1565,7 +1565,7 @@ def main():
     projs = [x_high, x_low, y_high, y_low, z_high, z_low]
     projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
     for proj, name in zip(projs, projs_names):
-        vis.show_body(proj)
+        # vis.show_body(proj)
         dir = os.path.join("slice_img", "sum_projection_img")
         proj.save_png(dir=dir, filename=name+".png")
 
