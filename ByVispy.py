@@ -75,7 +75,12 @@ class ByVispy(View):
             )
 
             # Add a 3D axis to keep us oriented
-            scene.visuals.XYZAxis(parent=view.scene)
+            # Axes are x=red, y=green, z=blue
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            shape = min(object3D.shape)
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            affine = s.as_matrix()
+            axis_widget.transform = affine
 
             # run
             if sys.flags.interactive != 1:
@@ -132,7 +137,12 @@ class ByVispy(View):
             )
 
             # Add a 3D axis to keep us oriented
-            scene.visuals.XYZAxis(parent=view.scene)
+            # Axes are x=red, y=green, z=blue
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            shape = min(object3D.shape)
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            affine = s.as_matrix()
+            axis_widget.transform = affine
 
             # run
             if sys.flags.interactive != 1:
