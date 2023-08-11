@@ -56,7 +56,7 @@ class PropEnv(Object3D):
         # photon steps from position xyz to xyz_next 
         linspace = np.linspace(0.0, 1.0, num=int(dist)+1)
 
-        # start values
+        # loop initiation values
         boundary_pos = xyz_next
         boundary_change = False
         boundary_norm_vec = None
@@ -97,7 +97,7 @@ class PropEnv(Object3D):
 
         # iter through marching cubes, find plane stretched on triangles,
         # check if the ray intersect this plane, find its norm vector and intersection point
-        # start values
+        # loop initiation values
         return_norm_vec = None
         return_boundary_pos = boundary_pos.copy()
         for cent in marching_cubes_centroids:

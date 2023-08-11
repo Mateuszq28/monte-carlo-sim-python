@@ -34,6 +34,7 @@ class ByVispy(View):
         # data
         color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933',
                        '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
+        # loop initiation values
         counter = 0
         pos_list = []
         colrs_list = []
@@ -113,6 +114,7 @@ class ByVispy(View):
         if len(pos_not_conc) > 0:
             pos = np.concatenate(pos_not_conc)
             n = len(pos)
+            # loop initiation value
             colors = np.ones((n, 4), dtype=np.float32)
             for i in range(n):
                 colors[i] = (i / n, 1.0 - i / n, 0, 0.8)

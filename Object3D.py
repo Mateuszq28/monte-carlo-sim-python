@@ -67,6 +67,7 @@ class Object3D():
         """
         self.composition = dict()
         self.composition["labels"] = np.unique(self.body).tolist()
+        # loop initiation value
         self.composition["labels_count"] = []
         for label in self.composition["labels"]:
             self.composition["labels_count"].append(np.count_nonzero(self.body == label))
@@ -82,7 +83,7 @@ class Object3D():
         """
         self.analize_materials()
         # list of np.array [point number, xyz]
-        self.composition["points_series"] = []
+        self.composition["points_series"] = [] # loop initiation value
         for i in range(len(self.composition["labels"])):
             self.composition["points_series"].append(np.zeros(shape=(self.composition["labels_count"][i], 3)))
         # counter to change values in arrays - list of free ID's
@@ -112,6 +113,7 @@ class Object3D():
         range_x = range(0, self.depth, stride[0])
         range_y = range(0, self.width, stride[1])
         range_z = range(0, self.height, stride[2])
+        # loop initiation values
         new_arr = np.zeros([len(range_x), len(range_y), len(range_z)])
         new_x_idx = 0
         new_y_idx = 0

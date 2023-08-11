@@ -29,8 +29,8 @@ class ByMatplotlib(View):
         ax = fig.add_subplot(111, projection='3d')
         # colors
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
-        color_idx = 0
         color_idx_limit = len(color_bufor)
+        color_idx = 0   # loop initiation value
         for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])):
             if label not in omit_labels:
                 x_series = series[:, 0]
@@ -56,8 +56,8 @@ class ByMatplotlib(View):
         ax = fig.add_subplot(111, projection='3d')
         # colors
         color_bufor = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
-        color_idx = 0
         color_idx_limit = len(color_bufor)
+        color_idx = 0   # loop initiation value
         for series, label in list(zip(object3D.composition["points_series"], object3D.composition["labels"])):
             if label not in omit_labels:
                 x_series = series[:, 0]
