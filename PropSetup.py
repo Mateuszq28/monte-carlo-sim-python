@@ -15,6 +15,7 @@ class PropSetup:
         self.preview = None
         self.env_path = None
         self.light_source_path = None
+        self.escaped_photons_weight = 0.0
         self.resultEnv = None
         self.resultRecords = None
 
@@ -41,7 +42,8 @@ class PropSetup:
         Values of resultEnv [photon weight/bin] are normalized by the appropriate volume_per_bin and
         by the value n_photons to yield the absorbed fraction [1/cm^3]
         """
-        self.resultEnv.body = self.resultEnv.body / (n_photons * volume_per_bin)
+        sum_of_photon_weight_in_observed_area = n_photons * 1.0 - self.escaped_photons_weight
+        self.resultEnv.body = self.resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
 
     def save2resultEnv(self, xyz, weight):
         if self.resultEnv is None:

@@ -169,17 +169,26 @@ class Sim():
                     photon.weight *= R
 
                 # update old photon
+                # do this code in both cases:
+                # case 1: when R is 1 (only reflection),
+                #   no need to change photon weight
+                # case 2: when R < 1. (reflection and refraction, but refraction was served above),
+                #   also reflection weight was changed above
                 photon.pos = boundary_pos
                 photon.dir = reflect_vec
                 self.try_move(photon, rest_dist)
             
             else:
+                # photon just moved in the same tissue
                 photon.pos = next_pos
         else:
-            # ignore - photon escape
-            photon.weight = 0
-            photon.pos = next_pos
+            # ignore the further path of the photon - photon escape from tissue
             self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id)
+            photon.pos = next_pos
+            self.propSetup.escaped_photons_weight += photon.weight
+            # stop tracking
+            # with a weight of zero, the algorithm will finish tracking (loop condition)
+            photon.weight = 0
 
 
     def drop(self, photon:Photon, mu_a, mu_s, mu_t):
