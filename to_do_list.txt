@@ -4,7 +4,7 @@ wykresy Henyey-Greenstein (HG) function
 
 puszczanie fotonu
 
-przyporządkowanie kolorów do labeli - osobna klasa ShowColors
+przyporządkowanie kolorów do labeli - osobna klasa ColorPointDF
 
 przeczytać mcx coś tam kod
 
