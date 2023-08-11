@@ -37,14 +37,6 @@ class PropSetup:
         self.save2resultEnv(xyz, weight)
         self.save2resultRecords(xyz, weight, photon_id, round)
 
-    def normalize_resultEnv(self, n_photons, volume_per_bin):
-        """
-        Values of resultEnv [photon weight/bin] are normalized by the appropriate volume_per_bin and
-        by the value n_photons to yield the absorbed fraction [1/cm^3]
-        """
-        sum_of_photon_weight_in_observed_area = n_photons * 1.0 - self.escaped_photons_weight
-        self.resultEnv.body = self.resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
-
     def save2resultEnv(self, xyz, weight):
         if self.resultEnv is None:
             sh = self.propEnv.shape
