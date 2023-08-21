@@ -18,6 +18,7 @@ class PropSetup:
         self.escaped_photons_weight = 0.0
         self.resultEnv = None
         self.resultRecords = None
+        self.config = None
 
     def makePreview(self):
         arr3d = self.propEnv.body.copy()

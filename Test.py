@@ -14,6 +14,7 @@ from Projection import *
 from Sim import Sim
 import matplotlib.pyplot as plt
 import numpy as np
+from ResultEnvProcessing import ResultEnvProcessing
 
 class Test():
     def __init__(self):
@@ -1364,6 +1365,19 @@ class Test():
             plt.show()
 
 
+    class Test_ResultEnvProcessing():
+        def __init__(self):
+            pass
+
+        @staticmethod
+        def are_2_variants_equal(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
+            normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False)
+            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False)
+            test_result = np.allclose(normal_output_1.body, normal_output_2.body)
+            if not test_result:
+                raise ValueError("Normalize methods are not equal!")
+            return test_result
+
 
     def test1(self):
         test_FunOrigin = self.Test_FunOrigin()
@@ -1591,6 +1605,21 @@ def main():
     propSetup = sim.start_sim()
     end_time = time.time()
     print("time:", end_time-start_time)
+
+
+    # normalize output [photon weight / bin] -> absorbed fraction [1/cm^3]
+    photon_limits_list = propSetup.lightSource.photon_limits_list
+    photon_num = sum(photon_limits_list)
+    bins_per_1_cm = propSetup.config["bins_per_1_cm"] # [N/cm]
+    volume_per_bin = (1/bins_per_1_cm)**3
+    # TEST TO DELETE
+    Test.Test_ResultEnvProcessing.are_2_variants_equal(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
+    # END OF TEST
+    ResultEnvProcessing.normalize_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
+
+
+
+
     propSetup.show_results()
     # SumProjections
     sump = SumProjection()

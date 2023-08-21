@@ -22,3 +22,22 @@ class ResultEnvProcessing():
             return resultEnv
         else:
             return PropEnv(arr=body_pointer)
+        
+    @staticmethod
+    def normalize_resultEnv_2(resultEnv: PropEnv, volume_per_bin, inplace=True):
+        """
+        variant with body sum instead of 
+        NORMALIZE resultEnv.body VALUES
+        Values of resultEnv [photon weight/bin] are normalized by the appropriate volume_per_bin and
+        by the value n_photons to yield the absorbed fraction [1/cm^3]
+        """
+        if inplace:
+            body_pointer = resultEnv.body
+        else:
+            body_pointer = resultEnv.body.copy()
+        sum_of_photon_weight_in_observed_area = body_pointer.sum()
+        body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
+        if inplace:
+            return resultEnv
+        else:
+            return PropEnv(arr=body_pointer)

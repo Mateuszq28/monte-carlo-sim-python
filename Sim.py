@@ -6,7 +6,6 @@ from PropSetup import PropSetup
 from Photon import Photon
 from Space3dTools import Space3dTools
 from FeatureSampling import FeatureSampling
-from ResultEnvProcessing import ResultEnvProcessing
 import random
 
 
@@ -61,6 +60,9 @@ class Sim():
             self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
         else:
             self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
+        
+        # link config to PropSetup
+        self.propSetup.config = self.config
 
 
     def start_sim(self):
@@ -79,11 +81,7 @@ class Sim():
                         raise ValueError("ls is None")
         else:
             raise ValueError("photon_limits_list is None")
-        # normalize output [photon weight / bin] -> absorbed fraction [1/cm^3]
-        photon_num = sum(photon_limits_list)
-        bins_per_1_cm = self.config["bins_per_1_cm"] # [N/cm]
-        volume_per_bin = (1/bins_per_1_cm)**3
-        ResultEnvProcessing.normalize_resultEnv(self.propSetup.resultEnv, photon_num, volume_per_bin, self.propSetup.escaped_photons_weight, inplace=True)
+        # save results
         self.propSetup.save_result_json(self.result_folder)
         # self.propSetup.show_results()
         return self.propSetup
