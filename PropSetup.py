@@ -21,6 +21,9 @@ class PropSetup:
         self.config = None
 
     def makePreview(self):
+        """
+        # Make object that contain material labels + marked light sources locations
+        """
         arr3d = self.propEnv.body.copy()
         ox, oy, oz = self.offset
         sh = self.lightSource.shape
@@ -28,6 +31,9 @@ class PropSetup:
         self.preview = Object3D(arr=arr3d)
 
     def show_results(self):
+        """
+        Show photon weights (result env), use prop env (material labels) as background
+        """
         if self.resultEnv is not None:
             arr = self.resultEnv.body + self.propEnv.body
             show_prop = PropEnv(arr=arr)

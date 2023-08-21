@@ -41,3 +41,4 @@ class ResultEnvProcessing():
             return resultEnv
         else:
             return PropEnv(arr=body_pointer)
+        
