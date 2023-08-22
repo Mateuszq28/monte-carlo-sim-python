@@ -8,6 +8,7 @@ import PIL
 from PIL import ImageColor
 import sys
 from vispy import app, visuals, scene
+import pandas as pd
 
 
 
@@ -154,5 +155,55 @@ class ByVispy(View):
 
         else:
             print("Can not show empty object3D - " + title)
+
+
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None):
+        """
+        Plot 3D interactive plot of points in colorPointDF data frame using Vispy
+        :return: None
+        """
+
+        if len(colorPointDF) > 0:
+
+            # data to visualize
+            pos = colorPointDF[['x_idx', 'y_idx', 'z_idx']].to_numpy()
+            colrs = colorPointDF[['R', 'G', 'B', 'A']].to_numpy() / 255.0
+
+
+            # build your visuals, that's all
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+            # The real-things : plot using scene
+            # build canvas
+            canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
+
+            # Add a ViewBox to let the user zoom/rotate
+            view = canvas.central_widget.add_view()
+            view.camera = "turntable"
+            view.camera.fov = 45
+            view.camera.distance = 500
+
+            # plot ! note the parent parameter
+            p1 = Scatter3D(parent=view.scene)
+            p1.set_gl_state("translucent", blend=True, depth_test=True)
+            p1.set_data(
+                pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
+            )
+
+            # Add a 3D axis to keep us oriented
+            # Axes are x=red, y=green, z=blue
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+                # to enlarge it (scale by affine transformation)
+            shape = sorted(colorPointDF[['x_idx', 'y_idx', 'z_idx']].max().values)[1]
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            affine = s.as_matrix()
+            axis_widget.transform = affine
+
+            # run
+            if sys.flags.interactive != 1:
+                app.run()
+
+        else:
+            print("Can not show empty colorPointDF - " + title)
 
      

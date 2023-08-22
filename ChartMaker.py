@@ -1,4 +1,7 @@
 from SumProjection import SumProjection
+from Object3D import Object3D
+from PropSetup import PropSetup
+from ColorPointDF import ColorPointDF
 from ByVispy import ByVispy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -65,3 +68,22 @@ class ChartMaker():
             vis.show_body(proj)
             ChartMaker.heatmap2d(proj.body[:,:,0], bins_per_cm)
             proj.save_png(dir=dir, filename=name+".png")
+
+
+    @staticmethod
+    def show_resultEnv(resultEnv: PropSetup, config):
+        colorPointDF = ColorPointDF(config)
+        df = colorPointDF.from_Object3d(resultEnv, color_scheme="threshold", drop_values=[0])
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
+
+    @staticmethod
+    def simple_show_object3d(object3d: Object3D):
+        vis = ByVispy()
+        vis.show_body(object3d)
+
+
+    @staticmethod
+    def show_all(propSetup: PropSetup):
+        # ChartMaker.simple_show_object3d(propSetup.resultEnv)
+        ChartMaker.show_resultEnv(propSetup.resultEnv, propSetup.config)

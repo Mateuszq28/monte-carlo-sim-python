@@ -52,10 +52,13 @@ class RunAll():
         RunAll.normalize_process(propSetup)
 
         # SHOW PHOTON WEIGHTS (RESULT ENV), USE PROP ENV (MATERIAL LABELS) AS BACKGROUND
-        propSetup.show_results()
+        # propSetup.show_results()
+
+        # SHOW PHOTON WIGHTS
+        ChartMaker.show_all(propSetup)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv, sim.config["bins_per_1_cm"])
+        # ChartMaker.sum_projections(propSetup.resultEnv, sim.config["bins_per_1_cm"])
 
 
 
