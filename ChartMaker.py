@@ -51,7 +51,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def sum_projections(resultEnv, bins_per_cm):
+    def sum_projections_show_body(resultEnv, bins_per_cm):
         sump = SumProjection()
         x_high = sump.x_high(resultEnv)
         x_low = sump.x_low(resultEnv)
@@ -71,7 +71,26 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: PropSetup, config):
+    def sum_projections(resultEnv, config):
+        sump = SumProjection()
+        x_high = sump.x_high(resultEnv)
+        x_low = sump.x_low(resultEnv)
+        y_high = sump.y_high(resultEnv)
+        y_low = sump.y_low(resultEnv)
+        z_high = sump.z_high(resultEnv)
+        z_low = sump.z_low(resultEnv)
+        projs = [x_high, x_low, y_high, y_low, z_high, z_low]
+        projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+        # used in loop
+        dir = os.path.join("slice_img", "sum_projection_img")
+        vis = ByVispy()
+        for proj, name in zip(projs, projs_names):
+            ChartMaker.show_resultEnv(proj, config)
+            proj.save_png(dir=dir, filename=name+".png")
+
+
+    @staticmethod
+    def show_resultEnv(resultEnv: Object3D, config):
         colorPointDF = ColorPointDF(config)
         df = colorPointDF.from_Object3d(resultEnv, color_scheme="threshold", drop_values=[0])
         vis = ByVispy()
