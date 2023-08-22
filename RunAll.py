@@ -58,7 +58,7 @@ class RunAll():
         ChartMaker.show_all(propSetup)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv, sim.config)
+        ChartMaker.sum_projections(propSetup.resultEnv)
 
 
 

@@ -71,11 +71,10 @@ class Projection(Object3D):
         self.rebuild_from_array(samples3d)
         return self
     
-    def save_png(self, dir=None, filename="projection.png"):
+    def save_png(self, dir=None, filename="projection.png", color_scheme="threshold", connect_lines=None):
         if dir is None:
             dir = os.path.join("slice_img", "projection_img")
-        Print().z_high(self, dir, filename)
-        
+        Print().z_high(self, dir, filename, color_scheme, connect_lines)
 
                     
         
