@@ -12,7 +12,6 @@ class PropSetup:
         self.propEnv = propEnv
         self.lightSource = lightSource
         self.offset = offset
-        self.preview = None
         self.env_path = None
         self.light_source_path = None
         self.escaped_photons_weight = 0.0
@@ -20,25 +19,29 @@ class PropSetup:
         self.resultRecords = None
         self.config = None
 
-    def makePreview(self):
+    def make_preview(self):
         """
-        # Make object that contain material labels + marked light sources locations
+        Make object that contain material labels + marked light sources locations
+        self.propEnv.body + self.lightSource.body
         """
         arr3d = self.propEnv.body.copy()
         ox, oy, oz = self.offset
         sh = self.lightSource.shape
         arr3d[ox:ox+sh[0], oy:oy+sh[1], oz:oz+sh[2]] = self.lightSource.body
-        self.preview = Object3D(arr=arr3d)
+        preview = Object3D(arr=arr3d)
+        return preview
 
-    def show_results(self):
+    def make_result_preview(self):
         """
-        Show photon weights (result env), use prop env (material labels) as background
+        Make object that contain material labels + result photon weights in tissue
+        self.propEnv.body + self.resultEnv.body
         """
         if self.resultEnv is not None:
             arr = self.resultEnv.body + self.propEnv.body
-            show_prop = PropEnv(arr=arr)
-            vis = ByVispy()
-            vis.show_body(show_prop, title="Absorbed energy in volume")
+            result_preview = PropEnv(arr=arr)
+            return result_preview
+        else:
+            raise ValueError("self.resultEnv can not be None")
 
     def save2result_env_and_records(self, xyz, weight, photon_id, round=True):
         self.save2resultEnv(xyz, weight)

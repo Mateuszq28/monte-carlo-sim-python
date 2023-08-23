@@ -7,9 +7,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+
 class ChartMaker():
     def __init__(self):
         pass
+
+
+    @staticmethod
+    def show_simulation_preview(propSetup: PropSetup, color_scheme="loop"):
+        simulation_preview = propSetup.make_preview()
+        colorPointDF = ColorPointDF()
+        df = colorPointDF.from_Object3d(simulation_preview, color_scheme=color_scheme, drop_values=[0])
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None)
+
+
+    @staticmethod
+    def show_simulation_result_preview(propSetup: PropSetup, color_scheme="loop"):
+        simulation_result_preview = propSetup.make_result_preview()
+        colorPointDF = ColorPointDF()
+        df = colorPointDF.from_Object3d(simulation_result_preview, color_scheme=color_scheme, drop_values=[0])
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights)", connect_lines=None)
+
+
+    @staticmethod
+    def show_all(propSetup: PropSetup, color_scheme="loop"):
+
+        # SHOW RESULT ENV
+        # ChartMaker.simple_show_object3d(propSetup.resultEnv)
+        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+
+        # SUM PROJECTIONS + MAKING .PNG IMAGES
+        ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
 
 
     @staticmethod
@@ -85,7 +115,7 @@ class ChartMaker():
         dir = os.path.join("slice_img", "sum_projection_img")
         vis = ByVispy()
         for proj, name in zip(projs, projs_names):
-            ChartMaker.show_resultEnv(proj)
+            ChartMaker.show_resultEnv(proj, color_scheme)
             proj.save_png(dir=dir, filename=name+".png", color_scheme=color_scheme)
 
 
@@ -96,13 +126,11 @@ class ChartMaker():
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 
+
     @staticmethod
     def simple_show_object3d(object3d: Object3D):
         vis = ByVispy()
         vis.show_body(object3d)
 
 
-    @staticmethod
-    def show_all(propSetup: PropSetup):
-        # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(propSetup.resultEnv)
+

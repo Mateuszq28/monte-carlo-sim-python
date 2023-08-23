@@ -83,8 +83,7 @@ class Sim():
             raise ValueError("photon_limits_list is None")
         # save results
         self.propSetup.save_result_json(self.result_folder)
-        # self.propSetup.show_results()
-        return self.propSetup
+        return True
 
 
     def propagate_photon(self, photon: Photon):

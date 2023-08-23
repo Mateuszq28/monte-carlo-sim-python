@@ -34,32 +34,30 @@ class RunAll():
         MAIN PHOTON SIMULATION
         """
 
+        # used in every printing and charts
+        color_scheme = "threshold"
+        color_scheme = "loop"
+
         sim = Sim()
         vis = ByVispy()
 
-        # MAKE OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        # sim.propSetup.makePreview()
-        # o = sim.propSetup.preview
-        # vis.show_body(o)
+        # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
+        ChartMaker.show_simulation_preview(sim.propSetup, color_scheme)
 
         # SIMULATION
         start_time = time.time()
-        propSetup = sim.start_sim()
+        sim.start_sim()
         end_time = time.time()
         print("simulation calculation time:", end_time-start_time)
 
         # NORMALIZATION
-        RunAll.normalize_process(propSetup)
+        RunAll.normalize_process(sim.propSetup)
 
-        # SHOW PHOTON WEIGHTS (RESULT ENV), USE PROP ENV (MATERIAL LABELS) AS BACKGROUND
-        # propSetup.show_results()
+        # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
+        ChartMaker.show_simulation_result_preview(sim.propSetup, color_scheme)
 
-        # SHOW PHOTON WIGHTS
-        ChartMaker.show_all(propSetup)
-
-        # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv)
-
+        # SHOW OTHER CHARTS + MAKE .PNG IMAGES
+        ChartMaker.show_all(sim.propSetup, color_scheme)
 
 
 
