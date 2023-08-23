@@ -71,7 +71,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def sum_projections(resultEnv):
+    def sum_projections(resultEnv, color_scheme="threshold"):
         sump = SumProjection()
         x_high = sump.x_high(resultEnv)
         x_low = sump.x_low(resultEnv)
@@ -86,13 +86,13 @@ class ChartMaker():
         vis = ByVispy()
         for proj, name in zip(projs, projs_names):
             ChartMaker.show_resultEnv(proj)
-            proj.save_png(dir=dir, filename=name+".png", color_scheme="loop")
+            proj.save_png(dir=dir, filename=name+".png", color_scheme=color_scheme)
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D):
+    def show_resultEnv(resultEnv: Object3D, color_scheme="threshold"):
         colorPointDF = ColorPointDF()
-        df = colorPointDF.from_Object3d(resultEnv, color_scheme="loop", drop_values=[0])
+        df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 

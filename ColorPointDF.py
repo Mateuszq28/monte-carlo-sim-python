@@ -44,7 +44,7 @@ class ColorPointDF():
             df['G'] = rgb[1]
             df['B'] = rgb[2]
             # alpha channel
-            df['A'] = 255.0
+            df['A'] = 255
 
         elif color_scheme == "loop":
 
@@ -71,7 +71,7 @@ class ColorPointDF():
             df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
             # alpha channel
             # df['A'] = 255.0
-            df.insert(len(df.columns), "A", [255.0 for _ in rgb], True)
+            df.insert(len(df.columns), "A", [255 for _ in rgb], True)
                     
 
 

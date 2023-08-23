@@ -57,7 +57,7 @@ class Print(Object3D):
 
     def arr2D_to_img(self, arr2D, color_scheme="threshold", connect_lines=None):
         colorPointDF = ColorPointDF()
-        df = colorPointDF.from_arr2d(arr2D, color_scheme="threshold", drop_values=[0])
+        df = colorPointDF.from_arr2d(arr2D, color_scheme=color_scheme, drop_values=[0])
         # New array with rgb values
         new_arr2D = np.zeros((arr2D.shape[0], arr2D.shape[1], 3))
         # put default background color
@@ -68,11 +68,9 @@ class Print(Object3D):
         # set arr2d values in loop
         for i in range(new_arr2D.shape[0]):
             for j in range(new_arr2D.shape[1]):
-                rgb = df.loc[(df['x_idx'] == i) & df['x_idx'] == j][["R", "G", "B"]].to_numpy()
-                # rgb = df["R", "G", "B"].loc[(df['x_idx'] == i) & df['x_idx'] == j]
-                new_arr2D[i,j,0] = rgb[0]
-                new_arr2D[i,j,1] = rgb[1]
-                new_arr2D[i,j,2] = rgb[2]
+                rgb = df.loc[(df['x_idx'] == i) & (df['y_idx'] == j)][["R", "G", "B"]].to_numpy()
+                if len(rgb) > 0:
+                    new_arr2D[i,j,:] = rgb
         # Make PIL Image
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image
