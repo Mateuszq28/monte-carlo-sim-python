@@ -65,12 +65,8 @@ class Print(Object3D):
         new_arr2D[:,:,0] = default_color[0]
         new_arr2D[:,:,1] = default_color[1]
         new_arr2D[:,:,2] = default_color[2]
-        # set arr2d values in loop
-        for i in range(new_arr2D.shape[0]):
-            for j in range(new_arr2D.shape[1]):
-                rgb = df.loc[(df['x_idx'] == i) & (df['y_idx'] == j)][["R", "G", "B"]].to_numpy()
-                if len(rgb) > 0:
-                    new_arr2D[i,j,:] = rgb
+        # set arr2d
+        new_arr2D[df["x_idx"].to_numpy(), df["y_idx"].to_numpy(), :] = df[["R", "G", "B"]].to_numpy()
         # Make PIL Image
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image

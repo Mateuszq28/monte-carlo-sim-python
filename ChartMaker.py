@@ -71,7 +71,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def sum_projections(resultEnv, color_scheme="threshold"):
+    def sum_projections(resultEnv, color_scheme="loop"):
         sump = SumProjection()
         x_high = sump.x_high(resultEnv)
         x_low = sump.x_low(resultEnv)
@@ -90,7 +90,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D, color_scheme="threshold"):
+    def show_resultEnv(resultEnv: Object3D, color_scheme="loop"):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()

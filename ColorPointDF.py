@@ -29,7 +29,9 @@ class ColorPointDF():
 
             # choose threshold
             if self.use_threshold == "const":
-                threshold = self.threshold_const * self.volume_per_bin
+                bins_per_1_cm = self.config["bins_per_1_cm"] # [N/cm]
+                volume_per_bin = (1/bins_per_1_cm)**3
+                threshold = self.threshold_const * volume_per_bin
             elif self.use_threshold == "quantile":
                 threshold = df["value"].quantile(self.threshold_quantile)
             else:
