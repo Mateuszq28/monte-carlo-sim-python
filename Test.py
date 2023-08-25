@@ -1386,18 +1386,21 @@ class Test():
         @staticmethod
         def stack_color_scheme():
             # make test object
-            o1 = Object3D()
-            o2 = Object3D()
+            o_size = 20
+            arr = np.full((o_size, o_size, o_size), fill_value=0.0)
+            o1 = Object3D(arr=arr)
+            o2 = Object3D(arr=arr.copy())
             o1.fill_cube(0, start_p=(0.0,0.0,0.0), end_p=(0.75,0.75,0.75), random_fill=True)
             o2.fill_cube(0, start_p=(0.25,0.25,0.25), end_p=(1.0,1.0,1.0), random_fill=True)
-
             # make color schemes (data frames)
             colorPointDF = ColorPointDF()
-            df1 = colorPointDF.from_Object3d(o1, color_scheme="loop")
-            df2 = colorPointDF.from_Object3d(o2, color_scheme="threshold")
-
+            df1 = colorPointDF.from_Object3d(o1, color_scheme="loop", drop_values=[0])
+            print("df1\n", df1)
+            df2 = colorPointDF.from_Object3d(o2, color_scheme="threshold", drop_values=[0])
+            print("df2\n", df2)
             # stack
             df_stack = colorPointDF.stack_color_scheme([df1, df2])
+            print("df_stack\n", df_stack)
             # show
             vis = ByVispy()
             vis.show_ColorPointDF(df_stack)

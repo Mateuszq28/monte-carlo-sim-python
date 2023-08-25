@@ -8,6 +8,7 @@ class ColorPointDF():
 
     threshold_const = 0.2
     threshold_quantile = 0.2
+    threshold_quantile = 0.0
     use_threshold = "quantile"
     loop_color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
 
@@ -109,17 +110,17 @@ class ColorPointDF():
         return df
     
 
-    def stack_color_scheme(self, cs_list: list[pd.DataFrame]):
+    def stack_color_scheme(self, cs_list: list[pd.DataFrame], ignore_index=True, drop_duplicates=True):
         cs_stack = pd.DataFrame()
+        # columns that will be used as an unique key
+        loc_cols = ["x_idx", "y_idx"]
+        if "z_idx" in cs_list[0].columns:
+            loc_cols.append("z_idx")
+        # concatenate in loop
         for cs in cs_list:
-            # columns that will be used as an unique key
-            loc_cols = ["x_idx", "y_idx"]
-            if "z_idx" in cs.columns:
-                loc_cols.append("z_idx")
-
-            write_cols = ["value", "R", "G", "B", "A"]
-
-            cs_stack.loc[cs_stack.loc[loc_cols] == cs.loc[loc_cols]][write_cols] = cs[write_cols]
-
+            cs_stack = pd.concat([cs_stack, cs], ignore_index=ignore_index)
+        # drop duplicates
+        if drop_duplicates:
+            cs_stack = cs_stack.drop_duplicates(subset=loc_cols, keep='last', ignore_index=ignore_index)
         return cs_stack
         
