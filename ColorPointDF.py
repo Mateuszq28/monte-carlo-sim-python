@@ -107,5 +107,19 @@ class ColorPointDF():
         df = pd.DataFrame({'value': arr2d.flatten(), 'x_idx': X.flatten(), 'y_idx': Y.flatten()})
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
+    
 
+    def stack_color_scheme(self, cs_list: list[pd.DataFrame]):
+        cs_stack = pd.DataFrame()
+        for cs in cs_list:
+            # columns that will be used as an unique key
+            loc_cols = ["x_idx", "y_idx"]
+            if "z_idx" in cs.columns:
+                loc_cols.append("z_idx")
+
+            write_cols = ["value", "R", "G", "B", "A"]
+
+            cs_stack.loc[cs_stack.loc[loc_cols] == cs.loc[loc_cols]][write_cols] = cs[write_cols]
+
+        return cs_stack
         

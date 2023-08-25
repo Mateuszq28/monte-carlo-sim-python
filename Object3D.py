@@ -1,5 +1,6 @@
 import numpy as np
 import json
+from FeatureSampling import MyRandom
 
 
 class Object3D():
@@ -169,7 +170,7 @@ class Object3D():
         return int_point
                 
 
-    def fill_cube(self, fill, start_p, fill_rec=None, end_p=None):
+    def fill_cube(self, fill, start_p, fill_rec=None, end_p=None, random_fill=False):
         """
         Fills subCube in main body using number in fill variable.
         Works inplace on self.body ndarray
@@ -199,10 +200,15 @@ class Object3D():
             if end_pi[dimIdx] > self.shape[dimIdx]:
                 end_pi[dimIdx] = self.shape[dimIdx]
 
+        # Random generator
+        rnd = MyRandom()
+
         # fill in loop
         for i in range(start_pi[0], end_pi[0]):
             for j in range(start_pi[1], end_pi[1]):
                 for k in range(start_pi[2], end_pi[2]):
+                    if random_fill:
+                        fill = rnd.uniform_half_open(0.0, 1.0)
                     self.body[i, j, k] = fill
 
         self.analize_materials()

@@ -15,6 +15,7 @@ from Sim import Sim
 import matplotlib.pyplot as plt
 import numpy as np
 from ResultEnvProcessing import ResultEnvProcessing
+from ChartMaker import ChartMaker
 
 class Test():
     def __init__(self):
@@ -1377,6 +1378,31 @@ class Test():
             if not test_result:
                 raise ValueError("Normalize methods are not equal!")
             return test_result
+        
+    class Test_ColorPointDF():
+        def __init__(self):
+            pass
+
+        @staticmethod
+        def stack_color_scheme():
+            # make test object
+            o1 = Object3D()
+            o2 = Object3D()
+            o1.fill_cube(0, start_p=(0.0,0.0,0.0), end_p=(0.75,0.75,0.75), random_fill=True)
+            o2.fill_cube(0, start_p=(0.25,0.25,0.25), end_p=(1.0,1.0,1.0), random_fill=True)
+
+            # make color schemes (data frames)
+            colorPointDF = ColorPointDF()
+            df1 = colorPointDF.from_Object3d(o1, color_scheme="loop")
+            df2 = colorPointDF.from_Object3d(o2, color_scheme="threshold")
+
+            # stack
+            df_stack = colorPointDF.stack_color_scheme([df1, df2])
+            # show
+            vis = ByVispy()
+            vis.show_ColorPointDF(df_stack)
+
+
 
 
     def test1(self):
@@ -1511,6 +1537,11 @@ class Test():
         t = self.Test_Space3dTools()
         t.internal_reflectance()
 
+    def test25(self):
+        # color scheme stack
+        t = self.Test_ColorPointDF()
+        t.stack_color_scheme()
+
 
 def main():
     test = Test()
@@ -1558,6 +1589,9 @@ def main():
 
     # Reflectance function
     # test.test24()
+
+    # test color scheme stack
+    test.test25()
 
 
 
