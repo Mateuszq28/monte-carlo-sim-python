@@ -49,17 +49,20 @@ class ChartMaker():
     def show_all(propSetup: PropSetup, color_scheme="loop"):
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview_DF(propSetup, cs_material="solid", cs_light_source="solid")
+        # ChartMaker.show_simulation_preview_DF(propSetup, cs_material="solid", cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="solid", cs_photons="loop")
+        # ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="solid", cs_photons="loop")
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+        # ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
+        # ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
+
+        # SHOW RESULT RECORDS
+        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise")
 
 
     @staticmethod
@@ -143,6 +146,13 @@ class ChartMaker():
     def show_resultEnv(resultEnv: Object3D, color_scheme="loop"):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0])
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
+
+    @staticmethod
+    def show_resultRecords(resultRecords, color_scheme="photonwise"):
+        colorPointDF = ColorPointDF()
+        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 

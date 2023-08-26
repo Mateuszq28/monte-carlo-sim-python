@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from PIL import ImageColor
 import json
+from FeatureSampling import MyRandom
 
 class ColorPointDF():
 
@@ -113,9 +114,28 @@ class ColorPointDF():
             # df['A'] = 255.0
             df.insert(len(df.columns), "A", [255 for _ in rgb], True)
 
+        elif color_scheme == "photonwise":
+
+            if "photon_id" not in df.columns:
+                raise ValueError("df must have photon_id column")
+            
+            uniq_photon_id = pd.unique(df['photon_id'])
+            rnd = MyRandom()
+            colors = [[rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)] for _ in range(len(uniq_photon_id))]
+            # id to color translator (dict)
+            trans_color = dict(zip(uniq_photon_id, colors))
+            # treanslate colors
+            rgb = [trans_color[val] for val in df["photon_id"].values]
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
+            df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
+            df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
+            # alpha channel
+            # df['A'] = 255.0
+            df.insert(len(df.columns), "A", [255 for _ in rgb], True)
 
 
-
+            
 
 
 
@@ -141,6 +161,11 @@ class ColorPointDF():
     def from_arr2d(self, arr2d, color_scheme, drop_values=None):
         X, Y = np.indices(arr2d.shape)
         df = pd.DataFrame({'value': arr2d.flatten(), 'x_idx': X.flatten(), 'y_idx': Y.flatten()})
+        df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
+        return df
+    
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None):
+        df = pd.DataFrame({'value': [val[4] for val in resultRecords], 'x_idx': [val[1] for val in resultRecords], 'y_idx': [val[2] for val in resultRecords], 'z_idx': [val[3] for val in resultRecords], 'photon_id': [val[0] for val in resultRecords]})
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     

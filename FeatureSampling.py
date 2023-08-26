@@ -24,6 +24,9 @@ class MyRandom():
         Generate random number from half-open interval [a, b)
         """
         return np.random.uniform(low=a, high=b)
+    
+    def randint(self, a, b):
+        return random.randint(a, b)
         
 
 class FeatureSampling():
