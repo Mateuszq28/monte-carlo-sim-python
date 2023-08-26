@@ -5,6 +5,7 @@ import json
 import numpy as np
 import os
 from ByVispy import ByVispy
+from ColorPointDF import ColorPointDF
 
 class PropSetup:
 
@@ -21,7 +22,7 @@ class PropSetup:
 
     def make_preview(self):
         """
-        Make object that contain material labels + marked light sources locations
+        Make object3D that contain material labels + marked light sources locations
         self.propEnv.body + self.lightSource.body
         """
         arr3d = self.propEnv.body.copy()
@@ -33,7 +34,7 @@ class PropSetup:
 
     def make_result_preview(self):
         """
-        Make object that contain material labels + result photon weights in tissue
+        Make object3D that contain material labels + result photon weights in tissue
         self.propEnv.body + self.resultEnv.body
         """
         if self.resultEnv is not None:
@@ -42,6 +43,32 @@ class PropSetup:
             return result_preview
         else:
             raise ValueError("self.resultEnv can not be None")
+        
+
+    def make_preview_DF(self, cs_material="loop", cs_light_source="loop"):
+        """
+        Make ColorPointDF that contain material labels + marked light sources locations
+        self.propEnv.body + self.lightSource.body
+        """
+        cdf = ColorPointDF()
+        df_material = cdf.from_Object3d(self.propEnv, color_scheme=cs_material, drop_values=[0])
+        df_light_source = cdf.from_Object3d(self.lightSource, color_scheme=cs_light_source, drop_values=[0])
+        cdf.add_offset(df_light_source, offset=self.offset)
+        preview_DF = cdf.stack_color_scheme([df_material, df_light_source])
+        return preview_DF
+
+
+    def make_result_preview_DF(self, cs_material="loop", cs_photons="threshold"):
+        """
+        Make ColorPointDF that contain material labels + result photon weights in tissue
+        self.propEnv.body + self.resultEnv.body
+        """
+        cdf = ColorPointDF()
+        df_material = cdf.from_Object3d(self.propEnv, color_scheme=cs_material, drop_values=[0])
+        df_photons = cdf.from_Object3d(self.resultEnv, color_scheme=cs_photons, drop_values=[0])
+        result_preview_DF = cdf.stack_color_scheme([df_material, df_photons])
+        return result_preview_DF
+
 
     def save2result_env_and_records(self, xyz, weight, photon_id, round=True):
         self.save2resultEnv(xyz, weight)

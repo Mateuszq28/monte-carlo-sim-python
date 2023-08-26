@@ -32,7 +32,27 @@ class ChartMaker():
 
 
     @staticmethod
+    def show_simulation_preview_DF(propSetup: PropSetup, cs_material="loop", cs_light_source="loop"):
+        df = propSetup.make_preview_DF(cs_material, cs_light_source)
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None)
+
+
+    @staticmethod
+    def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="loop", cs_photons="threshold"):
+        df = propSetup.make_result_preview_DF(cs_material, cs_photons)
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights)", connect_lines=None)
+
+
+    @staticmethod
     def show_all(propSetup: PropSetup, color_scheme="loop"):
+
+        # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
+        ChartMaker.show_simulation_preview_DF(propSetup, cs_material="loop", cs_light_source="loop")
+
+        # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
+        ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="loop", cs_photons="threshold")
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)

@@ -1395,12 +1395,12 @@ class Test():
             # make color schemes (data frames)
             colorPointDF = ColorPointDF()
             df1 = colorPointDF.from_Object3d(o1, color_scheme="loop", drop_values=[0])
-            print("df1\n", df1)
+            # print("df1\n", df1)
             df2 = colorPointDF.from_Object3d(o2, color_scheme="threshold", drop_values=[0])
-            print("df2\n", df2)
+            # print("df2\n", df2)
             # stack
             df_stack = colorPointDF.stack_color_scheme([df1, df2])
-            print("df_stack\n", df_stack)
+            # print("df_stack\n", df_stack)
             # show
             vis = ByVispy()
             vis.show_ColorPointDF(df_stack)

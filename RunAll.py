@@ -41,9 +41,6 @@ class RunAll():
         sim = Sim()
         vis = ByVispy()
 
-        # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview(sim.propSetup, color_scheme)
-
         # SIMULATION
         start_time = time.time()
         sim.start_sim()
@@ -53,10 +50,7 @@ class RunAll():
         # NORMALIZATION
         RunAll.normalize_process(sim.propSetup)
 
-        # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview(sim.propSetup, color_scheme)
-
-        # SHOW OTHER CHARTS + MAKE .PNG IMAGES
+        # SHOW CHARTS + MAKE .PNG IMAGES
         ChartMaker.show_all(sim.propSetup, color_scheme)
 
 

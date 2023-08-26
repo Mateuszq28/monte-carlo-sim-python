@@ -94,7 +94,7 @@ class ColorPointDF():
 
 
 
-
+    # FUNCTIONS FROM OBJECTS TO COLOR SCHEME DF
 
     def from_Object3d(self, object3d: Object3D, color_scheme, drop_values=None):
         X, Y, Z = np.indices(object3d.body.shape)
@@ -110,6 +110,10 @@ class ColorPointDF():
         return df
     
 
+
+
+    # TOOLS
+
     def stack_color_scheme(self, cs_list: list[pd.DataFrame], ignore_index=True, drop_duplicates=True):
         cs_stack = pd.DataFrame()
         # columns that will be used as an unique key
@@ -123,4 +127,14 @@ class ColorPointDF():
         if drop_duplicates:
             cs_stack = cs_stack.drop_duplicates(subset=loc_cols, keep='last', ignore_index=ignore_index)
         return cs_stack
+    
+
+    def add_offset(self, data_frame, offset):
+        # choose columns to modify
+        if len(offset) == 2:
+            cols = ["x_idx", "y_idx"]
+        else:
+            cols = ["x_idx", "y_idx", "z_idx"]
+        # add offset
+        data_frame[cols] += offset
         
