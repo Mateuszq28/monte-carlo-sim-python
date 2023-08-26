@@ -10,6 +10,7 @@ class ColorPointDF():
     threshold_quantile = 0.2
     threshold_quantile = 0.0
     use_threshold = "quantile"
+    # loop_color_names = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9', '#3498DB', '#1ABC9C', '#16A085', '#27AE60', '#2ECC71', '#F1C40F', '#F39C12', '#E67E22', '#D35400', '#ECF0F1', '#BDC3C7', '#95A5A6', '#7F8C8D', '#34495E', '#2C3E50']
     loop_color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
 
 
@@ -76,7 +77,41 @@ class ColorPointDF():
             # df['A'] = 255.0
             df.insert(len(df.columns), "A", [255 for _ in rgb], True)
                     
+        elif color_scheme == "solid":
 
+            other_uniq_vals = pd.unique(df['value']).tolist()
+
+            # get solid colors dict from config
+            solid_color_dict = dict()
+            for key, value in self.config["tissue_properties"].items():
+                solid_color_dict[key] = value["print color"]
+                if key in other_uniq_vals:
+                    other_uniq_vals.remove(key)
+
+            # get loop colors dict for not specified labels in config
+            color_names = self.loop_color_names.copy()
+            colors_len = len(color_names)
+            uniq_len = len(other_uniq_vals)
+            if colors_len > uniq_len:
+                color_names = color_names[0:uniq_len]
+            else:
+                # repeat colors
+                for i in range(uniq_len - colors_len):
+                    color_names.append(color_names[i % colors_len])
+
+            # make dictionary for changing DF value fields into rgb colors
+            colors_rgb = [ImageColor.getrgb(c) for c in color_names]
+            trans_color = dict(zip(other_uniq_vals, colors_rgb))
+            trans_color.update(solid_color_dict)
+
+            # 2. set DF colors
+            rgb = [trans_color[val] for val in df["value"].values]
+            df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
+            df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
+            df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
+            # alpha channel
+            # df['A'] = 255.0
+            df.insert(len(df.columns), "A", [255 for _ in rgb], True)
 
 
 

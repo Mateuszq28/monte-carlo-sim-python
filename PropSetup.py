@@ -45,7 +45,7 @@ class PropSetup:
             raise ValueError("self.resultEnv can not be None")
         
 
-    def make_preview_DF(self, cs_material="loop", cs_light_source="loop"):
+    def make_preview_DF(self, cs_material="solid", cs_light_source="solid"):
         """
         Make ColorPointDF that contain material labels + marked light sources locations
         self.propEnv.body + self.lightSource.body
@@ -58,7 +58,7 @@ class PropSetup:
         return preview_DF
 
 
-    def make_result_preview_DF(self, cs_material="loop", cs_photons="threshold"):
+    def make_result_preview_DF(self, cs_material="solid", cs_photons="loop"):
         """
         Make ColorPointDF that contain material labels + result photon weights in tissue
         self.propEnv.body + self.resultEnv.body
