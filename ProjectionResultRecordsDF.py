@@ -40,7 +40,7 @@ class ProjectionResultRecordsDF():
         i_axis_name = ax_lvl_names[i_axis_idx]
         j_axis_name = ax_lvl_names[j_axis_idx]
         search_axis_name = ax_lvl_names[axis]
-        output_df = pd.DataFrame()
+        output_df = pd.DataFrame(columns = resultRecordsDF.columns)
         for i in range(input_shape[i_axis_idx]):
             # iter through second left axis
             for j in range(input_shape[j_axis_idx]):
