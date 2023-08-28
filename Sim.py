@@ -76,6 +76,11 @@ class Sim():
                         photon = ls[i].emit()
                         # global coordinates
                         photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
+                        # register start position in photon_register
+                        self.propSetup.photon_register[photon.id] = {"start_pos": photon.pos,
+                                                                     "parent": None,
+                                                                     "child": []}
+                        # propagate
                         self.propagate_photon(photon)
                     else:
                         raise ValueError("ls is None")
@@ -161,6 +166,11 @@ class Sim():
                     # penetration ray - refraction
                     # new photon to track
                     refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1-R))
+                    self.propSetup.photon_register[refraction_photon.id] = {"start_pos": refraction_photon.pos,
+                                                                            "parent": photon.id,
+                                                                            "child": []
+                                                                            }
+                    self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
                     self.try_move(refraction_photon, rest_dist)
                     self.propagate_photon(refraction_photon)
                     # update old photon

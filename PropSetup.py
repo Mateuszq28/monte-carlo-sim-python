@@ -18,6 +18,7 @@ class PropSetup:
         self.escaped_photons_weight = 0.0
         self.resultEnv = None
         self.resultRecords = None
+        self.photon_register = dict()
         self.config = None
 
     def make_preview(self):

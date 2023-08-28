@@ -9,7 +9,7 @@ class Photon():
     static_photon_id_counter = 0
 
     
-    def __init__(self, emit_pos, emit_dir, weight=1.):
+    def __init__(self, emit_pos, emit_dir, weight=1.0):
         self.pos = emit_pos
         self.dir = emit_dir
         self.weight = weight
