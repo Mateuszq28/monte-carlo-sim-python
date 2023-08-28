@@ -1,6 +1,7 @@
 from SumProjection import SumProjection
 from Object3D import Object3D
 from PropSetup import PropSetup
+from PropEnv import PropEnv
 from ColorPointDF import ColorPointDF
 from ByVispy import ByVispy
 import matplotlib.pyplot as plt
@@ -27,7 +28,7 @@ class ChartMaker():
         ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
+        ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
 
         # SHOW RESULT RECORDS
         sl = list(range(10,20)) + list(range(30,40))
@@ -158,7 +159,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def sum_projections(resultEnv, color_scheme="loop"):
+    def sum_projections(resultEnv: PropEnv, bins_per_cm, color_scheme="loop"):
         sump = SumProjection()
         x_high = sump.x_high(resultEnv)
         x_low = sump.x_low(resultEnv)
@@ -173,6 +174,7 @@ class ChartMaker():
         vis = ByVispy()
         for proj, name in zip(projs, projs_names):
             ChartMaker.show_resultEnv(proj, color_scheme)
+            ChartMaker.heatmap2d(proj.body[:,:,0], bins_per_cm)
             proj.save_png(dir=dir, filename=name+".png", color_scheme=color_scheme)
 
 

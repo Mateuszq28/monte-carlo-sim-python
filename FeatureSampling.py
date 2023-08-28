@@ -62,9 +62,9 @@ class FeatureSampling():
     
     def photon_theta(self):
         # try other functions
-        return self.funSampling.normal(scale=1.0)
+        # return self.funSampling.normal(scale=1.0)
         # return self.funSampling.exp2(a=1) * math.pi
-        # return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
+        return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
 
     def photon_theta_isotropic(self):
         return self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
