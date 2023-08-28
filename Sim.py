@@ -79,7 +79,8 @@ class Sim():
                         # register start position in photon_register
                         self.propSetup.photon_register[photon.id] = {"start_pos": photon.pos,
                                                                      "parent": None,
-                                                                     "child": []}
+                                                                     "child": []
+                                                                     }
                         # propagate
                         self.propagate_photon(photon)
                     else:

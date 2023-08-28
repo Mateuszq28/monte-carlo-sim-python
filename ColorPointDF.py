@@ -163,14 +163,27 @@ class ColorPointDF():
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
-    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, border_limits=None):
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
         """
         :param border_limits: [x_min, x_max, y_min, y_max, z_min, z_max]
         """
         df = pd.DataFrame({'value': [val[4] for val in resultRecords], 'x_idx': [val[1] for val in resultRecords], 'y_idx': [val[2] for val in resultRecords], 'z_idx': [val[3] for val in resultRecords], 'photon_id': [val[0] for val in resultRecords]})
-        # filter
+        # filter photon_id
         if select_photon_id is not None:
+            if photon_register is not None:
+                # parent
+                if select_parent:
+                    for select_id in select_photon_id.copy():
+                        select_photon_id += self.all_parents_in_photon_register(photon_register, select_id)
+                        select_photon_id = list(set(select_photon_id)) # unique vals
+                # child
+                if select_child:
+                    for select_id in select_photon_id.copy():
+                        select_photon_id += self.all_childs_in_photon_register(photon_register, select_id)
+                        select_photon_id = list(set(select_photon_id)) # unique vals
+            # filter - only ids that are in select_photon_id
             df = df[df["photon_id"].isin(select_photon_id)]
+        # filter values in border limit
         if border_limits is not None:
             df = df[df["x_idx"] >= border_limits[0]]
             df = df[df["x_idx"] <= border_limits[1]-1]
@@ -210,6 +223,23 @@ class ColorPointDF():
             cols = ["x_idx", "y_idx", "z_idx"]
         # add offset
         df[cols] += offset
+
+    def all_parents_in_photon_register(self, photon_register, photon_id):
+        parent_id = photon_register[photon_id]["parent"]
+        if parent_id is None:
+            return []
+        else:
+            return [parent_id] + self.all_parents_in_photon_register(photon_register, parent_id)
+        
+    def all_childs_in_photon_register(self, photon_register, photon_id):
+        childs = photon_register[photon_id]["child"]
+        if len(childs) > 0:
+            bufor = []
+            for one_child in childs:
+                bufor += self.all_parents_in_photon_register(photon_register, one_child)
+            return childs + bufor
+        else:
+            return []
         
 
 

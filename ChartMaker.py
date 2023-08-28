@@ -30,11 +30,16 @@ class ChartMaker():
         # ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
 
         # SHOW RESULT RECORDS
-        select_photon_id = [50,68]
-        select_photon_id = None
+        sl = None
+        sl = list(range(10,20)) + list(range(30,40))
         sh = propSetup.propEnv.shape
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
-        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, border_limits=border_limits)
+        border_limits = None
+
+
+        for s in sl:
+            select_photon_id = [s]
+            ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
 
 
 
@@ -176,9 +181,9 @@ class ChartMaker():
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 
     @staticmethod
-    def show_resultRecords(resultRecords, color_scheme="photonwise", select_photon_id=None, border_limits=None):
+    def show_resultRecords(resultRecords, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
         colorPointDF = ColorPointDF()
-        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0], select_photon_id=select_photon_id, border_limits=border_limits)
+        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0], select_photon_id=select_photon_id, photon_register=photon_register, select_parent=select_parent, select_child=select_child, border_limits=border_limits)
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 
