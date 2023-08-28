@@ -24,8 +24,7 @@ class ColorPointDF():
 
         # Drop values (for example 0.0)
         if drop_values is not None:
-            for drop_val in drop_values:
-                df = df.loc[df["value"] != drop_val]
+            df = df[~df["value"].isin(drop_values)]
 
 
         if color_scheme == "threshold":
@@ -164,8 +163,10 @@ class ColorPointDF():
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
-    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None):
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None):
         df = pd.DataFrame({'value': [val[4] for val in resultRecords], 'x_idx': [val[1] for val in resultRecords], 'y_idx': [val[2] for val in resultRecords], 'z_idx': [val[3] for val in resultRecords], 'photon_id': [val[0] for val in resultRecords]})
+        if select_photon_id is not None:
+            df = df[df["photon_id"].isin(select_photon_id)]
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
@@ -189,12 +190,15 @@ class ColorPointDF():
         return cs_stack
     
 
-    def add_offset(self, data_frame, offset):
+    def add_offset(self, df, offset):
         # choose columns to modify
         if len(offset) == 2:
             cols = ["x_idx", "y_idx"]
         else:
             cols = ["x_idx", "y_idx", "z_idx"]
         # add offset
-        data_frame[cols] += offset
+        df[cols] += offset
+        
+
+
         

@@ -62,7 +62,7 @@ class ChartMaker():
         # ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
 
         # SHOW RESULT RECORDS
-        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise")
+        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=[99,98])
 
 
     @staticmethod
@@ -150,9 +150,9 @@ class ChartMaker():
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 
     @staticmethod
-    def show_resultRecords(resultRecords, color_scheme="photonwise"):
+    def show_resultRecords(resultRecords, color_scheme="photonwise", select_photon_id=None):
         colorPointDF = ColorPointDF()
-        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0])
+        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0], select_photon_id=select_photon_id)
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 
