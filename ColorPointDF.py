@@ -163,10 +163,22 @@ class ColorPointDF():
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
-    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None):
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, border_limits=None):
+        """
+        :param border_limits: [x_min, x_max, y_min, y_max, z_min, z_max]
+        """
         df = pd.DataFrame({'value': [val[4] for val in resultRecords], 'x_idx': [val[1] for val in resultRecords], 'y_idx': [val[2] for val in resultRecords], 'z_idx': [val[3] for val in resultRecords], 'photon_id': [val[0] for val in resultRecords]})
+        # filter
         if select_photon_id is not None:
             df = df[df["photon_id"].isin(select_photon_id)]
+        if border_limits is not None:
+            df = df[df["x_idx"] >= border_limits[0]]
+            df = df[df["x_idx"] <= border_limits[1]-1]
+            df = df[df["y_idx"] >= border_limits[2]]
+            df = df[df["y_idx"] <= border_limits[3]-1]
+            df = df[df["z_idx"] >= border_limits[4]]
+            df = df[df["z_idx"] <= border_limits[5]-1]
+        # color scheme process
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     

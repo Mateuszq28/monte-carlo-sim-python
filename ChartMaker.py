@@ -62,7 +62,9 @@ class ChartMaker():
         # ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
 
         # SHOW RESULT RECORDS
-        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=[99,98])
+        select_photon_id = [50,68]
+        select_photon_id = None
+        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id)
 
 
     @staticmethod
