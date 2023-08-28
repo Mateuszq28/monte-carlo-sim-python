@@ -229,10 +229,11 @@ class ChartMaker():
         # used in loop
         dir = os.path.join("slice_img", "photonwise_projection_img")
         vis = ByVispy()
-        for proj, flat_ax, name in zip(projs, flat_axis, projs_names):
-            vis.show_ColorPointDF(proj, title="Absorbed energy in volume", connect_lines=None)
-            flat_z_proj = pDF.set_z_as_flat_axis(proj, flat_ax)
-            image_shape = input_shape.copy().remove(flat_ax)
+        for projDF, flat_ax, name in zip(projs, flat_axis, projs_names):
+            vis.show_ColorPointDF(projDF, title="Absorbed energy in volume", connect_lines=None)
+            flat_z_proj = pDF.set_z_as_flat_axis(projDF, flat_ax)
+            image_shape = input_shape.copy()
+            image_shape.pop(flat_ax)
             Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape, dir=dir, filename=name+".png")
 
 

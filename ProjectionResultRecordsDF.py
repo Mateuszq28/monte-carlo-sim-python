@@ -40,7 +40,8 @@ class ProjectionResultRecordsDF():
         i_axis_name = ax_lvl_names[i_axis_idx]
         j_axis_name = ax_lvl_names[j_axis_idx]
         search_axis_name = ax_lvl_names[axis]
-        output_df = pd.DataFrame(columns = resultRecordsDF.columns)
+        output_df = pd.DataFrame()
+        # print("resultRecordsDF", resultRecordsDF)
         for i in range(input_shape[i_axis_idx]):
             # iter through second left axis
             for j in range(input_shape[j_axis_idx]):
@@ -48,9 +49,9 @@ class ProjectionResultRecordsDF():
                 if len(filtered_rows) > 0:
                     # find first or last val on the search axis
                     if xray == -1:
-                        first_val = filtered_rows.loc[filtered_rows[search_axis_name].idxmax()]
+                        first_val = filtered_rows.loc[[filtered_rows[search_axis_name].idxmax()]]
                     elif xray == 1:
-                        first_val = filtered_rows.loc[filtered_rows[search_axis_name].idxmin()]
+                        first_val = filtered_rows.loc[[filtered_rows[search_axis_name].idxmin()]]
                     else:
                         raise ValueError("xray must be -1 or 1")
                     # here add to output container
@@ -63,7 +64,7 @@ class ProjectionResultRecordsDF():
         else:
             raise ValueError("xray must be -1 or 1")
         output_df[search_axis_name] = reset_idx
-        #
+        # all values on flat axis are the same
         flat_axis = axis
         return output_df, flat_axis
 
