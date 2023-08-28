@@ -24,22 +24,25 @@ class ChartMaker():
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        # ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        # ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
+        ChartMaker.sum_projections(propSetup.resultEnv, color_scheme)
 
         # SHOW RESULT RECORDS
-        sl = None
         sl = list(range(10,20)) + list(range(30,40))
+        sl = None
         sh = propSetup.propEnv.shape
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
         border_limits = None
 
+        select_photon_id = None
+        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
 
-        for s in sl:
-            select_photon_id = [s]
-            ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
+        if sl is not None:
+            for s in sl:
+                select_photon_id = [s]
+                ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
 
 
 

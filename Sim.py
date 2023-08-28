@@ -252,8 +252,11 @@ class Sim():
         flag_terminate = False
         if photon.weight < threshold:
             if rnd <= chance:
-                photon.weight = photon.weight / chance
+                new_weight = photon.weight / chance
+                self.propSetup.escaped_photons_weight -= (new_weight - photon.weight)
+                photon.weight = new_weight
             else:
+                self.propSetup.escaped_photons_weight += photon.weight
                 flag_terminate = True
         return flag_terminate
 

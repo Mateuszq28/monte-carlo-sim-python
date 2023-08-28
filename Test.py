@@ -1372,8 +1372,8 @@ class Test():
 
         @staticmethod
         def are_2_variants_equal(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
-            normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False)
-            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False)
+            normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False, print_debug=True)
             test_result = np.allclose(normal_output_1.body, normal_output_2.body)
             if not test_result:
                 raise ValueError("Normalize methods are not equal!")
