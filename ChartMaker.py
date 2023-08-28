@@ -2,8 +2,10 @@ from SumProjection import SumProjection
 from Object3D import Object3D
 from PropSetup import PropSetup
 from PropEnv import PropEnv
+from ProjectionResultRecordsDF import ProjectionResultRecordsDF
 from ColorPointDF import ColorPointDF
 from ByVispy import ByVispy
+from Print import Print
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -25,25 +27,50 @@ class ChartMaker():
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+        # ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
+        # ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
+
+        # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
+        sh = propSetup.resultEnv.shape
+        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                  input_shape = sh,
+                                                  color_scheme = "photonwise",
+                                                  drop_values = None,
+                                                  select_photon_id = None,
+                                                  photon_register = propSetup.photon_register,
+                                                  select_parent = True,
+                                                  select_child = True,
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]])
 
         # SHOW RESULT RECORDS
         sl = list(range(10,20)) + list(range(30,40))
         sl = None
+        sl = list(range(10,15))
         sh = propSetup.propEnv.shape
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
         border_limits = None
 
         select_photon_id = None
-        ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
+        ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+                                      color_scheme = "photonwise",
+                                      select_photon_id = select_photon_id,
+                                      photon_register = propSetup.photon_register,
+                                      select_parent = True,
+                                      select_child = True,
+                                      border_limits = border_limits)
 
         if sl is not None:
             for s in sl:
                 select_photon_id = [s]
-                ChartMaker.show_resultRecords(propSetup.resultRecords, color_scheme="photonwise", select_photon_id=select_photon_id, photon_register=propSetup.photon_register, select_parent=True, select_child=True, border_limits=border_limits)
+                ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+                                              color_scheme = "photonwise",
+                                              select_photon_id = select_photon_id,
+                                              photon_register = propSetup.photon_register,
+                                              select_parent = True,
+                                              select_child = True,
+                                              border_limits = border_limits)
 
 
 
@@ -179,6 +206,37 @@ class ChartMaker():
 
 
     @staticmethod
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
+        cDF = ColorPointDF()
+        df = cDF.from_resultRecords(resultRecords = resultRecords,
+                                    color_scheme = color_scheme,
+                                    drop_values = drop_values,
+                                    select_photon_id = select_photon_id,
+                                    photon_register = photon_register,
+                                    select_parent = select_parent,
+                                    select_child = select_child,
+                                    border_limits = border_limits)
+        pDF = ProjectionResultRecordsDF()
+        x_high, x_high_flat_axis = pDF.x_high(df, input_shape)
+        x_low, x_low_flat_axis = pDF.x_low(df, input_shape)
+        y_high, y_high_flat_axis = pDF.y_high(df, input_shape)
+        y_low, y_low_flat_axis = pDF.y_low(df, input_shape)
+        z_high, z_high_flat_axis = pDF.z_high(df, input_shape)
+        z_low, z_low_flat_axis = pDF.z_low(df, input_shape)
+        projs = [x_high, x_low, y_high, y_low, z_high, z_low]
+        flat_axis = [x_high_flat_axis, x_low_flat_axis, y_high_flat_axis, y_low_flat_axis, z_high_flat_axis, z_low_flat_axis]
+        projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+        # used in loop
+        dir = os.path.join("slice_img", "photonwise_projection_img")
+        vis = ByVispy()
+        for proj, flat_ax, name in zip(projs, flat_axis, projs_names):
+            vis.show_ColorPointDF(proj, title="Absorbed energy in volume", connect_lines=None)
+            flat_z_proj = pDF.set_z_as_flat_axis(proj, flat_ax)
+            image_shape = input_shape.copy().remove(flat_ax)
+            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape, dir=dir, filename=name+".png")
+
+
+    @staticmethod
     def show_resultEnv(resultEnv: Object3D, color_scheme="loop"):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0])
@@ -188,7 +246,14 @@ class ChartMaker():
     @staticmethod
     def show_resultRecords(resultRecords, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
         colorPointDF = ColorPointDF()
-        df = colorPointDF.from_resultRecords(resultRecords, color_scheme=color_scheme, drop_values=[0], select_photon_id=select_photon_id, photon_register=photon_register, select_parent=select_parent, select_child=select_child, border_limits=border_limits)
+        df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
+                                             color_scheme = color_scheme,
+                                             drop_values = [0],
+                                             select_photon_id = select_photon_id,
+                                             photon_register = photon_register,
+                                             select_parent = select_parent,
+                                             select_child = select_child,
+                                             border_limits = border_limits)
         vis = ByVispy()
         vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
 

@@ -100,4 +100,21 @@ class Print(Object3D):
             ValueError("axis must be in {0,1,2}")
         img = self.arr2D_to_img(img_arr, color_scheme, connect_lines)
         self.img2png(img, dir, filename)
-        
+
+    def projectionResultRecordsDF_to_png(self, resultRecordsDF, image_shape, dir="photonwise_projection_img", filename="projection_df.png"):
+        img = self.projectionResultRecordsDF_to_img(resultRecordsDF, image_shape)
+        self.img2png(img, dir, filename)
+
+    def projectionResultRecordsDF_to_img(self, resultRecordsDF, image_shape):
+        # New array with rgb values
+        new_arr2D = np.zeros((image_shape[0], image_shape[1], 3))
+        # put default background color
+        default_color = ImageColor.getrgb("black")
+        new_arr2D[:,:,0] = default_color[0]
+        new_arr2D[:,:,1] = default_color[1]
+        new_arr2D[:,:,2] = default_color[2]
+        # set arr2d
+        new_arr2D[resultRecordsDF["x_idx"].to_numpy(), resultRecordsDF["y_idx"].to_numpy(), :] = resultRecordsDF[["R", "G", "B"]].to_numpy()
+        # Make PIL Image
+        PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
+        return PIL_image

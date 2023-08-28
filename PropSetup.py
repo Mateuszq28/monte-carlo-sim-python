@@ -117,7 +117,7 @@ class PropSetup:
         # middle y axis
         offset_y = (env_shape[1] - lightSource_shape[1]) // 2
         # max top z axis
-        offset_z = env_shape[2] - lightSource_shape[2] - 50
+        offset_z = env_shape[2] - lightSource_shape[2] - 10
         return [offset_x, offset_y, offset_z]
 
     @staticmethod
