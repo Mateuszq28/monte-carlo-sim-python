@@ -20,10 +20,14 @@ class ChartMaker():
     def show_all(propSetup: PropSetup, color_scheme="loop"):
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview_DF(propSetup, cs_material="solid", cs_light_source="solid")
+        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+                                              cs_material="solid",
+                                              cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="solid", cs_photons=color_scheme)
+        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+                                                     cs_material="solid",
+                                                     cs_photons=color_scheme)
 
 
 
@@ -32,7 +36,9 @@ class ChartMaker():
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+                                  color_scheme = color_scheme)
 
         
 
@@ -49,37 +55,46 @@ class ChartMaker():
         border_limits = None
 
         select_photon_id = None
+        local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-                                      color_scheme = "photonwise",
+                                      title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
+                                      color_scheme = local_color_scheme,
                                       select_photon_id = select_photon_id,
                                       photon_register = propSetup.photon_register,
                                       select_parent = True,
                                       select_child = True,
                                       border_limits = border_limits)
 
+        
         if sl is not None:
             for s in sl:
                 select_photon_id = [s]
+                local_color_scheme = "photonwise"
                 ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-                                              color_scheme = "photonwise",
+                                              title = "one photon path - color_scheme = " + local_color_scheme,
+                                              color_scheme = local_color_scheme,
                                               select_photon_id = select_photon_id,
                                               photon_register = propSetup.photon_register,
                                               select_parent = True,
                                               select_child = True,
                                               border_limits = border_limits)
+        
                 
 
 
 
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        # ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+                                   color_scheme = color_scheme)
 
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
+        local_color_scheme = "photonwise"
         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                   input_shape = sh,
-                                                  color_scheme = "photonwise",
+                                                  color_scheme = local_color_scheme,
                                                   drop_values = None,
                                                   select_photon_id = None,
                                                   photon_register = propSetup.photon_register,
@@ -88,11 +103,12 @@ class ChartMaker():
                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]])
         
         if sl is not None:
-            for s in sl:
+            for s in sl[:1]:
                 select_photon_id = [s]
+                local_color_scheme = "photonwise"
                 ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                           input_shape = sh,
-                                                          color_scheme = "photonwise",
+                                                          color_scheme = local_color_scheme,
                                                           drop_values = None,
                                                           select_photon_id = select_photon_id,
                                                           photon_register = propSetup.photon_register,
@@ -153,13 +169,15 @@ class ChartMaker():
     def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="solid", cs_photons="loop"):
         df = propSetup.make_result_preview_DF(cs_material, cs_photons)
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights)", connect_lines=None)
+        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights), photon color_scheme = " + cs_photons, connect_lines=None)
 
 
     @staticmethod
-    def heatmap2d(arr: np.ndarray, bins_per_cm):
+    def heatmap2d(arr: np.ndarray, bins_per_cm, title=None):
+        if title is None:
+            title = "absorbed fraction"
         plt.imshow(arr, cmap='viridis')
-        plt.title("absorbed fraction")
+        plt.title(title)
         cb = plt.colorbar()
         cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
         # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
@@ -209,9 +227,10 @@ class ChartMaker():
         dir = os.path.join("slice_img", "sum_projection_img")
         vis = ByVispy()
         for proj, name in zip(projs, projs_names):
-            vis.show_body(proj)
-            ChartMaker.heatmap2d(proj.body[:,:,0], bins_per_cm)
-            proj.save_png(dir=dir, filename=name+".png")
+            chart_name = "sum_projection_" + name
+            vis.show_body(proj, title=chart_name)
+            ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+            proj.save_png(dir=dir, filename=chart_name+".png")
 
 
     @staticmethod
@@ -229,9 +248,10 @@ class ChartMaker():
         dir = os.path.join("slice_img", "sum_projection_img")
         vis = ByVispy()
         for proj, name in zip(projs, projs_names):
-            ChartMaker.show_resultEnv(proj, color_scheme)
-            ChartMaker.heatmap2d(proj.body[:,:,0], bins_per_cm)
-            proj.save_png(dir=dir, filename=name+".png", color_scheme=color_scheme)
+            chart_name = "sum_projection_" + name
+            ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme)
+            ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+            proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme)
 
 
     @staticmethod
@@ -262,22 +282,25 @@ class ChartMaker():
             dir = png_dir
         vis = ByVispy()
         for projDF, flat_ax, name in zip(projs, flat_axis, projs_names):
-            vis.show_ColorPointDF(projDF, title="Projection "+name, connect_lines=None)
+            chart_name = "projections_from_resultRecords_" + name
+            vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=None)
             flat_z_proj = pDF.set_z_as_flat_axis(projDF, flat_ax)
             image_shape = input_shape.copy()
             image_shape.pop(flat_ax)
-            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape, dir=dir, filename=name+".png")
+            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png")
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D, color_scheme="loop"):
+    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop"):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
+        if title is None:
+            title="Absorbed energy in volume"
+        vis.show_ColorPointDF(df, title=title, connect_lines=None)
 
     @staticmethod
-    def show_resultRecords(resultRecords, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
+    def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                              color_scheme = color_scheme,
@@ -288,7 +311,9 @@ class ChartMaker():
                                              select_child = select_child,
                                              border_limits = border_limits)
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="Absorbed energy in volume", connect_lines=None)
+        if title is None:
+            title="Absorbed energy in volume"
+        vis.show_ColorPointDF(df, title=title, connect_lines=None)
 
 
     @staticmethod

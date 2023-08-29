@@ -22,11 +22,11 @@ class ColorPointDF():
             self.config = json.load(f)
         # set default loop color list
         # self.loop_color_names = self.palette_2
-        self.loop_color_names = self.create_palette(100)
+        self.loop_color_names = self.create_palette(30)
 
     def create_palette(self, num_of_colors):
         # choose to how many parts split hsv color wheel (color space)
-        hue_max_fragments = 20
+        hue_max_fragments = 15
         saturation_max_fragments = 5
         value_max_fragments = 5
         # check if num_of_colors not exceeds the limit
