@@ -4,6 +4,7 @@ import pandas as pd
 import colorsys
 from PIL import ImageColor
 import json
+import math
 from FeatureSampling import MyRandom
 
 class ColorPointDF():
@@ -24,11 +25,43 @@ class ColorPointDF():
         self.loop_color_names = self.create_palette(100)
 
     def create_palette(self, num_of_colors):
-        hue = np.linspace(0.0, 1.0, num=num_of_colors, endpoint=True)
-        rgb_color = [colorsys.hsv_to_rgb(h, 1.0, 1.0) for h in hue]
+        # choose to how many parts split hsv color wheel (color space)
+        hue_max_fragments = 20
+        saturation_max_fragments = 5
+        value_max_fragments = 5
+        # check if num_of_colors not exceeds the limit
+        num_of_colors_limit = hue_max_fragments * saturation_max_fragments * value_max_fragments
+        if num_of_colors > num_of_colors_limit:
+            raise ValueError("num_of_colors must be <= {}".format(num_of_colors_limit))
+        # tune up split up nums
+        # first take all hue, then all value, then all saturation
+        if num_of_colors > hue_max_fragments:
+            hue_num_of_colors = hue_max_fragments
+            value_num_of_colors = math.ceil(num_of_colors / hue_num_of_colors)
+            if value_num_of_colors > value_max_fragments:
+                value_num_of_colors = value_max_fragments
+                saturation_num_of_colors = math.ceil(num_of_colors / (hue_num_of_colors * value_num_of_colors))
+            else:
+                saturation_num_of_colors = 1
+        else:
+            hue_num_of_colors = num_of_colors
+            value_num_of_colors = 1
+            saturation_num_of_colors = 1
+        # split hsv
+        hue = np.linspace(0.0, 1.0, num=hue_num_of_colors, endpoint=True)
+        saturation = np.linspace(1.0, 0.5, num=saturation_num_of_colors, endpoint=True) # reversed to take first 1.0
+        value = np.linspace(1.0, 0.5, num=value_num_of_colors, endpoint=True) # reversed to take first 1.0
+        # hsv to rgb <0.0, 1.0>
+        rgb_color = []
+        for h in hue:
+            for s in saturation:
+                for v in value:
+                    rgb_color.append(colorsys.hsv_to_rgb(h, s, v))
+        # to rgb <0, 255>
         rgb_color_255 = [[round(val * 255.0) for val in rgb] for rgb in rgb_color]
+        # to hex string code
         hex_color = [self.rgb_to_hex(rgb) for rgb in rgb_color_255]
-        return hex_color
+        return hex_color[:num_of_colors]
 
     def rgb_to_hex(self, rgb):
         r, g, b = rgb
