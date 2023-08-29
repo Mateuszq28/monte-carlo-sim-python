@@ -1,6 +1,7 @@
 from Object3D import Object3D
 import numpy as np
 import pandas as pd
+import colorsys
 from PIL import ImageColor
 import json
 from FeatureSampling import MyRandom
@@ -8,17 +9,32 @@ from FeatureSampling import MyRandom
 class ColorPointDF():
 
     threshold_const = 0.2
-    threshold_quantile = 0.2
     threshold_quantile = 0.0
     use_threshold = "quantile"
-    # loop_color_names = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9', '#3498DB', '#1ABC9C', '#16A085', '#27AE60', '#2ECC71', '#F1C40F', '#F39C12', '#E67E22', '#D35400', '#ECF0F1', '#BDC3C7', '#95A5A6', '#7F8C8D', '#34495E', '#2C3E50']
-    loop_color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
+    palette_1 = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9', '#3498DB', '#1ABC9C', '#16A085', '#27AE60', '#2ECC71', '#F1C40F', '#F39C12', '#E67E22', '#D35400', '#ECF0F1', '#BDC3C7', '#95A5A6', '#7F8C8D', '#34495E', '#2C3E50']
+    palette_2 = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
 
 
     def __init__(self):
         with open("config.json") as f:
             # get simulation config parameters
             self.config = json.load(f)
+        # set default loop color list
+        # self.loop_color_names = self.palette_2
+        self.loop_color_names = self.create_palette(100)
+
+    def create_palette(self, num_of_colors):
+        hue = np.linspace(0.0, 1.0, num=num_of_colors, endpoint=True)
+        rgb_color = [colorsys.hsv_to_rgb(h, 1.0, 1.0) for h in hue]
+        rgb_color_255 = [[round(val * 255.0) for val in rgb] for rgb in rgb_color]
+        hex_color = [self.rgb_to_hex(rgb) for rgb in rgb_color_255]
+        return hex_color
+
+    def rgb_to_hex(self, rgb):
+        r, g, b = rgb
+        return "#" + ('%02x%02x%02x' % (r, g, b)).upper()
+
+
 
     def process_df_by_color_scheme(self, df: pd.DataFrame, color_scheme, drop_values):
 
@@ -84,7 +100,8 @@ class ColorPointDF():
             # get solid colors dict from config
             solid_color_dict = dict()
             for key, value in self.config["tissue_properties"].items():
-                solid_color_dict[key] = value["print color"]
+                solid_color_dict[key] = ImageColor.getrgb(value["print color"])
+                solid_color_dict[float(key)] = ImageColor.getrgb(value["print color"])
                 if key in other_uniq_vals:
                     other_uniq_vals.remove(key)
 

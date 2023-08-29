@@ -20,29 +20,25 @@ class ChartMaker():
     def show_all(propSetup: PropSetup, color_scheme="loop"):
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        # ChartMaker.show_simulation_preview_DF(propSetup, cs_material="solid", cs_light_source="solid")
+        ChartMaker.show_simulation_preview_DF(propSetup, cs_material="solid", cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        # ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="solid", cs_photons="loop")
+        ChartMaker.show_simulation_result_preview_DF(propSetup, cs_material="solid", cs_photons=color_scheme)
+
+
+
+
+
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        # ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
+        ChartMaker.show_resultEnv(propSetup.resultEnv, color_scheme)
 
-        # SUM PROJECTIONS + MAKING .PNG IMAGES
-        # ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
+        
 
-        # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
-        sh = propSetup.resultEnv.shape
-        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-                                                  input_shape = sh,
-                                                  color_scheme = "photonwise",
-                                                  drop_values = None,
-                                                  select_photon_id = None,
-                                                  photon_register = propSetup.photon_register,
-                                                  select_parent = True,
-                                                  select_child = True,
-                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]])
+
+
+
 
         # SHOW RESULT RECORDS
         sl = list(range(10,20)) + list(range(30,40))
@@ -71,6 +67,39 @@ class ChartMaker():
                                               select_parent = True,
                                               select_child = True,
                                               border_limits = border_limits)
+                
+
+
+
+
+        # SUM PROJECTIONS + MAKING .PNG IMAGES
+        # ChartMaker.sum_projections(propSetup.resultEnv, propSetup.config["bins_per_1_cm"], color_scheme)
+
+        # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
+        sh = propSetup.resultEnv.shape
+        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                  input_shape = sh,
+                                                  color_scheme = "photonwise",
+                                                  drop_values = None,
+                                                  select_photon_id = None,
+                                                  photon_register = propSetup.photon_register,
+                                                  select_parent = True,
+                                                  select_child = True,
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]])
+        
+        if sl is not None:
+            for s in sl:
+                select_photon_id = [s]
+                ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                          input_shape = sh,
+                                                          color_scheme = "photonwise",
+                                                          drop_values = None,
+                                                          select_photon_id = select_photon_id,
+                                                          photon_register = propSetup.photon_register,
+                                                          select_parent = True,
+                                                          select_child = True,
+                                                          border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                          png_dir = os.path.join("slice_img", "single_photon_projection_img"))
 
 
 
@@ -206,7 +235,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -227,7 +256,10 @@ class ChartMaker():
         flat_axis = [x_high_flat_axis, x_low_flat_axis, y_high_flat_axis, y_low_flat_axis, z_high_flat_axis, z_low_flat_axis]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
         # used in loop
-        dir = os.path.join("slice_img", "photonwise_projection_img")
+        if png_dir is None:
+            dir = os.path.join("slice_img", "photonwise_projection_img")
+        else:
+            dir = png_dir
         vis = ByVispy()
         for projDF, flat_ax, name in zip(projs, flat_axis, projs_names):
             vis.show_ColorPointDF(projDF, title="Projection "+name, connect_lines=None)
