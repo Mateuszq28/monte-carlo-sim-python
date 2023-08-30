@@ -72,52 +72,57 @@ class ProjectionResultRecordsDF():
         return output_df, flat_axis
 
 
-    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, post_transform=True, transform_preset=None, input_shape=None):
+    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None):
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         flat_axis_name = ax_lvl_names.pop(flataxis)
         outputDF = resultRecordsDF.rename(columns={ax_lvl_names[0]: "x_idx", ax_lvl_names[1]: "y_idx", flat_axis_name: "z_idx"})
         # rotate and inverse axis if need
+        image_shape = input_shape.copy()
+        image_shape.pop(flataxis)
         if post_transform:
             if transform_preset is not None and input_shape is not None:
-                input_shape = input_shape.copy()
-                input_shape.pop(flataxis)
+                # on print image arrow of y axis is directed upwards (not down like in standard image)
                 if transform_preset == "x_high":
-                    self.rotate_left(outputDF, input_shape)
+                    self.rotate_left(outputDF, image_shape)
                 elif transform_preset == "x_low":
-                    self.rotate_left(outputDF, input_shape)
-                    self.inverese_vertical(outputDF, input_shape)
+                    self.rotate_left(outputDF, image_shape)
+                    self.inverese_vertical(outputDF, image_shape)
                 elif transform_preset == "y_high":
-                    self.rotate_left(outputDF, input_shape)
-                    self.inverese_vertical(outputDF, input_shape)
+                    self.rotate_left(outputDF, image_shape)
+                    self.inverese_vertical(outputDF, image_shape)
                 elif transform_preset == "y_low":
-                    self.rotate_left(outputDF, input_shape)
+                    self.rotate_left(outputDF, image_shape)
                 elif transform_preset == "z_high":
                     pass
                 elif transform_preset == "z_low":
-                    self.inverese_horizontal(outputDF, input_shape)
+                    self.inverese_horizontal(outputDF, image_shape)
                 else:
                     raise ValueError("transform_preset not recognized")
             else:
                 raise ValueError("To do post_transform input_shape and transform_preset are needed.")
-        return outputDF
+        return outputDF, image_shape
     
 
-    def rotate_left(self, df: pd.DataFrame, input_shape):
-        self.flip_axis(df, ax1=0, ax2=1)
-        self.inverese_horizontal(df, input_shape)
+    def rotate_left(self, df: pd.DataFrame, image_shape):
+        self.flip_axis(df, ax1=0, ax2=1, image_shape=image_shape)
+        self.inverese_horizontal(df, image_shape=image_shape)
 
-    def rotate_right(self, df: pd.DataFrame, input_shape):
-        self.flip_axis(df, ax1=0, ax2=1)
-        self.inverese_vertical(df, input_shape)
+    def rotate_right(self, df: pd.DataFrame, image_shape):
+        self.flip_axis(df, ax1=0, ax2=1, image_shape=image_shape)
+        self.inverese_vertical(df, image_shape=image_shape)
 
-    def inverese_vertical(self, df: pd.DataFrame, input_shape):
-        df["y_idx"] = input_shape[1] - 1 - df["y_idx"]
+    def inverese_vertical(self, df: pd.DataFrame, image_shape):
+        df["y_idx"] = image_shape[1] - 1 - df["y_idx"]
 
-    def inverese_horizontal(self, df: pd.DataFrame, input_shape):
-        df["x_idx"] = input_shape[0] - 1 - df["x_idx"]
+    def inverese_horizontal(self, df: pd.DataFrame, image_shape):
+        df["x_idx"] = image_shape[0] - 1 - df["x_idx"]
 
-    def flip_axis(self, df: pd.DataFrame, ax1, ax2):
+    def flip_axis(self, df: pd.DataFrame, ax1, ax2, image_shape):
         axis_names = ["x_idx", "y_idx", "z_idx"]
         ax1_name = axis_names[ax1]
         ax2_name = axis_names[ax2]
-        df.rename(columns={ax1_name: ax2_name, ax2_name: ax1_name})
+        df.rename(columns={ax1_name: ax2_name, ax2_name: ax1_name}, inplace=True)
+        # change image shape list
+        bufor = image_shape[ax1]
+        image_shape[ax1] = image_shape[ax2]
+        image_shape[ax2] = bufor
