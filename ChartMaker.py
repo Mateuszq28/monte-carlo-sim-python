@@ -56,6 +56,8 @@ class ChartMaker():
 
         select_photon_id = None
         local_color_scheme = "photonwise"
+        local_color_scheme = "loop"
+        sum_same_idx = False
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
                                       title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
                                       color_scheme = local_color_scheme,
@@ -63,7 +65,8 @@ class ChartMaker():
                                       photon_register = propSetup.photon_register,
                                       select_parent = True,
                                       select_child = True,
-                                      border_limits = border_limits)
+                                      border_limits = border_limits,
+                                      sum_same_idx = sum_same_idx)
 
         
         if sl is not None:
@@ -300,7 +303,7 @@ class ChartMaker():
         vis.show_ColorPointDF(df, title=title, connect_lines=None)
 
     @staticmethod
-    def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None):
+    def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx = False):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                              color_scheme = color_scheme,
@@ -309,7 +312,8 @@ class ChartMaker():
                                              photon_register = photon_register,
                                              select_parent = select_parent,
                                              select_child = select_child,
-                                             border_limits = border_limits)
+                                             border_limits = border_limits,
+                                             sum_same_idx = sum_same_idx)
         vis = ByVispy()
         if title is None:
             title="Absorbed energy in volume"

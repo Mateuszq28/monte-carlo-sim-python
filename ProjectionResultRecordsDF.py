@@ -42,9 +42,10 @@ class ProjectionResultRecordsDF():
         search_axis_name = ax_lvl_names[axis]
         output_df = pd.DataFrame()
         for i in range(input_shape[i_axis_idx]):
+            filtered_rows = resultRecordsDF[resultRecordsDF[i_axis_name] == i]
             # iter through second left axis
             for j in range(input_shape[j_axis_idx]):
-                filtered_rows = resultRecordsDF[(resultRecordsDF[i_axis_name] == i) & (resultRecordsDF[j_axis_name] == j)]
+                filtered_rows = filtered_rows[filtered_rows[j_axis_name] == j]
                 if len(filtered_rows) > 0:
                     # find first or last val on the search axis
                     if xray == -1:

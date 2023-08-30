@@ -1405,6 +1405,25 @@ class Test():
             vis = ByVispy()
             vis.show_ColorPointDF(df_stack)
 
+        @staticmethod
+        def sum_same_idx():
+            x_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
+            y_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
+            z_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
+            value = [1 for _ in range(len(x_idx))]
+            random_col = [random.random() for _ in range(len(x_idx))]
+            dic = {"x_idx": x_idx,
+                  "y_idx": y_idx,
+                  "z_idx": z_idx,
+                  "value": value,
+                  "random_col": random_col}
+            df = pd.DataFrame(dic)
+            df = df.sample(frac = 1)
+            print("df\n", df)
+            colorPointDF = ColorPointDF()
+            colorPointDF.sum_same_idx(df)
+            print("res_df\n", df)
+
 
 
 
@@ -1545,6 +1564,11 @@ class Test():
         t = self.Test_ColorPointDF()
         t.stack_color_scheme()
 
+    def test26(self):
+        # sum same idx
+        t = self.Test_ColorPointDF()
+        t.sum_same_idx()
+
 
 def main():
     test = Test()
@@ -1594,7 +1618,10 @@ def main():
     # test.test24()
 
     # test color scheme stack
-    test.test25()
+    # test.test25()
+
+    # test sum same idx ColorPointDF
+    test.test26()
 
 
 
