@@ -95,6 +95,7 @@ class ChartMaker():
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
         local_color_scheme = "photonwise"
+        local_color_scheme = color_scheme
         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                   input_shape = sh,
                                                   color_scheme = local_color_scheme,
@@ -103,7 +104,8 @@ class ChartMaker():
                                                   photon_register = propSetup.photon_register,
                                                   select_parent = True,
                                                   select_child = True,
-                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]])
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                  sum_same_idx = True)
         
         if sl is not None:
             for s in sl[:1]:
@@ -258,7 +260,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -267,7 +269,8 @@ class ChartMaker():
                                     photon_register = photon_register,
                                     select_parent = select_parent,
                                     select_child = select_child,
-                                    border_limits = border_limits)
+                                    border_limits = border_limits,
+                                    sum_same_idx = sum_same_idx)
         pDF = ProjectionResultRecordsDF()
         x_high, x_high_flat_axis = pDF.x_high(df, input_shape)
         x_low, x_low_flat_axis = pDF.x_low(df, input_shape)

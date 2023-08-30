@@ -300,6 +300,9 @@ class ColorPointDF():
         sums = df.groupby(by=subset, as_index=False, sort=False, dropna=False)["value"].sum()
         df.drop_duplicates(subset=subset, inplace=True, ignore_index=True)
         df["value"] = sums["value"]
+        if "photon_id" in df.columns:
+            df.drop("photon_id", axis="columns", inplace=True)
+
         
 
 
