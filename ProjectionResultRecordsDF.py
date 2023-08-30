@@ -42,10 +42,10 @@ class ProjectionResultRecordsDF():
         search_axis_name = ax_lvl_names[axis]
         output_df = pd.DataFrame()
         for i in range(input_shape[i_axis_idx]):
-            filtered_rows = resultRecordsDF[resultRecordsDF[i_axis_name] == i]
+            filtered_rows_candidates = resultRecordsDF[resultRecordsDF[i_axis_name] == i]
             # iter through second left axis
             for j in range(input_shape[j_axis_idx]):
-                filtered_rows = filtered_rows[filtered_rows[j_axis_name] == j]
+                filtered_rows = filtered_rows_candidates[filtered_rows_candidates[j_axis_name] == j]
                 if len(filtered_rows) > 0:
                     # find first or last val on the search axis
                     if xray == -1:
@@ -104,11 +104,11 @@ class ProjectionResultRecordsDF():
 
     def rotate_left(self, df: pd.DataFrame, input_shape):
         self.flip_axis(df, ax1=0, ax2=1)
-        self.inverese_vertical(df, input_shape)
+        self.inverese_horizontal(df, input_shape)
 
     def rotate_right(self, df: pd.DataFrame, input_shape):
         self.flip_axis(df, ax1=0, ax2=1)
-        self.inverese_horizontal(df, input_shape)
+        self.inverese_vertical(df, input_shape)
 
     def inverese_vertical(self, df: pd.DataFrame, input_shape):
         df["y_idx"] = input_shape[1] - 1 - df["y_idx"]
