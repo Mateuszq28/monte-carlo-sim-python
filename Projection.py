@@ -6,7 +6,7 @@ import os
 class Projection(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
         super().__init__(x, y, z, arr)
-        self.omit = [0]
+        self.omit = [0, 0.0]
         self.reset_val = 0
 
     def x_high(self, object3D:Object3D):

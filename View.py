@@ -2,7 +2,7 @@ from Object3D import Object3D
 
 class View():
     
-    omit_labels = [0]
+    omit_labels = [0, 0.0]
 
     def __init__(self):
         pass

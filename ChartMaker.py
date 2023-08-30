@@ -88,9 +88,9 @@ class ChartMaker():
 
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
-        # ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
-        #                            bins_per_cm = propSetup.config["bins_per_1_cm"],
-        #                            color_scheme = color_scheme)
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+                                   color_scheme = color_scheme)
 
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
@@ -98,7 +98,7 @@ class ChartMaker():
         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                   input_shape = sh,
                                                   color_scheme = local_color_scheme,
-                                                  drop_values = None,
+                                                  drop_values = [0, 0.0],
                                                   select_photon_id = None,
                                                   photon_register = propSetup.photon_register,
                                                   select_parent = True,

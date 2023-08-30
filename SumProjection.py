@@ -10,12 +10,18 @@ class SumProjection():
     def x_high(self, object3D:Object3D):
         ax = 0
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
+        proj_arr2d = self.rotate_left(proj_arr2d)
+
         # FLIP TO ^Y ->X
         # no need to flip
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
@@ -24,12 +30,19 @@ class SumProjection():
     def x_low(self, object3D:Object3D):
         ax = 0
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
+        proj_arr2d = self.rotate_left(proj_arr2d)
+        proj_arr2d = self.inverese_vertical(proj_arr2d)
+
         # FLIP TO ^Y ->X
-        proj_arr2d = np.flip(proj_arr2d, axis=0)
+        # proj_arr2d = np.flip(proj_arr2d, axis=0)
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
@@ -38,12 +51,19 @@ class SumProjection():
     def y_high(self, object3D:Object3D):
         ax = 1
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
+        proj_arr2d = self.rotate_left(proj_arr2d)
+        proj_arr2d = self.inverese_vertical(proj_arr2d)
+
         # FLIP TO ^Y ->X
-        proj_arr2d = np.flip(proj_arr2d, axis=0)
+        # proj_arr2d = np.flip(proj_arr2d, axis=0)
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
@@ -52,12 +72,18 @@ class SumProjection():
     def y_low(self, object3D:Object3D):
         ax = 1
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
+        proj_arr2d = self.rotate_left(proj_arr2d)
+
         # FLIP TO ^Y ->X
         # no need to flip
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
@@ -66,12 +92,16 @@ class SumProjection():
     def z_high(self, object3D:Object3D):
         ax = 2
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
         # FLIP TO ^Y ->X
         # no need to flip
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
@@ -80,14 +110,46 @@ class SumProjection():
     def z_low(self, object3D:Object3D):
         ax = 2
         sh = object3D.body.shape
-        proj_arr2d = np.sum(object3D.body, axis=ax) / sh[ax]
+        proj_arr2d = np.sum(object3D.body, axis=ax)
+
+
+        proj_arr2d = self.inverese_horizontal(proj_arr2d)
+
         # FLIP TO ^Y ->X
-        proj_arr2d = np.flip(proj_arr2d, axis=0)
+        # proj_arr2d = np.flip(proj_arr2d, axis=0)
         # no need to change axis
         # FLIP TO \/X ->Y
-        proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+        # proj_arr2d = Space3dTools.change_axis2print_mode(proj_arr2d)
+
+
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
         proj_arr3d = proj_arr2d.reshape(sh2[0], sh2[1], 1)
         return Projection(arr=proj_arr3d)
+    
+
+
+
+
+    def rotate_left(self, arr2d: np.ndarray):
+        arr2d = self.flip_axis(arr2d, ax1=0, ax2=1)
+        arr2d = self.inverese_horizontal(arr2d)
+        return arr2d
+
+    def rotate_right(self, arr2d: np.ndarray):
+        arr2d = self.flip_axis(arr2d, ax1=0, ax2=1)
+        arr2d = self.inverese_vertical(arr2d)
+        return arr2d
+
+    def inverese_vertical(self, arr2d: np.ndarray):
+        arr2d = np.flip(arr2d, axis=1)
+        return arr2d
+
+    def inverese_horizontal(self, arr2d: np.ndarray):
+        arr2d = np.flip(arr2d, axis=0)
+        return arr2d
+
+    def flip_axis(self, arr2d: np.ndarray, ax1, ax2):
+        arr2d = np.swapaxes(arr2d, axis1=ax1, axis2=ax2)
+        return arr2d
         

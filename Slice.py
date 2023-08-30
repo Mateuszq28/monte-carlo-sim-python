@@ -16,7 +16,7 @@ class Slice(Object3D):
         self.p1 = None
         self.p2 = None
         self.p3 = None
-        self.omit = [0]
+        self.omit = [0, 0.0]
         self.reset_val = 0
 
     
