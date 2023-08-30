@@ -79,6 +79,7 @@ class ProjectionResultRecordsDF():
         # rotate and inverse axis if need
         if post_transform:
             if transform_preset is not None and input_shape is not None:
+                input_shape = input_shape.copy()
                 input_shape.pop(flataxis)
                 if transform_preset == "x_high":
                     self.rotate_left(outputDF, input_shape)
