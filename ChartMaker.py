@@ -100,19 +100,21 @@ class ChartMaker():
 
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
-        local_color_scheme = "photonwise"
         local_color_scheme = color_scheme
+        local_color_scheme = "photonwise"
+        drop_values = [0, 0.0]
+        drop_values = None
         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                   input_shape = sh,
                                                   color_scheme = local_color_scheme,
-                                                  drop_values = [0, 0.0],
+                                                  drop_values = drop_values,
                                                   select_photon_id = None,
                                                   photon_register = propSetup.photon_register,
                                                   select_parent = True,
                                                   select_child = True,
                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-                                                  sum_same_idx = True,
-                                                  sum_axis = True,
+                                                  sum_same_idx = False,
+                                                  sum_axis = False,
                                                   show = False)
         
         # if sl is not None:
