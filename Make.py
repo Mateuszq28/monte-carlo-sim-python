@@ -34,7 +34,7 @@ class Make():
 
 
     def default_env(self):
-        propEnv = PropEnv(x=20, y=20, z=40)
+        propEnv = PropEnv(x=100, y=100, z=300)
         # propEnv.fill_cube(fill=1, start_p=[0, 0, 0], end_p=[1.0, 1.0, 0.25])
         return propEnv
 
@@ -48,7 +48,7 @@ class Make():
     def default_prop_setup(self):
         env_path = self.default_env_path
         light_source_path = self.default_light_surce_path
-        offset = [150, 150, 550]
+        offset = [150, 150, 570]
         offset = None
         propSetup = PropSetup.from_components(env_path, light_source_path, offset=offset)
         return propSetup

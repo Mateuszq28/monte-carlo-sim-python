@@ -39,15 +39,16 @@ class ProjectionResultRecordsDF():
         if sum_axis:
             ColorPointDF.sum_same_idx(df = resultRecordsDF_copy,
                                       subset = ax_lvl_names_active)
-        # iter through first left axis
-        # for example if x_high -> axis=0:
-        #   i iters through y axis and j inters through z axis
+        # prepare for scanning values
         i_axis_idx = ax_lvl_list[0]
         j_axis_idx = ax_lvl_list[1]
         i_axis_name = ax_lvl_names[i_axis_idx]
         j_axis_name = ax_lvl_names[j_axis_idx]
         search_axis_name = ax_lvl_names[axis]
         output_df = pd.DataFrame()
+        # iter through first left axis
+        # for example if x_high -> axis=0:
+        #   i iters through y axis and j inters through z axis
         for i in range(input_shape[i_axis_idx]):
             filtered_rows_candidates = resultRecordsDF_copy[resultRecordsDF_copy[i_axis_name] == i]
             # iter through second left axis
