@@ -115,7 +115,8 @@ class ChartMaker():
                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
                                                   sum_same_idx = False,
                                                   sum_axis = False,
-                                                  show = False)
+                                                  reset_png_colors = None,
+                                                  show = True)
         
         # if sl is not None:
         #     for s in sl[:1]:
@@ -262,7 +263,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, show=True):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -287,7 +288,7 @@ class ChartMaker():
             chart_name = "projections_from_resultRecords_" + name
             if show:
                 vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=None)
-            flat_z_proj, image_shape = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=color_scheme)
+            flat_z_proj, image_shape = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors)
             Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png")
 
 
