@@ -56,9 +56,9 @@ class ChartMaker():
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
 
-        select_photon_id = None
-        local_color_scheme = "loop"
-        local_color_scheme = "photonwise"
+        # select_photon_id = None
+        # local_color_scheme = "loop"
+        # local_color_scheme = "photonwise"
         # ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
         #                               title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
         #                               color_scheme = local_color_scheme,
@@ -89,6 +89,10 @@ class ChartMaker():
 
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
+        # old
+        # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
+        #                            bins_per_cm = propSetup.config["bins_per_1_cm"])
+        # new
         ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
                                    bins_per_cm = propSetup.config["bins_per_1_cm"],
                                    color_scheme = color_scheme,
@@ -226,18 +230,13 @@ class ChartMaker():
     @staticmethod
     def sum_projections_show_body(resultEnv, bins_per_cm):
         sump = SumProjection()
-        x_high = sump.x_high(resultEnv)
-        x_low = sump.x_low(resultEnv)
-        y_high = sump.y_high(resultEnv)
-        y_low = sump.y_low(resultEnv)
-        z_high = sump.z_high(resultEnv)
-        z_low = sump.z_low(resultEnv)
-        projs = [x_high, x_low, y_high, y_low, z_high, z_low]
+        funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
         # used in loop
         dir = os.path.join("slice_img", "sum_projection_img")
         vis = ByVispy()
-        for proj, name in zip(projs, projs_names):
+        for fun, name in zip(funs, projs_names):
+            proj = fun(resultEnv)
             chart_name = "sum_projection_" + name
             vis.show_body(proj, title=chart_name)
             ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
@@ -247,17 +246,12 @@ class ChartMaker():
     @staticmethod
     def sum_projections(resultEnv: PropEnv, bins_per_cm, color_scheme="loop", show=True):
         sump = SumProjection()
-        x_high = sump.x_high(resultEnv)
-        x_low = sump.x_low(resultEnv)
-        y_high = sump.y_high(resultEnv)
-        y_low = sump.y_low(resultEnv)
-        z_high = sump.z_high(resultEnv)
-        z_low = sump.z_low(resultEnv)
-        projs = [x_high, x_low, y_high, y_low, z_high, z_low]
+        funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
         # used in loop
         dir = os.path.join("slice_img", "sum_projection_img")
-        for proj, name in zip(projs, projs_names):
+        for fun, name in zip(funs, projs_names):
+            proj = fun(resultEnv)
             chart_name = "sum_projection_" + name
             if show:
                 ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme)
@@ -278,14 +272,7 @@ class ChartMaker():
                                     border_limits = border_limits,
                                     sum_same_idx = sum_same_idx)
         pDF = ProjectionResultRecordsDF()
-        x_high, x_high_flat_axis = pDF.x_high(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        x_low, x_low_flat_axis = pDF.x_low(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        y_high, y_high_flat_axis = pDF.y_high(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        y_low, y_low_flat_axis = pDF.y_low(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        z_high, z_high_flat_axis = pDF.z_high(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        z_low, z_low_flat_axis = pDF.z_low(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
-        projs = [x_high, x_low, y_high, y_low, z_high, z_low]
-        flat_axis = [x_high_flat_axis, x_low_flat_axis, y_high_flat_axis, y_low_flat_axis, z_high_flat_axis, z_low_flat_axis]
+        funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
         # used in loop
         if png_dir is None:
@@ -293,7 +280,8 @@ class ChartMaker():
         else:
             dir = png_dir
         vis = ByVispy()
-        for projDF, flat_ax, name in zip(projs, flat_axis, projs_names):
+        for proj_fun, name in zip(funs, projs_names):
+            projDF, flat_ax = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
             chart_name = "projections_from_resultRecords_" + name
             if show:
                 vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=None)
