@@ -5,25 +5,25 @@ class ProjectionResultRecordsDF():
     def __init__(self):
         pass
 
-    def x_high(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 0, -1)
+    def x_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 0, -1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def x_low(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 0, 1)
+    def x_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 0, 1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def y_high(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 1, -1)
+    def y_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 1, -1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def y_low(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 1, 1)
+    def y_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 1, 1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def z_high(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 2, -1)
+    def z_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 2, -1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def z_low(self, resultRecordsDF, input_shape):
-        return self.throw(resultRecordsDF, input_shape, 2, 1)
+    def z_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 2, 1, sum_axis=sum_axis, reset_colors=reset_colors)
 
-    def throw(self, resultRecordsDF: pd.DataFrame, input_shape, axis, xray):
+    def throw(self, resultRecordsDF: pd.DataFrame, input_shape, axis, xray, sum_axis=False, sort=True, reset_colors=None):
         """
         The function will take first value from object3D.body (recovered from resultRecordsDF) seen perpendicularly to axis.
         :param axis: observer's axis
@@ -32,6 +32,13 @@ class ProjectionResultRecordsDF():
         ax_lvl_list = [0,1,2]
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         ax_lvl_list.remove(axis)
+        ax_lvl_names_active = ax_lvl_names.copy()
+        ax_lvl_names_active.pop(axis)
+        resultRecordsDF_copy = resultRecordsDF.copy()
+        # sum projection DF
+        if sum_axis:
+            ColorPointDF.sum_same_idx(df = resultRecordsDF_copy,
+                                      subset = ax_lvl_names_active)
         # iter through first left axis
         # for example if x_high -> axis=0:
         #   i iters through y axis and j inters through z axis
@@ -42,7 +49,7 @@ class ProjectionResultRecordsDF():
         search_axis_name = ax_lvl_names[axis]
         output_df = pd.DataFrame()
         for i in range(input_shape[i_axis_idx]):
-            filtered_rows_candidates = resultRecordsDF[resultRecordsDF[i_axis_name] == i]
+            filtered_rows_candidates = resultRecordsDF_copy[resultRecordsDF_copy[i_axis_name] == i]
             # iter through second left axis
             for j in range(input_shape[j_axis_idx]):
                 filtered_rows = filtered_rows_candidates[filtered_rows_candidates[j_axis_name] == j]
@@ -69,10 +76,15 @@ class ProjectionResultRecordsDF():
         # we will need flat axis idx to change 3d object to 2d array later
         # (all idx values on flat axis column are the same)
         flat_axis = axis
+        # sort output to have same colors like in propEnv processing
+        if sort:
+            output_df.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
+        if reset_colors is not None:
+            output_df = ColorPointDF().reset_colors(output_df, reset_colors)
         return output_df, flat_axis
 
 
-    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None):
+    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None, sort=True, reset_colors=None):
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         flat_axis_name = ax_lvl_names.pop(flataxis)
         outputDF = resultRecordsDF.rename(columns={ax_lvl_names[0]: "x_idx", ax_lvl_names[1]: "y_idx", flat_axis_name: "z_idx"})
@@ -100,6 +112,11 @@ class ProjectionResultRecordsDF():
                     raise ValueError("transform_preset not recognized")
             else:
                 raise ValueError("To do post_transform input_shape and transform_preset are needed.")
+        # sort output to have same colors like in propEnv processing
+        if sort:
+            outputDF.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
+        if reset_colors is not None:
+            outputDF = ColorPointDF().reset_colors(outputDF, reset_colors)
         return outputDF, image_shape
     
 

@@ -213,7 +213,7 @@ class ColorPointDF():
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
-    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False):
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, sort=True):
         """
         :param border_limits: [x_min, x_max, y_min, y_max, z_min, z_max]
         """
@@ -244,7 +244,15 @@ class ColorPointDF():
         # sum values (photon weights) on the same localization idx and delete duplicates
         if sum_same_idx:
             self.sum_same_idx(df)
+        # sort output to have same colors like in propEnv processing
+        if sort:
+            df.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
         # color scheme process
+        df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
+        return df
+    
+    def reset_colors(self, df: pd.DataFrame, color_scheme, drop_values=None):
+        df.drop(["R", "G", "B", "A"], axis='columns', inplace=True)
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
@@ -295,8 +303,10 @@ class ColorPointDF():
             return []
         
     
-    def sum_same_idx(self, df: pd.DataFrame):
-        subset = ["x_idx", "y_idx", "z_idx"]
+    @staticmethod
+    def sum_same_idx(df: pd.DataFrame, subset=None):
+        if subset is None:
+            subset = ["x_idx", "y_idx", "z_idx"]
         sums = df.groupby(by=subset, as_index=False, sort=False, dropna=False)["value"].sum()
         df.drop_duplicates(subset=subset, inplace=True, ignore_index=True)
         df["value"] = sums["value"]

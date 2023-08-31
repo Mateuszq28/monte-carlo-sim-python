@@ -1371,13 +1371,27 @@ class Test():
             pass
 
         @staticmethod
-        def are_2_variants_equal(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
+        def are_2_variants_equal_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
+            print("TEST NORMALIZATION resultEnv")
             normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
             normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False, print_debug=True)
             test_result = np.allclose(normal_output_1.body, normal_output_2.body)
             if not test_result:
                 raise ValueError("Normalize methods are not equal!")
             return test_result
+        
+        @staticmethod
+        def are_2_variants_equal_resultRecords(resultRecords, photon_num, volume_per_bin, borders, escaped_photons_weight):
+            print("TEST NORMALIZATION resultRecords")
+            normal_output_1 = ResultEnvProcessing.normalize_resultRecords(resultRecords, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(resultRecords, volume_per_bin, borders, inplace=False, print_debug=True)
+            arr1 = np.array([col[4] for col in normal_output_1])
+            arr2 = np.array([col[4] for col in normal_output_2])
+            test_result = np.allclose(arr1, arr2)
+            if not test_result:
+                raise ValueError("Normalize methods are not equal!")
+            return test_result
+        
         
     class Test_ColorPointDF():
         def __init__(self):

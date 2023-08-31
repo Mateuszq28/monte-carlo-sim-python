@@ -130,7 +130,7 @@ class Sim():
         if not env_boundary_exceeded:
             if boundary_change:
                 # save photon position with no absorb weight
-                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0., photon_id=photon.id)
+                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.0, photon_id=photon.id)
 
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)

@@ -78,9 +78,9 @@ class PropSetup:
     def save2resultEnv(self, xyz, weight):
         if self.resultEnv is None:
             sh = self.propEnv.shape
-            arr = np.full(shape=sh, fill_value=0.)
+            arr = np.full(shape=sh, fill_value=0.0, dtype=np.float64)
             self.resultEnv = PropEnv(arr=arr)
-        xyz_int = self.resultEnv.round_xyz(xyz)
+        xyz_int = PropEnv.round_xyz(xyz)
         self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         
     def save2resultRecords(self, xyz, weight, photon_id, round=True):

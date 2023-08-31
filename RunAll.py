@@ -16,16 +16,29 @@ class RunAll():
 
     @staticmethod
     def normalize_process(propSetup: PropSetup):
+        # NORMALIZATION OF resultEnv
         # normalize output [photon weight / bin] -> absorbed fraction [1/cm^3]
         photon_limits_list = propSetup.lightSource.photon_limits_list
         photon_num = sum(photon_limits_list)
         bins_per_1_cm = propSetup.config["bins_per_1_cm"] # [N/cm]
         volume_per_bin = (1/bins_per_1_cm)**3
+
         # TEST TO DELETE (inplace = False)
-        Test.Test_ResultEnvProcessing.are_2_variants_equal(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
+        Test.Test_ResultEnvProcessing.are_2_variants_equal_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
         # END OF TEST
+
         ResultEnvProcessing.normalize_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
-        # HERE NORMALIZATION INPLACE IS DONE
+        # HERE NORMALIZATION ON propSetup.resultEnv INPLACE IS DONE
+        # NORMALIZATION OF resultRecords
+
+        # TEST TO DELETE (inplace = False)
+        sh = propSetup.resultEnv.shape
+        borders = [0, sh[0], 0, sh[1], 0, sh[2]]
+        Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
+        # END OF TEST
+
+        ResultEnvProcessing.normalize_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True, print_debug=False)
+        # HERE NORMALIZATION ON propSetup.resultRecords INPLACE IS DONE
 
 
     @staticmethod
