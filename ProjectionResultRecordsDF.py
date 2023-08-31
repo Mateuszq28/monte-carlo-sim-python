@@ -5,23 +5,23 @@ class ProjectionResultRecordsDF():
     def __init__(self):
         pass
 
-    def x_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 0, -1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def x_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 0, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
-    def x_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 0, 1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def x_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 0, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
-    def y_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 1, -1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def y_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 1, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
-    def y_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 1, 1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def y_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 1, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
-    def z_high(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 2, -1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def z_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 2, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
-    def z_low(self, resultRecordsDF, input_shape, sum_axis=False, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 2, 1, sum_axis=sum_axis, reset_colors=reset_colors)
+    def z_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
+        return self.throw(resultRecordsDF, input_shape, 2, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
 
     def throw(self, resultRecordsDF: pd.DataFrame, input_shape, axis, xray, sum_axis=False, sort=True, reset_colors=None):
         """
