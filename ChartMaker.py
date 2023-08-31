@@ -21,6 +21,15 @@ class ChartMaker():
     @staticmethod
     def show_all(propSetup: PropSetup, color_scheme="loop"):
 
+        # TEST DUPLICATES IN RECORDS
+        turn_on_test = False
+        if turn_on_test:
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0])
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 20.0])
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0])
+            propSetup.resultRecords.insert(0, [300, 0, 0, 0, 30.0])
+            propSetup.resultRecords.insert(0, [200, 0, 0, 0, 5.0])
+
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
         # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
         #                                       cs_material="solid",

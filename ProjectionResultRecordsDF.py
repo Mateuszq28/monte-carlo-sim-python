@@ -33,18 +33,38 @@ class ProjectionResultRecordsDF():
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         ax_lvl_list.remove(axis)
         ax_lvl_names_active = ax_lvl_names.copy()
-        ax_lvl_names_active.pop(axis)
+        search_axis_name = ax_lvl_names_active.pop(axis)
         resultRecordsDF_copy = resultRecordsDF.copy()
         # sum projection DF
         if sum_axis:
             ColorPointDF.sum_same_idx(df = resultRecordsDF_copy,
                                       subset = ax_lvl_names_active)
+        # NEW FASTER METHOD FOR SCANNING
+        # find first or last val on the search axis
+        if xray == -1:
+            # find last value on search axis
+            finded_idx = resultRecordsDF_copy.groupby(by=ax_lvl_names_active, as_index=False, sort=False, dropna=False)[search_axis_name].max()[search_axis_name]
+        elif xray == 1:
+            # find first value on search axis
+            finded_idx = resultRecordsDF_copy.groupby(by=ax_lvl_names_active, as_index=False, sort=False, dropna=False)[search_axis_name].min()[search_axis_name]
+        else:
+            raise ValueError("xray must be -1 or 1")
+        # finded_idx has one column (search_axis_name)
+        # (localization of the finded values to keep)
+        # drop duplicates to achieve the same lenth as finded_idx (groupby)
+        # when keep="first":
+            # it will return value that was added to the records earlier
+            # (lower index in resultRecords, index 0 of list with finded values)
+        resultRecordsDF_copy.drop_duplicates(subset=ax_lvl_names_active, inplace=True, ignore_index=True, keep="first")
+        resultRecordsDF_copy[search_axis_name] = finded_idx
+        output_df = resultRecordsDF_copy
+        # OLD SLOW METHOD - ITERATION
+        """
         # prepare for scanning values
         i_axis_idx = ax_lvl_list[0]
         j_axis_idx = ax_lvl_list[1]
         i_axis_name = ax_lvl_names[i_axis_idx]
         j_axis_name = ax_lvl_names[j_axis_idx]
-        search_axis_name = ax_lvl_names[axis]
         output_df = pd.DataFrame()
         # iter through first left axis
         # for example if x_high -> axis=0:
@@ -56,6 +76,7 @@ class ProjectionResultRecordsDF():
                 filtered_rows = filtered_rows_candidates[filtered_rows_candidates[j_axis_name] == j]
                 if len(filtered_rows) > 0:
                     # find first or last val on the search axis
+                    # if there are more then one finded values it will return value that was added to the records earlier (lower index, index 0 of list with finded values)
                     if xray == -1:
                         # observer is at the end of the axis, so we are looking for the last (max idx) value
                         first_val = filtered_rows.loc[[filtered_rows[search_axis_name].idxmax()]]
@@ -66,6 +87,7 @@ class ProjectionResultRecordsDF():
                         raise ValueError("xray must be -1 or 1")
                     # here add to output container
                     output_df = pd.concat([output_df, first_val], ignore_index=True)
+        """
         # reset idx on search value axis (we want flat 3d object)
         if xray == -1:
             reset_idx = input_shape[axis] -1
