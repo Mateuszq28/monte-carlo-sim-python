@@ -308,7 +308,8 @@ class ColorPointDF():
         if subset is None:
             subset = ["x_idx", "y_idx", "z_idx"]
         sums = df.groupby(by=subset, as_index=False, sort=False, dropna=False)["value"].sum()
-        df.drop_duplicates(subset=subset, inplace=True, ignore_index=True)
+        # drop duplicates to achieve the same lenth as finded_idx (groupby)
+        df.drop_duplicates(subset=subset, inplace=True, ignore_index=True, keep="first")
         df["value"] = sums["value"]
         if "photon_id" in df.columns:
             df.drop("photon_id", axis="columns", inplace=True)
