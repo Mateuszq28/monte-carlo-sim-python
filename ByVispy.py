@@ -157,7 +157,7 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None):
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False):
         """
         Plot 3D interactive plot of points in colorPointDF data frame using Vispy
         :return: None
@@ -184,11 +184,10 @@ class ByVispy(View):
             view.camera.distance = 500
 
             # plot ! note the parent parameter
-            p1 = Scatter3D(parent=view.scene)
-            p1.set_gl_state("translucent", blend=True, depth_test=True)
-            p1.set_data(
-                pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue"
-            )
+            if not hide_points:
+                p1 = Scatter3D(parent=view.scene)
+                p1.set_gl_state("translucent", blend=True, depth_test=True)
+                p1.set_data(pos, face_color=colrs, symbol="o", size=10, edge_width=0.5, edge_color="blue")
 
             # Add a 3D axis to keep us oriented
             # Axes are x=red, y=green, z=blue
@@ -205,25 +204,26 @@ class ByVispy(View):
                 arrow_pos[0::2] = connect_lines[["x_idx", "y_idx", "z_idx"]]
                 arrow_pos[1::2] = connect_lines[["x_idx_2", "y_idx_2", "z_idx_2"]]
                 # line color
-                arrow_color = connect_lines[["R", "G", "B", "A"]] / 255.0
-                arrow_color = np.vstack((arrow_color, arrow_color))
+                arrow_color = np.empty((arrow_pos.shape[0], 4), dtype=float)
+                arrow_color[0::2] = connect_lines[["R", "G", "B", "A"]] / 255.0
+                arrow_color[1::2] = arrow_color[0::2]
                 # arrow_method = "agg"
                 arrow_method = "gl"
                 # arrows - just arrowheads
-                arrow_arrows = connect_lines[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]]
+                arrow_arrows = connect_lines[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]].to_numpy()
                 arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"] # len = 9
                 # arrowhead color
-                arrow_arrow_color = arrow_color[:len(arrow_arrows)]
+                arrow_arrow_color = arrow_color[0::2]
                 arrows = scene.visuals.Arrow(pos = arrow_pos,
                                              color = arrow_color,
                                              parent = view.scene,
-                                             width = 2,
+                                             width = 1,
                                              connect = "segments",
                                              method = arrow_method,
                                              antialias = True,
                                              arrows = arrow_arrows,
-                                             arrow_type = arrow_types[2],
-                                             arrow_size = 1.0,
+                                             arrow_type = arrow_types[0],
+                                             arrow_size = 3.0,
                                              arrow_color = arrow_arrow_color)
 
             # run
