@@ -289,7 +289,8 @@ class ChartMaker():
                                     select_parent = select_parent,
                                     select_child = select_child,
                                     border_limits = border_limits,
-                                    sum_same_idx = sum_same_idx)
+                                    sum_same_idx = sum_same_idx,
+                                    sort = True)
         pDF = ProjectionResultRecordsDF()
         funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
@@ -328,7 +329,8 @@ class ChartMaker():
                                              select_parent = select_parent,
                                              select_child = select_child,
                                              border_limits = border_limits,
-                                             sum_same_idx = sum_same_idx)
+                                             sum_same_idx = sum_same_idx,
+                                             sort = True)
         if do_connect_lines:
             df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                                  color_scheme = "photonwise",
@@ -338,7 +340,8 @@ class ChartMaker():
                                                  select_parent = select_parent,
                                                  select_child = select_child,
                                                  border_limits = border_limits,
-                                                 sum_same_idx = False)
+                                                 sum_same_idx = False,
+                                                 sort = False)
             ADF = ArrowsDF()
             connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
         else:
