@@ -92,7 +92,9 @@ class ChartMaker():
         #                                       photon_register = propSetup.photon_register,
         #                                       select_parent = True,
         #                                       select_child = True,
-        #                                       border_limits = border_limits)
+        #                                       border_limits = border_limits,
+        #                                       sum_same_idx = False,
+        #                                       connect_lines = connect_lines)
         
                 
 
@@ -124,6 +126,7 @@ class ChartMaker():
         #                                           select_parent = True,
         #                                           select_child = True,
         #                                           border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+        #                                           png_dir = None,
         #                                           sum_same_idx = False,
         #                                           sum_axis = False,
         #                                           reset_png_colors = None,
@@ -144,7 +147,9 @@ class ChartMaker():
         #                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
         #                                                   png_dir = os.path.join("slice_img", "single_photon_projection_img"),
         #                                                   sum_same_idx = False,
-        #                                                   sum_axis = False)
+        #                                                   sum_axis = False,
+        #                                                   reset_png_colors = None,
+        #                                                   show = True)
 
 
 
