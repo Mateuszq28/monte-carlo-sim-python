@@ -347,7 +347,7 @@ class ChartMaker():
                                                  sort = False)
             ADF = ArrowsDF()
             connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
-            hide_points = True
+            hide_points = False
         else:
             connect_lines = None
             hide_points = False

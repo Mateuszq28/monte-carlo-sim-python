@@ -210,7 +210,13 @@ class ByVispy(View):
                 # arrow_method = "agg"
                 arrow_method = "gl"
                 # arrows - just arrowheads
-                arrow_arrows = connect_lines[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]].to_numpy()
+                arrows_vec_int = connect_lines[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]].to_numpy()
+                # move arrowheads backwards not to be overlapped by points balls
+                dir_vec = arrows_vec_int[:, 3:6] - arrows_vec_int[:, 0:3]
+                arrow_arrows = np.empty(arrows_vec_int.shape, dtype=float)
+                arrow_arrows[:, 0:3] = arrows_vec_int[:, 0:3]
+                # arrow_arrows[:, 3:6] = arrows_vec_int[:, 3:6] - 0.1 * dir_vec / np.linalg.norm(dir_vec, axis=1)[:, np.newaxis]
+                arrow_arrows[:, 3:6] = arrows_vec_int[:, 3:6] - 0.5 * dir_vec # in the middle of the arrow body line
                 arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"] # len = 9
                 # arrowhead color
                 arrow_arrow_color = arrow_color[0::2]
@@ -223,7 +229,7 @@ class ByVispy(View):
                                              antialias = True,
                                              arrows = arrow_arrows,
                                              arrow_type = arrow_types[0],
-                                             arrow_size = 3.0,
+                                             arrow_size = 5.0,
                                              arrow_color = arrow_arrow_color)
 
             # run
