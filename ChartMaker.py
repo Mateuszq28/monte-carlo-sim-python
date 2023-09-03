@@ -322,7 +322,7 @@ class ChartMaker():
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                              color_scheme = color_scheme,
-                                             drop_values = [0],
+                                             drop_values = [0, 0.0],
                                              select_photon_id = select_photon_id,
                                              photon_register = photon_register,
                                              select_parent = select_parent,
@@ -330,8 +330,17 @@ class ChartMaker():
                                              border_limits = border_limits,
                                              sum_same_idx = sum_same_idx)
         if do_connect_lines:
+            df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
+                                                 color_scheme = "photonwise",
+                                                 drop_values = None,
+                                                 select_photon_id = select_photon_id,
+                                                 photon_register = photon_register,
+                                                 select_parent = select_parent,
+                                                 select_child = select_child,
+                                                 border_limits = border_limits,
+                                                 sum_same_idx = False)
             ADF = ArrowsDF()
-            connect_lines = ADF.fromDF(df, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
+            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
         else:
             connect_lines = None
         if title is None:
