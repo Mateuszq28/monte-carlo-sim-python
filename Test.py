@@ -1065,6 +1065,32 @@ class Test():
                 plt.ylabel("s")
                 plt.show()
 
+        def henyey_greenstein(self):
+            g = 0.5
+            funSampling = FunSampling()
+            samp_num = 10000
+            hist_bins = 200
+            linspace = np.linspace(start=0.0, stop=1.0, num=samp_num, endpoint=True)
+            samples = np.array([funSampling.henyey_greenstein(g, rnd=rnd) for rnd in linspace]) * 180 / math.pi
+            plt.plot(linspace, samples)
+            plt.title("henyey_greenstein, g = {}".format(g))
+            plt.xlabel("rnd = F(S)")
+            plt.ylabel("s = theta [deg]")
+            plt.show()
+            # histogram
+            plt.hist(samples, bins=hist_bins)
+            plt.title("histogram henyey_greenstein, g = {}".format(g))
+            plt.xlabel("theta [deg]")
+            plt.ylabel("amount of samples")
+            plt.show()
+            # histogram 2
+            samples2 = np.array([funSampling.henyey_greenstein(g) for _ in range(samp_num)]) * 180 / math.pi
+            plt.hist(samples2, bins=hist_bins)
+            plt.title("histogram henyey_greenstein, g = {}".format(g))
+            plt.xlabel("theta [deg]")
+            plt.ylabel("amount of samples")
+            plt.show()
+
     class Test_Object3D():
         def __init__(self):
             pass
@@ -1583,6 +1609,11 @@ class Test():
         t = self.Test_ColorPointDF()
         t.sum_same_idx()
 
+    def test27(self):
+        # henyey_greenstein
+        t = self.Test_FunSampling()
+        t.henyey_greenstein()
+
 
 def main():
     test = Test()
@@ -1635,7 +1666,10 @@ def main():
     # test.test25()
 
     # test sum same idx ColorPointDF
-    test.test26()
+    # test.test26()
+
+    # henyey_greenstein
+    test.test27()
 
 
 
