@@ -6,7 +6,7 @@ class ArrowsDF():
     def __init__(self):
         pass
 
-    def fromDF(self, df: pd.DataFrame, photon_register=None, add_start_arrows=True, color_by_root=False):
+    def fromDF(self, df: pd.DataFrame, photon_register=None, add_start_arrows=True, color_by_root=False, drop_excessive_columns=True):
         df = df.copy()
         if "photon_id" not in df:
             raise ValueError("df must have photon_id column")
@@ -23,6 +23,8 @@ class ArrowsDF():
                 raise ValueError("To add start point arrows photon_register is needed")
         if color_by_root:
             self.color_by_root_photon(df, photon_register)
+        if drop_excessive_columns:
+            df = df[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2", "R", "G", "B", "A"]]
         return df
 
 
