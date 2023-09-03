@@ -200,13 +200,20 @@ class ByVispy(View):
             axis_widget.transform = affine
 
             if connect_lines is not None:
-                arrow_pos = np.array([[1, 1, 1], [20, 20, 20]])
-                arrow_color = np.array( [1.0, 0.0, 0.0, 1.0] )
+                # pos - line body
+                arrow_pos = np.empty((len(connect_lines)*2, 3), dtype=int)
+                arrow_pos[0::2] = connect_lines[["x_idx", "y_idx", "z_idx"]]
+                arrow_pos[1::2] = connect_lines[["x_idx_2", "y_idx_2", "z_idx_2"]]
+                # line color
+                arrow_color = connect_lines[["R", "G", "B", "A"]] / 255.0
+                arrow_color = np.vstack((arrow_color, arrow_color))
                 # arrow_method = "agg"
                 arrow_method = "gl"
-                arrow_arrows = np.array([[1, 1, 1, 20, 20, 20]])
+                # arrows - just arrowheads
+                arrow_arrows = connect_lines[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]]
                 arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"] # len = 9
-                arrow_arrow_color = arrow_color
+                # arrowhead color
+                arrow_arrow_color = arrow_color[:len(arrow_arrows)]
                 arrows = scene.visuals.Arrow(pos = arrow_pos,
                                              color = arrow_color,
                                              parent = view.scene,
