@@ -67,6 +67,7 @@ class ChartMaker():
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
 
         select_photon_id = None
+        select_photon_id = [0,1,2]
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
