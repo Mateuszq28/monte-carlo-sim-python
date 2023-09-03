@@ -23,6 +23,7 @@ class ColorPointDF():
         # set default loop color list
         # self.loop_color_names = self.palette_2
         self.loop_color_names = self.create_palette(30)
+        self.old_color_dict = None
 
     def create_palette(self, num_of_colors):
         # choose to how many parts split hsv color wheel (color space)
@@ -69,7 +70,7 @@ class ColorPointDF():
 
 
 
-    def process_df_by_color_scheme(self, df: pd.DataFrame, color_scheme, drop_values):
+    def process_df_by_color_scheme(self, df: pd.DataFrame, color_scheme, drop_values, try_use_old_color_dict=True):
 
         # Drop values (for example 0.0)
         if drop_values is not None:
@@ -168,11 +169,16 @@ class ColorPointDF():
             if "photon_id" not in df.columns:
                 raise ValueError("df must have photon_id column")
             
-            uniq_photon_id = pd.unique(df['photon_id'])
-            rnd = MyRandom()
-            colors = [[rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)] for _ in range(len(uniq_photon_id))]
-            # id to color translator (dict)
-            trans_color = dict(zip(uniq_photon_id, colors))
+            if try_use_old_color_dict and self.old_color_dict is not None:
+                trans_color = self.old_color_dict
+            else:
+                uniq_photon_id = pd.unique(df['photon_id'])
+                rnd = MyRandom()
+                colors = [[rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)] for _ in range(len(uniq_photon_id))]
+                # id to color translator (dict)
+                trans_color = dict(zip(uniq_photon_id, colors))
+                self.old_color_dict = trans_color
+                    
             # treanslate colors
             rgb = [trans_color[val] for val in df["photon_id"].values]
             # insert R, G, B columns
