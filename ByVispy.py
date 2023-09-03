@@ -201,16 +201,16 @@ class ByVispy(View):
 
             if connect_lines is not None:
                 arrow_pos = np.array([[1, 1, 1], [20, 20, 20]])
-                arrow_color = arrow_pos.copy()
-                arrow_color[:,0:4] = [1.0, 0.0, 0.0, 1.0]
+                arrow_color = np.array( [1.0, 0.0, 0.0, 1.0] )
                 arrow_method = "agg"
                 arrow_method = "gl"
                 arrow_arrows = np.array([[1, 1, 1, 20, 20, 20]])
                 arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"]
                 arrow_arrow_color = arrow_color
-                arrows = scene.visuals.Arrow(pos = arrow_pos,
+                arrows = scene.visuals.Arrow(parent = view.scene,
+                                             pos = arrow_pos,
                                              color = arrow_color,
-                                             width = 2,
+                                             width = 4,
                                              connect = "strip",
                                              method = arrow_method,
                                              antialias = True,
