@@ -11,7 +11,9 @@ class ArrowsDF():
         if "photon_id" not in df:
             raise ValueError("df must have photon_id column")
         df.sort_values(by=['photon_id'], inplace=True)
-        df[["x_idx_2", "y_idx_2", "z_idx_2", "photon_id_2"]] = df.iloc[[(i+1) % len(df) for i in range(len(df))]][["x_idx", "y_idx", "z_idx", "photon_id"]]
+        move_idx = [(i+1) % len(df) for i in range(len(df))]
+        df[["x_idx_2", "y_idx_2", "z_idx_2", "photon_id_2"]] = df.iloc[move_idx][["x_idx", "y_idx", "z_idx", "photon_id"]].to_numpy()
+        # delete arrows, that are not connected to the same photon
         df = df[df["photon_id"] == df["photon_id_2"]]
         if add_start_arrows:
             if photon_register is not None:
@@ -26,8 +28,9 @@ class ArrowsDF():
 
     def start_points_arrows(self, first_arrow_records: pd.DataFrame, photon_register):
         start_arrows = first_arrow_records.copy()
+        start_arrows.drop_duplicates(subset="photon_id", keep="first", inplace=True)
         start_arrows[["x_idx_2", "y_idx_2", "z_idx_2"]] = start_arrows[["x_idx", "y_idx", "z_idx"]]
-        start_pos = np.array([np.array( photon_register[id]["start_pos"] ) for id in start_arrows["photon_id"]])
+        start_pos = np.array([np.array( photon_register[id]["start_pos"], dtype=int) for id in start_arrows["photon_id"]])
         start_arrows[["x_idx", "y_idx", "z_idx"]] = start_pos
         return start_arrows
     

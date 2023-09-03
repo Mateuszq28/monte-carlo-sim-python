@@ -50,6 +50,7 @@ class RunAll():
         # used in every printing and charts
         color_scheme = "threshold"
         color_scheme = "loop"
+        connect_lines = True
 
         sim = Sim()
         vis = ByVispy()
@@ -64,7 +65,7 @@ class RunAll():
         RunAll.normalize_process(sim.propSetup)
 
         # SHOW CHARTS + MAKE .PNG IMAGES
-        ChartMaker.show_all(sim.propSetup, color_scheme)
+        ChartMaker.show_all(sim.propSetup, color_scheme, connect_lines)
 
 
 

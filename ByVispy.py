@@ -157,7 +157,7 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None):
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=False):
         """
         Plot 3D interactive plot of points in colorPointDF data frame using Vispy
         :return: None
@@ -198,6 +198,26 @@ class ByVispy(View):
             s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
             affine = s.as_matrix()
             axis_widget.transform = affine
+
+            if connect_lines:
+                arrow_pos = np.array([[1, 1, 1], [20, 20, 20]])
+                arrow_color = arrow_pos.copy()
+                arrow_color[:,0:4] = [1.0, 0.0, 0.0, 1.0]
+                arrow_method = "agg"
+                arrow_method = "gl"
+                arrow_arrows = np.array([[1, 1, 1, 20, 20, 20]])
+                arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"]
+                arrow_arrow_color = arrow_color
+                arrows = scene.visuals.Arrow(pos = arrow_pos,
+                                             color = arrow_color,
+                                             width = 2,
+                                             connect = "strip",
+                                             method = arrow_method,
+                                             antialias = True,
+                                             arrows = arrow_arrows,
+                                             arrow_type = arrow_types[0],
+                                             arrow_size = 1.0,
+                                             arrow_color = arrow_arrow_color)
 
             # run
             if sys.flags.interactive != 1:
