@@ -124,16 +124,17 @@ class Print(Object3D):
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image
     
-    def background_img(self, image_shape):
+    def background_img(self, image_size):
         # New array with rgb values
-        new_arr2D = np.zeros((image_shape[0], image_shape[1], 3))
+        # new_arr2D = np.zeros((image_size[0], image_size[1], 3))
         # put default background color
-        default_color = ImageColor.getrgb("black")
-        new_arr2D[:,:,0] = default_color[0]
-        new_arr2D[:,:,1] = default_color[1]
-        new_arr2D[:,:,2] = default_color[2]
+        # default_color = ImageColor.getrgb("black")
+        # new_arr2D[:,:,0] = default_color[0]
+        # new_arr2D[:,:,1] = default_color[1]
+        # new_arr2D[:,:,2] = default_color[2]
         # Make PIL Image
-        PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
+        # PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
+        PIL_image = Image.new('RGB', image_size, (0,0,0))
         return PIL_image
     
     def rgb_to_rgba(self, img):
@@ -147,12 +148,12 @@ class Print(Object3D):
         if connect_lines is None:
             img = photons_img.copy()
         else:
-            image_shape = photons_img.size
+            image_size = photons_img.size
             if hide_points:
-                background = self.background_img(image_shape)
+                background = self.background_img(image_size)
             else:
                 background = photons_img
-            arrows = self.connect_lines_img(connect_lines, image_shape)
+            arrows = self.connect_lines_img(connect_lines, image_size)
             arrows_rgba = self.rgb_to_rgba(arrows)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
@@ -161,9 +162,9 @@ class Print(Object3D):
             img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
         return img
     
-    def connect_lines_img(self, connect_lines: pd.DataFrame, image_shape):
+    def connect_lines_img(self, connect_lines: pd.DataFrame, image_size):
         # Create an empty transparent image
-        im = Image.new('RGBA', image_shape, (0,0,0,0))
+        im = Image.new('RGBA', image_size, (0,0,0,0))
         # Make into Numpy array so we can use OpenCV drawing functions
         na = np.array(im)
         # Draw arrowed lines
@@ -176,12 +177,13 @@ class Print(Object3D):
             g = connect_lines["G"].iloc[i]
             b = connect_lines["B"].iloc[i]
             a = connect_lines["A"].iloc[i]
+            x,y,x2,y2,r,g,b,a = [int(val) for val in [x,y,x2,y2,r,g,b,a]]
             # openCV uses top left corner as (0,0) point
-            y = image_shape[1] - y
-            y2 = image_shape[1] - y2
+            y = image_size[0] - y
+            y2 = image_size[0] - y2
             # OpenCV uses BGR rather than RGB
             width = 1
-            na = cv2.arrowedLine(na, (x,y), (x2,y2), (b,g,r,a), width)
+            na = cv2.arrowedLine(na, (y,x), (y2,x2), (b,g,r,a), width)
         # Revert back to PIL Image and save
         img = Image.fromarray(na)
         return img

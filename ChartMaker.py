@@ -78,33 +78,33 @@ class ChartMaker():
         select_photon_id = [97, 98]
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
-        ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-                                      title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
-                                      color_scheme = local_color_scheme,
-                                      select_photon_id = select_photon_id,
-                                      photon_register = propSetup.photon_register,
-                                      select_parent = True,
-                                      select_child = True,
-                                      border_limits = border_limits,
-                                      sum_same_idx = False,
-                                      do_connect_lines = do_connect_lines)
+        # ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+        #                               title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
+        #                               color_scheme = local_color_scheme,
+        #                               select_photon_id = select_photon_id,
+        #                               photon_register = propSetup.photon_register,
+        #                               select_parent = True,
+        #                               select_child = True,
+        #                               border_limits = border_limits,
+        #                               sum_same_idx = False,
+        #                               do_connect_lines = do_connect_lines)
 
         
 
-        if sl is not None:
-            for s in sl:
-                select_photon_id = [s]
-                local_color_scheme = "photonwise"
-                ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-                                              title = "({}) one photon path - color_scheme = ".format(s) + local_color_scheme,
-                                              color_scheme = local_color_scheme,
-                                              select_photon_id = select_photon_id,
-                                              photon_register = propSetup.photon_register,
-                                              select_parent = True,
-                                              select_child = True,
-                                              border_limits = border_limits,
-                                              sum_same_idx = False,
-                                              do_connect_lines = do_connect_lines)
+        # if sl is not None:
+        #     for s in sl:
+        #         select_photon_id = [s]
+        #         local_color_scheme = "photonwise"
+        #         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+        #                                       title = "({}) one photon path - color_scheme = ".format(s) + local_color_scheme,
+        #                                       color_scheme = local_color_scheme,
+        #                                       select_photon_id = select_photon_id,
+        #                                       photon_register = propSetup.photon_register,
+        #                                       select_parent = True,
+        #                                       select_child = True,
+        #                                       border_limits = border_limits,
+        #                                       sum_same_idx = False,
+        #                                       do_connect_lines = do_connect_lines)
         
 
 
@@ -130,6 +130,8 @@ class ChartMaker():
         local_color_scheme = "photonwise"
         drop_values = [0, 0.0]
         drop_values = None
+        local_reset_colors = local_color_scheme
+        local_reset_colors = None
         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
                                                   input_shape = sh,
                                                   color_scheme = local_color_scheme,
@@ -145,7 +147,8 @@ class ChartMaker():
                                                   reset_png_colors = None,
                                                   show = True,
                                                   title_prefix = "",
-                                                  do_connect_lines = do_connect_lines)
+                                                  do_connect_lines = do_connect_lines,
+                                                  reset_colors = local_reset_colors)
         
         if sl is not None:
             for s in sl:
@@ -166,7 +169,8 @@ class ChartMaker():
                                                           reset_png_colors = None,
                                                           show = True,
                                                           title_prefix = "({}) ".format(s),
-                                                          do_connect_lines = do_connect_lines)
+                                                          do_connect_lines = do_connect_lines,
+                                                          reset_colors = local_reset_colors)
 
 
 
@@ -303,7 +307,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False, reset_colors=None):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -342,7 +346,7 @@ class ChartMaker():
             dir = png_dir
         vis = ByVispy()
         for proj_fun, name in zip(funs, projs_names):
-            projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme, connect_lines=connect_lines)
+            projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=reset_colors, connect_lines=connect_lines)
             chart_name = title_prefix + "projections_from_resultRecords_" + name
             if show:
                 vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points)
