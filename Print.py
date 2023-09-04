@@ -2,7 +2,9 @@ from Object3D import Object3D
 from ColorPointDF import ColorPointDF
 import numpy as np
 import os
+import pandas as pd
 from PIL import ImageColor, Image
+import cv2
 
 
 class Print(Object3D):
@@ -133,9 +135,6 @@ class Print(Object3D):
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image
     
-    def connect_lines_img(self, connect_lines, image_shape):
-        raise NotImplementedError()
-    
     def rgb_to_rgba(self, img):
         img = img.copy()
         if img.mode == "RGB":
@@ -159,4 +158,29 @@ class Print(Object3D):
             alpha = 123
             mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
             img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
+        return img
+    
+    def connect_lines_img(self, connect_lines: pd.DataFrame, image_shape):
+        # Create an empty transparent image
+        im = Image.new('RGBA', image_shape, (0,0,0,0))
+        # Make into Numpy array so we can use OpenCV drawing functions
+        na = np.array(im)
+        # Draw arrowed lines
+        for i in range(len(connect_lines)):
+            x = connect_lines["x_idx"].iloc[i]
+            y = connect_lines["y_idx"].iloc[i]
+            x2 = connect_lines["x_idx_2"].iloc[i]
+            y2 = connect_lines["y_idx_2"].iloc[i]
+            r = connect_lines["R"].iloc[i]
+            g = connect_lines["G"].iloc[i]
+            b = connect_lines["B"].iloc[i]
+            a = connect_lines["A"].iloc[i]
+            # openCV uses top left corner as (0,0) point
+            y = image_shape[1] - y
+            y2 = image_shape[1] - y2
+            # OpenCV uses BGR rather than RGB
+            width = 1
+            na = cv2.arrowedLine(na, (x,y), (x2,y2), (b,g,r,a), width)
+        # Revert back to PIL Image and save
+        img = Image.fromarray(na)
         return img
