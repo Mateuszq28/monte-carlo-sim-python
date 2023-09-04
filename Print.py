@@ -3,8 +3,9 @@ from ColorPointDF import ColorPointDF
 from ArrowsDF import ArrowsDF
 import numpy as np
 import os
+import math
 import pandas as pd
-from PIL import ImageColor, Image
+from PIL import ImageColor, ImageDraw, Image
 import cv2
 # pip3 install opencv-python
 
@@ -172,7 +173,7 @@ class Print(Object3D):
                 background = self.background_img(image_size)
             else:
                 background = photons_img_ready
-            arrows = self.connect_lines_img(connect_lines_ready, image_size)
+            arrows = self.connect_lines_img_pil(connect_lines_ready, image_size)
             arrows_rgba = self.rgb_to_rgba(arrows)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
@@ -181,7 +182,7 @@ class Print(Object3D):
             img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
         return img
     
-    def connect_lines_img(self, connect_lines: pd.DataFrame, image_size):
+    def connect_lines_img_cv2(self, connect_lines: pd.DataFrame, image_size):
         # Create an empty transparent image
         im = Image.new('RGBA', image_size, (0,0,0,0))
         # Make into Numpy array so we can use OpenCV drawing functions
@@ -203,6 +204,66 @@ class Print(Object3D):
         # to PIL Image
         img = Image.fromarray(na)
         return img
+    
+    def connect_lines_img_pil(self, connect_lines: pd.DataFrame, image_size):
+        # Create an empty transparent image
+        im = Image.new('RGBA', image_size, (0,0,0,0))
+        # Draw arrowed lines
+        for i in range(len(connect_lines)):
+            x = connect_lines["x_idx"].iloc[i]
+            y = connect_lines["y_idx"].iloc[i]
+            x2 = connect_lines["x_idx_2"].iloc[i]
+            y2 = connect_lines["y_idx_2"].iloc[i]
+            r = connect_lines["R"].iloc[i]
+            g = connect_lines["G"].iloc[i]
+            b = connect_lines["B"].iloc[i]
+            a = connect_lines["A"].iloc[i]
+            x,y,x2,y2,r,g,b,a = [int(val) for val in [x,y,x2,y2,r,g,b,a]]
+            width = 1
+            im = self.arrowedLine(im, ptA=(x,y), ptB=(x2,y2), width=width, color=(r,g,b,a))
+        return im
+    
+    @staticmethod
+    def arrowedLine(im, ptA, ptB, width=1, color=(0,255,0,1)):
+        """
+        Draw line from ptA to ptB with arrowhead at ptB
+        source: https://stackoverflow.com/questions/63671018/how-can-i-draw-an-arrow-using-pil
+        [modified]
+        """
+        # Get drawing context
+        draw = ImageDraw.Draw(im)
+        # Draw the line without arrows
+        draw.line((ptA,ptB), width=width, fill=color)
+        # Now work out the arrowhead
+        # = it will be a triangle with one vertex at ptB
+        # - it will start n pixels before ptB
+        # - it will extend m pixels either side of the line
+        x0, y0 = ptA
+        x1, y1 = ptB
+        vec_len = np.linalg.norm([x1-x0, y1-y0])
+        # Now we can work out the x,y coordinates of the bottom of the arrowhead triangle
+        n = 3.0
+        xb = x1 - n*(x1-x0)/vec_len
+        yb = y1 - n*(y1-y0)/vec_len
+        # Work out the other two vertices of the triangle
+        # Check if line is vertical
+        m = 3
+        if x0==x1:
+            vtx0 = (xb-m, yb)
+            vtx1 = (xb+m, yb)
+        # Check if line is horizontal
+        elif y0==y1:
+            vtx0 = (xb, yb+m)
+            vtx1 = (xb, yb-m)
+        else:
+            alpha = math.atan2(y1-y0,x1-x0)-90*math.pi/180
+            a = m*math.cos(alpha)
+            b = m*math.sin(alpha)
+            vtx0 = (xb+a, yb-b)
+            vtx1 = (xb-a, yb+b)
+        # Now draw the arrowhead triangle
+        draw.polygon([vtx0, vtx1, ptB], fill=color)
+        return im
     
     def make_img_sparse(self, img, put_num):
         scale_factor = put_num+1
