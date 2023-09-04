@@ -5,25 +5,25 @@ class ProjectionResultRecordsDF():
     def __init__(self):
         pass
 
-    def x_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 0, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def x_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 0, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def x_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 0, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def x_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 0, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def y_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 1, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def y_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 1, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def y_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 1, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def y_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 1, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def z_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 2, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def z_high(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 2, -1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def z_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None):
-        return self.throw(resultRecordsDF, input_shape, 2, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors)
+    def z_low(self, resultRecordsDF, input_shape, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
+        return self.throw(resultRecordsDF, input_shape, 2, 1, sum_axis=sum_axis, sort=sort, reset_colors=reset_colors, connect_lines=connect_lines)
 
-    def throw(self, resultRecordsDF: pd.DataFrame, input_shape, axis, xray, sum_axis=False, sort=True, reset_colors=None):
+    def throw(self, resultRecordsDF: pd.DataFrame, input_shape, axis, xray, sum_axis=False, sort=True, reset_colors=None, connect_lines=None):
         """
         The function will take first value from object3D.body (recovered from resultRecordsDF) seen perpendicularly to axis.
         :param axis: observer's axis
@@ -96,6 +96,17 @@ class ProjectionResultRecordsDF():
         else:
             raise ValueError("xray must be -1 or 1")
         output_df[search_axis_name] = reset_idx
+        # [make arrows flat] reset idx on search value axis (we want flat 3d object)
+        if connect_lines is not None:
+            proj_connect_lines = connect_lines.copy()
+            arrow_cols_1 = ["x_idx", "y_idx", "z_idx"]
+            arrow_cols_2 = ["x_idx_2", "y_idx_2", "z_idx_2"]
+            arrow_reset_col_1 = arrow_cols_1.pop(axis)
+            arrow_reset_col_2 = arrow_cols_2.pop(axis)
+            proj_connect_lines[arrow_reset_col_1] = reset_idx
+            proj_connect_lines[arrow_reset_col_2] = reset_idx
+        else:
+            proj_connect_lines = None
         # we will need flat axis idx to change 3d object to 2d array later
         # (all idx values on flat axis column are the same)
         flat_axis = axis
@@ -104,13 +115,22 @@ class ProjectionResultRecordsDF():
             output_df.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
         if reset_colors is not None:
             output_df = ColorPointDF().reset_colors(output_df, reset_colors)
-        return output_df, flat_axis
+        return output_df, flat_axis, proj_connect_lines
 
 
-    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None, sort=True, reset_colors=None):
+    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None, sort=True, reset_colors=None, connect_lines=None):
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         flat_axis_name = ax_lvl_names.pop(flataxis)
         outputDF = resultRecordsDF.rename(columns={ax_lvl_names[0]: "x_idx", ax_lvl_names[1]: "y_idx", flat_axis_name: "z_idx"})
+        # make flat z connect_lines arrows
+        if connect_lines is not None:
+            arrow_cols_1 = ["x_idx", "y_idx", "z_idx"]
+            arrow_cols_2 = ["x_idx_2", "y_idx_2", "z_idx_2"]
+            arrow_reset_col_1 = arrow_cols_1.pop(flataxis)
+            arrow_reset_col_2 = arrow_cols_2.pop(flataxis)
+            flat_z_connect_lines = connect_lines.rename(columns={arrow_cols_1[0]: "x_idx", arrow_cols_1[1]: "y_idx", arrow_reset_col_1: "z_idx", arrow_cols_2[0]: "x_idx_1", arrow_cols_2[1]: "y_idx_2", arrow_reset_col_2: "z_idx_2"})
+        else:
+            flat_z_connect_lines = None
         # rotate and inverse axis if need
         image_shape = input_shape.copy()
         image_shape.pop(flataxis)
@@ -119,18 +139,30 @@ class ProjectionResultRecordsDF():
                 # on print image arrow of y axis is directed upwards (not down like in standard image)
                 if transform_preset == "x_high":
                     self.rotate_left(outputDF, image_shape)
+                    if flat_z_connect_lines is not None:
+                        self.rotate_left(flat_z_connect_lines, image_shape)
                 elif transform_preset == "x_low":
                     self.rotate_left(outputDF, image_shape)
                     self.inverese_vertical(outputDF, image_shape)
+                    if flat_z_connect_lines is not None:
+                        self.rotate_left(flat_z_connect_lines, image_shape)
+                        self.inverese_vertical(flat_z_connect_lines, image_shape)
                 elif transform_preset == "y_high":
                     self.rotate_left(outputDF, image_shape)
                     self.inverese_vertical(outputDF, image_shape)
+                    if flat_z_connect_lines is not None:
+                        self.rotate_left(flat_z_connect_lines, image_shape)
+                        self.inverese_vertical(flat_z_connect_lines, image_shape)
                 elif transform_preset == "y_low":
                     self.rotate_left(outputDF, image_shape)
+                    if flat_z_connect_lines is not None:
+                        self.rotate_left(flat_z_connect_lines, image_shape)
                 elif transform_preset == "z_high":
                     pass
                 elif transform_preset == "z_low":
                     self.inverese_horizontal(outputDF, image_shape)
+                    if flat_z_connect_lines is not None:
+                        self.inverese_horizontal(flat_z_connect_lines, image_shape)
                 else:
                     raise ValueError("transform_preset not recognized")
             else:
@@ -140,7 +172,7 @@ class ProjectionResultRecordsDF():
             outputDF.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
         if reset_colors is not None:
             outputDF = ColorPointDF().reset_colors(outputDF, reset_colors)
-        return outputDF, image_shape
+        return outputDF, image_shape, flat_z_connect_lines
     
 
     def rotate_left(self, df: pd.DataFrame, image_shape):
@@ -153,15 +185,27 @@ class ProjectionResultRecordsDF():
 
     def inverese_vertical(self, df: pd.DataFrame, image_shape):
         df["y_idx"] = image_shape[1] - 1 - df["y_idx"]
+        # for connect lines arrows
+        if "y_idx_2" in df.columns:
+            df["y_idx_2"] = image_shape[1] - 1 - df["y_idx_2"]
 
     def inverese_horizontal(self, df: pd.DataFrame, image_shape):
         df["x_idx"] = image_shape[0] - 1 - df["x_idx"]
+        # for connect lines arrows
+        if "x_idx_2" in df.columns:
+            df["x_idx_2"] = image_shape[0] - 1 - df["x_idx_2"]
 
     def flip_axis(self, df: pd.DataFrame, ax1, ax2, image_shape):
         axis_names = ["x_idx", "y_idx", "z_idx"]
         ax1_name = axis_names[ax1]
         ax2_name = axis_names[ax2]
         df.rename(columns={ax1_name: ax2_name, ax2_name: ax1_name}, inplace=True)
+        # for connect lines arrows
+        if "x_idx_2" in df.columns or "y_idx_2" in df.columns or "z_idx_2" in df.columns:
+            axis_names = ["x_idx_2", "y_idx_2", "z_idx_2"]
+            ax1_name = axis_names[ax1]
+            ax2_name = axis_names[ax2]
+            df.rename(columns={ax1_name: ax2_name, ax2_name: ax1_name}, inplace=True)
         # change image shape list
         bufor = image_shape[ax1]
         image_shape[ax1] = image_shape[ax2]

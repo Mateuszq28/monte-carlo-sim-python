@@ -63,6 +63,7 @@ class ChartMaker():
         sl = None
         sl = list(range(10,15))
         sl = list(range(0,100))
+        sl = [0]
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
@@ -119,40 +120,43 @@ class ChartMaker():
         local_color_scheme = "photonwise"
         drop_values = [0, 0.0]
         drop_values = None
-        # ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                           input_shape = sh,
-        #                                           color_scheme = local_color_scheme,
-        #                                           drop_values = drop_values,
-        #                                           select_photon_id = None,
-        #                                           photon_register = propSetup.photon_register,
-        #                                           select_parent = True,
-        #                                           select_child = True,
-        #                                           border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-        #                                           png_dir = None,
-        #                                           sum_same_idx = False,
-        #                                           sum_axis = False,
-        #                                           reset_png_colors = None,
-        #                                           show = True)
+        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                  input_shape = sh,
+                                                  color_scheme = local_color_scheme,
+                                                  drop_values = drop_values,
+                                                  select_photon_id = None,
+                                                  photon_register = propSetup.photon_register,
+                                                  select_parent = True,
+                                                  select_child = True,
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                  png_dir = None,
+                                                  sum_same_idx = False,
+                                                  sum_axis = False,
+                                                  reset_png_colors = None,
+                                                  show = True,
+                                                  title_prefix = "",
+                                                  do_connect_lines = do_connect_lines)
         
-        # if sl is not None:
-        #     for s in sl[:1]:
-        #         select_photon_id = [s]
-        #         local_color_scheme = "photonwise"
-        #         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                                   input_shape = sh,
-        #                                                   color_scheme = local_color_scheme,
-        #                                                   drop_values = None,
-        #                                                   select_photon_id = select_photon_id,
-        #                                                   photon_register = propSetup.photon_register,
-        #                                                   select_parent = True,
-        #                                                   select_child = True,
-        #                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-        #                                                   png_dir = os.path.join("slice_img", "single_photon_projection_img"),
-        #                                                   sum_same_idx = False,
-        #                                                   sum_axis = False,
-        #                                                   reset_png_colors = None,
-        #                                                   show = True,
-        #                                                   title_prefix = "({}) ".format(s))
+        if sl is not None:
+            for s in sl[:1]:
+                select_photon_id = [s]
+                local_color_scheme = "photonwise"
+                ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                          input_shape = sh,
+                                                          color_scheme = local_color_scheme,
+                                                          drop_values = None,
+                                                          select_photon_id = select_photon_id,
+                                                          photon_register = propSetup.photon_register,
+                                                          select_parent = True,
+                                                          select_child = True,
+                                                          border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                          png_dir = os.path.join("slice_img", "single_photon_projection_img"),
+                                                          sum_same_idx = False,
+                                                          sum_axis = False,
+                                                          reset_png_colors = None,
+                                                          show = True,
+                                                          title_prefix = "({}) ".format(s),
+                                                          do_connect_lines = do_connect_lines)
 
 
 
@@ -282,7 +286,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix=""):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -294,6 +298,23 @@ class ChartMaker():
                                     border_limits = border_limits,
                                     sum_same_idx = sum_same_idx,
                                     sort = True)
+        if do_connect_lines:
+            df_arrows = cDF.from_resultRecords(resultRecords = resultRecords,
+                                               color_scheme = "photonwise",
+                                               drop_values = None,
+                                               select_photon_id = select_photon_id,
+                                               photon_register = photon_register,
+                                               select_parent = select_parent,
+                                               select_child = select_child,
+                                               border_limits = border_limits,
+                                               sum_same_idx = False,
+                                               sort = False)
+            ADF = ArrowsDF()
+            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
+            hide_points = False
+        else:
+            connect_lines = None
+            hide_points = False
         pDF = ProjectionResultRecordsDF()
         funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
@@ -304,12 +325,12 @@ class ChartMaker():
             dir = png_dir
         vis = ByVispy()
         for proj_fun, name in zip(funs, projs_names):
-            projDF, flat_ax = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme)
+            projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=color_scheme, connect_lines=connect_lines)
             chart_name = title_prefix + "projections_from_resultRecords_" + name
             if show:
-                vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=None)
-            flat_z_proj, image_shape = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors)
-            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png")
+                vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points)
+            flat_z_proj, image_shape, flat_z_connect_lines = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors, connect_lines=proj_connect_lines)
+            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png", connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
     @staticmethod

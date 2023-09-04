@@ -9,23 +9,23 @@ class Print(Object3D):
     def __init__(self):
         pass
 
-    def x_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 0, -1, dir, filename, color_scheme, connect_lines)
+    def x_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 0, -1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
-    def x_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 0, 1, dir, filename, color_scheme, connect_lines)
+    def x_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 0, 1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
-    def y_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 1, -1, dir, filename, color_scheme, connect_lines)
+    def y_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 1, -1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
-    def y_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 1, 1, dir, filename, color_scheme, connect_lines)
+    def y_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 1, 1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
-    def z_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 2, -1, dir, filename, color_scheme, connect_lines)
+    def z_high(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 2, -1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
-    def z_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
-        self.obj3D_to_png(object3D, 2, 1, dir, filename, color_scheme, connect_lines)
+    def z_low(self, object3D:Object3D, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
+        self.obj3D_to_png(object3D, 2, 1, dir, filename, color_scheme, connect_lines=connect_lines, hide_points=hide_points)
 
     def arr2D_to_img_old(self, arr2D):
         color_names = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933',
@@ -55,7 +55,7 @@ class Print(Object3D):
         return PIL_image
     
 
-    def arr2D_to_img(self, arr2D, color_scheme="threshold", connect_lines=None):
+    def arr2D_to_img(self, arr2D, color_scheme="threshold"):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_arr2d(arr2D, color_scheme=color_scheme, drop_values=[0])
         # New array with rgb values
@@ -80,7 +80,7 @@ class Print(Object3D):
         img = self.arr2D_to_img(arr2D)
         self.img2png(img, dir, filename)
 
-    def obj3D_to_png(self, object3D:Object3D, axis, xray, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None):
+    def obj3D_to_png(self, object3D:Object3D, axis, xray, dir="slice_img", filename="slice.png", color_scheme="threshold", connect_lines=None, hide_points=False):
         if xray == 1:
             ax = 0
         elif xray == -1:
@@ -98,11 +98,13 @@ class Print(Object3D):
         else:
             img_arr = None
             ValueError("axis must be in {0,1,2}")
-        img = self.arr2D_to_img(img_arr, color_scheme, connect_lines)
+        photons_img = self.arr2D_to_img(img_arr, color_scheme)
+        img = self.blend_with_connect_lines(photons_img, connect_lines=connect_lines, hide_points=hide_points)
         self.img2png(img, dir, filename)
 
-    def projectionResultRecordsDF_to_png(self, resultRecordsDF, image_shape, dir="photonwise_projection_img", filename="projection_df.png"):
-        img = self.projectionResultRecordsDF_to_img(resultRecordsDF, image_shape)
+    def projectionResultRecordsDF_to_png(self, resultRecordsDF, image_shape, dir="photonwise_projection_img", filename="projection_df.png", connect_lines=None, hide_points=False):
+        photons_img = self.projectionResultRecordsDF_to_img(resultRecordsDF, image_shape)
+        img = self.blend_with_connect_lines(photons_img, connect_lines=connect_lines, hide_points=hide_points)
         self.img2png(img, dir, filename)
 
     def projectionResultRecordsDF_to_img(self, resultRecordsDF, image_shape):
@@ -118,3 +120,43 @@ class Print(Object3D):
         # Make PIL Image
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image
+    
+    def background_img(self, image_shape):
+        # New array with rgb values
+        new_arr2D = np.zeros((image_shape[0], image_shape[1], 3))
+        # put default background color
+        default_color = ImageColor.getrgb("black")
+        new_arr2D[:,:,0] = default_color[0]
+        new_arr2D[:,:,1] = default_color[1]
+        new_arr2D[:,:,2] = default_color[2]
+        # Make PIL Image
+        PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
+        return PIL_image
+    
+    def connect_lines_img(self, connect_lines, image_shape):
+        raise NotImplementedError()
+    
+    def rgb_to_rgba(self, img):
+        img = img.copy()
+        if img.mode == "RGB":
+            a_channel = Image.new('L', img.size, 255)   # 'L' 8-bit pixels, black and white
+            img.putalpha(a_channel)
+        return img
+    
+    def blend_with_connect_lines(self, photons_img: Image.Image, connect_lines=None, hide_points=False):
+        if connect_lines is None:
+            img = photons_img.copy()
+        else:
+            image_shape = photons_img.size
+            if hide_points:
+                background = self.background_img(image_shape)
+            else:
+                background = photons_img
+            arrows = self.connect_lines_img(connect_lines, image_shape)
+            arrows_rgba = self.rgb_to_rgba(arrows)
+            background_rgba = self.rgb_to_rgba(background)
+            #create a mask using RGBA to define an alpha channel to make the overlay transparent
+            alpha = 123
+            mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
+            img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
+        return img
