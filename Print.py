@@ -176,7 +176,7 @@ class Print(Object3D):
             arrows_rgba = self.rgb_to_rgba(arrows)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
-            alpha = 123
+            alpha = 255
             mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
             img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
         return img
@@ -200,7 +200,7 @@ class Print(Object3D):
             # OpenCV uses BGR rather than RGB
             width = 1
             na = cv2.arrowedLine(na, (y,x), (y2,x2), (b,g,r,a), width)
-        # Revert back to PIL Image and save
+        # to PIL Image
         img = Image.fromarray(na)
         return img
     
