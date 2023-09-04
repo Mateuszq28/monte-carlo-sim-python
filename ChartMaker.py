@@ -43,22 +43,23 @@ class ChartMaker():
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
-        #                                       cs_material="solid",
-        #                                       cs_light_source="solid")
+        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+                                              cs_material="solid",
+                                              cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        # ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
-        #                                              cs_material="solid",
-        #                                              cs_photons=color_scheme)
+        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+                                                     cs_material="solid",
+                                                     cs_photons=color_scheme)
 
 
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
-        #                           title = "Absorbed energy in volume - color_scheme = " + color_scheme,
-        #                           color_scheme = color_scheme)
+        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+                                  color_scheme = color_scheme,
+                                  connect_lines = standard_connect_lines)
 
         
 
@@ -110,13 +111,13 @@ class ChartMaker():
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
         # old
-        # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
-        #                            bins_per_cm = propSetup.config["bins_per_1_cm"])
+        ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
-        # ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
-        #                            bins_per_cm = propSetup.config["bins_per_1_cm"],
-        #                            color_scheme = color_scheme,
-        #                            show = False)
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+                                   color_scheme = color_scheme,
+                                   show = False)
 
 
 
@@ -144,7 +145,7 @@ class ChartMaker():
                                                   do_connect_lines = do_connect_lines)
         
         if sl is not None:
-            for s in sl[:1]:
+            for s in sl:
                 select_photon_id = [s]
                 local_color_scheme = "photonwise"
                 ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
@@ -340,13 +341,13 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop"):
+    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0, 0.0])
         vis = ByVispy()
         if title is None:
             title="Absorbed energy in volume"
-        vis.show_ColorPointDF(df, title=title, connect_lines=None)
+        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines)
 
     @staticmethod
     def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False):
