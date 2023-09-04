@@ -293,7 +293,7 @@ class ChartMaker():
             chart_name = "sum_projection_" + name
             # add arrows
             if connect_lines is not None:
-                flat_z_connect_lines, _, _ = line_fun(connect_lines, resultEnv.shape, set_z_as_flat_axis=True)
+                flat_z_connect_lines, _, _ = line_fun(connect_lines, resultEnv.shape, set_z_as_flat_axis=True, set_z_idx_to_0=True)
             else:
                 flat_z_connect_lines = None
             if show:

@@ -118,51 +118,57 @@ class ProjectionResultRecordsDF():
         return output_df, flat_axis, proj_connect_lines
 
 
-    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None, sort=True, reset_colors=None, connect_lines=None):
+    def set_z_as_flat_axis(self, resultRecordsDF, flataxis, input_shape, post_transform=True, transform_preset=None, sort=True, reset_colors=None, connect_lines=None, set_z_idx_to_0=False):
         ax_lvl_names = ["x_idx", "y_idx", "z_idx"]
         flat_axis_name = ax_lvl_names.pop(flataxis)
         outputDF = resultRecordsDF.rename(columns={ax_lvl_names[0]: "x_idx", ax_lvl_names[1]: "y_idx", flat_axis_name: "z_idx"})
+        if set_z_idx_to_0:
+            outputDF["z_idx"] = 0
         # make flat z connect_lines arrows
         if connect_lines is not None:
             arrow_cols_1 = ["x_idx", "y_idx", "z_idx"]
             arrow_cols_2 = ["x_idx_2", "y_idx_2", "z_idx_2"]
             arrow_reset_col_1 = arrow_cols_1.pop(flataxis)
             arrow_reset_col_2 = arrow_cols_2.pop(flataxis)
-            flat_z_connect_lines = connect_lines.rename(columns={arrow_cols_1[0]: "x_idx", arrow_cols_1[1]: "y_idx", arrow_reset_col_1: "z_idx", arrow_cols_2[0]: "x_idx_1", arrow_cols_2[1]: "y_idx_2", arrow_reset_col_2: "z_idx_2"})
+            flat_z_connect_lines = connect_lines.rename(columns={arrow_cols_1[0]: "x_idx", arrow_cols_1[1]: "y_idx", arrow_reset_col_1: "z_idx", arrow_cols_2[0]: "x_idx_2", arrow_cols_2[1]: "y_idx_2", arrow_reset_col_2: "z_idx_2"})
+            if set_z_idx_to_0:
+                flat_z_connect_lines["z_idx"] = 0
+                flat_z_connect_lines["z_idx_2"] = 0
         else:
             flat_z_connect_lines = None
         # rotate and inverse axis if need
         image_shape = input_shape.copy()
         image_shape.pop(flataxis)
+        image_shape_arrows = image_shape.copy()
         if post_transform:
             if transform_preset is not None and input_shape is not None:
                 # on print image arrow of y axis is directed upwards (not down like in standard image)
                 if transform_preset == "x_high":
                     self.rotate_left(outputDF, image_shape)
                     if flat_z_connect_lines is not None:
-                        self.rotate_left(flat_z_connect_lines, image_shape)
+                        self.rotate_left(flat_z_connect_lines, image_shape_arrows)
                 elif transform_preset == "x_low":
                     self.rotate_left(outputDF, image_shape)
                     self.inverese_vertical(outputDF, image_shape)
                     if flat_z_connect_lines is not None:
-                        self.rotate_left(flat_z_connect_lines, image_shape)
-                        self.inverese_vertical(flat_z_connect_lines, image_shape)
+                        self.rotate_left(flat_z_connect_lines, image_shape_arrows)
+                        self.inverese_vertical(flat_z_connect_lines, image_shape_arrows)
                 elif transform_preset == "y_high":
                     self.rotate_left(outputDF, image_shape)
                     self.inverese_vertical(outputDF, image_shape)
                     if flat_z_connect_lines is not None:
-                        self.rotate_left(flat_z_connect_lines, image_shape)
-                        self.inverese_vertical(flat_z_connect_lines, image_shape)
+                        self.rotate_left(flat_z_connect_lines, image_shape_arrows)
+                        self.inverese_vertical(flat_z_connect_lines, image_shape_arrows)
                 elif transform_preset == "y_low":
                     self.rotate_left(outputDF, image_shape)
                     if flat_z_connect_lines is not None:
-                        self.rotate_left(flat_z_connect_lines, image_shape)
+                        self.rotate_left(flat_z_connect_lines, image_shape_arrows)
                 elif transform_preset == "z_high":
                     pass
                 elif transform_preset == "z_low":
                     self.inverese_horizontal(outputDF, image_shape)
                     if flat_z_connect_lines is not None:
-                        self.inverese_horizontal(flat_z_connect_lines, image_shape)
+                        self.inverese_horizontal(flat_z_connect_lines, image_shape_arrows)
                 else:
                     raise ValueError("transform_preset not recognized")
             else:
