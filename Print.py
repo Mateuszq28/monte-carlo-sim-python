@@ -5,6 +5,7 @@ import os
 import pandas as pd
 from PIL import ImageColor, Image
 import cv2
+# pip3 install opencv-python
 
 
 class Print(Object3D):

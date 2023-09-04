@@ -7,6 +7,7 @@ from ColorPointDF import ColorPointDF
 from ByVispy import ByVispy
 from Print import Print
 from ArrowsDF import ArrowsDF
+from ProjectionArrowsDF import ProjectionArrowsDF
 import matplotlib.pyplot as plt
 import pandas as pd
 from IPython.display import display
@@ -43,23 +44,23 @@ class ChartMaker():
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
-                                              cs_material="solid",
-                                              cs_light_source="solid")
+        # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+        #                                       cs_material="solid",
+        #                                       cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
-                                                     cs_material="solid",
-                                                     cs_photons=color_scheme)
+        # ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+        #                                              cs_material="solid",
+        #                                              cs_photons=color_scheme)
 
 
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
-                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
-                                  color_scheme = color_scheme,
-                                  connect_lines = standard_connect_lines)
+        # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+        #                           title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+        #                           color_scheme = color_scheme,
+        #                           connect_lines = standard_connect_lines)
 
         
 
@@ -73,8 +74,8 @@ class ChartMaker():
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
 
-        select_photon_id = [98]
         select_photon_id = None
+        select_photon_id = [97, 98]
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
@@ -111,13 +112,15 @@ class ChartMaker():
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
         # old
-        ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
-                                   bins_per_cm = propSetup.config["bins_per_1_cm"])
+        # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
+        #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
         ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
                                    bins_per_cm = propSetup.config["bins_per_1_cm"],
                                    color_scheme = color_scheme,
-                                   show = False)
+                                   show = True,
+                                   connect_lines = standard_connect_lines,
+                                   hide_points = standard_hide_points)
 
 
 
@@ -277,19 +280,26 @@ class ChartMaker():
 
 
     @staticmethod
-    def sum_projections(resultEnv: PropEnv, bins_per_cm, color_scheme="loop", show=True):
+    def sum_projections(resultEnv: PropEnv, bins_per_cm, color_scheme="loop", show=True, connect_lines=None, hide_points=False):
         sump = SumProjection()
+        padf = ProjectionArrowsDF()
         funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
+        arrow_funs = [padf.x_high, padf.x_low, padf.y_high, padf.y_low, padf.z_high, padf.z_low]
         projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
         # used in loop
         dir = os.path.join("slice_img", "sum_projection_img")
-        for fun, name in zip(funs, projs_names):
+        for fun, line_fun, name in zip(funs, arrow_funs, projs_names):
             proj = fun(resultEnv)
             chart_name = "sum_projection_" + name
+            # add arrows
+            if connect_lines is not None:
+                flat_z_connect_lines, _, _ = line_fun(connect_lines, resultEnv.shape, set_z_as_flat_axis=True)
+            else:
+                flat_z_connect_lines = None
             if show:
-                ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme)
+                ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
                 ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
-            proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme)
+            proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
     @staticmethod
@@ -341,13 +351,13 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None):
+    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None, hide_points=False):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0, 0.0])
         vis = ByVispy()
         if title is None:
             title="Absorbed energy in volume"
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines)
+        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points)
 
     @staticmethod
     def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False):

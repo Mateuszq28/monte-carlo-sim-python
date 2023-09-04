@@ -9,7 +9,7 @@ class ProjectionArrowsDF():
     def x_high(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 0, -1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 0, -1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="x_high")
             out1 = flat_z_connect_lines
@@ -24,7 +24,7 @@ class ProjectionArrowsDF():
     def x_low(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 0, 1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 0, 1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="x_low")
             out1 = flat_z_connect_lines
@@ -39,7 +39,7 @@ class ProjectionArrowsDF():
     def y_high(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 1, -1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 1, -1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="y_high")
             out1 = flat_z_connect_lines
@@ -54,7 +54,7 @@ class ProjectionArrowsDF():
     def y_low(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 1, 1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 1, 1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="y_low")
             out1 = flat_z_connect_lines
@@ -69,7 +69,7 @@ class ProjectionArrowsDF():
     def z_high(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 2, -1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 2, -1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="z_high")
             out1 = flat_z_connect_lines
@@ -84,7 +84,7 @@ class ProjectionArrowsDF():
     def z_low(self, connect_lines: pd.DataFrame, input_shape, set_z_as_flat_axis=True):
         PRR = ProjectionResultRecordsDF()
         empty_df = pd.DataFrame({"x_idx": [0], "y_idx": [0], "z_idx": [0]})
-        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 2, 1, sum_axis=False, sort=False, reset_colors=False, connect_lines=connect_lines)
+        _, flat_axis, proj_connect_lines = PRR.throw(empty_df, input_shape, 2, 1, sum_axis=False, sort=False, reset_colors=None, connect_lines=connect_lines)
         if set_z_as_flat_axis:
             flat_z_connect_lines, image_shape = self.set_z_as_flat_axis(proj_connect_lines, flat_axis, input_shape, post_transform=True, transform_preset="z_low")
             out1 = flat_z_connect_lines
