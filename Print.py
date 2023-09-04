@@ -197,9 +197,6 @@ class Print(Object3D):
             b = connect_lines["B"].iloc[i]
             a = connect_lines["A"].iloc[i]
             x,y,x2,y2,r,g,b,a = [int(val) for val in [x,y,x2,y2,r,g,b,a]]
-            # openCV uses top left corner as (0,0) point
-            y = image_size[0] - y
-            y2 = image_size[0] - y2
             # OpenCV uses BGR rather than RGB
             width = 1
             na = cv2.arrowedLine(na, (y,x), (y2,x2), (b,g,r,a), width)
