@@ -72,6 +72,13 @@ class ArrowsDF():
     def find_colors_by_photon_id(self, df: pd.DataFrame, photon_id):
         colors = df[df["photon_id"] == photon_id][["R", "G", "B", "A"]].iloc[0].to_numpy()
         return colors
+    
+
+    @staticmethod
+    def make_sparse(df, put_num):
+        scale = put_num+1
+        df[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]] = df[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2"]] * scale
+        return df
 
 
 

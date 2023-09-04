@@ -1,5 +1,6 @@
 from Object3D import Object3D
 from ColorPointDF import ColorPointDF
+from ArrowsDF import ArrowsDF
 import numpy as np
 import os
 import pandas as pd
@@ -145,15 +146,33 @@ class Print(Object3D):
         return img
     
     def blend_with_connect_lines(self, photons_img: Image.Image, connect_lines=None, hide_points=False):
+        # decide if put empty rows and columns between data points (decide in seperate cases)
         if connect_lines is None:
-            img = photons_img.copy()
+            do_sparse = False
+            connect_lines_ready = None
         else:
-            image_size = photons_img.size
+            do_sparse = True
+            connect_lines_ready = connect_lines.copy()
+        # do sparse image
+        if do_sparse:
+            put_num = 7
+            # sparse background img with photons
+            photons_img_ready = self.make_img_sparse(photons_img, put_num=put_num)
+            # sparse arrows
+            if connect_lines is not None:
+                connect_lines_ready = ArrowsDF.make_sparse(connect_lines_ready, put_num)
+        else:
+            photons_img_ready = photons_img
+        # blending
+        if connect_lines is None:
+            img = photons_img_ready.copy()
+        else:
+            image_size = photons_img_ready.size
             if hide_points:
                 background = self.background_img(image_size)
             else:
-                background = photons_img
-            arrows = self.connect_lines_img(connect_lines, image_size)
+                background = photons_img_ready
+            arrows = self.connect_lines_img(connect_lines_ready, image_size)
             arrows_rgba = self.rgb_to_rgba(arrows)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
@@ -187,3 +206,12 @@ class Print(Object3D):
         # Revert back to PIL Image and save
         img = Image.fromarray(na)
         return img
+    
+    def make_img_sparse(self, img, put_num):
+        scale_factor = put_num+1
+        img_arr = np.array(img)
+        sh = img_arr.shape
+        output_arr = np.full(shape=(sh[0]*scale_factor, sh[1]*scale_factor, 3), fill_value=0.0)
+        output_arr[0::scale_factor, 0::scale_factor, :] = img_arr
+        output_img = Image.fromarray(np.uint8(output_arr)).convert('RGB')
+        return output_img
