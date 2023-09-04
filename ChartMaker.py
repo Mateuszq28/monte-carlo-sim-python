@@ -31,6 +31,17 @@ class ChartMaker():
             propSetup.resultRecords.insert(0, [300, 0, 0, 0, 30.0])
             propSetup.resultRecords.insert(0, [200, 0, 0, 0, 5.0])
 
+
+        # PREPARE STANDARD ARROWS
+        if do_connect_lines:
+            standard_connect_lines = ChartMaker.prepare_standard_connect_lines(propSetup)
+            standard_hide_points = False
+        else:
+            standard_connect_lines = None
+            standard_hide_points = False
+
+
+
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
         # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
         #                                       cs_material="solid",
@@ -43,9 +54,6 @@ class ChartMaker():
 
 
 
-
-
-
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
         # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
@@ -53,10 +61,6 @@ class ChartMaker():
         #                           color_scheme = color_scheme)
 
         
-
-
-
-
 
         # SHOW RESULT RECORDS
         sl = list(range(10,20)) + list(range(30,40))
@@ -84,6 +88,7 @@ class ChartMaker():
                                       do_connect_lines = do_connect_lines)
 
         
+
         if sl is not None:
             for s in sl:
                 select_photon_id = [s]
@@ -99,7 +104,6 @@ class ChartMaker():
                                               sum_same_idx = False,
                                               do_connect_lines = do_connect_lines)
         
-                
 
 
 
@@ -113,6 +117,8 @@ class ChartMaker():
         #                            bins_per_cm = propSetup.config["bins_per_1_cm"],
         #                            color_scheme = color_scheme,
         #                            show = False)
+
+
 
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
@@ -383,5 +389,23 @@ class ChartMaker():
         vis = ByVispy()
         vis.show_body(object3d)
 
+    @staticmethod
+    def prepare_standard_connect_lines(propSetup: PropSetup):
+        CPDF = ColorPointDF()
+        sh = propSetup.propEnv.shape
+        border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
+        df_arrows = CPDF.from_resultRecords(resultRecords = propSetup.resultRecords,
+                                            color_scheme = "photonwise",
+                                            drop_values = None,
+                                            select_photon_id = None,
+                                            photon_register = propSetup.photon_register,
+                                            select_parent = True,
+                                            select_child = True,
+                                            border_limits = border_limits,
+                                            sum_same_idx = False,
+                                            sort = False)
+        ADF = ArrowsDF()
+        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=False)
+        return standard_connect_lines
 
 
