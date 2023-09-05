@@ -37,7 +37,7 @@ class PropEnv(Object3D):
         return n
     
     def env_boundary_check(self, xyz):
-        xyz_int = self.round_xyz(xyz)
+        xyz_int = PropEnv.round_xyz(xyz)
         env_boundary_exceeded = False
         for i in range(3):
             if xyz_int[i] > self.shape[i]-1 or xyz_int[i] < 0:

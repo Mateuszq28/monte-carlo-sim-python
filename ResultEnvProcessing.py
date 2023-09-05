@@ -89,7 +89,8 @@ class ResultEnvProcessing():
     
     @staticmethod
     def is_in_borders(record, borders):
-        x, y, z = record[1:4]
+        xyz = record[1:4]
+        x, y, z = PropEnv.round_xyz(xyz)
         x_in = x >= borders[0] and x <= borders[1]-1
         y_in = y >= borders[2] and y <= borders[3]-1
         z_in = z >= borders[4] and z <= borders[5]-1

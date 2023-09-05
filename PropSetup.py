@@ -84,14 +84,18 @@ class PropSetup:
         self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         
     def save2resultRecords(self, xyz, weight, photon_id, round=True):
+        # check if create resultRecords container
         if self.resultRecords is None:
             self.resultRecords = []
+        # float int conversion
         if round:
             xyz_save = PropEnv.round_xyz(xyz)
         else:
             xyz_save = xyz.copy()
-        if isinstance(xyz_save,np.ndarray):
+        # data type cohesion
+        if isinstance(xyz_save, np.ndarray):
             xyz_save = xyz_save.tolist()
+        # save
         record = [photon_id] + xyz_save + [weight]
         self.resultRecords.append(record)
 

@@ -130,7 +130,7 @@ class Sim():
         if not env_boundary_exceeded:
             if boundary_change:
                 # save photon position with no absorb weight
-                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.0, photon_id=photon.id)
+                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.0, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
 
                 incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                 reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
@@ -192,7 +192,7 @@ class Sim():
                 photon.pos = next_pos
         else:
             # ignore the further path of the photon - photon escape from tissue
-            self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id)
+            self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
             photon.pos = next_pos
             self.propSetup.escaped_photons_weight += photon.weight
             # stop tracking
@@ -202,7 +202,7 @@ class Sim():
 
     def drop(self, photon:Photon, mu_a, mu_s, mu_t):
         w_drop = photon.weight * (mu_a / mu_t)
-        self.propSetup.save2result_env_and_records(xyz=photon.pos, weight=w_drop, photon_id=photon.id)
+        self.propSetup.save2result_env_and_records(xyz=photon.pos, weight=w_drop, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
         photon.weight = photon.weight * (mu_s / mu_t)
 
 

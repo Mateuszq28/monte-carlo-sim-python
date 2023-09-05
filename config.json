@@ -12,6 +12,8 @@
 
     "flag_make_prop_setup_from_componentes": false,
 
+    "flag_result_records_pos_int": false,
+
     "random_seed": 0,
     "precision": 8,
     "bins_per_1_cm": 500,
