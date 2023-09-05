@@ -10,7 +10,8 @@ class ArrowsDF():
         df = df.copy()
         if "photon_id" not in df:
             raise ValueError("df must have photon_id column")
-        df.sort_values(by=['photon_id'], inplace=True)
+        # Do not sort like this! It will also change order within the same photon_id
+        # df.sort_values(by=['photon_id'], inplace=True)
         move_idx = [(i+1) % len(df) for i in range(len(df))]
         df[["x_idx_2", "y_idx_2", "z_idx_2", "photon_id_2"]] = df.iloc[move_idx][["x_idx", "y_idx", "z_idx", "photon_id"]].to_numpy()
         # drop last row (it's photon_idx_2 is hookeded up to the first row)

@@ -94,8 +94,8 @@ class ChartMaker():
         if sl is not None:
             take_group = 2
             for i in range(len(sl)+1-take_group):
+                select_photon_id = [sl[i]]
                 select_photon_id = sl[i:i+take_group]
-                # select_photon_id = [sl[i]]
                 local_color_scheme = "photonwise"
                 ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
                                               title = "({}) one photon path - color_scheme = ".format(i) + local_color_scheme,
@@ -380,15 +380,15 @@ class ChartMaker():
                                              sort = True)
         if do_connect_lines:
             df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
-                                                 color_scheme = "photonwise",
-                                                 drop_values = None,
-                                                 select_photon_id = select_photon_id,
-                                                 photon_register = photon_register,
-                                                 select_parent = select_parent,
-                                                 select_child = select_child,
-                                                 border_limits = None,
-                                                 sum_same_idx = False,
-                                                 sort = False)
+                                                        color_scheme = "photonwise",
+                                                        drop_values = None,
+                                                        select_photon_id = select_photon_id,
+                                                        photon_register = photon_register,
+                                                        select_parent = select_parent,
+                                                        select_child = select_child,
+                                                        border_limits = None,
+                                                        sum_same_idx = False,
+                                                        sort = False)
             ADF = ArrowsDF()
             connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
             hide_points = False
