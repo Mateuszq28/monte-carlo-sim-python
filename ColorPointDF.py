@@ -321,6 +321,11 @@ class ColorPointDF():
             df.drop("photon_id", axis="columns", inplace=True)
 
         
-
-
+    @staticmethod
+    def make_sparse(df, put_num):
+        scale = put_num+1
+        df[["x_idx", "y_idx", "z_idx"]] = df[["x_idx", "y_idx", "z_idx"]] * scale
+        return df
+    
+    
         

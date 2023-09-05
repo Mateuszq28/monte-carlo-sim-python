@@ -104,10 +104,40 @@ class Print(Object3D):
             img_arr = None
             ValueError("axis must be in {0,1,2}")
         photons_img = self.arr2D_to_img(img_arr, color_scheme)
+        # decide if put empty rows and columns between data points (decide in seperate cases)
+        if connect_lines is None:
+            do_sparse = False
+        else:
+            do_sparse = True
+        # do sparse data
+        if do_sparse:
+            put_num = 20
+            # sparse background with photons
+            photons_img = photons_img.copy()
+            photons_img = self.make_img_sparse(photons_img, put_num=put_num)
+            # sparse arrows
+            if connect_lines is not None:
+                connect_lines = connect_lines.copy()
+                connect_lines = ArrowsDF.make_sparse(connect_lines, put_num)
         img = self.blend_with_connect_lines(photons_img, connect_lines=connect_lines, hide_points=hide_points)
         self.img2png(img, dir, filename)
 
     def projectionResultRecordsDF_to_png(self, resultRecordsDF, image_shape, dir="photonwise_projection_img", filename="projection_df.png", connect_lines=None, hide_points=False):
+        # decide if put empty rows and columns between data points (decide in seperate cases)
+        if connect_lines is None:
+            do_sparse = False
+        else:
+            do_sparse = True
+        # do sparse data
+        if do_sparse:
+            put_num = 20
+            # sparse background with photons
+            resultRecordsDF = resultRecordsDF.copy()
+            resultRecordsDF = ColorPointDF.make_sparse(resultRecordsDF, put_num=put_num)
+            # sparse arrows
+            if connect_lines is not None:
+                connect_lines = connect_lines.copy()
+                connect_lines = ArrowsDF.make_sparse(connect_lines, put_num)
         photons_img = self.projectionResultRecordsDF_to_img(resultRecordsDF, image_shape)
         img = self.blend_with_connect_lines(photons_img, connect_lines=connect_lines, hide_points=hide_points)
         self.img2png(img, dir, filename)
@@ -147,21 +177,6 @@ class Print(Object3D):
         return img
     
     def blend_with_connect_lines(self, photons_img: Image.Image, connect_lines=None, hide_points=False):
-        photons_img = photons_img.copy()
-        # decide if put empty rows and columns between data points (decide in seperate cases)
-        if connect_lines is None:
-            do_sparse = False
-        else:
-            do_sparse = True
-            connect_lines = connect_lines.copy()
-        # do sparse image
-        if do_sparse:
-            put_num = 20
-            # sparse background img with photons
-            photons_img = self.make_img_sparse(photons_img, put_num=put_num)
-            # sparse arrows
-            if connect_lines is not None:
-                connect_lines = ArrowsDF.make_sparse(connect_lines, put_num)
         # blending
         if connect_lines is None:
             img = photons_img
