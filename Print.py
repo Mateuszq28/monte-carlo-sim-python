@@ -131,6 +131,9 @@ class Print(Object3D):
         # do sparse data
         if do_sparse:
             put_num = 20
+            image_shape = image_shape.copy()
+            image_shape[0] = image_shape[0] * (put_num+1)
+            image_shape[1] = image_shape[1] * (put_num+1)
             # sparse background with photons
             resultRecordsDF = resultRecordsDF.copy()
             resultRecordsDF = ColorPointDF.make_sparse(resultRecordsDF, put_num=put_num)

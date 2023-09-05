@@ -172,7 +172,7 @@ class ChartMaker():
                                                           sum_axis = False,
                                                           reset_png_colors = None,
                                                           show = True,
-                                                          title_prefix = "({}) ".format(s),
+                                                          title_prefix = "({}) ".format(i),
                                                           do_connect_lines = do_connect_lines,
                                                           reset_colors = local_reset_colors)
 
