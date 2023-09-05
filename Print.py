@@ -192,7 +192,7 @@ class Print(Object3D):
             arrows_rgba = self.connect_lines_img_pil(connect_lines, image_size)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
-            alpha = 123
+            alpha = 220
             # mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
             # mask = Image.new('L', arrows_rgba.size, alpha)
             mask = arrows_rgba.copy().convert('L')
