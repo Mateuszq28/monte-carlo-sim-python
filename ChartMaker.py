@@ -327,7 +327,7 @@ class ChartMaker():
                                                photon_register = photon_register,
                                                select_parent = select_parent,
                                                select_child = select_child,
-                                               border_limits = border_limits,
+                                               border_limits = None,
                                                sum_same_idx = False,
                                                sort = False)
             ADF = ArrowsDF()
@@ -384,7 +384,7 @@ class ChartMaker():
                                                  photon_register = photon_register,
                                                  select_parent = select_parent,
                                                  select_child = select_child,
-                                                 border_limits = border_limits,
+                                                 border_limits = None,
                                                  sum_same_idx = False,
                                                  sort = False)
             ADF = ArrowsDF()
@@ -416,7 +416,7 @@ class ChartMaker():
                                             photon_register = propSetup.photon_register,
                                             select_parent = True,
                                             select_child = True,
-                                            border_limits = border_limits,
+                                            border_limits = None,
                                             sum_same_idx = False,
                                             sort = False)
         ADF = ArrowsDF()
