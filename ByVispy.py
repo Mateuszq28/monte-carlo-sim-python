@@ -200,7 +200,7 @@ class ByVispy(View):
 
             if connect_lines is not None:
                 # pos - line body
-                arrow_pos = np.empty((len(connect_lines)*2, 3), dtype=int)
+                arrow_pos = np.empty((len(connect_lines)*2, 3), dtype=float)
                 arrow_pos[0::2] = connect_lines[["x_idx", "y_idx", "z_idx"]]
                 arrow_pos[1::2] = connect_lines[["x_idx_2", "y_idx_2", "z_idx_2"]]
                 # line color

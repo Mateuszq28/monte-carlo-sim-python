@@ -311,6 +311,7 @@ class ColorPointDF():
     
     @staticmethod
     def sum_same_idx(df: pd.DataFrame, subset=None):
+        df[["x_idx", "y_idx", "z_idx"]] = df[["x_idx", "y_idx", "z_idx"]].round().astype(int)
         if subset is None:
             subset = ["x_idx", "y_idx", "z_idx"]
         sums = df.groupby(by=subset, as_index=False, sort=False, dropna=False)["value"].sum()
