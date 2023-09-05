@@ -76,28 +76,36 @@ class PropSetup:
         self.save2resultRecords(xyz, weight, photon_id, round)
 
     def save2resultEnv(self, xyz, weight):
-        if self.resultEnv is None:
-            sh = self.propEnv.shape
-            arr = np.full(shape=sh, fill_value=0.0, dtype=np.float64)
-            self.resultEnv = PropEnv(arr=arr)
-        xyz_int = PropEnv.round_xyz(xyz)
-        self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
+        if self.config is not None:
+            if self.config["flag_save_result_env"]:
+                if self.resultEnv is None:
+                    sh = self.propEnv.shape
+                    arr = np.full(shape=sh, fill_value=0.0, dtype=np.float64)
+                    self.resultEnv = PropEnv(arr=arr)
+                xyz_int = PropEnv.round_xyz(xyz)
+                self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
+        else:
+            raise ValueError("self.config is needed")
         
     def save2resultRecords(self, xyz, weight, photon_id, round=True):
-        # check if create resultRecords container
-        if self.resultRecords is None:
-            self.resultRecords = []
-        # float int conversion
-        if round:
-            xyz_save = PropEnv.round_xyz(xyz)
+        if self.config is not None:
+            if self.config["flag_seve_result_records"]:
+                # check if create resultRecords container
+                if self.resultRecords is None:
+                    self.resultRecords = []
+                # float int conversion
+                if round:
+                    xyz_save = PropEnv.round_xyz(xyz)
+                else:
+                    xyz_save = xyz.copy()
+                # data type cohesion
+                if isinstance(xyz_save, np.ndarray):
+                    xyz_save = xyz_save.tolist()
+                # save
+                record = [photon_id] + xyz_save + [weight]
+                self.resultRecords.append(record)
         else:
-            xyz_save = xyz.copy()
-        # data type cohesion
-        if isinstance(xyz_save, np.ndarray):
-            xyz_save = xyz_save.tolist()
-        # save
-        record = [photon_id] + xyz_save + [weight]
-        self.resultRecords.append(record)
+            raise ValueError("self.config is needed")
 
     def save_result_json(self, folder):
         if self.resultEnv is not None:
