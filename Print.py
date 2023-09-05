@@ -147,39 +147,39 @@ class Print(Object3D):
         return img
     
     def blend_with_connect_lines(self, photons_img: Image.Image, connect_lines=None, hide_points=False):
+        photons_img = photons_img.copy()
         # decide if put empty rows and columns between data points (decide in seperate cases)
         if connect_lines is None:
             do_sparse = False
-            connect_lines_ready = None
         else:
             do_sparse = True
-            connect_lines_ready = connect_lines.copy()
+            connect_lines = connect_lines.copy()
         # do sparse image
         if do_sparse:
-            put_num = 7
+            put_num = 20
             # sparse background img with photons
-            photons_img_ready = self.make_img_sparse(photons_img, put_num=put_num)
+            photons_img = self.make_img_sparse(photons_img, put_num=put_num)
             # sparse arrows
             if connect_lines is not None:
-                connect_lines_ready = ArrowsDF.make_sparse(connect_lines_ready, put_num)
-        else:
-            photons_img_ready = photons_img
+                connect_lines = ArrowsDF.make_sparse(connect_lines, put_num)
         # blending
         if connect_lines is None:
-            img = photons_img_ready.copy()
+            img = photons_img
         else:
-            image_size = photons_img_ready.size
+            image_size = photons_img.size
             if hide_points:
                 background = self.background_img(image_size)
             else:
-                background = photons_img_ready
-            arrows = self.connect_lines_img_pil(connect_lines_ready, image_size)
-            arrows_rgba = self.rgb_to_rgba(arrows)
+                background = photons_img
+            arrows_rgba = self.connect_lines_img_pil(connect_lines, image_size)
             background_rgba = self.rgb_to_rgba(background)
             #create a mask using RGBA to define an alpha channel to make the overlay transparent
-            alpha = 255
-            mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
-            img = Image.composite(background_rgba, arrows_rgba, mask).convert('RGB')
+            alpha = 123
+            # mask = Image.new('RGBA', arrows_rgba.size, (0,0,0,alpha))
+            # mask = Image.new('L', arrows_rgba.size, alpha)
+            mask = arrows_rgba.copy().convert('L')
+            mask = mask.point( lambda p: alpha if p > 0 else 0 )
+            img = Image.composite(arrows_rgba, background_rgba, mask).convert('RGB')
         return img
     
     def connect_lines_img_cv2(self, connect_lines: pd.DataFrame, image_size):
@@ -198,6 +198,8 @@ class Print(Object3D):
             b = connect_lines["B"].iloc[i]
             a = connect_lines["A"].iloc[i]
             x,y,x2,y2,r,g,b,a = [int(val) for val in [x,y,x2,y2,r,g,b,a]]
+            if x == x2 and y == y2:
+                continue
             # OpenCV uses BGR rather than RGB
             width = 1
             na = cv2.arrowedLine(na, (y,x), (y2,x2), (b,g,r,a), width)
@@ -219,12 +221,14 @@ class Print(Object3D):
             b = connect_lines["B"].iloc[i]
             a = connect_lines["A"].iloc[i]
             x,y,x2,y2,r,g,b,a = [int(val) for val in [x,y,x2,y2,r,g,b,a]]
+            if x == x2 and y == y2:
+                continue
             width = 1
-            im = self.arrowedLine(im, ptA=(x,y), ptB=(x2,y2), width=width, color=(r,g,b,a))
+            im = self.arrowedLine(im, ptA=(y,x), ptB=(y2,x2), width=width, color=(r,g,b,a))
         return im
     
     @staticmethod
-    def arrowedLine(im, ptA, ptB, width=1, color=(0,255,0,1)):
+    def arrowedLine(im, ptA, ptB, width=1, color=(0,255,0,255)):
         """
         Draw line from ptA to ptB with arrowhead at ptB
         source: https://stackoverflow.com/questions/63671018/how-can-i-draw-an-arrow-using-pil
@@ -242,7 +246,7 @@ class Print(Object3D):
         x1, y1 = ptB
         vec_len = np.linalg.norm([x1-x0, y1-y0])
         # Now we can work out the x,y coordinates of the bottom of the arrowhead triangle
-        n = 3.0
+        n = 5.0
         xb = x1 - n*(x1-x0)/vec_len
         yb = y1 - n*(y1-y0)/vec_len
         # Work out the other two vertices of the triangle
@@ -259,8 +263,12 @@ class Print(Object3D):
             alpha = math.atan2(y1-y0,x1-x0)-90*math.pi/180
             a = m*math.cos(alpha)
             b = m*math.sin(alpha)
-            vtx0 = (xb+a, yb-b)
-            vtx1 = (xb-a, yb+b)
+            # (yx mode)
+            vtx0 = (xb+a, yb+b)
+            vtx1 = (xb-a, yb-b)
+            # (xy mode)
+            # vtx0 = (xb+a, yb-b)
+            # vtx1 = (xb-a, yb+b)
         # Now draw the arrowhead triangle
         draw.polygon([vtx0, vtx1, ptB], fill=color)
         return im
