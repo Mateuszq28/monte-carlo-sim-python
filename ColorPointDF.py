@@ -241,12 +241,12 @@ class ColorPointDF():
             df = df[df["photon_id"].isin(select_photon_id)]
         # filter values in border limit
         if border_limits is not None:
-            df = df[df["x_idx"] >= border_limits[0]]
-            df = df[df["x_idx"] <= border_limits[1]-1]
-            df = df[df["y_idx"] >= border_limits[2]]
-            df = df[df["y_idx"] <= border_limits[3]-1]
-            df = df[df["z_idx"] >= border_limits[4]]
-            df = df[df["z_idx"] <= border_limits[5]-1]
+            df = df[df["x_idx"].round() >= border_limits[0]]
+            df = df[df["x_idx"].round() <= border_limits[1]-1]
+            df = df[df["y_idx"].round() >= border_limits[2]]
+            df = df[df["y_idx"].round() <= border_limits[3]-1]
+            df = df[df["z_idx"].round() >= border_limits[4]]
+            df = df[df["z_idx"].round() <= border_limits[5]-1]
         # sum values (photon weights) on the same localization idx and delete duplicates
         if sum_same_idx:
             self.sum_same_idx(df)

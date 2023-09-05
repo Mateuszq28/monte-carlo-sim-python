@@ -154,7 +154,8 @@ class Print(Object3D):
         new_arr2D[:,:,1] = default_color[1]
         new_arr2D[:,:,2] = default_color[2]
         # set arr2d
-        new_arr2D[resultRecordsDF["x_idx"].to_numpy(), resultRecordsDF["y_idx"].to_numpy(), :] = resultRecordsDF[["R", "G", "B"]].to_numpy()
+        indices = resultRecordsDF[["x_idx", "y_idx"]].round().to_numpy(dtype=int)
+        new_arr2D[indices[:,0], indices[:,1], :] = resultRecordsDF[["R", "G", "B"]].to_numpy()
         # Make PIL Image
         PIL_image = Image.fromarray(np.uint8(new_arr2D)).convert('RGB')
         return PIL_image
