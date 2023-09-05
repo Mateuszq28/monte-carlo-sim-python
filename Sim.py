@@ -77,7 +77,7 @@ class Sim():
                         # global coordinates
                         photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
                         # register start position in photon_register
-                        self.propSetup.photon_register[photon.id] = {"start_pos": photon.pos,
+                        self.propSetup.photon_register[photon.id] = {"start_pos": self.condition_round(photon.pos),
                                                                      "parent": None,
                                                                      "child": []
                                                                      }
@@ -167,7 +167,7 @@ class Sim():
                     # penetration ray - refraction
                     # new photon to track
                     refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1-R))
-                    self.propSetup.photon_register[refraction_photon.id] = {"start_pos": refraction_photon.pos,
+                    self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                             "parent": photon.id,
                                                                             "child": []
                                                                             }
@@ -259,6 +259,12 @@ class Sim():
                 self.propSetup.escaped_photons_weight += photon.weight
                 flag_terminate = True
         return flag_terminate
+    
+    def condition_round(self, xyz):
+        xyz = xyz.copy()
+        if self.config["flag_result_records_pos_int"]:
+            xyz = [round(val) for val in xyz]
+        return xyz
 
 
 

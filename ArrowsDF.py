@@ -42,7 +42,7 @@ class ArrowsDF():
         start_arrows = first_arrow_records.copy()
         start_arrows.drop_duplicates(subset="photon_id", keep="first", inplace=True)
         start_arrows[["x_idx_2", "y_idx_2", "z_idx_2"]] = start_arrows[["x_idx", "y_idx", "z_idx"]]
-        start_pos = np.array([np.array( photon_register[id]["start_pos"], dtype=int) for id in start_arrows["photon_id"]])
+        start_pos = np.array([np.array( photon_register[id]["start_pos"]) for id in start_arrows["photon_id"]])
         start_arrows[["x_idx", "y_idx", "z_idx"]] = start_pos
         return start_arrows
     
