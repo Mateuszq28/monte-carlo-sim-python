@@ -14,6 +14,7 @@ class ColorPointDF():
     use_threshold = "quantile"
     palette_1 = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9', '#3498DB', '#1ABC9C', '#16A085', '#27AE60', '#2ECC71', '#F1C40F', '#F39C12', '#E67E22', '#D35400', '#ECF0F1', '#BDC3C7', '#95A5A6', '#7F8C8D', '#34495E', '#2C3E50']
     palette_2 = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
+    old_color_dict = None
 
 
     def __init__(self):
@@ -23,7 +24,6 @@ class ColorPointDF():
         # set default loop color list
         # self.loop_color_names = self.palette_2
         self.loop_color_names = self.create_palette(30)
-        self.old_color_dict = None
 
     def create_palette(self, num_of_colors):
         # choose to how many parts split hsv color wheel (color space)
@@ -169,15 +169,15 @@ class ColorPointDF():
             if "photon_id" not in df.columns:
                 raise ValueError("df must have photon_id column")
             
-            if try_use_old_color_dict and self.old_color_dict is not None:
-                trans_color = self.old_color_dict
+            if try_use_old_color_dict and ColorPointDF.old_color_dict is not None:
+                trans_color = ColorPointDF.old_color_dict
             else:
                 uniq_photon_id = pd.unique(df['photon_id'])
                 rnd = MyRandom()
                 colors = [[rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)] for _ in range(len(uniq_photon_id))]
                 # id to color translator (dict)
                 trans_color = dict(zip(uniq_photon_id, colors))
-                self.old_color_dict = trans_color
+                ColorPointDF.old_color_dict = trans_color
                     
             # treanslate colors
             rgb = [trans_color[val] for val in df["photon_id"].values]
