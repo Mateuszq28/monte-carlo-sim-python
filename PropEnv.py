@@ -12,6 +12,7 @@ class PropEnv(Object3D):
             # get simulation config parameters
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
+        self.very_close_photons = set()
     
     def get_label_from_float(self, xyz):
         xyz_int = self.round_xyz(xyz)
@@ -54,10 +55,10 @@ class PropEnv(Object3D):
         vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
         # photon steps from position xyz to xyz_next 
-        linspace = np.linspace(0.0, 1.0, num=int(dist)+1)
+        linspace = np.linspace(0.0, 1.0, num=int(dist)+2, endpoint=True)
 
         # loop initiation values
-        boundary_pos = xyz_next
+        boundary_pos = xyz_next.copy()
         boundary_change = False
         boundary_norm_vec = None
         for t in linspace:
@@ -69,18 +70,30 @@ class PropEnv(Object3D):
             if label_in != label_check:
                 proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
                 if proposed_norm_vec is not None:
-                    boundary_change = True
                     boundary_pos = check_pos.tolist()
+                    boundary_change = True
                     boundary_norm_vec = proposed_norm_vec
+                    if tuple(xyz) in self.very_close_photons:
+                        print("Intersection done by photon from very_close_photons set!")
+                        print("debug xyz_in", xyz)
+                        print()
+                        self.very_close_photons.remove(xyz)
                     break
                 else:
                     print("Photon was very close to the tissue boundary, but there was not intersection")
+                    print("debug xyz_in", xyz)
+                    print("debug label_in", label_in)
+                    print("debug check_pos", check_pos)
+                    print("debug label_check", label_check)
+                    print("debug xyz_next", xyz_next)
+                    print("\n")
+                    self.very_close_photons.add(tuple(xyz))
         return boundary_pos, boundary_change, boundary_norm_vec
     
-    def plane_boundary_normal_vec(self, last_pos, boundary_pos):
+    def plane_boundary_normal_vec(self, last_pos, boundary_pos, debug=False):
         """
-        Finds normal vector to the boundary tissue plane using
-        Estimates the plane using Marching Cubes algorithm (8 marching cubes) in one local point (boundary_pos)
+        Finds normal vector to the boundary tissue plane using.
+        Estimates the plane using Marching Cubes algorithm (8 marching cubes) in one local point (boundary_pos).
         """
         boundary_pos_label = self.get_label_from_float(boundary_pos)
         # suggest cubes surrounding boundary point
@@ -89,14 +102,18 @@ class PropEnv(Object3D):
         
         # centroids distances from last_pos
         marching_cubes_distances = [math.dist(last_pos, cent) for cent in marching_cubes_centroids]
+        if debug:
+            print("marching_cubes_centroids", marching_cubes_centroids)
         
         # sort centroids by distances
         sorted_indices = np.argsort(marching_cubes_distances)
         marching_cubes_distances = np.array(marching_cubes_distances)[sorted_indices]
         marching_cubes_centroids = np.array(marching_cubes_centroids)[sorted_indices]
+        if debug:
+            print("sorted marching_cubes_centroids", marching_cubes_centroids)
 
-        # iter through marching cubes, find plane stretched on triangles,
-        # check if the ray intersect this plane, find its norm vector and intersection point
+        # - iter through marching cubes, find plane stretched on triangles,
+        # - check if the ray intersect this plane, find its norm vector and intersection point
         # loop initiation values
         return_norm_vec = None
         return_boundary_pos = boundary_pos.copy()
@@ -118,17 +135,35 @@ class PropEnv(Object3D):
             # remove intersection points that are not in range of marching cube with centroid in cent 
             normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + 0.5 and p[0] >= cent[0] - 0.5 and p[1] <= cent[1] + 0.5 and p[1] >= cent[1] - 0.5 and p[2] <= cent[2] + 0.5 and p[2] >= cent[2] - 0.5)]
 
+            if debug:
+                print("corners", corners)
+                print("corner_full_binary_code", corner_full_binary_code)
+                print("corner_full_decimal", corner_full_decimal)
+                print("triangles", triangles)
+                print("triangles_coordinates", triangles_coordinates)
+                print("triangles_planes", triangles_planes)
+                print("ray_intersect_planes", ray_intersect_planes)
+                print("normal_vec_and_intersect", normal_vec_and_intersect)
+                print("normal_vec_and_intersect_in_marching_cube", normal_vec_and_intersect_in_marching_cube)
+
             if len(normal_vec_and_intersect_in_marching_cube) == 0:
                 continue
             else:
                 return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0].copy()
                 return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1].copy()
-                # to be sure, that norm ector is directed outwards boundary plane
+                # to be sure, that norm vector is directed outwards boundary plane
                 ray_vec_out = (np.array(last_pos) - np.array(boundary_pos)).tolist()
                 alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
                 # alfa should be in <0,90> deg
                 if alfa > math.pi / 2:
                     return_norm_vec = (-np.array(return_norm_vec)).tolist()
+
+                if debug:
+                    print("return_norm_vec", return_norm_vec)
+                    print("return_boundary_pos", return_boundary_pos)
+                    print("ray_vec_out", ray_vec_out)
+                    print("alfa", alfa)
+
                 break
         return return_norm_vec, return_boundary_pos
 
@@ -153,14 +188,15 @@ class PropEnv(Object3D):
         max 8, less if some cube's points are not in env shape range
         """
         point_int = self.round_xyz(point)
+        # point_int = point
         marching_cubes_centroids = []
         # flags if corners are in env shape range
-        flag_x_plus = point_int[0] + 1 <= self.shape[0]
-        flag_x_minus = point_int[0] >= 1
-        flag_y_plus = point_int[1] + 1 <= self.shape[1]
-        flag_y_minus = point_int[1] >= 1
-        flag_z_plus = point_int[2] + 1 <= self.shape[2]
-        flag_z_minus = point_int[2] >= 1
+        flag_x_plus = point_int[0] + 1 <= self.shape[0] - 1
+        flag_x_minus = point_int[0] - 1 >= 0
+        flag_y_plus = point_int[1] + 1 <= self.shape[1] - 1
+        flag_y_minus = point_int[1] -1 >= 0
+        flag_z_plus = point_int[2] + 1 <= self.shape[2] - 1
+        flag_z_minus = point_int[2] -1 >= 0
         # add centroids of cubes
         if flag_x_plus:
             if flag_y_plus:

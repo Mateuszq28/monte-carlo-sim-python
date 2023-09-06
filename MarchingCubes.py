@@ -25,14 +25,14 @@ class MarchingCubes():
 		sets up cube vertices coordinates
 		:param centroid: centroid of Marching Cube coordinates
 		"""
-		c0 = [centroid[0]-0.5, centroid[0]-0.5, centroid[0]-0.5]
-		c1 = [centroid[0]+0.5, centroid[0]-0.5, centroid[0]-0.5]
-		c2 = [centroid[0]-0.5, centroid[0]-0.5, centroid[0]+0.5]
-		c3 = [centroid[0]+0.5, centroid[0]-0.5, centroid[0]+0.5]
-		c4 = [centroid[0]-0.5, centroid[0]+0.5, centroid[0]-0.5]
-		c5 = [centroid[0]+0.5, centroid[0]+0.5, centroid[0]-0.5]
-		c6 = [centroid[0]-0.5, centroid[0]+0.5, centroid[0]+0.5]
-		c7 = [centroid[0]+0.5, centroid[0]+0.5, centroid[0]+0.5]
+		c0 = [centroid[0]-0.5, centroid[1]-0.5, centroid[2]-0.5]
+		c1 = [centroid[0]+0.5, centroid[1]-0.5, centroid[2]-0.5]
+		c2 = [centroid[0]-0.5, centroid[1]-0.5, centroid[2]+0.5]
+		c3 = [centroid[0]+0.5, centroid[1]-0.5, centroid[2]+0.5]
+		c4 = [centroid[0]-0.5, centroid[1]+0.5, centroid[2]-0.5]
+		c5 = [centroid[0]+0.5, centroid[1]+0.5, centroid[2]-0.5]
+		c6 = [centroid[0]-0.5, centroid[1]+0.5, centroid[2]+0.5]
+		c7 = [centroid[0]+0.5, centroid[1]+0.5, centroid[2]+0.5]
 		corners = [c7, c6, c5, c4, c3, c2, c1, c0]
 		return corners
 

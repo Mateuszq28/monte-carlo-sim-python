@@ -8,6 +8,7 @@ import PIL
 from PIL import ImageColor
 import sys
 from vispy import app, visuals, scene
+from vispy.color import color_array
 import pandas as pd
 
 
@@ -231,6 +232,37 @@ class ByVispy(View):
                                              arrow_type = arrow_types[0],
                                              arrow_size = 5.0,
                                              arrow_color = arrow_arrow_color)
+                
+            # manually added border plane (rectangle)
+            flag_draw_plane = True
+            if flag_draw_plane:
+                # first set plane on which rectangle will be put
+                draw_plane = scene.visuals.Plane(width = 1.0,
+                                                 height = 1.0,
+                                                 direction = '+z',
+                                                 color = color_array.Color('blue'),
+                                                 edge_color = None,
+                                                 parent = view.scene)
+                s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50, 50, 1))
+                affine = s.as_matrix()
+                draw_plane.transform = affine
+                
+                # draw_plane = scene.visuals.Volume(vol,
+                #                                   parent=view.scene,
+                #                                   raycasting_mode='plane',
+                #                                   method='mip',
+                #                                   plane_thickness=3.0,
+                #                                   plane_position=(128, 60, 64),
+                #                                   plane_normal=(1, 0, 0))
+                
+                # draw_plane = scene.visuals.Rectangle(center = np.array([50/2-1, 50/2-1, 49.5]),
+                #                                      color = color_array.Color('blue'),
+                #                                      border_color = color_array.Color('red'),
+                #                                      border_width = 1,
+                #                                      height = 50,
+                #                                      width = 50,
+                #                                      radius = 0,
+                #                                      parent = view.scene)
 
             # run
             if sys.flags.interactive != 1:

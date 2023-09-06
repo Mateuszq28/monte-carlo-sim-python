@@ -155,8 +155,8 @@ class Sim():
                     refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
                     neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
                     beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
-                    print("n1:", n1)
-                    print("n2:", n2)
+                    # print("n1:", n1)
+                    # print("n2:", n2)
                     R = Space3dTools.internal_reflectance(alpha, beta)
 
                 traveled_dist = math.dist(photon.pos, boundary_pos)
