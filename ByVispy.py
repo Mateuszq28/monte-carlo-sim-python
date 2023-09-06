@@ -184,6 +184,12 @@ class ByVispy(View):
             view.camera.fov = 45
             view.camera.distance = 500
 
+            # camera rotating point
+            max_idx = colorPointDF[['x_idx', 'y_idx', 'z_idx']].max().to_numpy()
+            min_idx = colorPointDF[['x_idx', 'y_idx', 'z_idx']].min().to_numpy()
+            mid = (min_idx + max_idx) / 2
+            view.camera.center = mid
+
             # plot ! note the parent parameter
             if not hide_points:
                 p1 = Scatter3D(parent=view.scene)
@@ -240,7 +246,7 @@ class ByVispy(View):
                 draw_plane = scene.visuals.Plane(width = 1.0,
                                                  height = 1.0,
                                                  direction = '+z',
-                                                 color = color_array.Color('blue'),
+                                                 color = color_array.Color('white', alpha=1.0),
                                                  edge_color = None,
                                                  parent = view.scene)
                 s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50, 50, 1))

@@ -4,6 +4,7 @@ import numpy as np
 import math
 from MarchingCubes import MarchingCubes
 from Space3dTools import Space3dTools
+import warnings
 
 class PropEnv(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
@@ -71,17 +72,18 @@ class PropEnv(Object3D):
                 proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
                 if proposed_norm_vec is not None:
                     boundary_pos = check_pos.tolist()
+                    # boundary_pos = proposed_boundary_pos
                     boundary_change = True
                     boundary_norm_vec = proposed_norm_vec
                     if tuple(xyz) in self.very_close_photons:
                         print("Intersection done by photon from very_close_photons set!")
-                        print("debug xyz_in", xyz)
+                        print("debug xyz in", xyz)
                         print()
                         self.very_close_photons.remove(xyz)
                     break
                 else:
                     print("Photon was very close to the tissue boundary, but there was not intersection")
-                    print("debug xyz_in", xyz)
+                    print("debug xyz in", xyz)
                     print("debug label_in", label_in)
                     print("debug check_pos", check_pos)
                     print("debug label_check", label_check)
@@ -133,7 +135,14 @@ class PropEnv(Object3D):
             # normal vec + intersection point, filter out None values
             normal_vec_and_intersect = [[plane_eq[:3], intersect] for plane_eq, intersect in zip(triangles_planes, ray_intersect_planes) if intersect is not None]
             # remove intersection points that are not in range of marching cube with centroid in cent 
-            normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + 0.5 and p[0] >= cent[0] - 0.5 and p[1] <= cent[1] + 0.5 and p[1] >= cent[1] - 0.5 and p[2] <= cent[2] + 0.5 and p[2] >= cent[2] - 0.5)]
+            cmv = MarchingCubes.cmv
+            normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
+            # check if intersection wasn't somewhere between +cmv and +0.5
+            cmv = 0.5
+            control_list = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
+            if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):
+                print("warning")
+                warnings.warn("WARNING! Photon slipped in between marching cubes!")
 
             if debug:
                 print("corners", corners)
@@ -187,6 +196,7 @@ class PropEnv(Object3D):
         suggest cubes surrounding boundary point
         max 8, less if some cube's points are not in env shape range
         """
+        cmv = MarchingCubes.cmv
         point_int = self.round_xyz(point)
         # point_int = point
         marching_cubes_centroids = []
@@ -201,57 +211,57 @@ class PropEnv(Object3D):
         if flag_x_plus:
             if flag_y_plus:
                 if flag_z_plus:
-                    centroid = [val + 0.5 for val in point_int]
+                    centroid = [val + cmv for val in point_int]
                     marching_cubes_centroids.append(centroid.copy())
                 
                 if flag_z_minus:
                     centroid = point_int.copy()
-                    centroid[0] += 0.5
-                    centroid[1] += 0.5
-                    centroid[2] -= 0.5
+                    centroid[0] += cmv
+                    centroid[1] += cmv
+                    centroid[2] -= cmv
                     marching_cubes_centroids.append(centroid.copy())
 
             if flag_y_minus:
                 if flag_z_plus:
                     centroid = point_int.copy()
-                    centroid[0] += 0.5
-                    centroid[1] -= 0.5
-                    centroid[2] += 0.5
+                    centroid[0] += cmv
+                    centroid[1] -= cmv
+                    centroid[2] += cmv
                     marching_cubes_centroids.append(centroid.copy())
 
                 if flag_z_minus:
                     centroid = point_int.copy()
-                    centroid[0] += 0.5
-                    centroid[1] -= 0.5
-                    centroid[2] -= 0.5
+                    centroid[0] += cmv
+                    centroid[1] -= cmv
+                    centroid[2] -= cmv
                     marching_cubes_centroids.append(centroid.copy())
 
         if flag_x_minus:
             if flag_y_plus:
                 if flag_z_plus:
                     centroid = point_int.copy()
-                    centroid[0] -= 0.5
-                    centroid[1] += 0.5
-                    centroid[2] += 0.5
+                    centroid[0] -= cmv
+                    centroid[1] += cmv
+                    centroid[2] += cmv
                     marching_cubes_centroids.append(centroid.copy())
                     
                 if flag_z_minus:
                     centroid = point_int.copy()
-                    centroid[0] -= 0.5
-                    centroid[1] += 0.5
-                    centroid[2] -= 0.5
+                    centroid[0] -= cmv
+                    centroid[1] += cmv
+                    centroid[2] -= cmv
                     marching_cubes_centroids.append(centroid.copy())
 
             if flag_y_minus:
                 if flag_z_plus:
                     centroid = point_int.copy()
-                    centroid[0] -= 0.5
-                    centroid[1] -= 0.5
-                    centroid[2] += 0.5
+                    centroid[0] -= cmv
+                    centroid[1] -= cmv
+                    centroid[2] += cmv
                     marching_cubes_centroids.append(centroid.copy())
 
                 if flag_z_minus:
-                    centroid = [val - 0.5 for val in point_int]
+                    centroid = [val - cmv for val in point_int]
                     marching_cubes_centroids.append(centroid.copy())
 
         return marching_cubes_centroids
@@ -268,4 +278,16 @@ class PropEnv(Object3D):
     def round_xyz(xyz):
         xyz_int = [round(val) for val in xyz]
         return xyz_int
+    
+    @staticmethod
+    def are_lists_with_same_vals(l1, l2):
+        le1 = len(l1)
+        le2 = len(l2)
+        if le1 != le2:
+            return False
+        for i in range(le1):
+            if l1[i] != l2[i]:
+                return False
+        return True
+        
     

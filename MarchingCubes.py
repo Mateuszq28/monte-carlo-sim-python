@@ -3,20 +3,22 @@ import numpy as np
 
 class MarchingCubes():
 
+	# corner move value
+	cmv = 0.499999999
 
 	Tringle_corner_offset_table = [
-			[0, -0.5, -0.5], #0
-			[0.5, -0.5, 0], #1
-			[0, -0.5, 0.5],
-			[-0.5, -0.5, 0],
-			[0, 0.5, -0.5],
-			[0.5, 0.5, 0],
-			[0, 0.5, 0.5],
-			[-0.5, 0.5, 0],
-			[-0.5, 0, -0.5],
-			[0.5, 0, -0.5],
-			[0.5, 0, 0.5],
-			[-0.5, 0, 0.5]
+			[0, -cmv, -cmv], #0
+			[cmv, -cmv, 0], #1
+			[0, -cmv, cmv],
+			[-cmv, -cmv, 0],
+			[0, cmv, -cmv],
+			[cmv, cmv, 0],
+			[0, cmv, cmv],
+			[-cmv, cmv, 0],
+			[-cmv, 0, -cmv],
+			[cmv, 0, -cmv],
+			[cmv, 0, cmv],
+			[-cmv, 0, cmv]
 		]
 
 	@staticmethod
@@ -25,14 +27,15 @@ class MarchingCubes():
 		sets up cube vertices coordinates
 		:param centroid: centroid of Marching Cube coordinates
 		"""
-		c0 = [centroid[0]-0.5, centroid[1]-0.5, centroid[2]-0.5]
-		c1 = [centroid[0]+0.5, centroid[1]-0.5, centroid[2]-0.5]
-		c2 = [centroid[0]-0.5, centroid[1]-0.5, centroid[2]+0.5]
-		c3 = [centroid[0]+0.5, centroid[1]-0.5, centroid[2]+0.5]
-		c4 = [centroid[0]-0.5, centroid[1]+0.5, centroid[2]-0.5]
-		c5 = [centroid[0]+0.5, centroid[1]+0.5, centroid[2]-0.5]
-		c6 = [centroid[0]-0.5, centroid[1]+0.5, centroid[2]+0.5]
-		c7 = [centroid[0]+0.5, centroid[1]+0.5, centroid[2]+0.5]
+		move = MarchingCubes.cmv
+		c0 = [centroid[0]-move, centroid[1]-move, centroid[2]-move]
+		c1 = [centroid[0]+move, centroid[1]-move, centroid[2]-move]
+		c2 = [centroid[0]-move, centroid[1]-move, centroid[2]+move]
+		c3 = [centroid[0]+move, centroid[1]-move, centroid[2]+move]
+		c4 = [centroid[0]-move, centroid[1]+move, centroid[2]-move]
+		c5 = [centroid[0]+move, centroid[1]+move, centroid[2]-move]
+		c6 = [centroid[0]-move, centroid[1]+move, centroid[2]+move]
+		c7 = [centroid[0]+move, centroid[1]+move, centroid[2]+move]
 		corners = [c7, c6, c5, c4, c3, c2, c1, c0]
 		return corners
 
