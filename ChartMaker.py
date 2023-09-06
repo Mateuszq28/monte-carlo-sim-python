@@ -32,6 +32,12 @@ class ChartMaker():
             propSetup.resultRecords.insert(0, [300, 0, 0, 0, 30.0])
             propSetup.resultRecords.insert(0, [200, 0, 0, 0, 5.0])
 
+        
+        # SHOW STATISTICS
+        print()
+        ChartMaker.show_statistics(propSetup)
+        print()
+
 
         # PREPARE STANDARD ARROWS
         if do_connect_lines:
@@ -68,16 +74,16 @@ class ChartMaker():
         sl = list(range(10,20)) + list(range(30,40))
         sl = None
         sl = list(range(10,15))
-        sl = list(range(0,100))
         sl = [0,1]
+        sl = list(range(0,100))
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
 
         select_photon_id = [97, 98]
         select_photon_id = None
-        very_close_photons = [220, 222, 285, 294, 588]
-        select_photon_id = very_close_photons
+        # very_close_photons = [220, 222, 285, 294, 588]
+        # select_photon_id = very_close_photons
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
@@ -93,22 +99,22 @@ class ChartMaker():
 
         
 
-        # if sl is not None:
-        #     take_group = 2
-        #     for i in range(len(sl)+1-take_group):
-        #         select_photon_id = [sl[i]]
-        #         select_photon_id = sl[i:i+take_group]
-        #         local_color_scheme = "photonwise"
-        #         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                       title = "({}) one photon path - color_scheme = ".format(i) + local_color_scheme,
-        #                                       color_scheme = local_color_scheme,
-        #                                       select_photon_id = select_photon_id,
-        #                                       photon_register = propSetup.photon_register,
-        #                                       select_parent = True,
-        #                                       select_child = True,
-        #                                       border_limits = border_limits,
-        #                                       sum_same_idx = False,
-        #                                       do_connect_lines = do_connect_lines)
+        if sl is not None:
+            take_group = 2
+            for i in range(len(sl)+1-take_group):
+                select_photon_id = [sl[i]]
+                select_photon_id = sl[i:i+take_group]
+                local_color_scheme = "photonwise"
+                ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+                                              title = "({}) one photon path - color_scheme = ".format(i) + local_color_scheme,
+                                              color_scheme = local_color_scheme,
+                                              select_photon_id = select_photon_id,
+                                              photon_register = propSetup.photon_register,
+                                              select_parent = True,
+                                              select_child = True,
+                                              border_limits = border_limits,
+                                              sum_same_idx = False,
+                                              do_connect_lines = do_connect_lines)
         
 
 
@@ -428,5 +434,14 @@ class ChartMaker():
         ADF = ArrowsDF()
         standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=False)
         return standard_connect_lines
+    
+    @staticmethod
+    def show_statistics(propSetup: PropSetup):
+        print("len(photon_register)", len(propSetup.photon_register))
+        print("len(resultRecords)", len(propSetup.resultRecords))
+        ids = set([col[0] for col in propSetup.resultRecords])
+        print("photons recorded:", len(ids))
+        print("max photon_id:", max(ids))
+        print("min photon_id:", min(ids))
 
 

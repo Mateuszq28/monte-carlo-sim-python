@@ -3,6 +3,7 @@ import numpy as np
 import math
 from Make import Make
 from PropSetup import PropSetup
+from MarchingCubes import MarchingCubes
 from Photon import Photon
 from Space3dTools import Space3dTools
 from FeatureSampling import FeatureSampling
@@ -115,89 +116,112 @@ class Sim():
 
 
     def try_move(self, photon:Photon, distance):
-        step = [distance * ax for ax in photon.dir]
-        next_pos = (np.array(photon.pos) + np.array(step)).tolist()
+        # photon.print_me()
+        if distance > 0 and photon.weight > 0:
+            step = [distance * ax for ax in photon.dir]
+            next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
-        # check if there was change of a material
-        boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
-        # check if photon is in env shape range
-        if boundary_change:
-            # photon interact with the tissue earlier
-            env_boundary_exceeded = False
-        else:
-            env_boundary_exceeded = self.propSetup.propEnv.env_boundary_check(next_pos)
-
-        if not env_boundary_exceeded:
+            # check if there was change of a material
+            boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+            # check if photon is in env shape range
             if boundary_change:
-                # save photon position with no absorb weight
-                self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.0, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
-
-                incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
-                reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
-
-                # Total internal reflection
-                R = 0 # init value
-                neg_incident_vec = Space3dTools.negative_vector(incident_vec)
-                alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
-                refraction_vec = None
-                    # refractive indices
-                n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
-                n2 = self.propSetup.propEnv.get_refractive_index(xyz=boundary_pos)
-                if n2 < n1:
-                    critical_alpha = math.asin(n2 / n1)
-                    if alpha > critical_alpha:
-                        # internal reflectance
-                        R = 1.
-
-                # if R was not set
-                # (if there was not total internal reflection)
-                if R == 0:
-                    refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
-                    neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
-                    beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
-                    # print("n1:", n1)
-                    # print("n2:", n2)
-                    R = Space3dTools.internal_reflectance(alpha, beta)
-
-                traveled_dist = math.dist(photon.pos, boundary_pos)
-                rest_dist = distance - traveled_dist
-
-                if R < 1.:
-                    # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
-                    # penetration ray - refraction
-                    # new photon to track
-                    refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1-R))
-                    self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
-                                                                            "parent": photon.id,
-                                                                            "child": []
-                                                                            }
-                    self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
-                    self.try_move(refraction_photon, rest_dist)
-                    self.propagate_photon(refraction_photon)
-                    # update old photon
-                    photon.weight *= R
-
-                # update old photon
-                # do this code in both cases:
-                # case 1: when R is 1 (only reflection),
-                #   no need to change photon weight
-                # case 2: when R < 1. (reflection and refraction, but refraction was served above),
-                #   also reflection weight was changed above
-                photon.pos = boundary_pos
-                photon.dir = reflect_vec
-                self.try_move(photon, rest_dist)
-            
+                # photon interact with the tissue earlier
+                env_boundary_exceeded = False
             else:
-                # photon just moved in the same tissue
+                env_boundary_exceeded = self.propSetup.propEnv.env_boundary_check(next_pos)
+
+            if not env_boundary_exceeded:
+                if boundary_change:
+                    # save photon position with no absorb weight
+                    self.propSetup.save2resultRecords(xyz=boundary_pos, weight=0.0, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
+
+                    incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
+                    reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
+                    # min_step_correction = 0
+                    min_step_correction = 0.000000001
+                    min_step = 0.5 - MarchingCubes.cmv + min_step_correction
+                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(boundary_change))
+
+                    # Total internal reflection
+                    R = 0.0 # init value
+                    neg_incident_vec = Space3dTools.negative_vector(incident_vec)
+                    alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
+                    refraction_vec = None
+                        # refractive indices
+                    n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
+                    n2 = self.propSetup.propEnv.get_refractive_index(xyz=passed_boundary_pos)
+                    if n2 < n1:
+                        critical_alpha = math.asin(n2 / n1)
+                        if alpha > critical_alpha:
+                            # internal reflectance
+                            R = 1.0
+
+                    # if R was not set
+                    # (if there was not total internal reflection)
+                    if R == 0.0:
+                        refraction_vec = Space3dTools.refraction_vec(incident_vec, boundary_norm_vec, n1, n2)
+                        neg_normal_vec = Space3dTools.negative_vector(boundary_norm_vec)
+                        beta = Space3dTools.angle_between_vectors(refraction_vec, neg_normal_vec)
+                        # print("n1:", n1)
+                        # print("n2:", n2)
+                        R = Space3dTools.internal_reflectance(alpha, beta)
+
+                    traveled_dist = math.dist(photon.pos, boundary_pos)
+                    rest_dist = distance - traveled_dist - min_step
+
+                    if R == 0.0:
+                        # ONLY REFRACTION (OLD RAY)
+                        # penetration ray - refraction
+                        photon.weight *= (1.0-R)
+                        photon.pos = boundary_pos
+                        photon.dir = refraction_vec
+                        self.just_move(photon, min_step)
+                        self.try_move(photon, rest_dist)
+
+                    if 0.0 < R < 1.0:
+                        # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
+                        # penetration ray - refraction
+                        # new photon to track
+                        refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1.0-R))
+                        self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
+                                                                                "parent": photon.id,
+                                                                                "child": []
+                                                                                }
+                        self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
+                        self.just_move(refraction_photon, min_step)
+                        self.try_move(refraction_photon, rest_dist)
+                        self.propagate_photon(refraction_photon)
+                        # update old photon (reflection one)
+                        photon.weight *= R
+                        photon.pos = boundary_pos
+                        photon.dir = reflect_vec
+                        self.just_move(photon, min_step)
+                        self.try_move(photon, rest_dist)
+
+                    if R == 1.0:
+                        # ONLY REFLECTION (OLD RAY)
+                        photon.weight *= R
+                        photon.pos = boundary_pos
+                        photon.dir = reflect_vec
+                        self.just_move(photon, min_step)
+                        self.try_move(photon, rest_dist)
+                
+                else:
+                    # photon just moved in the same tissue
+                    photon.pos = next_pos
+            else:
+                # ignore the further path of the photon - photon escape from tissue
+                self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
                 photon.pos = next_pos
-        else:
-            # ignore the further path of the photon - photon escape from tissue
-            self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
-            photon.pos = next_pos
-            self.propSetup.escaped_photons_weight += photon.weight
-            # stop tracking
-            # with a weight of zero, the algorithm will finish tracking (loop condition)
-            photon.weight = 0
+                self.propSetup.escaped_photons_weight += photon.weight
+                # stop tracking
+                # with a weight of zero, the algorithm will finish tracking (loop condition)
+                photon.weight = 0.0
+
+
+    def just_move(self, photon: Photon, step):
+        vec = np.array(photon.dir) / np.linalg.norm(photon.dir) * step
+        photon.pos = [p+s for p, s in zip(photon.pos, vec)]
 
 
     def drop(self, photon:Photon, mu_a, mu_s, mu_t):

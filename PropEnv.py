@@ -71,8 +71,8 @@ class PropEnv(Object3D):
             if label_in != label_check:
                 proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
                 if proposed_norm_vec is not None:
-                    boundary_pos = check_pos.tolist()
-                    # boundary_pos = proposed_boundary_pos
+                    # boundary_pos = check_pos.tolist()
+                    boundary_pos = proposed_boundary_pos
                     boundary_change = True
                     boundary_norm_vec = proposed_norm_vec
                     if tuple(xyz) in self.very_close_photons:
@@ -138,11 +138,12 @@ class PropEnv(Object3D):
             cmv = MarchingCubes.cmv
             normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
             # check if intersection wasn't somewhere between +cmv and +0.5
-            cmv = 0.5
-            control_list = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
-            if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):
-                print("warning")
-                warnings.warn("WARNING! Photon slipped in between marching cubes!")
+            if MarchingCubes.cmv != 0.5:
+                cmv = 0.5
+                control_list = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
+                if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):
+                    print("warning")
+                    warnings.warn("WARNING! Photon slipped in between marching cubes!")
 
             if debug:
                 print("corners", corners)

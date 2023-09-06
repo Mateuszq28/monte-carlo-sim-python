@@ -16,4 +16,10 @@ class Photon():
         self.id = Photon.static_photon_id_counter
         Photon.static_photon_id_counter += 1
 
+    def print_me(self):
+        print("self.pos", self.pos)
+        print("self.dir", self.dir)
+        print("self.weight", self.weight)
+        print("self.id", self.id)
+
 
