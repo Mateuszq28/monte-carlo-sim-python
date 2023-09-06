@@ -98,16 +98,28 @@ class Sim():
             _, _, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
             # move photon to new position
             self.hop(photon, mu_t)
-            # photon.weight is set to 0 when photon escape env
-            if photon.weight == 0:
+            # do the rest, get termination flag
+            flag_break = self.after_hop(photon)
+            if flag_break:
                 break
-            # absorb light in medium
-            mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
-            self.drop(photon, mu_a, mu_s, mu_t)
-            self.spin(photon)
-            flag_terminate = self.terminate(photon)
-            if flag_terminate:
-                break
+            
+
+    def after_hop(self, photon: Photon):
+        """
+        Second part of propagation.
+        Returns flag if terminate.
+        """
+        # photon.weight is set to 0 when photon escape env
+        if photon.weight == 0:
+            return True
+        # absorb light in medium
+        mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+        self.drop(photon, mu_a, mu_s, mu_t)
+        self.spin(photon)
+        flag_terminate = self.terminate(photon)
+        if flag_terminate:
+            return True
+        return False
 
             
     def hop(self, photon: Photon, mu_t):
@@ -117,7 +129,7 @@ class Sim():
 
     def try_move(self, photon:Photon, distance):
         # photon.print_me()
-        if distance > 0 and photon.weight > 0:
+        if distance > 0:
             step = [distance * ax for ax in photon.dir]
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
@@ -182,7 +194,7 @@ class Sim():
                         # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
                         # penetration ray - refraction
                         # new photon to track
-                        refraction_photon = Photon(boundary_pos, refraction_vec, weight=photon.weight*(1.0-R))
+                        refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
                         self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                                 "parent": photon.id,
                                                                                 "child": []
@@ -190,7 +202,9 @@ class Sim():
                         self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
                         self.just_move(refraction_photon, min_step)
                         self.try_move(refraction_photon, rest_dist)
-                        self.propagate_photon(refraction_photon)
+                        flag_terminate = self.after_hop(refraction_photon)
+                        if not flag_terminate:
+                            self.propagate_photon(refraction_photon)
                         # update old photon (reflection one)
                         photon.weight *= R
                         photon.pos = boundary_pos
