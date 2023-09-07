@@ -14,6 +14,8 @@ class PropEnv(Object3D):
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
         self.very_close_photons = set()
+        debug_list = []
+        self.debug_pos = [tuple(pos) for pos in debug_list]
     
     def get_label_from_float(self, xyz):
         xyz_int = self.round_xyz(xyz)
@@ -50,6 +52,7 @@ class PropEnv(Object3D):
     def boundary_check(self, xyz:list, xyz_next:list):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
+        debug_flag = tuple(xyz) in self.debug_pos
         label_in = self.get_label_from_float(xyz)
         arr_xyz = np.array(xyz)
         arr_xyz_next = np.array(xyz_next)
@@ -69,7 +72,7 @@ class PropEnv(Object3D):
                 break
             label_check = self.get_label_from_float(check_pos)
             if label_in != label_check:
-                proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist())
+                proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), debug=debug_flag)
                 if proposed_norm_vec is not None:
                     # boundary_pos = check_pos.tolist()
                     boundary_pos = proposed_boundary_pos
