@@ -21,7 +21,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False):
+    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
 
         # TEST DUPLICATES IN RECORDS
         turn_on_test = False
@@ -41,7 +41,7 @@ class ChartMaker():
 
         # PREPARE STANDARD ARROWS
         if do_connect_lines:
-            standard_connect_lines = ChartMaker.prepare_standard_connect_lines(propSetup)
+            standard_connect_lines = ChartMaker.prepare_standard_connect_lines(propSetup, color_by_root=color_arrows_by_root)
             standard_hide_points = False
         else:
             standard_connect_lines = None
@@ -95,7 +95,9 @@ class ChartMaker():
                                       select_child = True,
                                       border_limits = border_limits,
                                       sum_same_idx = False,
-                                      do_connect_lines = do_connect_lines)
+                                      do_connect_lines = do_connect_lines,
+                                      color_points_by_root = color_points_by_root,
+                                      color_arrows_by_root = color_arrows_by_root)
 
         
 
@@ -114,7 +116,9 @@ class ChartMaker():
                                               select_child = True,
                                               border_limits = border_limits,
                                               sum_same_idx = False,
-                                              do_connect_lines = do_connect_lines)
+                                              do_connect_lines = do_connect_lines,
+                                              color_points_by_root = color_points_by_root,
+                                              color_arrows_by_root = color_arrows_by_root)
         
 
 
@@ -158,7 +162,9 @@ class ChartMaker():
                                                   show = True,
                                                   title_prefix = "",
                                                   do_connect_lines = do_connect_lines,
-                                                  reset_colors = local_reset_colors)
+                                                  reset_colors = local_reset_colors,
+                                                  color_points_by_root = color_points_by_root,
+                                                  color_arrows_by_root = color_arrows_by_root)
         
         if sl is not None:
             take_group = 2
@@ -182,7 +188,9 @@ class ChartMaker():
                                                           show = True,
                                                           title_prefix = "({}) ".format(i),
                                                           do_connect_lines = do_connect_lines,
-                                                          reset_colors = local_reset_colors)
+                                                          reset_colors = local_reset_colors,
+                                                          color_points_by_root = color_points_by_root,
+                                                          color_arrows_by_root = color_arrows_by_root)
 
 
 
@@ -319,7 +327,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False, reset_colors=None):
+    def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False, reset_colors=None, color_points_by_root=False, color_arrows_by_root=False):
         cDF = ColorPointDF()
         df = cDF.from_resultRecords(resultRecords = resultRecords,
                                     color_scheme = color_scheme,
@@ -330,7 +338,8 @@ class ChartMaker():
                                     select_child = select_child,
                                     border_limits = border_limits,
                                     sum_same_idx = sum_same_idx,
-                                    sort = True)
+                                    sort = True,
+                                    color_by_root=color_points_by_root)
         if do_connect_lines:
             df_arrows = cDF.from_resultRecords(resultRecords = resultRecords,
                                                color_scheme = "photonwise",
@@ -341,9 +350,10 @@ class ChartMaker():
                                                select_child = select_child,
                                                border_limits = None,
                                                sum_same_idx = False,
-                                               sort = False)
+                                               sort = False,
+                                               color_by_root=color_arrows_by_root)
             ADF = ArrowsDF()
-            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
+            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
             hide_points = False
         else:
             connect_lines = None
@@ -376,7 +386,7 @@ class ChartMaker():
         vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points)
 
     @staticmethod
-    def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False):
+    def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                              color_scheme = color_scheme,
@@ -387,7 +397,8 @@ class ChartMaker():
                                              select_child = select_child,
                                              border_limits = border_limits,
                                              sum_same_idx = sum_same_idx,
-                                             sort = True)
+                                             sort = True,
+                                             color_by_root = color_points_by_root)
         if do_connect_lines:
             df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
                                                         color_scheme = "photonwise",
@@ -398,9 +409,10 @@ class ChartMaker():
                                                         select_child = select_child,
                                                         border_limits = None,
                                                         sum_same_idx = False,
-                                                        sort = False)
+                                                        sort = False,
+                                                        color_by_root = color_arrows_by_root)
             ADF = ArrowsDF()
-            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=False)
+            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
             hide_points = False
         else:
             connect_lines = None
@@ -417,7 +429,7 @@ class ChartMaker():
         vis.show_body(object3d)
 
     @staticmethod
-    def prepare_standard_connect_lines(propSetup: PropSetup):
+    def prepare_standard_connect_lines(propSetup: PropSetup, color_by_root=False):
         CPDF = ColorPointDF()
         sh = propSetup.propEnv.shape
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
@@ -430,9 +442,10 @@ class ChartMaker():
                                             select_child = True,
                                             border_limits = None,
                                             sum_same_idx = False,
-                                            sort = False)
+                                            sort = False,
+                                            color_by_root=False)
         ADF = ArrowsDF()
-        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=False)
+        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=color_by_root)
         return standard_connect_lines
     
     @staticmethod
