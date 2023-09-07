@@ -4,7 +4,7 @@ import numpy as np
 class MarchingCubes():
 
 	# corner move value
-	cmv = 0.499999999
+	# cmv = 0.499999999
 	cmv = 0.5
 
 	Tringle_corner_offset_table = [

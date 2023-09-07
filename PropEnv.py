@@ -138,7 +138,7 @@ class PropEnv(Object3D):
             cmv = MarchingCubes.cmv
             normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
             # check if intersection wasn't somewhere between +cmv and +0.5
-            if MarchingCubes.cmv != 0.5:
+            if MarchingCubes.cmv < 0.5:
                 cmv = 0.5
                 control_list = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
                 if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):

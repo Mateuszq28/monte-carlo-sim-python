@@ -152,7 +152,10 @@ class Sim():
                     # min_step_correction = 0
                     # min_step_correction = 0.000000001
                     min_step_correction = self.config["min_step_when_boundary_cross"]
-                    min_step = 0.5 - MarchingCubes.cmv + min_step_correction
+                    if MarchingCubes.cmv <= 0.5:
+                        min_step = 0.5 - MarchingCubes.cmv + min_step_correction
+                    else:
+                        min_step = min_step_correction
                     passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(boundary_change))
 
                     # Total internal reflection
@@ -272,7 +275,7 @@ class Sim():
         photon.weight = photon.weight * (mu_s / mu_t)
 
 
-    def spin(self, photon):
+    def spin(self, photon: Photon):
         theta = self.featureSampling.photon_theta()
         phi = self.featureSampling.photon_phi()
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
