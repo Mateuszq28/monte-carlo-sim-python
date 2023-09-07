@@ -198,9 +198,9 @@ class Sim():
                             # (REFRACTION RAY OR REFLECTION RAY)
                             rnd_uniform = self.featureSampling.proba_split()
                             if R < rnd_uniform:
-                                flag_reflect = True
-                            else:
                                 flag_reflect = False
+                            else:
+                                flag_reflect = True
                             
                             if flag_reflect:
                                 # ONLY REFLECTION (OLD RAY)
