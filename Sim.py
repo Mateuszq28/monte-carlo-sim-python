@@ -150,7 +150,8 @@ class Sim():
                     incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                     reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
                     # min_step_correction = 0
-                    min_step_correction = 0.000000001
+                    # min_step_correction = 0.000000001
+                    min_step_correction = self.config["min_step_when_boundary_cross"]
                     min_step = 0.5 - MarchingCubes.cmv + min_step_correction
                     passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(boundary_change))
 
