@@ -95,6 +95,11 @@ class FeatureSampling():
     
     def start_dir_phi(self):
         return self.photon_phi()
+    
+    def proba_split(self):
+        """Returns random number from uniform distribution [low=0.0, high=1.0)"""
+        return self.myRandom.uniform_half_open(0.0, 1.0)
+
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
 

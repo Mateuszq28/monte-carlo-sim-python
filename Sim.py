@@ -192,26 +192,53 @@ class Sim():
                         self.try_move(photon, rest_dist)
 
                     if 0.0 < R < 1.0:
-                        # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
-                        # penetration ray - refraction
-                        # new photon to track
-                        refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
-                        self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
-                                                                                "parent": photon.id,
-                                                                                "child": []
-                                                                                }
-                        self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
-                        self.just_move(refraction_photon, min_step)
-                        self.try_move(refraction_photon, rest_dist)
-                        flag_terminate = self.after_hop(refraction_photon)
-                        if not flag_terminate:
-                            self.propagate_photon(refraction_photon)
-                        # update old photon (reflection one)
-                        photon.weight *= R
-                        photon.pos = boundary_pos
-                        photon.dir = reflect_vec
-                        self.just_move(photon, min_step)
-                        self.try_move(photon, rest_dist)
+
+                        if self.config["use_proba_instead_of_splitting"]:
+                            # DECIDE BASED ON PROBABLITY WHICH RAY TO PROPAGATE
+                            # (REFRACTION RAY OR REFLECTION RAY)
+                            rnd_uniform = self.featureSampling.proba_split()
+                            if R < rnd_uniform:
+                                flag_reflect = True
+                            else:
+                                flag_reflect = False
+                            
+                            if flag_reflect:
+                                # ONLY REFLECTION (OLD RAY)
+                                # photon weight is not changed
+                                photon.pos = boundary_pos
+                                photon.dir = reflect_vec
+                                self.just_move(photon, min_step)
+                                self.try_move(photon, rest_dist)
+                            else:
+                                # ONLY REFRACTION (OLD RAY)
+                                # penetration ray - refraction
+                                # photon weight is not changed
+                                photon.pos = boundary_pos
+                                photon.dir = refraction_vec
+                                self.just_move(photon, min_step)
+                                self.try_move(photon, rest_dist)
+
+                        else:
+                            # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
+                            # penetration ray - refraction
+                            # new photon to track
+                            refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
+                            self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
+                                                                                    "parent": photon.id,
+                                                                                    "child": []
+                                                                                    }
+                            self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
+                            self.just_move(refraction_photon, min_step)
+                            self.try_move(refraction_photon, rest_dist)
+                            flag_terminate = self.after_hop(refraction_photon)
+                            if not flag_terminate:
+                                self.propagate_photon(refraction_photon)
+                            # update old photon (reflection one)
+                            photon.weight *= R
+                            photon.pos = boundary_pos
+                            photon.dir = reflect_vec
+                            self.just_move(photon, min_step)
+                            self.try_move(photon, rest_dist)
 
                     if R == 1.0:
                         # ONLY REFLECTION (OLD RAY)
