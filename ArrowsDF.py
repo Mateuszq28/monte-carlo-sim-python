@@ -47,13 +47,17 @@ class ArrowsDF():
         start_arrows[["x_idx", "y_idx", "z_idx"]] = start_pos
         return start_arrows
     
-    def color_by_root_photon(self, df, photon_register):
-        photon_ids = list(set(df["photon_id"].to_list()))
-        dic = self.find_root_photon_ids(photon_ids, photon_register)
-        # add to df
-        column_root = [dic[pid] for pid in df["photon_id"]]
-        root_colors = [self.find_colors_by_photon_id(df, pid) for pid in df["photon_id"]]
-        df["root_photon_id"] = column_root
+    def color_by_root_photon(self, df, photon_register=None):
+        if "root_photon_id" not in df.columns:
+            if photon_register is not None:
+                photon_ids = list(set(df["photon_id"].to_list()))
+                dic = self.find_root_photon_ids(photon_ids, photon_register)
+                # add to df
+                column_root = [dic[pid] for pid in df["photon_id"]]
+                df["root_photon_id"] = column_root
+            else:
+                raise ValueError("To add root_photon_id to df photon_register is needed")
+        root_colors = [self.find_colors_by_photon_id(df, pid) for pid in df["root_photon_id"]]
         df[["R", "G", "B", "A"]] = root_colors
 
 
