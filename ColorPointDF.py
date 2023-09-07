@@ -308,7 +308,49 @@ class ColorPointDF():
         else:
             return []
         
-    
+
+    @staticmethod
+    def color_by_root_photon(df, photon_register=None):
+        if "root_photon_id" not in df.columns:
+            if photon_register is not None:
+                photon_ids = list(set(df["photon_id"].to_list()))
+                dic = ColorPointDF.find_root_photon_ids(photon_ids, photon_register)
+                # add to df
+                column_root = [dic[pid] for pid in df["photon_id"]]
+                df["root_photon_id"] = column_root
+            else:
+                raise ValueError("To add root_photon_id to df photon_register is needed")
+        root_colors = [ColorPointDF.find_colors_by_photon_id(df, pid) for pid in df["root_photon_id"]]
+        df[["R", "G", "B", "A"]] = root_colors
+
+
+    @staticmethod
+    def find_root_photon_ids(photon_ids: list, photon_register):
+        root_paths = [ColorPointDF.find_root_path_photon_id(pid, photon_register, finded=[]) for pid in photon_ids]
+        # filter out photon id, that are not in colorDF (not in space to draw)
+        root_paths_filtered = [[pid for pid in rp if pid in photon_ids] for rp in root_paths]
+        # take oldest
+        # root path of every photon has at least one photon_id (itself) 
+        root_photons = [rp[-1] for rp in root_paths_filtered]
+        dic = dict(zip(photon_ids, root_photons))
+        return dic
+
+
+    @staticmethod
+    def find_root_path_photon_id(photon_id, photon_register, finded: list):
+        finded += [photon_id]
+        parent_id = photon_register[photon_id]["parent"]
+        if parent_id is not None:
+            return ColorPointDF.find_root_path_photon_id(parent_id, photon_register, finded)
+        else:
+            return finded
+        
+
+    @staticmethod
+    def find_colors_by_photon_id(df: pd.DataFrame, photon_id):
+        colors = df[df["photon_id"] == photon_id][["R", "G", "B", "A"]].iloc[0].to_numpy()
+        return colors
+        
     @staticmethod
     def sum_same_idx(df: pd.DataFrame, subset=None):
         df[["x_idx", "y_idx", "z_idx"]] = df[["x_idx", "y_idx", "z_idx"]].round().astype(int)
