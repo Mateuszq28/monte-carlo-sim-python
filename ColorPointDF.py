@@ -219,7 +219,7 @@ class ColorPointDF():
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
         return df
     
-    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, sort=True):
+    def from_resultRecords(self, resultRecords, color_scheme, drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, sort=True, color_by_root=False):
         """
         :param border_limits: [x_min, x_max, y_min, y_max, z_min, z_max]
         """
@@ -255,6 +255,9 @@ class ColorPointDF():
             df.sort_values(["x_idx", "y_idx", "z_idx"], ignore_index=True, inplace=True)
         # color scheme process
         df = self.process_df_by_color_scheme(df, color_scheme, drop_values)
+        # to photon children (reflect and refraction) have the same color
+        if color_by_root:
+            self.color_by_root_photon(df, photon_register)
         return df
     
     def reset_colors(self, df: pd.DataFrame, color_scheme, drop_values=None):
