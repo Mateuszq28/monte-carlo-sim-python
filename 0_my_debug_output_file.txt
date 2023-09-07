@@ -1,0 +1,1351 @@
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 7.40863583 27.56069655 49.16979084]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 6.80440208 28.26167615 48.83118793]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 6.20016834 28.96265576 48.49258503]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 5.59593459 29.66363536 48.15398213]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 4.99170084 30.36461497 47.81537923]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 4.38746709 31.06559457 47.47677632]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 3.78323335 31.76657417 47.13817342]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 3.1789996  32.46755378 46.79957052]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 2.57476585 33.16853338 46.46096762]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 1.97053211 33.86951299 46.12236472]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [8.61710332399889, 26.158737342727452, 49.84699664050764]
+debug label_in 0
+debug check_pos [ 1.36629836 34.57049259 45.78376181]
+debug label_check 1
+debug xyz_next [1.3662983591527063, 34.57049259113303, 45.783761813401085]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [11.163887976677444, 28.069395697971025, 52.08065939018215]
+debug label_in 0
+debug check_pos [ 7.47519717 29.50783247 49.03855831]
+debug label_check 1
+debug xyz_next [6.737459004993156, 29.795519828867615, 48.43013809954644]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [11.163887976677444, 28.069395697971025, 52.08065939018215]
+debug label_in 0
+debug check_pos [ 6.737459   29.79551983 48.4301381 ]
+debug label_check 1
+debug xyz_next [6.737459004993156, 29.795519828867615, 48.43013809954644]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [0.55527826939763, 35.7055329343457, 53.362107602878496]
+debug label_in 0
+debug check_pos [-0.44489591 36.00777523 48.99852741]
+debug label_check 1
+debug xyz_next [-0.8449655861996715, 36.12867214340225, 47.25309532700312]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [20.85933714060633, 19.487065087474132, 50.92297461268031]
+debug label_in 0
+debug check_pos [20.61908362 17.42595771 48.89464257]
+debug label_check 1
+debug xyz_next [20.45891459866559, 16.051886127746403, 47.542421214403035]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [20.85933714060633, 19.487065087474132, 50.92297461268031]
+debug label_in 0
+debug check_pos [20.53899911 16.73892192 48.21853189]
+debug label_check 1
+debug xyz_next [20.45891459866559, 16.051886127746403, 47.542421214403035]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [20.85933714060633, 19.487065087474132, 50.92297461268031]
+debug label_in 0
+debug check_pos [20.4589146  16.05188613 47.54242121]
+debug label_check 1
+debug xyz_next [20.45891459866559, 16.051886127746403, 47.542421214403035]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [48.86581103085582, 5.19511231775337, 53.25701045659114]
+debug label_in 0
+debug check_pos [49.16700983  3.14680443 49.02169289]
+debug label_check 1
+debug xyz_next [49.22724958675821, 2.7371428510373965, 48.1746293762219]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [48.86581103085582, 5.19511231775337, 53.25701045659114]
+debug label_in 0
+debug check_pos [49.22724959  2.73714285 48.17462938]
+debug label_check 1
+debug xyz_next [49.22724958675821, 2.7371428510373965, 48.1746293762219]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 9.39286902  1.51341287 48.96382541]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 8.67065445  1.50098373 48.40934063]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 7.94843988  1.48855458 47.85485585]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 7.22622531  1.47612543 47.30037108]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 6.50401073  1.46369628 46.7458863 ]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 5.78179616  1.45126713 46.19140152]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [10.837298165705278, 1.538271172112732, 50.072794970704905]
+debug label_in 0
+debug check_pos [ 5.05958159  1.43883798 45.63691674]
+debug label_check 1
+debug xyz_next [5.059581589800482, 1.438837981234427, 45.63691673928772]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [42.19702181 -0.06152883 49.12236524]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [41.70299077 -0.13136724 48.32519929]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [41.20895972 -0.20120566 47.52803335]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [40.71492868 -0.27104407 46.7308674 ]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [40.22089763 -0.34088249 45.93370146]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [43.679114951185106, 0.14798641241447308, 51.51386307711265]
+debug label_in 0
+debug check_pos [39.72686659 -0.4107209  45.13653551]
+debug label_check 1
+debug xyz_next [39.726866586238756, -0.41072090018280283, 45.136535511146185]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [40.724131687429406, 0.994442153106311, 51.7873511520103]
+debug label_in 0
+debug check_pos [39.28852491 -0.45031349 48.97468884]
+debug label_check 1
+debug xyz_next [39.28852491245077, -0.45031348515539515, 48.97468883832853]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [39.68857495212575, 0.4069888088548065, 50.686984405610296]
+debug label_in 0
+debug check_pos [39.98147831 -0.22007338 48.8946983 ]
+debug label_check 1
+debug xyz_next [41.153091739999354, -2.7283221489179565, 41.72555388436365]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [49.130555768040466, 22.133658190863216, 49.557459662463664]
+debug label_in 0
+debug check_pos [49.16927155 22.07077119 48.63017537]
+debug label_check 1
+debug xyz_next [49.32413468258805, 21.819223161727965, 44.921038215561865]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [49.130555768040466, 22.133658190863216, 49.557459662463664]
+debug label_in 0
+debug check_pos [49.20798733 22.00788418 47.70289108]
+debug label_check 1
+debug xyz_next [49.32413468258805, 21.819223161727965, 44.921038215561865]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [49.130555768040466, 22.133658190863216, 49.557459662463664]
+debug label_in 0
+debug check_pos [49.24670312 21.94499717 46.77560679]
+debug label_check 1
+debug xyz_next [49.32413468258805, 21.819223161727965, 44.921038215561865]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [49.130555768040466, 22.133658190863216, 49.557459662463664]
+debug label_in 0
+debug check_pos [49.2854189  21.88211017 45.8483225 ]
+debug label_check 1
+debug xyz_next [49.32413468258805, 21.819223161727965, 44.921038215561865]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [49.130555768040466, 22.133658190863216, 49.557459662463664]
+debug label_in 0
+debug check_pos [49.32413468 21.81922316 44.92103822]
+debug label_check 1
+debug xyz_next [49.32413468258805, 21.819223161727965, 44.921038215561865]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [30.820204156831075, 23.805360175996874, 51.4835720803887]
+debug label_in 0
+debug check_pos [24.49291402 22.46416576 49.3214751 ]
+debug label_check 1
+debug xyz_next [22.685116835642383, 22.080967349054788, 48.703733101907886]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [30.820204156831075, 23.805360175996874, 51.4835720803887]
+debug label_in 0
+debug check_pos [23.58901543 22.27256655 49.0126041 ]
+debug label_check 1
+debug xyz_next [22.685116835642383, 22.080967349054788, 48.703733101907886]
+
+
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [30.820204156831075, 23.805360175996874, 51.4835720803887]
+debug label_in 0
+debug check_pos [22.68511684 22.08096735 48.7037331 ]
+debug label_check 1
+debug xyz_next [22.685116835642383, 22.080967349054788, 48.703733101907886]
+
+
+marching_cubes_centroids [[24.5, 26.5, 49.5], [24.5, 26.5, 48.5], [24.5, 25.5, 49.5], [24.5, 25.5, 48.5], [23.5, 26.5, 49.5], [23.5, 26.5, 48.5], [23.5, 25.5, 49.5], [23.5, 25.5, 48.5]]
+sorted marching_cubes_centroids [[23.5 26.5 49.5]
+ [23.5 25.5 49.5]
+ [23.5 26.5 48.5]
+ [23.5 25.5 48.5]
+ [24.5 26.5 49.5]
+ [24.5 25.5 49.5]
+ [24.5 26.5 48.5]
+ [24.5 25.5 48.5]]
+corners [[24.0, 27.0, 50.0], [23.0, 27.0, 50.0], [24.0, 27.0, 49.0], [23.0, 27.0, 49.0], [24.0, 26.0, 50.0], [23.0, 26.0, 50.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[23.0, 27.0, 49.5], [24.0, 27.0, 49.5], [23.0, 26.0, 49.5]], [[23.0, 26.0, 49.5], [24.0, 27.0, 49.5], [24.0, 26.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129487, 49.5], [22.94002223130409, 26.123402680129487, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 26.0, 50.0], [23.0, 26.0, 50.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 25.0, 50.0], [23.0, 25.0, 50.0], [24.0, 25.0, 49.0], [23.0, 25.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[23.0, 26.0, 49.5], [24.0, 26.0, 49.5], [23.0, 25.0, 49.5]], [[23.0, 25.0, 49.5], [24.0, 26.0, 49.5], [24.0, 25.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129487, 49.5], [22.94002223130409, 26.123402680129487, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 27.0, 49.0], [23.0, 27.0, 49.0], [24.0, 27.0, 48.0], [23.0, 27.0, 48.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 26.0, 48.0], [23.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 26.0, 48.0], [23.0, 26.0, 48.0], [24.0, 25.0, 49.0], [23.0, 25.0, 49.0], [24.0, 25.0, 48.0], [23.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 27.0, 50.0], [24.0, 27.0, 50.0], [25.0, 27.0, 49.0], [24.0, 27.0, 49.0], [25.0, 26.0, 50.0], [24.0, 26.0, 50.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[24.0, 27.0, 49.5], [25.0, 27.0, 49.5], [24.0, 26.0, 49.5]], [[24.0, 26.0, 49.5], [25.0, 27.0, 49.5], [25.0, 26.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129487, 49.5], [22.94002223130409, 26.123402680129487, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 50.0], [24.0, 26.0, 50.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 25.0, 50.0], [24.0, 25.0, 50.0], [25.0, 25.0, 49.0], [24.0, 25.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[24.0, 26.0, 49.5], [25.0, 26.0, 49.5], [24.0, 25.0, 49.5]], [[24.0, 25.0, 49.5], [25.0, 26.0, 49.5], [25.0, 25.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129487, 49.5], [22.94002223130409, 26.123402680129487, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129487, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 27.0, 49.0], [24.0, 27.0, 49.0], [25.0, 27.0, 48.0], [24.0, 27.0, 48.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0], [25.0, 25.0, 49.0], [24.0, 25.0, 49.0], [25.0, 25.0, 48.0], [24.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [23.5120983  26.03306476 49.17159405]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[24.5, 26.5, 49.5], [24.5, 26.5, 48.5], [24.5, 25.5, 49.5], [24.5, 25.5, 48.5], [23.5, 26.5, 49.5], [23.5, 26.5, 48.5], [23.5, 25.5, 49.5], [23.5, 25.5, 48.5]]
+sorted marching_cubes_centroids [[23.5 26.5 49.5]
+ [23.5 25.5 49.5]
+ [23.5 26.5 48.5]
+ [23.5 25.5 48.5]
+ [24.5 26.5 49.5]
+ [24.5 25.5 49.5]
+ [24.5 26.5 48.5]
+ [24.5 25.5 48.5]]
+corners [[24.0, 27.0, 50.0], [23.0, 27.0, 50.0], [24.0, 27.0, 49.0], [23.0, 27.0, 49.0], [24.0, 26.0, 50.0], [23.0, 26.0, 50.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[23.0, 27.0, 49.5], [24.0, 27.0, 49.5], [23.0, 26.0, 49.5]], [[23.0, 26.0, 49.5], [24.0, 27.0, 49.5], [24.0, 26.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129484, 49.5], [22.94002223130409, 26.123402680129484, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 26.0, 50.0], [23.0, 26.0, 50.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 25.0, 50.0], [23.0, 25.0, 50.0], [24.0, 25.0, 49.0], [23.0, 25.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[23.0, 26.0, 49.5], [24.0, 26.0, 49.5], [23.0, 25.0, 49.5]], [[23.0, 25.0, 49.5], [24.0, 26.0, 49.5], [24.0, 25.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129484, 49.5], [22.94002223130409, 26.123402680129484, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 27.0, 49.0], [23.0, 27.0, 49.0], [24.0, 27.0, 48.0], [23.0, 27.0, 48.0], [24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 26.0, 48.0], [23.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[24.0, 26.0, 49.0], [23.0, 26.0, 49.0], [24.0, 26.0, 48.0], [23.0, 26.0, 48.0], [24.0, 25.0, 49.0], [23.0, 25.0, 49.0], [24.0, 25.0, 48.0], [23.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 27.0, 50.0], [24.0, 27.0, 50.0], [25.0, 27.0, 49.0], [24.0, 27.0, 49.0], [25.0, 26.0, 50.0], [24.0, 26.0, 50.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[24.0, 27.0, 49.5], [25.0, 27.0, 49.5], [24.0, 26.0, 49.5]], [[24.0, 26.0, 49.5], [25.0, 27.0, 49.5], [25.0, 26.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129484, 49.5], [22.94002223130409, 26.123402680129484, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 50.0], [24.0, 26.0, 50.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 25.0, 50.0], [24.0, 25.0, 50.0], [25.0, 25.0, 49.0], [24.0, 25.0, 49.0]]
+corner_full_binary_code [False, False, True, True, False, False, True, True]
+corner_full_decimal 51
+triangles [[7, 5, 3], [3, 5, 1]]
+triangles_coordinates [[[24.0, 26.0, 49.5], [25.0, 26.0, 49.5], [24.0, 25.0, 49.5]], [[24.0, 25.0, 49.5], [25.0, 26.0, 49.5], [25.0, 25.0, 49.5]]]
+triangles_planes [[0.0, 0.0, -1.0, 49.5], [0.0, 0.0, -1.0, 49.5]]
+ray_intersect_planes [[22.94002223130409, 26.123402680129484, 49.5], [22.94002223130409, 26.123402680129484, 49.5]]
+normal_vec_and_intersect [[[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]], [[0.0, 0.0, -1.0], [22.94002223130409, 26.123402680129484, 49.5]]]
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 27.0, 49.0], [24.0, 27.0, 49.0], [25.0, 27.0, 48.0], [24.0, 27.0, 48.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0], [25.0, 25.0, 49.0], [24.0, 25.0, 49.0], [25.0, 25.0, 48.0], [24.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [24.30819005 25.90735199 48.71458968]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[25.5, 26.5, 48.5], [25.5, 26.5, 47.5], [25.5, 25.5, 48.5], [25.5, 25.5, 47.5], [24.5, 26.5, 48.5], [24.5, 26.5, 47.5], [24.5, 25.5, 48.5], [24.5, 25.5, 47.5]]
+sorted marching_cubes_centroids [[24.5 26.5 48.5]
+ [24.5 25.5 48.5]
+ [24.5 26.5 47.5]
+ [24.5 25.5 47.5]
+ [25.5 26.5 48.5]
+ [25.5 25.5 48.5]
+ [25.5 26.5 47.5]
+ [25.5 25.5 47.5]]
+corners [[25.0, 27.0, 49.0], [24.0, 27.0, 49.0], [25.0, 27.0, 48.0], [24.0, 27.0, 48.0], [25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 49.0], [24.0, 26.0, 49.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0], [25.0, 25.0, 49.0], [24.0, 25.0, 49.0], [25.0, 25.0, 48.0], [24.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 27.0, 48.0], [24.0, 27.0, 48.0], [25.0, 27.0, 47.0], [24.0, 27.0, 47.0], [25.0, 26.0, 48.0], [24.0, 26.0, 48.0], [25.0, 26.0, 47.0], [24.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[25.0, 26.0, 48.0], [24.0, 26.0, 48.0], [25.0, 26.0, 47.0], [24.0, 26.0, 47.0], [25.0, 25.0, 48.0], [24.0, 25.0, 48.0], [25.0, 25.0, 47.0], [24.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 27.0, 49.0], [25.0, 27.0, 49.0], [26.0, 27.0, 48.0], [25.0, 27.0, 48.0], [26.0, 26.0, 49.0], [25.0, 26.0, 49.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 26.0, 49.0], [25.0, 26.0, 49.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 25.0, 49.0], [25.0, 25.0, 49.0], [26.0, 25.0, 48.0], [25.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 27.0, 48.0], [25.0, 27.0, 48.0], [26.0, 27.0, 47.0], [25.0, 27.0, 47.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 26.0, 47.0], [25.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 26.0, 47.0], [25.0, 26.0, 47.0], [26.0, 25.0, 48.0], [25.0, 25.0, 48.0], [26.0, 25.0, 47.0], [25.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [25.10428179 25.78163921 48.2575853 ]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[26.5, 26.5, 48.5], [26.5, 26.5, 47.5], [26.5, 25.5, 48.5], [26.5, 25.5, 47.5], [25.5, 26.5, 48.5], [25.5, 26.5, 47.5], [25.5, 25.5, 48.5], [25.5, 25.5, 47.5]]
+sorted marching_cubes_centroids [[25.5 26.5 48.5]
+ [25.5 25.5 48.5]
+ [25.5 26.5 47.5]
+ [25.5 25.5 47.5]
+ [26.5 26.5 48.5]
+ [26.5 25.5 48.5]
+ [26.5 26.5 47.5]
+ [26.5 25.5 47.5]]
+corners [[26.0, 27.0, 49.0], [25.0, 27.0, 49.0], [26.0, 27.0, 48.0], [25.0, 27.0, 48.0], [26.0, 26.0, 49.0], [25.0, 26.0, 49.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 26.0, 49.0], [25.0, 26.0, 49.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 25.0, 49.0], [25.0, 25.0, 49.0], [26.0, 25.0, 48.0], [25.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 27.0, 48.0], [25.0, 27.0, 48.0], [26.0, 27.0, 47.0], [25.0, 27.0, 47.0], [26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 26.0, 47.0], [25.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[26.0, 26.0, 48.0], [25.0, 26.0, 48.0], [26.0, 26.0, 47.0], [25.0, 26.0, 47.0], [26.0, 25.0, 48.0], [25.0, 25.0, 48.0], [26.0, 25.0, 47.0], [25.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 27.0, 49.0], [26.0, 27.0, 49.0], [27.0, 27.0, 48.0], [26.0, 27.0, 48.0], [27.0, 26.0, 49.0], [26.0, 26.0, 49.0], [27.0, 26.0, 48.0], [26.0, 26.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 26.0, 49.0], [26.0, 26.0, 49.0], [27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 25.0, 49.0], [26.0, 25.0, 49.0], [27.0, 25.0, 48.0], [26.0, 25.0, 48.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 27.0, 48.0], [26.0, 27.0, 48.0], [27.0, 27.0, 47.0], [26.0, 27.0, 47.0], [27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 25.0, 48.0], [26.0, 25.0, 48.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [25.90037354 25.65592644 47.80058093]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[27.5, 26.5, 47.5], [27.5, 26.5, 46.5], [27.5, 25.5, 47.5], [27.5, 25.5, 46.5], [26.5, 26.5, 47.5], [26.5, 26.5, 46.5], [26.5, 25.5, 47.5], [26.5, 25.5, 46.5]]
+sorted marching_cubes_centroids [[26.5 26.5 47.5]
+ [26.5 25.5 47.5]
+ [26.5 26.5 46.5]
+ [26.5 25.5 46.5]
+ [27.5 26.5 47.5]
+ [27.5 25.5 47.5]
+ [27.5 26.5 46.5]
+ [27.5 25.5 46.5]]
+corners [[27.0, 27.0, 48.0], [26.0, 27.0, 48.0], [27.0, 27.0, 47.0], [26.0, 27.0, 47.0], [27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 25.0, 48.0], [26.0, 25.0, 48.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 27.0, 47.0], [26.0, 27.0, 47.0], [27.0, 27.0, 46.0], [26.0, 27.0, 46.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 26.0, 46.0], [26.0, 26.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 26.0, 46.0], [26.0, 26.0, 46.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0], [27.0, 25.0, 46.0], [26.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 27.0, 48.0], [27.0, 27.0, 48.0], [28.0, 27.0, 47.0], [27.0, 27.0, 47.0], [28.0, 26.0, 48.0], [27.0, 26.0, 48.0], [28.0, 26.0, 47.0], [27.0, 26.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 26.0, 48.0], [27.0, 26.0, 48.0], [28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 25.0, 48.0], [27.0, 25.0, 48.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 27.0, 47.0], [27.0, 27.0, 47.0], [28.0, 27.0, 46.0], [27.0, 27.0, 46.0], [28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 26.0, 46.0], [27.0, 26.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 26.0, 46.0], [27.0, 26.0, 46.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [26.69646529 25.53021366 47.34357655]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[27.5, 25.5, 47.5], [27.5, 25.5, 46.5], [27.5, 24.5, 47.5], [27.5, 24.5, 46.5], [26.5, 25.5, 47.5], [26.5, 25.5, 46.5], [26.5, 24.5, 47.5], [26.5, 24.5, 46.5]]
+sorted marching_cubes_centroids [[26.5 25.5 47.5]
+ [26.5 24.5 47.5]
+ [26.5 25.5 46.5]
+ [26.5 24.5 46.5]
+ [27.5 25.5 47.5]
+ [27.5 24.5 47.5]
+ [27.5 25.5 46.5]
+ [27.5 24.5 46.5]]
+corners [[27.0, 26.0, 48.0], [26.0, 26.0, 48.0], [27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 25.0, 48.0], [26.0, 25.0, 48.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 25.0, 48.0], [26.0, 25.0, 48.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0], [27.0, 24.0, 48.0], [26.0, 24.0, 48.0], [27.0, 24.0, 47.0], [26.0, 24.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 26.0, 47.0], [26.0, 26.0, 47.0], [27.0, 26.0, 46.0], [26.0, 26.0, 46.0], [27.0, 25.0, 47.0], [26.0, 25.0, 47.0], [27.0, 25.0, 46.0], [26.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[27.0, 25.0, 47.0], [26.0, 25.0, 47.0], [27.0, 25.0, 46.0], [26.0, 25.0, 46.0], [27.0, 24.0, 47.0], [26.0, 24.0, 47.0], [27.0, 24.0, 46.0], [26.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 26.0, 48.0], [27.0, 26.0, 48.0], [28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 25.0, 48.0], [27.0, 25.0, 48.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 25.0, 48.0], [27.0, 25.0, 48.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 24.0, 48.0], [27.0, 24.0, 48.0], [28.0, 24.0, 47.0], [27.0, 24.0, 47.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 26.0, 46.0], [27.0, 26.0, 46.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0], [28.0, 24.0, 47.0], [27.0, 24.0, 47.0], [28.0, 24.0, 46.0], [27.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [27.49255704 25.40450089 46.88657218]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[28.5, 25.5, 46.5], [28.5, 25.5, 45.5], [28.5, 24.5, 46.5], [28.5, 24.5, 45.5], [27.5, 25.5, 46.5], [27.5, 25.5, 45.5], [27.5, 24.5, 46.5], [27.5, 24.5, 45.5]]
+sorted marching_cubes_centroids [[27.5 25.5 46.5]
+ [27.5 24.5 46.5]
+ [27.5 25.5 45.5]
+ [27.5 24.5 45.5]
+ [28.5 25.5 46.5]
+ [28.5 24.5 46.5]
+ [28.5 25.5 45.5]
+ [28.5 24.5 45.5]]
+corners [[28.0, 26.0, 47.0], [27.0, 26.0, 47.0], [28.0, 26.0, 46.0], [27.0, 26.0, 46.0], [28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 25.0, 47.0], [27.0, 25.0, 47.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0], [28.0, 24.0, 47.0], [27.0, 24.0, 47.0], [28.0, 24.0, 46.0], [27.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 26.0, 46.0], [27.0, 26.0, 46.0], [28.0, 26.0, 45.0], [27.0, 26.0, 45.0], [28.0, 25.0, 46.0], [27.0, 25.0, 46.0], [28.0, 25.0, 45.0], [27.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[28.0, 25.0, 46.0], [27.0, 25.0, 46.0], [28.0, 25.0, 45.0], [27.0, 25.0, 45.0], [28.0, 24.0, 46.0], [27.0, 24.0, 46.0], [28.0, 24.0, 45.0], [27.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 26.0, 47.0], [28.0, 26.0, 47.0], [29.0, 26.0, 46.0], [28.0, 26.0, 46.0], [29.0, 25.0, 47.0], [28.0, 25.0, 47.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 25.0, 47.0], [28.0, 25.0, 47.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 24.0, 47.0], [28.0, 24.0, 47.0], [29.0, 24.0, 46.0], [28.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 26.0, 46.0], [28.0, 26.0, 46.0], [29.0, 26.0, 45.0], [28.0, 26.0, 45.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 25.0, 45.0], [28.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 25.0, 45.0], [28.0, 25.0, 45.0], [29.0, 24.0, 46.0], [28.0, 24.0, 46.0], [29.0, 24.0, 45.0], [28.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [28.28864879 25.27878811 46.4295678 ]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[29.5, 25.5, 46.5], [29.5, 25.5, 45.5], [29.5, 24.5, 46.5], [29.5, 24.5, 45.5], [28.5, 25.5, 46.5], [28.5, 25.5, 45.5], [28.5, 24.5, 46.5], [28.5, 24.5, 45.5]]
+sorted marching_cubes_centroids [[28.5 25.5 46.5]
+ [28.5 24.5 46.5]
+ [28.5 25.5 45.5]
+ [28.5 24.5 45.5]
+ [29.5 25.5 46.5]
+ [29.5 24.5 46.5]
+ [29.5 25.5 45.5]
+ [29.5 24.5 45.5]]
+corners [[29.0, 26.0, 47.0], [28.0, 26.0, 47.0], [29.0, 26.0, 46.0], [28.0, 26.0, 46.0], [29.0, 25.0, 47.0], [28.0, 25.0, 47.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 25.0, 47.0], [28.0, 25.0, 47.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 24.0, 47.0], [28.0, 24.0, 47.0], [29.0, 24.0, 46.0], [28.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 26.0, 46.0], [28.0, 26.0, 46.0], [29.0, 26.0, 45.0], [28.0, 26.0, 45.0], [29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 25.0, 45.0], [28.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[29.0, 25.0, 46.0], [28.0, 25.0, 46.0], [29.0, 25.0, 45.0], [28.0, 25.0, 45.0], [29.0, 24.0, 46.0], [28.0, 24.0, 46.0], [29.0, 24.0, 45.0], [28.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 26.0, 47.0], [29.0, 26.0, 47.0], [30.0, 26.0, 46.0], [29.0, 26.0, 46.0], [30.0, 25.0, 47.0], [29.0, 25.0, 47.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 25.0, 47.0], [29.0, 25.0, 47.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 24.0, 47.0], [29.0, 24.0, 47.0], [30.0, 24.0, 46.0], [29.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 26.0, 46.0], [29.0, 26.0, 46.0], [30.0, 26.0, 45.0], [29.0, 26.0, 45.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 25.0, 45.0], [29.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 25.0, 45.0], [29.0, 25.0, 45.0], [30.0, 24.0, 46.0], [29.0, 24.0, 46.0], [30.0, 24.0, 45.0], [29.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [29.08474053 25.15307534 45.97256343]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[30.5, 25.5, 46.5], [30.5, 25.5, 45.5], [30.5, 24.5, 46.5], [30.5, 24.5, 45.5], [29.5, 25.5, 46.5], [29.5, 25.5, 45.5], [29.5, 24.5, 46.5], [29.5, 24.5, 45.5]]
+sorted marching_cubes_centroids [[29.5 25.5 46.5]
+ [29.5 24.5 46.5]
+ [29.5 25.5 45.5]
+ [29.5 24.5 45.5]
+ [30.5 25.5 46.5]
+ [30.5 24.5 46.5]
+ [30.5 25.5 45.5]
+ [30.5 24.5 45.5]]
+corners [[30.0, 26.0, 47.0], [29.0, 26.0, 47.0], [30.0, 26.0, 46.0], [29.0, 26.0, 46.0], [30.0, 25.0, 47.0], [29.0, 25.0, 47.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 25.0, 47.0], [29.0, 25.0, 47.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 24.0, 47.0], [29.0, 24.0, 47.0], [30.0, 24.0, 46.0], [29.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 26.0, 46.0], [29.0, 26.0, 46.0], [30.0, 26.0, 45.0], [29.0, 26.0, 45.0], [30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 25.0, 45.0], [29.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[30.0, 25.0, 46.0], [29.0, 25.0, 46.0], [30.0, 25.0, 45.0], [29.0, 25.0, 45.0], [30.0, 24.0, 46.0], [29.0, 24.0, 46.0], [30.0, 24.0, 45.0], [29.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 26.0, 47.0], [30.0, 26.0, 47.0], [31.0, 26.0, 46.0], [30.0, 26.0, 46.0], [31.0, 25.0, 47.0], [30.0, 25.0, 47.0], [31.0, 25.0, 46.0], [30.0, 25.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 47.0], [30.0, 25.0, 47.0], [31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 24.0, 47.0], [30.0, 24.0, 47.0], [31.0, 24.0, 46.0], [30.0, 24.0, 46.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 26.0, 46.0], [30.0, 26.0, 46.0], [31.0, 26.0, 45.0], [30.0, 26.0, 45.0], [31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 24.0, 46.0], [30.0, 24.0, 46.0], [31.0, 24.0, 45.0], [30.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [29.88083228 25.02736256 45.51555906]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[31.5, 25.5, 45.5], [31.5, 25.5, 44.5], [31.5, 24.5, 45.5], [31.5, 24.5, 44.5], [30.5, 25.5, 45.5], [30.5, 25.5, 44.5], [30.5, 24.5, 45.5], [30.5, 24.5, 44.5]]
+sorted marching_cubes_centroids [[30.5 25.5 45.5]
+ [30.5 24.5 45.5]
+ [30.5 25.5 44.5]
+ [30.5 24.5 44.5]
+ [31.5 25.5 45.5]
+ [31.5 24.5 45.5]
+ [31.5 25.5 44.5]
+ [31.5 24.5 44.5]]
+corners [[31.0, 26.0, 46.0], [30.0, 26.0, 46.0], [31.0, 26.0, 45.0], [30.0, 26.0, 45.0], [31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 24.0, 46.0], [30.0, 24.0, 46.0], [31.0, 24.0, 45.0], [30.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 26.0, 45.0], [30.0, 26.0, 45.0], [31.0, 26.0, 44.0], [30.0, 26.0, 44.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 25.0, 44.0], [30.0, 25.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 25.0, 44.0], [30.0, 25.0, 44.0], [31.0, 24.0, 45.0], [30.0, 24.0, 45.0], [31.0, 24.0, 44.0], [30.0, 24.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 26.0, 46.0], [31.0, 26.0, 46.0], [32.0, 26.0, 45.0], [31.0, 26.0, 45.0], [32.0, 25.0, 46.0], [31.0, 25.0, 46.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 25.0, 46.0], [31.0, 25.0, 46.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 24.0, 46.0], [31.0, 24.0, 46.0], [32.0, 24.0, 45.0], [31.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 26.0, 45.0], [31.0, 26.0, 45.0], [32.0, 26.0, 44.0], [31.0, 26.0, 44.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 25.0, 44.0], [31.0, 25.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 25.0, 44.0], [31.0, 25.0, 44.0], [32.0, 24.0, 45.0], [31.0, 24.0, 45.0], [32.0, 24.0, 44.0], [31.0, 24.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [30.67692403 24.90164979 45.05855468]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+marching_cubes_centroids [[31.5, 25.5, 45.5], [31.5, 25.5, 44.5], [31.5, 24.5, 45.5], [31.5, 24.5, 44.5], [30.5, 25.5, 45.5], [30.5, 25.5, 44.5], [30.5, 24.5, 45.5], [30.5, 24.5, 44.5]]
+sorted marching_cubes_centroids [[30.5 25.5 45.5]
+ [30.5 24.5 45.5]
+ [30.5 25.5 44.5]
+ [30.5 24.5 44.5]
+ [31.5 25.5 45.5]
+ [31.5 24.5 45.5]
+ [31.5 25.5 44.5]
+ [31.5 24.5 44.5]]
+corners [[31.0, 26.0, 46.0], [30.0, 26.0, 46.0], [31.0, 26.0, 45.0], [30.0, 26.0, 45.0], [31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 46.0], [30.0, 25.0, 46.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 24.0, 46.0], [30.0, 24.0, 46.0], [31.0, 24.0, 45.0], [30.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 26.0, 45.0], [30.0, 26.0, 45.0], [31.0, 26.0, 44.0], [30.0, 26.0, 44.0], [31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 25.0, 44.0], [30.0, 25.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[31.0, 25.0, 45.0], [30.0, 25.0, 45.0], [31.0, 25.0, 44.0], [30.0, 25.0, 44.0], [31.0, 24.0, 45.0], [30.0, 24.0, 45.0], [31.0, 24.0, 44.0], [30.0, 24.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 26.0, 46.0], [31.0, 26.0, 46.0], [32.0, 26.0, 45.0], [31.0, 26.0, 45.0], [32.0, 25.0, 46.0], [31.0, 25.0, 46.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 25.0, 46.0], [31.0, 25.0, 46.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 24.0, 46.0], [31.0, 24.0, 46.0], [32.0, 24.0, 45.0], [31.0, 24.0, 45.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 26.0, 45.0], [31.0, 26.0, 45.0], [32.0, 26.0, 44.0], [31.0, 26.0, 44.0], [32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 25.0, 44.0], [31.0, 25.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+corners [[32.0, 25.0, 45.0], [31.0, 25.0, 45.0], [32.0, 25.0, 44.0], [31.0, 25.0, 44.0], [32.0, 24.0, 45.0], [31.0, 24.0, 45.0], [32.0, 24.0, 44.0], [31.0, 24.0, 44.0]]
+corner_full_binary_code [True, True, True, True, True, True, True, True]
+corner_full_decimal 255
+triangles []
+triangles_coordinates []
+triangles_planes []
+ray_intersect_planes []
+normal_vec_and_intersect []
+normal_vec_and_intersect_in_marching_cube []
+Photon was very close to the tissue boundary, but there was not intersection
+debug xyz in [22.716006550246295, 26.158777538695276, 49.62859842659819]
+debug label_in 0
+debug check_pos [31.47301578 24.77593701 44.60155031]
+debug label_check 1
+debug xyz_next [31.473015777650787, 24.77593700978235, 44.601550306428926]
+
+
+simulation calculation time: 1.9793570041656494
+very close photons ids:
+ [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+very close photons positions:
+ [[8.61710332399889, 26.158737342727452, 49.84699664050764], [11.163887976677444, 28.069395697971025, 52.08065939018215], [0.55527826939763, 35.7055329343457, 53.362107602878496], [20.85933714060633, 19.487065087474132, 50.92297461268031], [48.86581103085582, 5.19511231775337, 53.25701045659114], [10.837298165705278, 1.538271172112732, 50.072794970704905], [43.679114951185106, 0.14798641241447308, 51.51386307711265], [40.724131687429406, 0.994442153106311, 51.7873511520103], [39.68857495212575, 0.4069888088548065, 50.686984405610296], [49.130555768040466, 22.133658190863216, 49.557459662463664], [30.820204156831075, 23.805360175996874, 51.4835720803887], [22.716006550246295, 26.158777538695276, 49.62859842659819]]
+  photon_id          x          y        z
+-----------  ---------  ---------  -------
+          0   8.6171    26.1587    49.847
+         16  11.1639    28.0694    52.0807
+         22   0.555278  35.7055    53.3621
+         38  20.8593    19.4871    50.923
+         50  48.8658     5.19511   53.257
+         68  10.8373     1.53827   50.0728
+         75  43.6791     0.147986  51.5139
+         78  40.7241     0.994442  51.7874
+         79  39.6886     0.406989  50.687
+         91  49.1306    22.1337    49.5575
+         97  30.8202    23.8054    51.4836
+         98  22.716     26.1588    49.6286
+TEST NORMALIZATION resultEnv
+norm1 sum_of_photon_weight_in_observed_area: 74.99851155204954
+n_photons: 100
+escaped_photons_weight: 25.001488447950464
+norm2 sum_of_photon_weight_in_observed_area: 74.99851155204946
+TEST NORMALIZATION resultRecords
+norm1 sum_of_photon_weight_in_observed_area: 74.99851155204954
+n_photons: 100
+escaped_photons_weight: 25.001488447950464
+norm2 sum_of_photon_weight_in_observed_area: 74.99851155204892
+
+len(photon_register) 100
+len(resultRecords) 4572
+photons recorded: 100
+max photon_id: 99
+min photon_id: 0
+
