@@ -77,6 +77,7 @@ class ChartMaker():
         sl = list(range(0,100))
         sl = [0,1]
         sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+        sl = [4, 48, 73, 76, 77, 89]
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]

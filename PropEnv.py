@@ -4,7 +4,7 @@ import numpy as np
 import math
 from MarchingCubes import MarchingCubes
 from Space3dTools import Space3dTools
-import warnings
+
 
 class PropEnv(Object3D):
     def __init__(self, x=100, y=100, z=100, arr=None):
@@ -14,8 +14,7 @@ class PropEnv(Object3D):
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
         self.very_close_photons = set()
-        debug_list = [[8.61710332399889, 26.158737342727452, 49.84699664050764], [11.163887976677444, 28.069395697971025, 52.08065939018215], [0.55527826939763, 35.7055329343457, 53.362107602878496], [20.85933714060633, 19.487065087474132, 50.92297461268031], [48.86581103085582, 5.19511231775337, 53.25701045659114], [10.837298165705278, 1.538271172112732, 50.072794970704905], [43.679114951185106, 0.14798641241447308, 51.51386307711265], [40.724131687429406, 0.994442153106311, 51.7873511520103], [39.68857495212575, 0.4069888088548065, 50.686984405610296], [49.130555768040466, 22.133658190863216, 49.557459662463664], [30.820204156831075, 23.805360175996874, 51.4835720803887], [22.716006550246295, 26.158777538695276, 49.62859842659819]]
-        debug_list = [[22.716006550246295, 26.158777538695276, 49.62859842659819]]
+        debug_list = [[]]
         self.debug_pos = [tuple(pos) for pos in debug_list]
     
     def get_label_from_float(self, xyz):
@@ -60,7 +59,7 @@ class PropEnv(Object3D):
         vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
         # photon steps from position xyz to xyz_next 
-        linspace = np.linspace(0.0, 1.0, num=int(dist)+2, endpoint=True)
+        linspace = np.linspace(0.0, 1.0, num=(int(dist)+1)*2+2, endpoint=True)
 
         # loop initiation values
         boundary_pos = xyz_next.copy()
@@ -140,14 +139,14 @@ class PropEnv(Object3D):
             normal_vec_and_intersect = [[plane_eq[:3], intersect] for plane_eq, intersect in zip(triangles_planes, ray_intersect_planes) if intersect is not None]
             # remove intersection points that are not in range of marching cube with centroid in cent 
             cmv = MarchingCubes.cmv
-            normal_vec_and_intersect_in_marching_cube = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
+            om = 0.5 # out env margin
+            normal_vec_and_intersect_in_marching_cube = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om)
             # check if intersection wasn't somewhere between +cmv and +0.5
             if MarchingCubes.cmv < 0.5:
                 cmv = 0.5
-                control_list = [[norm, p] for [norm, p] in normal_vec_and_intersect if (p[0] <= cent[0] + cmv and p[0] >= cent[0] - cmv and p[1] <= cent[1] + cmv and p[1] >= cent[1] - cmv and p[2] <= cent[2] + cmv and p[2] >= cent[2] - cmv)]
+                control_list = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om)
                 if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):
-                    print("warning")
-                    warnings.warn("WARNING! Photon slipped in between marching cubes!")
+                    print("WARNING! Photon slipped in between marching cubes!")
 
             if debug:
                 print("corners", corners)
@@ -182,9 +181,25 @@ class PropEnv(Object3D):
         return return_norm_vec, return_boundary_pos
 
             
-
-
-
+    def filter_normal_vec_and_intersect(self, normal_vec_and_intersect, cent, cmv, om):
+        out = []
+        xc, yc, zc = cent[0], cent[1], cent[2]
+        for norm, p in normal_vec_and_intersect:
+            # flags is in centroid
+            x_in_c = xc-cmv <= p[0] <= xc+cmv
+            y_in_c = yc-cmv <= p[1] <= yc+cmv
+            z_in_c = zc-cmv <= p[2] <= zc+cmv
+            # flag is in env margin
+            x_in_m = (0-om <= p[0] < 0) or (self.shape[0]-1 < p[0] <= self.shape[0]-1 + om)
+            y_in_m = (0-om <= p[1] < 0) or (self.shape[1]-1 < p[1] <= self.shape[1]-1 + om)
+            z_in_m = (0-om <= p[2] < 0) or (self.shape[2]-1 < p[2] <= self.shape[2]-1 + om)
+            # flag to leave it in list
+            is_ok = (x_in_c or x_in_m) and (y_in_c or y_in_m) and (z_in_c or z_in_m)
+            if is_ok:
+                out.append([norm, p])
+        return out
+        
+        
 
 
 
