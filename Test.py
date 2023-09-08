@@ -15,7 +15,6 @@ from Sim import Sim
 import matplotlib.pyplot as plt
 import numpy as np
 from ResultEnvProcessing import ResultEnvProcessing
-from ChartMaker import ChartMaker
 
 class Test():
     def __init__(self):
@@ -1473,6 +1472,46 @@ class Test():
             colorPointDF = ColorPointDF()
             colorPointDF.sum_same_idx(df)
             print("res_df\n", df)
+
+    class Test_ArrowsDF():
+        def __init__(self):
+            pass
+
+        @staticmethod
+        def check_arrow_dirs(arrowsDF: pd.DataFrame):
+            flag_ok = True
+            not_ok = []
+            for id in arrowsDF["photon_id"].unique():
+                same_id_df = arrowsDF[arrowsDF["photon_id"] == id]
+                if len(same_id_df) < 3:
+                    continue
+                # calculate normalized dir vector
+                vec = same_id_df[["x_idx_2", "y_idx_2", "z_idx_2"]].to_numpy() - same_id_df[["x_idx", "y_idx", "z_idx"]].to_numpy()
+                dist = np.linalg.norm(vec, axis=1)
+                norm_dir = vec / dist.reshape(-1,1)
+                # check if the dir is not the same in pairs (incident[i], incident[i+2])
+                even = norm_dir[0:]
+                odd = norm_dir[2:]
+                limit = min(len(even), len(odd))
+                are_the_same = np.isclose(even[:limit], odd[:limit])
+                # check if there is at least one same dir vector
+                this_photon_ok = np.all(are_the_same == False)
+                flag_ok = flag_ok and this_photon_ok
+                if not this_photon_ok:
+                    not_ok.append(id)
+            if not flag_ok:
+                print()
+                print("Not every pair of dirs in every second arrows is different.")
+                print("Not ok num:", len(not_ok))
+                print("Not ok photon ids:", not_ok)
+                print()
+                return False
+            else:
+                return True
+                    
+
+
+
 
 
 

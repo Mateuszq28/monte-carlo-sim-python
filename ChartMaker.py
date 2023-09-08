@@ -13,6 +13,7 @@ import pandas as pd
 from IPython.display import display
 import numpy as np
 import os
+from Test import Test
 
 
 class ChartMaker():
@@ -43,6 +44,7 @@ class ChartMaker():
         if do_connect_lines:
             standard_connect_lines = ChartMaker.prepare_standard_connect_lines(propSetup, color_by_root=color_arrows_by_root)
             standard_hide_points = False
+            Test.Test_ArrowsDF.check_arrow_dirs(standard_connect_lines)
         else:
             standard_connect_lines = None
             standard_hide_points = False
@@ -74,10 +76,10 @@ class ChartMaker():
         sl = list(range(10,20)) + list(range(30,40))
         sl = None
         sl = list(range(10,15))
-        sl = list(range(0,100))
         sl = [0,1]
         sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
         sl = [4, 48, 73, 76, 77, 89]
+        sl = list(range(0,100))
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
@@ -448,7 +450,7 @@ class ChartMaker():
                                             sort = False,
                                             color_by_root=False)
         ADF = ArrowsDF()
-        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=color_by_root)
+        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=color_by_root, drop_excessive_columns=False)
         return standard_connect_lines
     
     @staticmethod
