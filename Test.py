@@ -1481,6 +1481,7 @@ class Test():
         def check_arrow_dirs(arrowsDF: pd.DataFrame):
             flag_ok = True
             not_ok = []
+            not_ok_dir_vecs = []
             for id in arrowsDF["photon_id"].unique():
                 same_id_df = arrowsDF[arrowsDF["photon_id"] == id]
                 if len(same_id_df) < 3:
@@ -1495,15 +1496,23 @@ class Test():
                 limit = min(len(even), len(odd))
                 are_the_same = np.isclose(even[:limit], odd[:limit])
                 # check if there is at least one same dir vector
-                this_photon_ok = np.all(are_the_same == False)
-                flag_ok = flag_ok and this_photon_ok
-                if not this_photon_ok:
+                are_rows_ok = ~np.all(are_the_same == True, axis=1)
+                is_photon_ok = np.all(are_rows_ok == True)
+                flag_ok = flag_ok and is_photon_ok
+                if not is_photon_ok:
                     not_ok.append(id)
+                    not_ok_vec1 = even[:limit][~are_rows_ok]
+                    not_ok_vec2 = odd[:limit][~are_rows_ok]
+                    print("photon_id:", id)
+                    print("not_ok_vec1")
+                    print(not_ok_vec1)
+                    print("not_ok_vec2")
+                    print(not_ok_vec2)
+                    not_ok_dir_vecs.append([not_ok_vec1, not_ok_vec2])
             if not flag_ok:
                 print()
-                print("Not every pair of dirs in every second arrows is different.")
+                print("Not every pair of direction vectors in every third arrows is different.")
                 print("Not ok num:", len(not_ok))
-                print("Not ok photon ids:", not_ok)
                 print()
                 return False
             else:

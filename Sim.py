@@ -205,7 +205,7 @@ class Sim():
                             else:
                                 flag_reflect = True
                             
-                            if not flag_reflect:
+                            if flag_reflect:
                                 # ONLY REFLECTION (OLD RAY)
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
