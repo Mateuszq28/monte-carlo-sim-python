@@ -59,7 +59,7 @@ class PropEnv(Object3D):
         vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
         # photon steps from position xyz to xyz_next 
-        linspace = np.linspace(0.0, 1.0, num=(int(dist)+1)*2+2, endpoint=True)
+        linspace = np.linspace(0.0, 1.0, num=int(dist*2+2), endpoint=True)
 
         # loop initiation values
         boundary_pos = xyz_next.copy()
