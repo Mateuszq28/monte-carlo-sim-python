@@ -15,6 +15,9 @@ import pandas as pd
 
 
 class ByVispy(View):
+
+    triangled_planes_dict = dict()
+
     def __init__(self):
         super().__init__()
 
@@ -158,7 +161,7 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False):
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False, draw_plane_triangles=True):
         """
         Plot 3D interactive plot of points in colorPointDF data frame using Vispy
         :return: None
@@ -240,9 +243,8 @@ class ByVispy(View):
                                              arrow_color = arrow_arrow_color)
                 
             # manually added border plane (rectangle)
-            flag_draw_plane = True
+            flag_draw_plane = False
             if flag_draw_plane:
-                # first set plane on which rectangle will be put
                 draw_plane = scene.visuals.Plane(width = 1.0,
                                                  height = 1.0,
                                                  direction = '+z',
@@ -283,7 +285,17 @@ class ByVispy(View):
                                                 scaling =True,
                                                 antialias = True,
                                                 parent = view.scene)
-
+                
+            if draw_plane_triangles:
+                for dic in self.triangled_planes_dict.values():
+                    color = dic["print color"]
+                    for position in dic["traingles"]:
+                        draw_triangle = scene.visuals.Polygon(pos = position,
+                                                              color = color,
+                                                              border_width = 0,
+                                                              parent = view.scene)
+                                                          
+                                                          
             # run
             if sys.flags.interactive != 1:
                 app.run()

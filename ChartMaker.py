@@ -13,7 +13,9 @@ import pandas as pd
 from IPython.display import display
 import numpy as np
 import os
+import time
 from Test import Test
+from PlaneTriangles import PlaneTriangles
 
 
 class ChartMaker():
@@ -49,6 +51,15 @@ class ChartMaker():
             standard_connect_lines = None
             standard_hide_points = False
 
+
+        # PREPARE TRIANGLED PLANES
+        start_time = time.time()
+        triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
+        end_time = time.time()
+        print()
+        print("Plane triangles calculation time:", end_time-start_time)
+        print()
+        ByVispy.triangled_planes_dict = triangls_dict
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
