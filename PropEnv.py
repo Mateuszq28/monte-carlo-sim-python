@@ -138,8 +138,8 @@ class PropEnv(Object3D):
             # normal vec + intersection point, filter out None values
             normal_vec_and_intersect = [[plane_eq[:3], intersect] for plane_eq, intersect in zip(triangles_planes, ray_intersect_planes) if intersect is not None]
             # remove intersection points that are not in range of marching cube with centroid in cent 
-            cmv = MarchingCubes.cmv
-            om = 0.5 # out env margin
+            cmv = MarchingCubes.cmv # marching cube corner +/- value from centroid
+            om = MarchingCubes.om # out env margin (for example -0.17 is rounded to 0, so margin should be 0.5)
             normal_vec_and_intersect_in_marching_cube = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om)
             # check if intersection wasn't somewhere between +cmv and +0.5
             if MarchingCubes.cmv < 0.5:

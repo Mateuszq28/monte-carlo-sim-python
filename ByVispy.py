@@ -249,7 +249,7 @@ class ByVispy(View):
                                                  color = color_array.Color('white', alpha=1.0),
                                                  edge_color = None,
                                                  parent = view.scene)
-                s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50, 50, 1))
+                s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50.5, 50.5, 1))
                 affine = s.as_matrix()
                 draw_plane.transform = affine
                 
