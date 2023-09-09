@@ -29,15 +29,15 @@
     "tissue_properties": {
         "-1": {"mu_a": null, "mu_s": null, "n": null, "name": "light source", "print color": "#FFE800"},
         "0": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "Vacuum", "print color": "#FF00F7"},
-        "1": {"mu_a": 5, "mu_s": 95, "n": 1.000293, "name": "Air", "print color": "#E4F6FF"},
-        "2": {"mu_a": 5, "mu_s": 95, "n": 1.333, "name": "Water", "print color": "#5091CE"},
+        "1": {"mu_a": 0.5, "mu_s": 20, "n": 1.000293, "name": "Air", "print color": "#E4F6FF"},
+        "2": {"mu_a": 1, "mu_s": 30, "n": 1.333, "name": "Water", "print color": "#5091CE"},
         "3": {"mu_a": 5, "mu_s": 95, "n": 1.47, "name": "Olive oil", "print color": "#DFD855"},
         "4": {"mu_a": 5, "mu_s": 95, "n": 1.52, "name": "Window glass", "print color": "#D0FAF9"},
         "5": {"mu_a": 5, "mu_s": 95, "n": 1.31, "name": "Ice", "print color": "#B1CDF9"},
         "6": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Diamond", "print color": "#51DDDD"},
         "7": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Cuticle", "print color": "#FFF99A"},
-        "8": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Skin", "print color": "#FFCB9A"},
-        "9": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Vein", "print color": "#F3794B"},
-        "10": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Blood", "print color": "#FF1414"}
+        "8": {"mu_a": 2, "mu_s": 80, "n": 2.417, "name": "Skin", "print color": "#FFCB9A"},
+        "9": {"mu_a": 30, "mu_s": 100, "n": 2.417, "name": "Vein", "print color": "#F3794B"},
+        "10": {"mu_a": 3, "mu_s": 50, "n": 2.417, "name": "Blood", "print color": "#FF1414"}
     }
 }

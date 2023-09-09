@@ -82,7 +82,7 @@ class PropEnv(Object3D):
                         print("Intersection done by photon from very_close_photons set!")
                         print("debug xyz in", xyz)
                         print()
-                        self.very_close_photons.remove(xyz)
+                        self.very_close_photons.remove(tuple(xyz))
                     break
                 else:
                     print("Photon was very close to the tissue boundary, but there was not intersection")
@@ -165,17 +165,18 @@ class PropEnv(Object3D):
                 return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0].copy()
                 return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1].copy()
                 # to be sure, that norm vector is directed outwards boundary plane
-                ray_vec_out = (np.array(last_pos) - np.array(boundary_pos)).tolist()
+                ray_vec_out = (np.array(last_pos) - np.array(return_boundary_pos)).tolist()
                 alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
                 # alfa should be in <0,90> deg
                 if alfa > math.pi / 2:
                     return_norm_vec = (-np.array(return_norm_vec)).tolist()
+                    alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
 
                 if debug:
                     print("return_norm_vec", return_norm_vec)
                     print("return_boundary_pos", return_boundary_pos)
                     print("ray_vec_out", ray_vec_out)
-                    print("alfa", alfa)
+                    print("alfa [deg]", alfa * 180 / math.pi)
 
                 break
         return return_norm_vec, return_boundary_pos

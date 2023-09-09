@@ -83,7 +83,8 @@ class Space3dTools():
         temp2 = (math.cos(t1)*math.cos(t2) + math.sin(t1)*math.sin(t2))**2 + (math.cos(t1)*math.cos(t2) - math.sin(t1)*math.sin(t2))**2
         temp3 = (math.sin(t1)*math.cos(t2) + math.cos(t1)*math.sin(t2))**2
         temp4 = (math.cos(t1)*math.cos(t2) + math.sin(t1)*math.sin(t2))**2
-        R = temp1 * temp2 / (temp3 * temp4)
+        temp5 = temp3 * temp4
+        R = temp1 * temp2 / temp5
         return R
     
     @staticmethod
