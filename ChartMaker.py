@@ -46,7 +46,7 @@ class ChartMaker():
         if do_connect_lines:
             standard_connect_lines = ChartMaker.prepare_standard_connect_lines(propSetup, color_by_root=color_arrows_by_root)
             standard_hide_points = False
-            Test.Test_ArrowsDF.check_arrow_dirs(standard_connect_lines)
+            # Test.Test_ArrowsDF.check_arrow_dirs(standard_connect_lines)
         else:
             standard_connect_lines = None
             standard_hide_points = False
@@ -64,14 +64,14 @@ class ChartMaker():
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
-        #                                       cs_material="solid",
-        #                                       cs_light_source="solid")
+        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+                                              cs_material="solid",
+                                              cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        # ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
-        #                                              cs_material="solid",
-        #                                              cs_photons=color_scheme)
+        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+                                                     cs_material="solid",
+                                                     cs_photons=color_scheme)
 
 
 
@@ -89,9 +89,9 @@ class ChartMaker():
         sl = None
         sl = list(range(10,15))
         sl = [0,1]
-        sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
-        sl = [4, 48, 73, 76, 77, 89]
         sl = list(range(0,100))
+        sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+        sl = [4, 48]
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
@@ -146,12 +146,12 @@ class ChartMaker():
         # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
         #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
-        # ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
-        #                            bins_per_cm = propSetup.config["bins_per_1_cm"],
-        #                            color_scheme = color_scheme,
-        #                            show = True,
-        #                            connect_lines = standard_connect_lines,
-        #                            hide_points = standard_hide_points)
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+                                   color_scheme = color_scheme,
+                                   show = True,
+                                   connect_lines = standard_connect_lines,
+                                   hide_points = standard_hide_points)
 
 
 
@@ -163,51 +163,51 @@ class ChartMaker():
         drop_values = None
         local_reset_colors = local_color_scheme
         local_reset_colors = None
-        # ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                           input_shape = sh,
-        #                                           color_scheme = local_color_scheme,
-        #                                           drop_values = drop_values,
-        #                                           select_photon_id = None,
-        #                                           photon_register = propSetup.photon_register,
-        #                                           select_parent = True,
-        #                                           select_child = True,
-        #                                           border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-        #                                           png_dir = None,
-        #                                           sum_same_idx = False,
-        #                                           sum_axis = False,
-        #                                           reset_png_colors = None,
-        #                                           show = True,
-        #                                           title_prefix = "",
-        #                                           do_connect_lines = do_connect_lines,
-        #                                           reset_colors = local_reset_colors,
-        #                                           color_points_by_root = color_points_by_root,
-        #                                           color_arrows_by_root = color_arrows_by_root)
+        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                  input_shape = sh,
+                                                  color_scheme = local_color_scheme,
+                                                  drop_values = drop_values,
+                                                  select_photon_id = None,
+                                                  photon_register = propSetup.photon_register,
+                                                  select_parent = True,
+                                                  select_child = True,
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                  png_dir = None,
+                                                  sum_same_idx = False,
+                                                  sum_axis = False,
+                                                  reset_png_colors = None,
+                                                  show = True,
+                                                  title_prefix = "",
+                                                  do_connect_lines = do_connect_lines,
+                                                  reset_colors = local_reset_colors,
+                                                  color_points_by_root = color_points_by_root,
+                                                  color_arrows_by_root = color_arrows_by_root)
         
-        # if sl is not None:
-        #     take_group = 2
-        #     for i in range(len(sl)+1-take_group):
-        #         select_photon_id = [sl[i]]
-        #         select_photon_id = sl[i:i+take_group]
-        #         local_color_scheme = "photonwise"
-        #         ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                                   input_shape = sh,
-        #                                                   color_scheme = local_color_scheme,
-        #                                                   drop_values = None,
-        #                                                   select_photon_id = select_photon_id,
-        #                                                   photon_register = propSetup.photon_register,
-        #                                                   select_parent = True,
-        #                                                   select_child = True,
-        #                                                   border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-        #                                                   png_dir = os.path.join("slice_img", "single_photon_projection_img"),
-        #                                                   sum_same_idx = False,
-        #                                                   sum_axis = False,
-        #                                                   reset_png_colors = None,
-        #                                                   show = True,
-        #                                                   title_prefix = "({}) ".format(i),
-        #                                                   do_connect_lines = do_connect_lines,
-        #                                                   reset_colors = local_reset_colors,
-        #                                                   color_points_by_root = color_points_by_root,
-        #                                                   color_arrows_by_root = color_arrows_by_root)
+        if sl is not None:
+            take_group = 2
+            for i in range(len(sl)+1-take_group):
+                select_photon_id = [sl[i]]
+                select_photon_id = sl[i:i+take_group]
+                local_color_scheme = "photonwise"
+                ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                          input_shape = sh,
+                                                          color_scheme = local_color_scheme,
+                                                          drop_values = None,
+                                                          select_photon_id = select_photon_id,
+                                                          photon_register = propSetup.photon_register,
+                                                          select_parent = True,
+                                                          select_child = True,
+                                                          border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                          png_dir = os.path.join("slice_img", "single_photon_projection_img"),
+                                                          sum_same_idx = False,
+                                                          sum_axis = False,
+                                                          reset_png_colors = None,
+                                                          show = True,
+                                                          title_prefix = "({}) ".format(i),
+                                                          do_connect_lines = do_connect_lines,
+                                                          reset_colors = local_reset_colors,
+                                                          color_points_by_root = color_points_by_root,
+                                                          color_arrows_by_root = color_arrows_by_root)
 
 
 

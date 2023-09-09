@@ -71,6 +71,7 @@ class RunAll():
             print("very close photons ids:\n", vc_ids)
             print("very close photons positions:\n", vc_pos)
             print(tabulate(vc_id_pos, headers=["photon_id", "x", "y", "z"]))
+            print()
         
         # return
     
