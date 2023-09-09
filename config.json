@@ -18,7 +18,7 @@
     "flag_seve_result_records": true,
     "flag_save_result_env": true,
 
-    "min_step_when_boundary_cross": 0.000000001,
+    "min_step_when_boundary_cross": 0.01,
 
     "random_seed": 0,
     "precision": 8,

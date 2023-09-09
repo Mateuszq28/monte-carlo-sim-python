@@ -36,10 +36,10 @@ class Make():
 
     def default_env(self):
         propEnv = PropEnv(x=50, y=50, z=100)
-        propEnv.fill_cube(fill=1, start_p=[0, 0, 0], end_p=[1.0, 1.0, 1.0]) # air
-        propEnv.fill_cube(fill=2, start_p=[1.0, 1.0, 0.70], end_p=[1.0, 1.0, 0.75]) # water
-        propEnv.fill_cube(fill=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.70]) # skin
-        FillShapes.fill_vein(propEnv, z_pos=0.35)
+        propEnv.fill_cube(fill=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # air
+        propEnv.fill_cube(fill=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75]) # water
+        propEnv.fill_cube(fill=8, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65]) # skin
+        FillShapes.fill_vein(propEnv, z_pos=0.25)
         return propEnv
 
 

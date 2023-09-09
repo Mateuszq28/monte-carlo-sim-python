@@ -6,13 +6,15 @@ class FillShapes():
         pass
 
     @staticmethod
-    def fill_vein(propEnv: PropEnv, z_pos, r=0.15, vein_thickness=0.05):
+    def fill_vein(propEnv: PropEnv, z_pos, r=0.25, vein_thickness=0.10):
         x_pos = propEnv.shape[0] // 2
         radius = r * propEnv.shape[1]
+        vein_thick = vein_thickness * propEnv.shape[1]
+        z_pos_idx = z_pos * propEnv.shape[2]
         for x_idx in range(propEnv.shape[0]):
             for z_idx in range(propEnv.shape[2]):
-                eq = (x_pos - x_idx)**2 + (z_pos - z_idx)**2
-                if eq <= (radius - vein_thickness)**2:
+                eq = (x_pos - x_idx)**2 + (z_pos_idx - z_idx)**2
+                if eq <= (radius - vein_thick)**2:
                     propEnv.body[x_idx, :, z_idx] = 10
                 elif eq <= radius**2:
                     propEnv.body[x_idx, :, z_idx] = 9

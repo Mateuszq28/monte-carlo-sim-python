@@ -78,7 +78,7 @@ class RunAll():
         RunAll.normalize_process(sim.propSetup)
 
         # SHOW CHARTS + MAKE .PNG IMAGES
-        ChartMaker.show_all(sim.propSetup, color_scheme, do_connect_lines, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False)
+        ChartMaker.show_all(sim.propSetup, color_scheme, do_connect_lines, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
 
 
 
