@@ -286,14 +286,22 @@ class ByVispy(View):
                                                 antialias = True,
                                                 parent = view.scene)
                 
+
             if draw_plane_triangles:
-                for dic in self.triangled_planes_dict.values():
-                    color = dic["print color"]
-                    for position in dic["traingles"]:
-                        draw_triangle = scene.visuals.Polygon(pos = position,
-                                                              color = color,
-                                                              border_width = 0,
-                                                              parent = view.scene)
+                for label, dic in self.triangled_planes_dict.items():
+                    if label not in self.omit_labels:
+                        color = dic["print color"]
+                        position = np.array(dic["traingles"]).reshape(-1,3)
+                        scene.visuals.Mesh(vertices=position,
+                                           faces=None,
+                                           vertex_colors=None,
+                                           face_colors=None,
+                                           color=color_array.Color(color, alpha=1.0),
+                                           vertex_values=None,
+                                           meshdata=None,
+                                           shading=None,
+                                           mode='triangles',
+                                           parent = view.scene)
                                                           
                                                           
             # run

@@ -33,9 +33,10 @@ class PlaneTriangles():
                         corner_full_decimal = sum([2**bit for bit, val in zip(range(7,-1,-1), corner_full_binary_code) if val == True])
                         # all triangles corners in one list
                         triangles = MarchingCubes.TriangleTable[corner_full_decimal].copy()
-                        # split into triangles
-                        triangles = [triangles[x:x+3] for x in range(0, len(triangles)-1, 3)]
-                        triangles_coordinates = [[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
-                        # add to dict
-                        triangls_dict[label]["traingles"] += triangles_coordinates
+                        if len(triangles) > 2:
+                            # split into triangles
+                            triangles = [triangles[x:x+3] for x in range(0, len(triangles)-1, 3)]
+                            triangles_coordinates = [[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
+                            # add to dict
+                            triangls_dict[label]["traingles"] += triangles_coordinates
         return triangls_dict
