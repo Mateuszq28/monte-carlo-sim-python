@@ -156,7 +156,7 @@ class Sim():
                         min_step = 0.5 - MarchingCubes.cmv + min_step_correction
                     else:
                         min_step = min_step_correction
-                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(boundary_change))
+                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(photon.dir))
 
                     # Total internal reflection
                     R = 0.0 # init value
