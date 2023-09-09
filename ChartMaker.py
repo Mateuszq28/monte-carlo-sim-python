@@ -238,7 +238,7 @@ class ChartMaker():
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(simulation_preview, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None)
+        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
@@ -247,21 +247,21 @@ class ChartMaker():
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(simulation_result_preview, color_scheme=color_scheme, drop_values=[0])
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights)", connect_lines=None)
+        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights)", connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
     def show_simulation_preview_DF(propSetup: PropSetup, cs_material="solid", cs_light_source="solid"):
         df = propSetup.make_preview_DF(cs_material, cs_light_source)
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None)
+        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
     def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="solid", cs_photons="loop"):
         df = propSetup.make_result_preview_DF(cs_material, cs_photons)
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights), photon color_scheme = " + cs_photons, connect_lines=None)
+        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights), photon color_scheme = " + cs_photons, connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
@@ -388,7 +388,7 @@ class ChartMaker():
             projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=reset_colors, connect_lines=connect_lines)
             chart_name = title_prefix + "projections_from_resultRecords_" + name
             if show:
-                vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points)
+                vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
             flat_z_proj, image_shape, flat_z_connect_lines = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors, connect_lines=proj_connect_lines)
             Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png", connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
@@ -400,7 +400,7 @@ class ChartMaker():
         vis = ByVispy()
         if title is None:
             title="Absorbed energy in volume"
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points)
+        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=True)
 
     @staticmethod
     def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
@@ -437,7 +437,7 @@ class ChartMaker():
         if title is None:
             title="Absorbed energy in volume"
         vis = ByVispy()
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points)
+        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=True)
 
 
     @staticmethod

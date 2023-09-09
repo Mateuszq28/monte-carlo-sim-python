@@ -161,7 +161,7 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False, draw_plane_triangles=True):
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False, draw_plane_triangles=False):
         """
         Plot 3D interactive plot of points in colorPointDF data frame using Vispy
         :return: None
