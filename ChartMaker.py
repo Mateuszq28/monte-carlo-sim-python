@@ -24,7 +24,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
+    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False):
 
         # TEST DUPLICATES IN RECORDS
         turn_on_test = False
@@ -53,13 +53,14 @@ class ChartMaker():
 
 
         # PREPARE TRIANGLED PLANES
-        start_time = time.time()
-        triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
-        end_time = time.time()
-        print()
-        print("Plane triangles calculation time:", end_time-start_time)
-        print()
-        ByVispy.triangled_planes_dict = triangls_dict
+        if do_triangled_planes:
+            start_time = time.time()
+            triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
+            end_time = time.time()
+            print()
+            print("Plane triangles calculation time:", end_time-start_time)
+            print()
+            ByVispy.triangled_planes_dict = triangls_dict
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
