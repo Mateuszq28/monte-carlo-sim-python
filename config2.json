@@ -1,0 +1,43 @@
+{
+    "flag_make_default_env": true,
+    "flag_make_default_light_source": true,
+    "flag_make_default_prop_setup_file": true,
+
+    "flag_use_default_env": true,
+    "alternative_env_path": "",
+    "flag_use_default_light_surce": true,
+    "alternative_light_source_path": "",
+    "flag_use_default_prop_setup": true,
+    "alternative_prop_setup_path": "",
+
+    "flag_make_prop_setup_from_componentes": false,
+
+    "use_proba_instead_of_splitting": true,
+
+    "flag_result_records_pos_int": false,
+    "flag_seve_result_records": true,
+    "flag_save_result_env": true,
+
+    "min_step_when_boundary_cross": 0.000000001,
+
+    "random_seed": 0,
+    "precision": 8,
+    "bins_per_1_cm": 500,
+    "anisotropy_of_scattering_g": 0.5,
+    "photon_weight_threshold": 1e-4,
+    "photon_chance": 0.1,
+    "tissue_properties": {
+        "-1": {"mu_a": null, "mu_s": null, "n": null, "name": "light source", "print color": "#FFE800"},
+        "0": {"mu_a": 0, "mu_s": 0, "n": 1.0, "name": "Vacuum", "print color": "#FF00F7"},
+        "1": {"mu_a": 1.64, "mu_s": 1.23e-7, "n": 1.000293, "name": "Air", "print color": "#E4F6FF"},
+        "2": {"mu_a": 0.135, "mu_s": 0.5, "n": 1.333, "name": "Water", "print color": "#5091CE"},
+        "3": {"mu_a": 5, "mu_s": 95, "n": 1.47, "name": "Olive oil", "print color": "#DFD855"},
+        "4": {"mu_a": 5, "mu_s": 95, "n": 1.52, "name": "Window glass", "print color": "#D0FAF9"},
+        "5": {"mu_a": 5, "mu_s": 95, "n": 1.31, "name": "Ice", "print color": "#B1CDF9"},
+        "6": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Diamond", "print color": "#51DDDD"},
+        "7": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Cuticle", "print color": "#FFF99A"},
+        "8": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Skin", "print color": "#FFCB9A"},
+        "9": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Vein", "print color": "#F3794B"},
+        "10": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Blood", "print color": "#FF1414"}
+    }
+}
