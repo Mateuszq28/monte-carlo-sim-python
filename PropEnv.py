@@ -140,11 +140,11 @@ class PropEnv(Object3D):
             # remove intersection points that are not in range of marching cube with centroid in cent 
             cmv = MarchingCubes.cmv # marching cube corner +/- value from centroid
             om = MarchingCubes.om # out env margin (for example -0.17 is rounded to 0, so margin should be 0.5)
-            normal_vec_and_intersect_in_marching_cube = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om)
+            normal_vec_and_intersect_in_marching_cube = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om, point_in=last_pos, point_out=boundary_pos)
             # check if intersection wasn't somewhere between +cmv and +0.5
             if MarchingCubes.cmv < 0.5:
                 cmv = 0.5
-                control_list = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om)
+                control_list = self.filter_normal_vec_and_intersect(normal_vec_and_intersect, cent, cmv, om, point_in=last_pos, point_out=boundary_pos)
                 if len(control_list) != len(normal_vec_and_intersect_in_marching_cube):
                     print("WARNING! Photon slipped in between marching cubes!")
 
@@ -182,10 +182,11 @@ class PropEnv(Object3D):
         return return_norm_vec, return_boundary_pos
 
             
-    def filter_normal_vec_and_intersect(self, normal_vec_and_intersect, cent, cmv, om):
+    def filter_normal_vec_and_intersect(self, normal_vec_and_intersect, cent, cmv, om, point_in, point_out):
+        intersection_in_vec = [[norm, p] for norm, p in normal_vec_and_intersect if self.is_between(point_in, p, point_out)]
         out = []
         xc, yc, zc = cent[0], cent[1], cent[2]
-        for norm, p in normal_vec_and_intersect:
+        for norm, p in intersection_in_vec:
             # flags is in centroid
             x_in_c = xc-cmv <= p[0] <= xc+cmv
             y_in_c = yc-cmv <= p[1] <= yc+cmv
@@ -199,6 +200,17 @@ class PropEnv(Object3D):
             if is_ok:
                 out.append([norm, p])
         return out
+    
+    @staticmethod
+    def is_between(p1, p2, p3):
+        """
+        Check if p2 is between p1 and p3.
+        It doesn't check if all three are in line.
+        """
+        x_between = (p1[0] <= p2[0] <= p3[0]) or (p3[0] <= p2[0] <= p1[0])
+        y_between = (p1[1] <= p2[1] <= p3[1]) or (p3[1] <= p2[1] <= p1[1])
+        z_between = (p1[2] <= p2[2] <= p3[2]) or (p3[2] <= p2[2] <= p1[2])
+        return x_between and y_between and z_between
         
         
 
