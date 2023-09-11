@@ -13,6 +13,7 @@ class Photon():
         self.pos = emit_pos
         self.dir = emit_dir
         self.weight = weight
+        self.mat_label = 0 # it is changed at the start of the sim
         self.id = Photon.static_photon_id_counter
         Photon.static_photon_id_counter += 1
 
@@ -21,5 +22,6 @@ class Photon():
         print("self.dir", self.dir)
         print("self.weight", self.weight)
         print("self.id", self.id)
+        print("self.mat_label", self.mat_label)
 
 

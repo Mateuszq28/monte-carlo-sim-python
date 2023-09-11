@@ -79,6 +79,8 @@ class Sim():
                         photon = ls[i].emit()
                         # global coordinates
                         photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
+                        # set start pos material label
+                        photon.mat_label = self.propSetup.propEnv.get_label_from_float(photon.pos)
                         # register start position in photon_register
                         self.propSetup.photon_register[photon.id] = {"start_pos": self.condition_round(photon.pos),
                                                                      "parent": None,
@@ -97,7 +99,7 @@ class Sim():
 
     def propagate_photon(self, photon: Photon):
         while photon.weight > 0:
-            _, _, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+            _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
             # move photon to new position
             self.hop(photon, mu_t)
             # do the rest, get termination flag
@@ -115,7 +117,7 @@ class Sim():
         if photon.weight == 0:
             return True
         # absorb light in medium
-        mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+        mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
         self.drop(photon, mu_a, mu_s, mu_t)
         self.spin(photon)
         flag_terminate = self.terminate(photon)
@@ -136,7 +138,7 @@ class Sim():
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
             # check if there was change of a material
-            boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+            boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
             # check if photon is in env shape range
             if boundary_change:
                 # photon interact with the tissue earlier
@@ -158,7 +160,6 @@ class Sim():
                         min_step = 0.5 - MarchingCubes.cmv + min_step_correction
                     else:
                         min_step = min_step_correction
-                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step)
 
                     # Total internal reflection
                     R = 0.0 # init value
@@ -166,8 +167,8 @@ class Sim():
                     alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
                     refraction_vec = None
                         # refractive indices
-                    n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
-                    n2 = self.propSetup.propEnv.get_refractive_index(xyz=passed_boundary_pos)
+                    n1 = self.propSetup.propEnv.get_refractive_index_from_label(label_in)
+                    n2 = self.propSetup.propEnv.get_refractive_index_from_label(label_out)
                     if n2 < n1:
                         critical_alpha = math.asin(n2 / n1)
                         if alpha > critical_alpha:
@@ -193,6 +194,7 @@ class Sim():
                         photon.weight *= (1.0-R)
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
+                        photon.mat_label = label_out
                         self.just_move(photon, min_step)
                         self.try_move(photon, rest_dist)
 
@@ -212,6 +214,7 @@ class Sim():
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
+                                photon.mat_label = label_in
                                 self.just_move(photon, min_step)
                                 self.try_move(photon, rest_dist)
                             else:
@@ -220,6 +223,7 @@ class Sim():
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
+                                photon.mat_label = label_out
                                 self.just_move(photon, min_step)
                                 self.try_move(photon, rest_dist)
 
@@ -228,6 +232,7 @@ class Sim():
                             # penetration ray - refraction
                             # new photon to track
                             refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
+                            refraction_photon.mat_label = label_out
                             self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                                     "parent": photon.id,
                                                                                     "child": []
@@ -242,6 +247,7 @@ class Sim():
                             photon.weight *= R
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
+                            photon.mat_label = label_in
                             self.just_move(photon, min_step)
                             self.try_move(photon, rest_dist)
 
@@ -250,6 +256,7 @@ class Sim():
                         photon.weight *= R
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
+                        photon.mat_label = label_in
                         self.just_move(photon, min_step)
                         self.try_move(photon, rest_dist)
                 

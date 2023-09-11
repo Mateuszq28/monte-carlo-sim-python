@@ -14,11 +14,12 @@ class PropEnv(Object3D):
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
     
-    def get_label_from_float(self, xyz):
+    def get_label_from_float(self, xyz) -> int:
         xyz_int = self.round_xyz(xyz)
         label = self.body[xyz_int[0], xyz_int[1], xyz_int[2]]
         return label
 
+    # Warning! xyz is rounded, so it can return wrong values if photon is near sloping boundary of materials
     def get_properties(self, xyz):
         label = self.get_label_from_float(xyz)
         label_str = str(label)
@@ -29,9 +30,26 @@ class PropEnv(Object3D):
         # Total attenuation coefficient in 1/cm
         mu_t = mu_a + mu_s
         return mu_a, mu_s, mu_t
+
+    def get_properties_from_label(self, label):
+        label_str = str(label)
+        # Absorption Coefficient in 1/cm
+        mu_a = self.tissue_properties[label_str]["mu_a"]
+        # Scattering Coefficient in 1/cm
+        mu_s = self.tissue_properties[label_str]["mu_s"]
+        # Total attenuation coefficient in 1/cm
+        mu_t = mu_a + mu_s
+        return mu_a, mu_s, mu_t
     
+    # Warning! xyz is rounded, so it can return wrong values if photon is near sloping boundary of materials
     def get_refractive_index(self, xyz):
         label = self.get_label_from_float(xyz)
+        label_str = str(label)
+        # absolute refractive index
+        n = self.tissue_properties[label_str]["n"]
+        return n
+    
+    def get_refractive_index_from_label(self, label):
         label_str = str(label)
         # absolute refractive index
         n = self.tissue_properties[label_str]["n"]
@@ -46,7 +64,7 @@ class PropEnv(Object3D):
                 break
         return env_boundary_exceeded
     
-    def boundary_check(self, xyz:list, xyz_next:list):
+    def boundary_check(self, xyz:list, xyz_next:list, label_in: int):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
         arr_xyz = np.array(xyz)
@@ -60,26 +78,28 @@ class PropEnv(Object3D):
         boundary_pos = xyz_next.copy()
         boundary_change = False
         boundary_norm_vec = None
+        label_out = None
         for t in linspace:
             check_pos = arr_xyz + vec * t
             if self.env_boundary_check(check_pos):
                 # photon escaped from observed env (tissue)
                 break
-            proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), debug=False)
+            proposed_norm_vec, proposed_boundary_pos, label_in, label_out = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), label_in, debug=False)
             if proposed_norm_vec is not None:
                 # boundary_pos = check_pos.tolist()
                 boundary_pos = proposed_boundary_pos
                 boundary_change = True
                 boundary_norm_vec = proposed_norm_vec
                 break
-        return boundary_pos, boundary_change, boundary_norm_vec
+        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
     
-    def plane_boundary_normal_vec(self, last_pos, boundary_pos, debug=False):
+    def plane_boundary_normal_vec(self, last_pos, boundary_pos, label_in, debug=False):
         """
         Finds normal vector to the boundary tissue plane using.
         Estimates the plane using Marching Cubes algorithm (8 marching cubes) in one local point (boundary_pos).
         """
-        boundary_pos_label = self.get_label_from_float(boundary_pos)
+        # boundary_pos_label = self.get_label_from_float(boundary_pos)
+        boundary_pos_label = label_in
         # suggest cubes surrounding boundary point
         # max 8, less if some cube's points are not in env shape range
         marching_cubes_centroids = self.cubes_surrounding_point(boundary_pos)
@@ -99,6 +119,8 @@ class PropEnv(Object3D):
         # - iter through marching cubes, find plane stretched on triangles,
         # - check if the ray intersect this plane, find its norm vector and intersection point
         # loop initiation values
+        return_label_in = boundary_pos_label
+        return_label_out = None
         return_norm_vec = None
         return_boundary_pos = boundary_pos.copy()
         for cent in marching_cubes_centroids:
@@ -141,6 +163,10 @@ class PropEnv(Object3D):
             if len(normal_vec_and_intersect_in_marching_cube) == 0:
                 continue
             else:
+                boundary_labels_list = list(set([self.get_label_from_float(co) != boundary_pos_label for co in corners]))
+                return_label_out = boundary_labels_list[0]
+                if len(boundary_labels_list) > 0:
+                    print("There was more than one material at the boundary! First was picked up as the return_label_out.")
                 return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0].copy()
                 return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1].copy()
                 # to be sure, that norm vector is directed outwards boundary plane
@@ -158,7 +184,8 @@ class PropEnv(Object3D):
                     print("alfa [deg]", alfa * 180 / math.pi)
 
                 break
-        return return_norm_vec, return_boundary_pos
+
+        return return_norm_vec, return_boundary_pos, return_label_in, return_label_out
 
             
     def filter_normal_vec_and_intersect(self, normal_vec_and_intersect, cent, cmv, om, point_in, point_out):
