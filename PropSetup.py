@@ -20,6 +20,7 @@ class PropSetup:
         self.resultRecords = None
         self.photon_register = dict()
         self.config = None
+        self.result_folder = ""
 
     def make_preview(self):
         """

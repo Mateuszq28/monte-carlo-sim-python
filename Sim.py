@@ -64,6 +64,8 @@ class Sim():
         
         # link config to PropSetup
         self.propSetup.config = self.config
+        # link output folder
+        self.propSetup.result_folder = self.result_folder
 
 
     def start_sim(self):

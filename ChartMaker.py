@@ -54,12 +54,23 @@ class ChartMaker():
 
         # PREPARE TRIANGLED PLANES
         if do_triangled_planes:
-            start_time = time.time()
-            triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
-            end_time = time.time()
-            print()
-            print("Plane triangles calculation time:", end_time-start_time)
-            print()
+            if propSetup.config["flag_use_triangled_planes_from_file"]:
+                triangls_dict = PlaneTriangles.load_json(propSetup.result_folder)
+                # if file not exsists triangls_dict is None
+            else:
+                triangls_dict = None
+            if triangls_dict is None:
+                start_time = time.time()
+                triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
+                end_time = time.time()
+                print()
+                print("Plane triangles calculation time:", end_time-start_time)
+                print()
+                PlaneTriangles.save_json(triangls_dict, propSetup.result_folder)
+            else:
+                print()
+                print("Triangles successfully loaded from json file.")
+                print()
             ByVispy.triangled_planes_dict = triangls_dict
 
 

@@ -275,7 +275,7 @@ class ByVispy(View):
             # mark some positions (for debugging)
             put_markers = False
             if put_markers:
-                pos_to_mark = [[]]
+                pos_to_mark = [[18.084844079411813, 9.089343247806013, 27.583690503396138]]
                 pos_to_mark = np.array(pos_to_mark)
                 markers = scene.visuals.Markers(pos = pos_to_mark,
                                                 size= 3.0,
