@@ -349,7 +349,7 @@ class ChartMaker():
             else:
                 flat_z_connect_lines = None
             if show:
-                ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
+                ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
                 ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
             proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
@@ -405,13 +405,13 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None, hide_points=False):
+    def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None, hide_points=False, draw_plane_triangles=True):
         colorPointDF = ColorPointDF()
         df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0, 0.0])
         vis = ByVispy()
         if title is None:
             title="Absorbed energy in volume"
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=True)
+        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=draw_plane_triangles)
 
     @staticmethod
     def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
