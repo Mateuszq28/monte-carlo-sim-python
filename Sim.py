@@ -158,7 +158,7 @@ class Sim():
                         min_step = 0.5 - MarchingCubes.cmv + min_step_correction
                     else:
                         min_step = min_step_correction
-                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(photon.dir))
+                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step)
 
                     # Total internal reflection
                     R = 0.0 # init value
@@ -267,7 +267,7 @@ class Sim():
 
 
     def just_move(self, photon: Photon, step):
-        vec = np.array(photon.dir) / np.linalg.norm(photon.dir) * step
+        vec = np.array(photon.dir) * step
         photon.pos = [p+s for p, s in zip(photon.pos, vec)]
 
 
