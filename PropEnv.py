@@ -211,12 +211,12 @@ class PropEnv(Object3D):
     @staticmethod
     def is_between(p1, p2, p3):
         """
-        Check if p2 is between p1 and p3.
+        Check if p2 is between (p1, p3].
         It doesn't check if all three are in line.
         """
-        x_between = (p1[0] <= p2[0] <= p3[0]) or (p3[0] <= p2[0] <= p1[0])
-        y_between = (p1[1] <= p2[1] <= p3[1]) or (p3[1] <= p2[1] <= p1[1])
-        z_between = (p1[2] <= p2[2] <= p3[2]) or (p3[2] <= p2[2] <= p1[2])
+        x_between = (p1[0] < p2[0] <= p3[0]) or (p3[0] <= p2[0] < p1[0])
+        y_between = (p1[1] < p2[1] <= p3[1]) or (p3[1] <= p2[1] < p1[1])
+        z_between = (p1[2] < p2[2] <= p3[2]) or (p3[2] <= p2[2] < p1[2])
         return x_between and y_between and z_between
         
         

@@ -23,8 +23,6 @@
     "flag_save_result_env": true,
     "flag_use_triangled_planes_from_file": true,
 
-    "min_step_when_boundary_cross": 0.01,
-
     "random_seed": 0,
     "precision": 8,
     "bins_per_1_cm": 500,

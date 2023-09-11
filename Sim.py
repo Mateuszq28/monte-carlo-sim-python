@@ -153,13 +153,6 @@ class Sim():
 
                     incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                     reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
-                    # min_step_correction = 0
-                    # min_step_correction = 0.000000001
-                    min_step_correction = self.config["min_step_when_boundary_cross"]
-                    if MarchingCubes.cmv <= 0.5:
-                        min_step = 0.5 - MarchingCubes.cmv + min_step_correction
-                    else:
-                        min_step = min_step_correction
 
                     # Total internal reflection
                     R = 0.0 # init value
@@ -186,7 +179,7 @@ class Sim():
                         R = Space3dTools.internal_reflectance(alpha, beta)
 
                     traveled_dist = math.dist(photon.pos, boundary_pos)
-                    rest_dist = distance - traveled_dist - min_step
+                    rest_dist = distance - traveled_dist
 
                     if R == 0.0:
                         # ONLY REFRACTION (OLD RAY)
@@ -195,7 +188,6 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
                         photon.mat_label = label_out
-                        self.just_move(photon, min_step)
                         self.try_move(photon, rest_dist)
 
                     if 0.0 < R < 1.0:
@@ -215,7 +207,6 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
                                 photon.mat_label = label_in
-                                self.just_move(photon, min_step)
                                 self.try_move(photon, rest_dist)
                             else:
                                 # ONLY REFRACTION (OLD RAY)
@@ -224,7 +215,6 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
                                 photon.mat_label = label_out
-                                self.just_move(photon, min_step)
                                 self.try_move(photon, rest_dist)
 
                         else:
@@ -238,7 +228,6 @@ class Sim():
                                                                                     "child": []
                                                                                     }
                             self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
-                            self.just_move(refraction_photon, min_step)
                             self.try_move(refraction_photon, rest_dist)
                             flag_terminate = self.after_hop(refraction_photon)
                             if not flag_terminate:
@@ -248,7 +237,6 @@ class Sim():
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
                             photon.mat_label = label_in
-                            self.just_move(photon, min_step)
                             self.try_move(photon, rest_dist)
 
                     if R == 1.0:
@@ -257,7 +245,6 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
                         photon.mat_label = label_in
-                        self.just_move(photon, min_step)
                         self.try_move(photon, rest_dist)
                 
                 else:
