@@ -61,17 +61,6 @@ class RunAll():
         sim.start_sim()
         end_time = time.time()
         print("simulation calculation time:", end_time-start_time)
-
-        # PRINT VERY CLOSE PHOTONS
-        vc_set = sim.propSetup.propEnv.very_close_photons
-        if len(vc_set) > 0:
-            vc_id_pos = [col[0:4] for col in sim.propSetup.resultRecords if tuple(col[1:4]) in vc_set]
-            vc_ids = [col[0] for col in vc_id_pos]
-            vc_pos = [col[1:4] for col in vc_id_pos]
-            print("very close photons ids:\n", vc_ids)
-            print("very close photons positions:\n", vc_pos)
-            print(tabulate(vc_id_pos, headers=["photon_id", "x", "y", "z"]))
-            print()
         
         # return
     

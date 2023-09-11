@@ -13,9 +13,6 @@ class PropEnv(Object3D):
             # get simulation config parameters
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
-        self.very_close_photons = set()
-        debug_list = [[]]
-        self.debug_pos = [tuple(pos) for pos in debug_list]
     
     def get_label_from_float(self, xyz):
         xyz_int = self.round_xyz(xyz)
@@ -52,15 +49,13 @@ class PropEnv(Object3D):
     def boundary_check(self, xyz:list, xyz_next:list):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
-        debug_flag = tuple(xyz) in self.debug_pos
-        label_in = self.get_label_from_float(xyz)
         arr_xyz = np.array(xyz)
         arr_xyz_next = np.array(xyz_next)
         vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
         # photon steps from position xyz to xyz_next 
-        linspace = np.linspace(0.0, 1.0, num=int(dist*2+2), endpoint=True)
-
+        linspace = np.linspace(0.0, 1.0, num=int(dist)*2+2, endpoint=False)
+        linspace += linspace[1]
         # loop initiation values
         boundary_pos = xyz_next.copy()
         boundary_change = False
@@ -70,29 +65,13 @@ class PropEnv(Object3D):
             if self.env_boundary_check(check_pos):
                 # photon escaped from observed env (tissue)
                 break
-            label_check = self.get_label_from_float(check_pos)
-            if label_in != label_check:
-                proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), debug=debug_flag)
-                if proposed_norm_vec is not None:
-                    # boundary_pos = check_pos.tolist()
-                    boundary_pos = proposed_boundary_pos
-                    boundary_change = True
-                    boundary_norm_vec = proposed_norm_vec
-                    if tuple(xyz) in self.very_close_photons:
-                        print("Intersection done by photon from very_close_photons set!")
-                        print("debug xyz in", xyz)
-                        print()
-                        self.very_close_photons.remove(tuple(xyz))
-                    break
-                else:
-                    print("Photon was very close to the tissue boundary, but there was not intersection")
-                    print("debug xyz in", xyz)
-                    print("debug label_in", label_in)
-                    print("debug check_pos", check_pos)
-                    print("debug label_check", label_check)
-                    print("debug xyz_next", xyz_next)
-                    print("\n")
-                    self.very_close_photons.add(tuple(xyz))
+            proposed_norm_vec, proposed_boundary_pos = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), debug=False)
+            if proposed_norm_vec is not None:
+                # boundary_pos = check_pos.tolist()
+                boundary_pos = proposed_boundary_pos
+                boundary_change = True
+                boundary_norm_vec = proposed_norm_vec
+                break
         return boundary_pos, boundary_change, boundary_norm_vec
     
     def plane_boundary_normal_vec(self, last_pos, boundary_pos, debug=False):
