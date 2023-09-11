@@ -163,10 +163,11 @@ class PropEnv(Object3D):
             if len(normal_vec_and_intersect_in_marching_cube) == 0:
                 continue
             else:
-                boundary_labels_list = list(set([self.get_label_from_float(co) != boundary_pos_label for co in corners]))
+                boundary_labels_list = list(set([self.get_label_from_float(co) for co in corners if self.get_label_from_float(co) != boundary_pos_label]))
                 return_label_out = boundary_labels_list[0]
-                if len(boundary_labels_list) > 0:
+                if len(boundary_labels_list) > 1:
                     print("There was more than one material at the boundary! First was picked up as the return_label_out.")
+                    print("boundary_labels_list:", boundary_labels_list)
                 return_norm_vec = normal_vec_and_intersect_in_marching_cube[0][0].copy()
                 return_boundary_pos = normal_vec_and_intersect_in_marching_cube[0][1].copy()
                 # to be sure, that norm vector is directed outwards boundary plane
