@@ -288,8 +288,9 @@ class ByVispy(View):
                 
 
             if draw_plane_triangles:
+                str_omit = [str(l) for l in self.omit_labels]
                 for label, dic in self.triangled_planes_dict.items():
-                    if label not in self.omit_labels:
+                    if label not in str_omit:
                         color = dic["print color"]
                         position = np.array(dic["traingles"]).reshape(-1,3)
                         scene.visuals.Mesh(vertices=position,

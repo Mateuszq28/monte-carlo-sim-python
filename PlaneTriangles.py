@@ -25,7 +25,7 @@ class PlaneTriangles():
         cent_y_linspace = np.linspace(0.5, propEnv.shape[1]-1-0.5, num=propEnv.shape[1]-1)
         cent_z_linspace = np.linspace(0.5, propEnv.shape[2]-1-0.5, num=propEnv.shape[2]-1)
         for label in labels:
-            triangls_dict["label"] = {"print color": self.config["tissue_properties"][str(label)]["print color"],
+            triangls_dict[str(label)] = {"print color": self.config["tissue_properties"][str(label)]["print color"],
                                     "traingles": []}
             for cent_x in cent_x_linspace:
                 for cent_y in cent_y_linspace:
@@ -42,7 +42,7 @@ class PlaneTriangles():
                             triangles = [triangles[x:x+3] for x in range(0, len(triangles)-1, 3)]
                             triangles_coordinates = [[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in triangles]
                             # add to dict
-                            triangls_dict["label"]["traingles"] += triangles_coordinates
+                            triangls_dict[str(label)]["traingles"] += triangles_coordinates
         return triangls_dict
     
     @staticmethod
