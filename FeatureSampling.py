@@ -49,6 +49,7 @@ class FeatureSampling():
         self.bins_per_1_cm = config["bins_per_1_cm"] # [N/cm]
         self.anisotropy_of_scattering_g = config["anisotropy_of_scattering_g"]
         self.funSampling = FunSampling(self.precision)
+        self.funDistribution = FunDistibution()
         self.myRandom = MyRandom()
 
     def photon_hop(self, mu_t):
@@ -59,6 +60,11 @@ class FeatureSampling():
         # calculations in bins (voxels)
         hop *= self.bins_per_1_cm # [cm * N/cm = N]
         return hop
+    
+    def photon_hop_distribution(self, mu_t, hop):
+        s = hop / self.bins_per_1_cm
+        F = self.funDistribution.exp1_aprox(a=mu_t, s=s) # F(s) = rnd 
+        return F
     
     def photon_theta(self):
         # try other functions
@@ -517,6 +523,9 @@ class FunDistibution():
         funIntegral = FunIntegral()
         distFun = funIntegral.exp1
         return distFun(a=a, s=s) - distFun(a=a, s=s1)
+    
+    def exp1_aprox(self, a, s):
+        return 1 - math.exp(- a * s)
     
     def parabola1(self, s):
         # constant integration scope <-pi, s> (in distribution)
