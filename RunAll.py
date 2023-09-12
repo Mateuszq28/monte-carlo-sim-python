@@ -55,6 +55,7 @@ class RunAll():
         color_scheme = "rainbow"
         color_scheme = "solid"
         color_scheme = "min-max"
+        color_scheme = "median"
         do_connect_lines = True
         do_connect_lines = False
 
