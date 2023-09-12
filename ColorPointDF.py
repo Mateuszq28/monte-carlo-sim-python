@@ -210,6 +210,17 @@ class ColorPointDF():
             # alpha channel
             df.insert(len(df.columns), "A", [val[3] for val in rgb], True)
 
+        elif color_scheme == "normalized":
+            max = df["value"].max()
+            gray = 255 * df["value"].to_numpy() / max
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val for val in gray], True)
+            df.insert(len(df.columns), "G", [val for val in gray], True)
+            df.insert(len(df.columns), "B", [val for val in gray], True)
+            # alpha channel
+            df.insert(len(df.columns), "A", [255 for _ in gray], True)
+
+
 
             
 

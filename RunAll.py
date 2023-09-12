@@ -54,6 +54,7 @@ class RunAll():
         color_scheme = "random"
         color_scheme = "rainbow"
         color_scheme = "solid"
+        color_scheme = "normalized"
         do_connect_lines = True
 
         sim = Sim()
