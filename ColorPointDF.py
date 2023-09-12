@@ -267,6 +267,24 @@ class ColorPointDF():
             # alpha channel
             df.insert(len(df.columns), "A", [255 for _ in color], True)
 
+        elif color_scheme == "logarithmic":
+            vals = df["value"].to_numpy()
+            max = vals.max()
+            # decibels (max is 0, other are negative)
+            # dec_vals = 20 * np.log10( vals / max )
+            dec_vals = np.log2( vals / max )
+            # min max normalization
+            min = dec_vals.min() # negative
+            max = dec_vals.max() # 0
+            min_color = 15
+            gray = (255-min_color) * ((dec_vals - min) / (max - min)) + min_color
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val for val in gray], True)
+            df.insert(len(df.columns), "G", [val for val in gray], True)
+            df.insert(len(df.columns), "B", [val for val in gray], True)
+            # alpha channel
+            df.insert(len(df.columns), "A", [255 for _ in gray], True)
+
 
 
             

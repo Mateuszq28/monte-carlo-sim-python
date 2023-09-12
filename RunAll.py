@@ -57,6 +57,7 @@ class RunAll():
         color_scheme = "min-max"
         color_scheme = "median"
         color_scheme = "trans-normal"
+        color_scheme = "logarithmic"
         do_connect_lines = True
         do_connect_lines = False
 
