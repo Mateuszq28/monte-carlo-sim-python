@@ -27,6 +27,9 @@ class MyRandom():
     
     def randint(self, a, b):
         return random.randint(a, b)
+    
+    def np_randint(self, a, b, size=None):
+        return np.random.randint(low=a, high=b, size=size)
         
 
 class FeatureSampling():

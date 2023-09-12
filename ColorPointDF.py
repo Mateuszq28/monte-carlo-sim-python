@@ -189,6 +189,16 @@ class ColorPointDF():
             # df['A'] = 255.0
             df.insert(len(df.columns), "A", [255 for _ in rgb], True)
 
+        elif color_scheme == "random":
+            rnd = MyRandom()
+            rgb = rnd.np_randint(0, 255+1, size=(len(df), 3))
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
+            df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
+            df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
+            # alpha channel
+            df.insert(len(df.columns), "A", [255 for _ in range(len(df))], True)
+
 
             
 

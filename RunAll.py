@@ -51,6 +51,7 @@ class RunAll():
         # used in every printing and charts
         color_scheme = "threshold"
         color_scheme = "loop"
+        color_scheme = "random"
         do_connect_lines = True
 
         sim = Sim()
