@@ -52,11 +52,11 @@ class FeatureSampling():
         self.funDistribution = FunDistibution()
         self.myRandom = MyRandom()
 
-    def photon_hop(self, mu_t):
+    def photon_hop(self, mu_t, F=None):
         # mu_t [1/cm]
         # try other functiuons
         # hop = self.funSampling.exp2(a=mu_t) # [cm]
-        hop = self.funSampling.exp1_aprox(a=mu_t) # [cm]
+        hop = self.funSampling.exp1_aprox(a=mu_t, rnd=F) # [cm]
         # calculations in bins (voxels)
         hop *= self.bins_per_1_cm # [cm * N/cm = N]
         return hop
@@ -662,8 +662,9 @@ class FunSampling():
             myRandom = MyRandom()
             rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) + 10**(-prec) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
-        # s = -math.log(1-rnd) / a
-        s = -math.log(rnd) / a #flipped
+        s = -math.log(1-rnd) / a
+        #flipped
+        # s = -math.log(rnd) / a
         return s
     
     def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi):

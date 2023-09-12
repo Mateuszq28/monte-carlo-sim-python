@@ -179,7 +179,15 @@ class Sim():
                         R = Space3dTools.internal_reflectance(alpha, beta)
 
                     traveled_dist = math.dist(photon.pos, boundary_pos)
-                    rest_dist = distance - traveled_dist
+                    rest_dist_reflection = distance - traveled_dist
+                    # for refraction we need to change hop, because material has changed
+                    if rest_dist_reflection > 0:
+                        _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_in)
+                        F = photon.hop_distribution(mu_t=mu_t, hop=rest_dist_reflection)
+                        _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_out)
+                        rest_dist_refraction = photon.fun_hop(mu_t=mu_t, F=F)
+                    else:
+                        rest_dist_refraction = 0
 
                     if R == 0.0:
                         # ONLY REFRACTION (OLD RAY)
@@ -188,7 +196,7 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
                         photon.mat_label = label_out
-                        self.try_move(photon, rest_dist)
+                        self.try_move(photon, rest_dist_refraction)
 
                     if 0.0 < R < 1.0:
 
@@ -207,7 +215,7 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
                                 photon.mat_label = label_in
-                                self.try_move(photon, rest_dist)
+                                self.try_move(photon, rest_dist_reflection)
                             else:
                                 # ONLY REFRACTION (OLD RAY)
                                 # penetration ray - refraction
@@ -215,7 +223,7 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
                                 photon.mat_label = label_out
-                                self.try_move(photon, rest_dist)
+                                self.try_move(photon, rest_dist_refraction)
 
                         else:
                             # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
@@ -228,7 +236,7 @@ class Sim():
                                                                                     "child": []
                                                                                     }
                             self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
-                            self.try_move(refraction_photon, rest_dist)
+                            self.try_move(refraction_photon, rest_dist_refraction)
                             flag_terminate = self.after_hop(refraction_photon)
                             if not flag_terminate:
                                 self.propagate_photon(refraction_photon)
@@ -237,7 +245,7 @@ class Sim():
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
                             photon.mat_label = label_in
-                            self.try_move(photon, rest_dist)
+                            self.try_move(photon, rest_dist_reflection)
 
                     if R == 1.0:
                         # ONLY REFLECTION (OLD RAY)
@@ -245,7 +253,7 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
                         photon.mat_label = label_in
-                        self.try_move(photon, rest_dist)
+                        self.try_move(photon, rest_dist_reflection)
                 
                 else:
                     # photon just moved in the same tissue
