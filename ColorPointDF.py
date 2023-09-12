@@ -6,6 +6,7 @@ from PIL import ImageColor
 import json
 import math
 from FeatureSampling import MyRandom
+from scipy.stats import norm
 
 class ColorPointDF():
 
@@ -231,6 +232,40 @@ class ColorPointDF():
             df.insert(len(df.columns), "B", [val for val in gray], True)
             # alpha channel
             df.insert(len(df.columns), "A", [255 for _ in gray], True)
+
+        elif color_scheme == "trans-normal":
+            min_color = 15
+            hist, bin_edges = np.histogram(df["value"].to_numpy(), bins=256-min_color, density=False)
+            cumsum = np.cumsum(hist)
+            cumsum_under = np.hstack((np.array([0]), cumsum))[:-1]
+            # cumulative sum in the middle of the bins
+            middle_cumsum = cumsum_under + 0.5 * hist
+            # number of all samples
+            n = sum(hist)
+            # proportion
+            p = middle_cumsum / n # cdf
+            # Percent point function (inverse of cdf — percentiles)
+            ppf = norm.ppf(p, loc=0, scale=1)
+            # min max normalization
+            # gry color for each bin
+            min = ppf.min()
+            max = ppf.max()
+            gray = (255-min_color) * ((ppf - min) / (max - min)) + min_color
+            # set colors
+            values = df["value"].to_numpy()
+            color = df["value"].to_numpy()
+            for i in range(len(hist)):
+                # <= value <=
+                # can be closed both side, because it will be overwritten
+                # must be closed, because lat val in bin_edges is included
+                mask = (bin_edges[i] <= values) * (values <= bin_edges[i+1])
+                color[mask] = gray[i]
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val for val in color], True)
+            df.insert(len(df.columns), "G", [val for val in color], True)
+            df.insert(len(df.columns), "B", [val for val in color], True)
+            # alpha channel
+            df.insert(len(df.columns), "A", [255 for _ in color], True)
 
 
 
