@@ -75,14 +75,14 @@ class ChartMaker():
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
-                                              cs_material="solid",
-                                              cs_light_source="solid")
+        # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+        #                                       cs_material="solid",
+        #                                       cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
-                                                     cs_material="solid",
-                                                     cs_photons=color_scheme)
+        # ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+        #                                              cs_material="solid",
+        #                                              cs_photons=color_scheme)
 
 
 

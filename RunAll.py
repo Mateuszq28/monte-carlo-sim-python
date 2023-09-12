@@ -54,8 +54,9 @@ class RunAll():
         color_scheme = "random"
         color_scheme = "rainbow"
         color_scheme = "solid"
-        color_scheme = "normalized"
+        color_scheme = "min-max"
         do_connect_lines = True
+        do_connect_lines = False
 
         sim = Sim()
         vis = ByVispy()
