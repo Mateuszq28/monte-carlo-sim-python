@@ -199,6 +199,17 @@ class ColorPointDF():
             # alpha channel
             df.insert(len(df.columns), "A", [255 for _ in range(len(df))], True)
 
+        elif color_scheme == "rainbow":
+            n = len(df)
+            rgb = [(i / n, 1.0 - i / n, 0.0, 0.8) for i in range(n)]
+            rgb = [[val*255.0 for val in rgb_tup] for rgb_tup in rgb]
+            # insert R, G, B columns
+            df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
+            df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
+            df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
+            # alpha channel
+            df.insert(len(df.columns), "A", [val[3] for val in rgb], True)
+
 
             
 

@@ -52,6 +52,7 @@ class RunAll():
         color_scheme = "threshold"
         color_scheme = "loop"
         color_scheme = "random"
+        color_scheme = "rainbow"
         do_connect_lines = True
 
         sim = Sim()
