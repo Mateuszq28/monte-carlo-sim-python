@@ -117,6 +117,7 @@ class ColorPointDF():
             self.cs_logarithmic(df)
             df = self.cs_rgb2heatmap(df)
 
+        print(df)
         return df
 
 
@@ -144,6 +145,7 @@ class ColorPointDF():
         df['B'] = rgb[2]
         # alpha channel
         df['A'] = 255
+        print(df)
 
 
     def cs_loop(self, df):
