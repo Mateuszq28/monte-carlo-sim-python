@@ -58,6 +58,7 @@ class RunAll():
         color_scheme = "median"
         color_scheme = "trans-normal"
         color_scheme = "logarithmic"
+        color_scheme = "heatmap trans-normal"
         do_connect_lines = True
         do_connect_lines = False
 

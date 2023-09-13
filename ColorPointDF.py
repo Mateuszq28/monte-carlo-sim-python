@@ -7,6 +7,8 @@ import json
 import math
 from FeatureSampling import MyRandom
 from scipy.stats import norm
+from matplotlib import cm
+import matplotlib.pyplot as plt
 
 class ColorPointDF():
 
@@ -101,6 +103,19 @@ class ColorPointDF():
             self.cs_transnormal(df)
         elif color_scheme == "logarithmic":
             self.cs_logarithmic(df)
+
+        elif color_scheme == "heatmap min-max":
+            self.cs_minmax(df)
+            df = self.cs_rgb2heatmap(df)
+        elif color_scheme == "heatmap median":
+            self.cs_median(df)
+            df = self.cs_rgb2heatmap(df)
+        elif color_scheme == "heatmap trans-normal":
+            self.cs_transnormal(df)
+            df = self.cs_rgb2heatmap(df)
+        elif color_scheme == "heatmap logarithmic":
+            self.cs_logarithmic(df)
+            df = self.cs_rgb2heatmap(df)
 
         return df
 
@@ -315,6 +330,31 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val for val in gray], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in gray], True)
+
+
+    def cs_rgb2heatmap(self, df):
+        # interesting colormaps from OpenCV
+        # - COLORMAP_AUTUMN - red. orange, yellow
+        # - COLORMAP_JET - blue, green, red
+        # - COLORMAP_HOT - black, red, orange, yellow, white
+        # interesting colormaps from matplotlib
+        # - autumn - red. orange, yellow
+        # - jet - blue, green, red
+        # - hot - black, red, orange, yellow, white
+        # - YlOrRd - yellow, orange, red
+        # - inferno - purple, yellow
+        name = "inferno"
+        gray = df['R'].to_numpy() / 255
+        rgb = cm.get_cmap(plt.get_cmap(name))(gray) * 255
+        # update values
+        df = df.drop(["R", "G", "B", "A"], axis='columns', inplace=False)
+        # insert R, G, B columns
+        df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
+        df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
+        df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
+        # alpha channel
+        df.insert(len(df.columns), "A", [val[3] for val in rgb], True)
+        return df
 
 
 
