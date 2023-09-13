@@ -49,16 +49,7 @@ class RunAll():
         """
 
         # used in every printing and charts
-        color_scheme = "threshold"
-        color_scheme = "loop"
-        color_scheme = "random"
-        color_scheme = "rainbow"
-        color_scheme = "solid"
-        color_scheme = "min-max"
-        color_scheme = "median"
-        color_scheme = "trans-normal"
-        color_scheme = "logarithmic"
-        color_scheme = "heatmap trans-normal"
+        color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
         do_connect_lines = True
         do_connect_lines = False
 
@@ -77,7 +68,10 @@ class RunAll():
         RunAll.normalize_process(sim.propSetup)
 
         # SHOW CHARTS + MAKE .PNG IMAGES
-        ChartMaker.show_all(sim.propSetup, color_scheme, do_connect_lines, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
+        take_cs = ["heatmap trans-normal"]
+        take_cs = color_scheme_list
+        for color_scheme in take_cs:
+            ChartMaker.show_all(sim.propSetup, color_scheme, do_connect_lines, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
 
 
 
