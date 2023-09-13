@@ -37,9 +37,9 @@ class ChartMaker():
 
         
         # SHOW STATISTICS
-        print()
-        ChartMaker.show_statistics(propSetup)
-        print()
+        # print()
+        # ChartMaker.show_statistics(propSetup)
+        # print()
 
 
         # PREPARE STANDARD ARROWS

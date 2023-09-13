@@ -70,6 +70,7 @@ class RunAll():
         # SHOW CHARTS + MAKE .PNG IMAGES
         take_cs = ["heatmap trans-normal"]
         take_cs = color_scheme_list
+        print()
         for i in range(len(take_cs)):
             color_scheme = take_cs[i]
             print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
