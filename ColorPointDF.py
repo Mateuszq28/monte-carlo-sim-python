@@ -271,8 +271,10 @@ class ColorPointDF():
             vals = df["value"].to_numpy()
             max = vals.max()
             # decibels (max is 0, other are negative)
-            # dec_vals = 20 * np.log10( vals / max )
-            dec_vals = np.log2( vals / max )
+            dec_vals = 20 * np.log10( vals / max )
+            #   other logarithms to achieve greater dynamic (difference between max and min)
+            #   dec_vals = np.log2( vals / max )
+            # dec_vals = np.emath.logn(n=1.05, x= vals / max )
             # min max normalization
             min = dec_vals.min() # negative
             max = dec_vals.max() # 0
