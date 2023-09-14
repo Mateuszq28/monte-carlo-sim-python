@@ -50,8 +50,8 @@ class RunAll():
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
-        do_connect_lines = True
-        do_connect_lines = False
+        do_connect_lines_list = [False]
+        do_connect_lines_list = [True, False]
 
         sim = Sim()
         vis = ByVispy()
@@ -71,10 +71,11 @@ class RunAll():
         take_cs = ["heatmap trans-normal"]
         take_cs = color_scheme_list
         print()
-        for i in range(len(take_cs)):
-            color_scheme = take_cs[i]
-            print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
-            ChartMaker.show_all(sim.propSetup, color_scheme, do_connect_lines, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
+        for do_cl in do_connect_lines_list:
+            for i in range(len(take_cs)):
+                color_scheme = take_cs[i]
+                print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
+                ChartMaker.show_all(sim.propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
 
 
 if __name__ == '__main__':
