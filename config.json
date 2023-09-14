@@ -16,7 +16,7 @@
 
 
 
-    "use_proba_instead_of_splitting": false,
+    "use_proba_instead_of_splitting": true,
 
     "flag_result_records_pos_int": false,
     "flag_seve_result_records": true,
