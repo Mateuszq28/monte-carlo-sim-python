@@ -83,41 +83,41 @@ class ColorPointDF():
 
 
         if color_scheme == "threshold":
-            self.cs_threshold(df)
+            df = self.cs_threshold(df)
         elif color_scheme == "loop":
-            self.cs_loop(df)
+            df = self.cs_loop(df)
         elif color_scheme == "solid":
-            self.cs_solid(df)
+            df = self.cs_solid(df)
         elif color_scheme == "photonwise":
-            self.cs_photonwise(df, try_use_old_color_dict=try_use_old_color_dict)
+            df = self.cs_photonwise(df, try_use_old_color_dict=try_use_old_color_dict)
         elif color_scheme == "random":
-            self.cs_random(df)
+            df = self.cs_random(df)
         elif color_scheme == "rainbow":
-            self.cs_rainbow(df)
+            df = self.cs_rainbow(df)
 
         elif color_scheme == "min-max":
-            self.cs_minmax(df)
+            df = self.cs_minmax(df)
         elif color_scheme == "median":
-            self.cs_median(df)
+            df = self.cs_median(df)
         elif color_scheme == "trans-normal":
-            self.cs_transnormal(df)
+            df = self.cs_transnormal(df)
         elif color_scheme == "logarithmic":
-            self.cs_logarithmic(df)
+            df = self.cs_logarithmic(df)
 
         elif color_scheme == "heatmap min-max":
-            self.cs_minmax(df)
+            df = self.cs_minmax(df)
             df = self.cs_rgb2heatmap(df)
         elif color_scheme == "heatmap median":
-            self.cs_median(df)
+            df = self.cs_median(df)
             df = self.cs_rgb2heatmap(df)
         elif color_scheme == "heatmap trans-normal":
-            self.cs_transnormal(df)
+            df = self.cs_transnormal(df)
             df = self.cs_rgb2heatmap(df)
         elif color_scheme == "heatmap logarithmic":
-            self.cs_logarithmic(df)
+            df = self.cs_logarithmic(df)
             df = self.cs_rgb2heatmap(df)
 
-        print(df)
+
         return df
 
 
@@ -145,10 +145,12 @@ class ColorPointDF():
         df['B'] = rgb[2]
         # alpha channel
         df['A'] = 255
-        print(df)
+        return df
+
 
 
     def cs_loop(self, df):
+        df = df.copy()
         # 1. Preparing dict for translating vals in DF into rgb color
         color_names = self.loop_color_names.copy()
         uniq_vals = pd.unique(df['value'])
@@ -173,9 +175,11 @@ class ColorPointDF():
         # alpha channel
         # df['A'] = 255.0
         df.insert(len(df.columns), "A", [255 for _ in rgb], True)
+        return df
 
 
     def cs_solid(self, df):
+        df = df.copy()
         other_uniq_vals = pd.unique(df['value']).tolist()
         # get solid colors dict from config
         solid_color_dict = dict()
@@ -206,9 +210,11 @@ class ColorPointDF():
         # alpha channel
         # df['A'] = 255.0
         df.insert(len(df.columns), "A", [255 for _ in rgb], True)
+        return df
 
 
     def cs_photonwise(self, df, try_use_old_color_dict):
+        df = df.copy()
         if "photon_id" not in df.columns:
             raise ValueError("df must have photon_id column")
         uniq_photon_id = pd.unique(df['photon_id'])
@@ -229,9 +235,11 @@ class ColorPointDF():
         # alpha channel
         # df['A'] = 255.0
         df.insert(len(df.columns), "A", [255 for _ in rgb], True)
+        return df
 
 
     def cs_random(self, df):
+        df = df.copy()
         rnd = MyRandom()
         rgb = rnd.np_randint(0, 255+1, size=(len(df), 3))
         # insert R, G, B columns
@@ -240,9 +248,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in range(len(df))], True)
+        return df
 
 
     def cs_rainbow(self, df):
+        df = df.copy()
         n = len(df)
         rgb = [(i / n, 1.0 - i / n, 0.0, 0.8) for i in range(n)]
         rgb = [[val*255.0 for val in rgb_tup] for rgb_tup in rgb]
@@ -252,9 +262,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val[2] for val in rgb], True)
         # alpha channel
         df.insert(len(df.columns), "A", [val[3] for val in rgb], True)
+        return df
 
 
     def cs_minmax(self, df):
+        df = df.copy()
         max = df["value"].max()
         min = df["value"].min()
         gray = 255 * ((df["value"].to_numpy() - min) / (max - min))
@@ -264,9 +276,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val for val in gray], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in gray], True)
+        return df
 
 
     def cs_median(self, df):
+        df = df.copy()
         me = df["value"].median()
         gray = 255 * (df["value"].to_numpy() / me)
         gray = np.clip(gray, a_min=0, a_max=255)
@@ -276,9 +290,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val for val in gray], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in gray], True)
+        return df
 
 
     def cs_transnormal(self, df):
+        df = df.copy()
         min_color = 15
         hist, bin_edges = np.histogram(df["value"].to_numpy(), bins=256-min_color, density=False)
         cumsum = np.cumsum(hist)
@@ -311,9 +327,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val for val in color], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in color], True)
+        return df
 
 
     def cs_logarithmic(self, df):
+        df = df.copy()
         vals = df["value"].to_numpy()
         max = vals.max()
         # decibels (max is 0, other are negative)
@@ -332,9 +350,11 @@ class ColorPointDF():
         df.insert(len(df.columns), "B", [val for val in gray], True)
         # alpha channel
         df.insert(len(df.columns), "A", [255 for _ in gray], True)
+        return df
 
 
     def cs_rgb2heatmap(self, df):
+        df = df.copy()
         # interesting colormaps from OpenCV
         # - COLORMAP_AUTUMN - red. orange, yellow
         # - COLORMAP_JET - blue, green, red
