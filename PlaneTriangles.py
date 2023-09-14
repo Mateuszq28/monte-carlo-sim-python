@@ -44,6 +44,40 @@ class PlaneTriangles():
                             # add to dict
                             triangls_dict[str(label)]["traingles"] += triangles_coordinates
         return triangls_dict
+
+    def from_propEnv_vectorized(self, propEnv: PropEnv):
+        """
+        Makes list of triangles of all planes (triangled planes).
+        """
+        triangls_dict = dict() # key = label
+        # labels (unique values) in propEnv
+        labels = np.unique(propEnv.body)
+        for label in labels:
+            triangls_dict[str(label)] = {"print color": self.config["tissue_properties"][str(label)]["print color"], "traingles": []}
+            # centroid coordinates
+            sh = [s-1 for s in propEnv.shape]
+            x, y, z = np.indices(sh)
+            x = x.flatten().reshape(-1,1) + 0.5
+            y = y.flatten().reshape(-1,1) + 0.5
+            z = z.flatten().reshape(-1,1) + 0.5
+            cents = np.hstack([x, y, z])
+            corners = [MarchingCubes.marching_cube_corners_from_centroid(row) for row in cents]
+            # if corner has the same label, it's the part of the plane
+            corner_full_binary_code = [[propEnv.get_label_from_float(co) == label for co in row] for row in corners]
+            corner_full_decimal = [sum([2**bit for bit, val in zip(range(7,-1,-1), row) if val == True]) for row in corner_full_binary_code]
+            # all triangles corners in one list
+            triangles = [MarchingCubes.TriangleTable[row].copy() for row in corner_full_decimal]
+
+            # split into triangles
+            triangles = [[row[x:x+3] for x in range(0, len(row)-1, 3)] for row in triangles]
+            triangles_coordinates = [[[MarchingCubes.triangle_corner_from_centroid(cent, corner_idx) for corner_idx in tri] for tri in row if len(tri) > 2] for row, cent in zip(triangles, cents) if len(row) > 0]
+            triangles_coordinates = [item for sublist in triangles_coordinates for item in sublist]
+
+            # add to dict
+            triangls_dict[str(label)]["traingles"] = triangles_coordinates
+        return triangls_dict
+  
+
     
     @staticmethod
     def save_json(triangls_dict, folder):

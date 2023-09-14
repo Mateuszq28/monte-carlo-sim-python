@@ -61,7 +61,7 @@ class ChartMaker():
                 triangls_dict = None
             if triangls_dict is None:
                 start_time = time.time()
-                triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
+                triangls_dict = PlaneTriangles().from_propEnv_vectorized(propSetup.propEnv)
                 end_time = time.time()
                 print()
                 print("Plane triangles calculation time:", end_time-start_time)

@@ -50,8 +50,8 @@ class RunAll():
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
-        do_connect_lines_list = [False]
         do_connect_lines_list = [True, False]
+        do_connect_lines_list = [False]
 
         sim = Sim()
         vis = ByVispy()
@@ -68,8 +68,8 @@ class RunAll():
         RunAll.normalize_process(sim.propSetup)
 
         # SHOW CHARTS + MAKE .PNG IMAGES
-        take_cs = ["heatmap trans-normal"]
         take_cs = color_scheme_list
+        take_cs = ["heatmap trans-normal"]
         print()
         for do_cl in do_connect_lines_list:
             for i in range(len(take_cs)):
