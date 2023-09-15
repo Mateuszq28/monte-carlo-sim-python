@@ -70,6 +70,7 @@ class RunAll():
         # SHOW CHARTS + MAKE .PNG IMAGES
         take_cs = ["heatmap trans-normal"]
         take_cs = color_scheme_list
+        take_cs.remove("photonwise")
         print()
         for do_cl in do_connect_lines_list:
             for i in range(len(take_cs)):
