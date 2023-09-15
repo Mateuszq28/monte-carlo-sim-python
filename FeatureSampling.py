@@ -12,24 +12,24 @@ class MyRandom():
     def __init__(self):
         pass
 
-    def uniform_closed(self, a, b, precision):
+    def uniform_closed(self, low: int, high: int, precision):
         """
-        Generate random number from closed interval [a, b]
+        Generate random float number from closed interval [a, b]
         """
-        rnd = random.randint(a, (b-a) * (10 ** precision)) / float((b-a) * (10 ** precision))
+        rnd = np.random.randint(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
         return rnd
     
-    def uniform_half_open(self, a, b):
+    def uniform_half_open(self, low, high):
         """
-        Generate random number from half-open interval [a, b)
+        Generate random float number from half-open interval [a, b)
         """
-        return np.random.uniform(low=a, high=b)
+        return np.random.uniform(low=low, high=high)
     
-    def randint(self, a, b):
-        return random.randint(a, b)
-    
-    def np_randint(self, a, b, size=None):
-        return np.random.randint(low=a, high=b, size=size)
+    def randint(self, low, high, size=None):
+        """
+        Generate random int from half-open interval [a, b)
+        """
+        return np.random.randint(low=low, high=high, size=size)
         
 
 class FeatureSampling():
@@ -76,7 +76,7 @@ class FeatureSampling():
         return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
 
     def photon_theta_isotropic(self):
-        return self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
+        return self.myRandom.uniform_half_open(0, math.pi)
     
     def photon_theta_constant(self, const=0):
         return const
@@ -594,7 +594,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1(a,s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         s = math.log(1 - a**2 * rnd) / -a
         return s
@@ -603,7 +603,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
+            rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         s = -math.log(1 - rnd*(1 - math.exp(-10*a))) / a
         return s
@@ -638,7 +638,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1_d(a, s1=min_scope, s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         s = math.log(math.exp(-a*min_scope) - a**2 * rnd) / -a
         return s
@@ -663,7 +663,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) + 10**(-prec) # rand from (a,b]
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) + 10**(-prec) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
         s = -math.log(1-rnd) / a
         #flipped
@@ -688,7 +688,7 @@ class FunSampling():
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.parabola1(s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         poly = np.polynomial.polynomial.Polynomial([2/3*(math.pi**3)-rnd, math.pi**2, 0, -1/3])
         roots = poly.roots()
@@ -719,7 +719,7 @@ class FunSampling():
         prec = self.precision
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
+            rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         k = 3/(4*(math.pi**3))
         poly = np.polynomial.polynomial.Polynomial([k * (2/3*(math.pi**3)) - rnd, k * (math.pi**2), 0, k * (-1/3) ])
@@ -760,7 +760,7 @@ class FunSampling():
         """
         if rnd is None:
             myRandom = MyRandom()
-            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) # rand from [a,b]
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) # rand from [a,b]
         if g == 0:
             # theta = math.acos(2*rnd - 1)
             theta = rnd * math.pi

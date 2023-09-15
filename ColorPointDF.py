@@ -219,7 +219,7 @@ class ColorPointDF():
             raise ValueError("df must have photon_id column")
         uniq_photon_id = pd.unique(df['photon_id'])
         rnd = MyRandom()
-        colors = [[rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)] for _ in range(len(uniq_photon_id))]
+        colors = [[rnd.randint(0, 255+1), rnd.randint(0, 255+1), rnd.randint(0, 255+1)] for _ in range(len(uniq_photon_id))]
         # id to color translator (dict)
         trans_color = dict(zip(uniq_photon_id, colors))
         ColorPointDF.old_color_dict = trans_color
@@ -241,7 +241,7 @@ class ColorPointDF():
     def cs_random(self, df):
         df = df.copy()
         rnd = MyRandom()
-        rgb = rnd.np_randint(0, 255+1, size=(len(df), 3))
+        rgb = rnd.randint(0, 255+1, size=(len(df), 3))
         # insert R, G, B columns
         df.insert(len(df.columns), "R", [val[0] for val in rgb], True)
         df.insert(len(df.columns), "G", [val[1] for val in rgb], True)
