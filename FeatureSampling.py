@@ -56,13 +56,20 @@ class FeatureSampling():
         self.anisotropy_of_scattering_g = config["anisotropy_of_scattering_g"]
         self.funSampling = FunSampling(self.precision)
         self.funDistribution = FunDistibution()
-        self.myRandom = MyRandom()
+
+        # seperate random generators
+        self.myRandom_photon_hop = MyRandom()
+        self.myRandom_photon_theta = MyRandom()
+        self.myRandom_photon_theta_isotropic = MyRandom()
+        self.myRandom_photon_phi = MyRandom()
+        self.myRandom_photon_phi_isotropic = MyRandom()
+        self.myRandom_proba_split = MyRandom()
 
     def photon_hop(self, mu_t, F=None):
         # mu_t [1/cm]
         # try other functiuons
-        # hop = self.funSampling.exp2(a=mu_t) # [cm]
-        hop = self.funSampling.exp1_aprox(a=mu_t, rnd=F) # [cm]
+        # hop = self.funSampling.exp2(a=mu_t, myRandom=self.myRandom_photon_hop) # [cm]
+        hop = self.funSampling.exp1_aprox(a=mu_t, rnd=F, myRandom=self.myRandom_photon_hop) # [cm]
         # calculations in bins (voxels)
         hop *= self.bins_per_1_cm # [cm * N/cm = N]
         return hop
@@ -75,20 +82,20 @@ class FeatureSampling():
     def photon_theta(self):
         # try other functions
         # return self.funSampling.normal(scale=1.0)
-        # return self.funSampling.exp2(a=1) * math.pi
-        return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
+        # return self.funSampling.exp2(a=1, myRandom=self.myRandom_photon_theta) * math.pi
+        return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g, myRandom=self.myRandom_photon_theta)
 
     def photon_theta_isotropic(self):
-        return self.myRandom.uniform_half_open(0, math.pi)
+        return self.myRandom_photon_theta_isotropic.uniform_half_open(0, math.pi)
     
     def photon_theta_constant(self, const=0):
         return const
 
     def photon_phi(self):
-        return self.myRandom.uniform_half_open(-math.pi, math.pi)
+        return self.myRandom_photon_phi.uniform_half_open(-math.pi, math.pi)
     
     def photon_phi_isotropic(self):
-        return self.myRandom.uniform_half_open(-math.pi, math.pi)
+        return self.myRandom_photon_phi_isotropic.uniform_half_open(-math.pi, math.pi)
 
     def photon_phi_constant(self, const=0):
         return const
@@ -110,7 +117,7 @@ class FeatureSampling():
     
     def proba_split(self):
         """Returns random number from uniform distribution [low=0.0, high=1.0)"""
-        return self.myRandom.uniform_half_open(0.0, 1.0)
+        return self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
 
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
@@ -566,7 +573,7 @@ class FunSampling():
     def __init__(self, precision=6):
         self.precision = precision
 
-    def exp1(self, a, rnd=None, min_rnd=0, max_rnd=1-math.exp(-10), min_scope=0, max_scope=10):
+    def exp1(self, a, rnd=None, min_rnd=0, max_rnd=1-math.exp(-10), min_scope=0, max_scope=10, myRandom=None):
         """
         constant integration scope <0, s> (in distribution)
         min_rnd=0 and min_scope=0 should not be changed
@@ -590,7 +597,8 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.exp1(a,s=max_scope)
@@ -602,16 +610,17 @@ class FunSampling():
         s = math.log(1 - a**2 * rnd) / -a
         return s
     
-    def exp2(self, a, rnd=None):
+    def exp2(self, a, rnd=None, myRandom=None):
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         s = -math.log(1 - rnd*(1 - math.exp(-10*a))) / a
         return s
     
-    def exp1_d(self, a, min_rnd, max_rnd, min_scope, max_scope, rnd=None):
+    def exp1_d(self, a, min_rnd, max_rnd, min_scope, max_scope, rnd=None, myRandom=None):
         """
         dynamic integration scope <s1, s> (in distribution)
         min_rnd=0 and min_scope=0 CAN be changed
@@ -634,7 +643,8 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.exp1_d(a, s1=min_scope, s=max_scope)
@@ -646,7 +656,7 @@ class FunSampling():
         s = math.log(math.exp(-a*min_scope) - a**2 * rnd) / -a
         return s
     
-    def exp1_aprox(self, a, rnd=None, min_rnd=0, max_rnd=1):
+    def exp1_aprox(self, a, rnd=None, min_rnd=0.0, max_rnd=1.0, myRandom=None):
         """
         variant from the literature
         
@@ -665,15 +675,16 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
-            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) + 10**(-prec) # rand from (a,b]
+            if myRandom is None:
+                myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
         s = -math.log(1-rnd) / a
         #flipped
         # s = -math.log(rnd) / a
         return s
     
-    def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi):
+    def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi, myRandom=None):
         """"
         constant integration scope <-pi, s> (in distribution)
         these values should not be changed:
@@ -684,7 +695,8 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.parabola1(s=max_scope)
@@ -715,13 +727,14 @@ class FunSampling():
             result = roots_real
         return result
     
-    def parabola2(self, rnd=None, filt_roots=True, debug=False):
+    def parabola2(self, rnd=None, filt_roots=True, debug=False, myRandom=None):
         """"
         constant integration scope <-pi, s> (in distribution)  
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         k = 3/(4*(math.pi**3))
@@ -757,12 +770,13 @@ class FunSampling():
         else:
             return n
         
-    def henyey_greenstein(self, g, rnd=None, min_rnd=0, max_rnd=1):
+    def henyey_greenstein(self, g, rnd=None, min_rnd=0, max_rnd=1, myRandom=None):
         """
         :param g: anisotropy of scattering
         """
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) # rand from [a,b]
         if g == 0:
             # theta = math.acos(2*rnd - 1)

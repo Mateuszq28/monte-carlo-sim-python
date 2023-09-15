@@ -279,8 +279,8 @@ class Sim():
 
 
     def spin(self, photon: Photon):
-        theta = self.featureSampling.photon_theta()
-        phi = self.featureSampling.photon_phi()
+        theta = Photon.featureSampling.photon_theta()
+        phi = Photon.featureSampling.photon_phi()
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
 
         do_method_from_book = False
