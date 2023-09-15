@@ -53,25 +53,26 @@ class ChartMaker():
 
 
         # PREPARE TRIANGLED PLANES
-        if do_triangled_planes:
-            if propSetup.config["flag_use_triangled_planes_from_file"]:
-                triangls_dict = PlaneTriangles.load_json(propSetup.result_folder)
-                # if file not exsists triangls_dict is None
-            else:
-                triangls_dict = None
-            if triangls_dict is None:
-                start_time = time.time()
-                triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
-                end_time = time.time()
-                print()
-                print("Plane triangles calculation time:", end_time-start_time)
-                print()
-                PlaneTriangles.save_json(triangls_dict, propSetup.result_folder)
-            else:
-                print()
-                print("Triangles successfully loaded from json file.")
-                print()
-            ByVispy.triangled_planes_dict = triangls_dict
+        if False:
+            if do_triangled_planes:
+                if propSetup.config["flag_use_triangled_planes_from_file"]:
+                    triangls_dict = PlaneTriangles.load_json(propSetup.result_folder)
+                    # if file not exsists triangls_dict is None
+                else:
+                    triangls_dict = None
+                if triangls_dict is None:
+                    start_time = time.time()
+                    triangls_dict = PlaneTriangles().from_propEnv(propSetup.propEnv)
+                    end_time = time.time()
+                    print()
+                    print("Plane triangles calculation time:", end_time-start_time)
+                    print()
+                    PlaneTriangles.save_json(triangls_dict, propSetup.result_folder)
+                else:
+                    print()
+                    print("Triangles successfully loaded from json file.")
+                    print()
+                ByVispy.triangled_planes_dict = triangls_dict
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
@@ -88,10 +89,10 @@ class ChartMaker():
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
-        #                           title = "Absorbed energy in volume - color_scheme = " + color_scheme,
-        #                           color_scheme = color_scheme,
-        #                           connect_lines = standard_connect_lines)
+        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+                                  color_scheme = color_scheme,
+                                  connect_lines = standard_connect_lines)
         ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
 
         
@@ -158,12 +159,12 @@ class ChartMaker():
         # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
         #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
-        # ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
-        #                            bins_per_cm = propSetup.config["bins_per_1_cm"],
-        #                            color_scheme = color_scheme,
-        #                            show = True,
-        #                            connect_lines = standard_connect_lines,
-        #                            hide_points = standard_hide_points)
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+                                   color_scheme = color_scheme,
+                                   show = False,
+                                   connect_lines = standard_connect_lines,
+                                   hide_points = standard_hide_points)
 
 
 
@@ -485,10 +486,11 @@ class ChartMaker():
     @staticmethod
     def show_statistics(propSetup: PropSetup):
         print("len(photon_register)", len(propSetup.photon_register))
-        print("len(resultRecords)", len(propSetup.resultRecords))
-        ids = set([col[0] for col in propSetup.resultRecords])
-        print("photons recorded:", len(ids))
-        print("max photon_id:", max(ids))
-        print("min photon_id:", min(ids))
+        if propSetup.config['flag_seve_result_records']:
+            print("len(resultRecords)", len(propSetup.resultRecords))
+            ids = set([col[0] for col in propSetup.resultRecords])
+            print("photons recorded:", len(ids))
+            print("max photon_id:", max(ids))
+            print("min photon_id:", min(ids))
 
 
