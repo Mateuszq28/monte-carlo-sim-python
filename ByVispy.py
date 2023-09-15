@@ -312,4 +312,46 @@ class ByVispy(View):
         else:
             print("Can not show empty colorPointDF - " + title)
 
+    def show_body_asVolume(self, object3D: Object3D, title=""):
+        # data to visualize
+        # input x,y,z
+        # output z,y,x
+        vol = np.swapaxes(object3D.body, 0, 2)
+
+
+        # build your visuals, that's all
+        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+        # The real-things : plot using scene
+        # build canvas
+        canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
+
+        # Add a ViewBox to let the user zoom/rotate
+        view = canvas.central_widget.add_view()
+        view.camera = "turntable"
+        view.camera.fov = 45
+        view.camera.distance = 500
+
+        # camera rotating point
+        mid = [val/2 for val in object3D.shape]
+        view.camera.center = mid
+
+
+        # Add a 3D axis to keep us oriented
+        # Axes are x=red, y=green, z=blue
+        axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            # to enlarge it (scale by affine transformation)
+        shape = sorted(object3D.shape)[1]
+        s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+        affine = s.as_matrix()
+        axis_widget.transform = affine
+
+        
+        scene.visuals.Volume(vol, parent = view.scene)
+                                                        
+                                                        
+        # run
+        if sys.flags.interactive != 1:
+            app.run()
+
      
