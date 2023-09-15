@@ -1460,7 +1460,8 @@ class Test():
             y_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
             z_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
             value = [1 for _ in range(len(x_idx))]
-            random_col = [random.random() for _ in range(len(x_idx))]
+            rnd = MyRandom()
+            random_col = [rnd.uniform_half_open(0.0, 1.0) for _ in range(len(x_idx))]
             dic = {"x_idx": x_idx,
                   "y_idx": y_idx,
                   "z_idx": z_idx,

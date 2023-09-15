@@ -6,8 +6,7 @@ from PropSetup import PropSetup
 from MarchingCubes import MarchingCubes
 from Photon import Photon
 from Space3dTools import Space3dTools
-from FeatureSampling import FeatureSampling
-import random
+from FeatureSampling import FeatureSampling, MyRandom
 
 
 class Sim():
@@ -19,7 +18,6 @@ class Sim():
             # get simulation config parameters
             self.config = json.load(f)
 
-        random.seed(self.config["random_seed"])
         np.random.seed(self.config["random_seed"])
 
         # interface to class, that makes Object3D instances, fills it and saves them to files
@@ -321,7 +319,7 @@ class Sim():
         """
         threshold = self.config["photon_weight_threshold"]
         chance = self.config["photon_chance"]
-        rnd = random.random()
+        rnd = MyRandom().uniform_half_open(0.0, 1.0)
         flag_terminate = False
         if photon.weight < threshold:
             if rnd <= chance:
