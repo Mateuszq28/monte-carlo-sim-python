@@ -195,7 +195,7 @@ class ChartMaker():
                                                   color_arrows_by_root = color_arrows_by_root)
         
         if sl is not None:
-            take_group = 2
+            take_group = 1
             for i in range(len(sl)+1-take_group):
                 select_photon_id = [sl[i]]
                 select_photon_id = sl[i:i+take_group]
