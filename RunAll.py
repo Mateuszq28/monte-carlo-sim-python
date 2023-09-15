@@ -50,8 +50,8 @@ class RunAll():
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
-        do_connect_lines_list = [False]
         do_connect_lines_list = [True, False]
+        do_connect_lines_list = [False]
 
         sim = Sim()
         vis = ByVispy()
