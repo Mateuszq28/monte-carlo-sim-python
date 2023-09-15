@@ -18,7 +18,8 @@ class Sim():
             # get simulation config parameters
             self.config = json.load(f)
 
-        np.random.seed(self.config["random_seed"])
+        # np.random.seed(self.config["random_seed"])
+        MyRandom.random_state_pool = self.config["random_seed"]
 
         # interface to class, that makes Object3D instances, fills it and saves them to files
         make = Make()
