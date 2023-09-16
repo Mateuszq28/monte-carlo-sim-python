@@ -20,10 +20,15 @@ class Sim():
 
         # np.random.seed(self.config["random_seed"])
         MyRandom.random_state_pool = self.config["random_seed"]
+        # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
+        # (seperate random states across Sim instances are prefered)
+        self.myRandom = MyRandom()
 
         # interface to class, that makes Object3D instances, fills it and saves them to files
         make = Make()
         # interface to random functions
+        # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
+        # (seperate random states across Sim instances are prefered)
         self.featureSampling = FeatureSampling()
 
         # default paths
@@ -320,7 +325,7 @@ class Sim():
         """
         threshold = self.config["photon_weight_threshold"]
         chance = self.config["photon_chance"]
-        rnd = MyRandom().uniform_half_open(0.0, 1.0)
+        rnd = self.myRandom.uniform_half_open(0.0, 1.0)
         flag_terminate = False
         if photon.weight < threshold:
             if rnd <= chance:

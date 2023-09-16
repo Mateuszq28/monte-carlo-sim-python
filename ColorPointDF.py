@@ -18,6 +18,7 @@ class ColorPointDF():
     palette_1 = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9', '#3498DB', '#1ABC9C', '#16A085', '#27AE60', '#2ECC71', '#F1C40F', '#F39C12', '#E67E22', '#D35400', '#ECF0F1', '#BDC3C7', '#95A5A6', '#7F8C8D', '#34495E', '#2C3E50']
     palette_2 = ['green', 'yellow', 'orange', 'red', 'purple', 'blue', 'pink', '#339933', '#FF3366', '#CC0066', '#99FFCC', '#3366FF', '#0000CC']
     old_color_dict = None
+    myRandom = MyRandom()
 
 
     def __init__(self):
@@ -218,7 +219,7 @@ class ColorPointDF():
         if "photon_id" not in df.columns:
             raise ValueError("df must have photon_id column")
         uniq_photon_id = pd.unique(df['photon_id'])
-        rnd = MyRandom()
+        rnd = ColorPointDF.myRandom
         colors = [[rnd.randint(0, 255+1), rnd.randint(0, 255+1), rnd.randint(0, 255+1)] for _ in range(len(uniq_photon_id))]
         # id to color translator (dict)
         trans_color = dict(zip(uniq_photon_id, colors))
@@ -240,7 +241,7 @@ class ColorPointDF():
 
     def cs_random(self, df):
         df = df.copy()
-        rnd = MyRandom()
+        rnd = ColorPointDF.myRandom
         rgb = rnd.randint(0, 255+1, size=(len(df), 3))
         # insert R, G, B columns
         df.insert(len(df.columns), "R", [val[0] for val in rgb], True)

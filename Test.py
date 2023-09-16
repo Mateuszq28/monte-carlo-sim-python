@@ -17,6 +17,9 @@ import numpy as np
 from ResultEnvProcessing import ResultEnvProcessing
 
 class Test():
+
+    myRandom = MyRandom()
+
     def __init__(self):
         pass
 
@@ -1460,7 +1463,7 @@ class Test():
             y_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
             z_idx = [1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 8, 8, 8, 9]
             value = [1 for _ in range(len(x_idx))]
-            rnd = MyRandom()
+            rnd = Test.myRandom
             random_col = [rnd.uniform_half_open(0.0, 1.0) for _ in range(len(x_idx))]
             dic = {"x_idx": x_idx,
                   "y_idx": y_idx,
