@@ -26,7 +26,7 @@ class ColorPointDF():
             # get simulation config parameters
             self.config = json.load(f)
         # set default loop color list
-        # self.loop_color_names = self.palette_2
+        # self.loop_color_names = ColorPointDF.palette_2
         self.loop_color_names = self.create_palette(30)
 
     def create_palette(self, num_of_colors):
@@ -127,12 +127,12 @@ class ColorPointDF():
 
     def cs_threshold(self, df):
         # choose threshold
-        if self.use_threshold == "const":
+        if ColorPointDF.use_threshold == "const":
             bins_per_1_cm = self.config["bins_per_1_cm"] # [N/cm]
             volume_per_bin = (1/bins_per_1_cm)**3
-            threshold = self.threshold_const * volume_per_bin
-        elif self.use_threshold == "quantile":
-            threshold = df["value"].quantile(self.threshold_quantile)
+            threshold = ColorPointDF.threshold_const * volume_per_bin
+        elif ColorPointDF.use_threshold == "quantile":
+            threshold = df["value"].quantile(ColorPointDF.threshold_quantile)
         else:
             raise ValueError("wrong color_scheme value")
         

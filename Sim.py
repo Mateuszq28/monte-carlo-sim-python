@@ -131,7 +131,7 @@ class Sim():
 
             
     def hop(self, photon: Photon, mu_t):
-        distance = photon.fun_hop(mu_t=mu_t)
+        distance = Photon.fun_hop(mu_t=mu_t)
         self.try_move(photon, distance)
 
 
@@ -187,7 +187,7 @@ class Sim():
                     # for refraction we need to change hop, because material has changed
                     if rest_dist_reflection > 0:
                         _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_in)
-                        F = photon.hop_distribution(mu_t=mu_t, hop=rest_dist_reflection)
+                        F = Photon.hop_distribution(mu_t=mu_t, hop=rest_dist_reflection)
                         _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_out)
                         rest_dist_refraction = photon.fun_hop(mu_t=mu_t, F=F)
                     else:
