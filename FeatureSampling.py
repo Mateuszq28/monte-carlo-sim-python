@@ -5,10 +5,16 @@ from scipy.stats import norm
 from scipy.special import erf
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
+#   For 100 photons, enc shape = (50, 50, 100)
+# - number of generated random numbers: 3262
+# - number of seperate random generator instances (MyRandom): 25
 
 class MyRandom():
 
+    # random seed to be set in next instance of MyRandom class
     random_state_pool = 0
+    # how many random numbers has been already generated
+    generated_num = 0
 
     def __init__(self):
         self.random_state = MyRandom.random_state_pool
@@ -20,18 +26,21 @@ class MyRandom():
         Generate random float number from closed interval [a, b]
         """
         rnd = self.rng1.randint(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
+        MyRandom.generated_num += 1
         return rnd
     
     def uniform_half_open(self, low, high):
         """
         Generate random float number from half-open interval [a, b)
         """
+        MyRandom.generated_num += 1
         return self.rng1.uniform(low=low, high=high)
     
     def randint(self, low, high, size=None):
         """
         Generate random int from half-open interval [a, b)
         """
+        MyRandom.generated_num += 1
         return self.rng1.randint(low=low, high=high, size=size)
         
 

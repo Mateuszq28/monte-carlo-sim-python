@@ -3,6 +3,7 @@ from Object3D import Object3D
 from PropSetup import PropSetup
 from PropEnv import PropEnv
 from ProjectionResultRecordsDF import ProjectionResultRecordsDF
+from FeatureSampling import MyRandom
 from ColorPointDF import ColorPointDF
 from ByVispy import ByVispy
 from Print import Print
@@ -485,6 +486,8 @@ class ChartMaker():
     
     @staticmethod
     def show_statistics(propSetup: PropSetup):
+        print("number of generated random numbers:", MyRandom.generated_num)
+        print("number of seperate random generator instances (MyRandom):", MyRandom.random_state_pool-propSetup.config["random_seed"])
         print("len(photon_register)", len(propSetup.photon_register))
         if propSetup.config['flag_seve_result_records']:
             print("len(resultRecords)", len(propSetup.resultRecords))
