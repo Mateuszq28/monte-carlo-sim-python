@@ -9,6 +9,7 @@ from scipy.special import erf
 # - number of generated random numbers: 3262
 # - number of seperate random generator instances (MyRandom): 25
 
+
 class MyRandom_old():
     """
     by default it uses Mersenne Twister (MT19937)
