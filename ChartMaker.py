@@ -169,7 +169,7 @@ class ChartMaker():
 
 
 
-        [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
+        # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
         sh = propSetup.resultEnv.shape
         local_color_scheme = color_scheme
         local_color_scheme = "photonwise"
