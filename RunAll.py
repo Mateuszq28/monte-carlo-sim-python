@@ -35,7 +35,7 @@ class RunAll():
 
         if propSetup.config["flag_seve_result_records"]:
             # TEST TO DELETE (inplace = False)
-            sh = propSetup.resultEnv.shape
+            sh = propSetup.resultShape
             borders = [0, sh[0], 0, sh[1], 0, sh[2]]
             Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
             # END OF TEST
@@ -53,6 +53,7 @@ class RunAll():
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
         do_connect_lines_list = [True, False]
+        do_connect_lines_list = [True]
         do_connect_lines_list = [False]
 
         sim = Sim()
@@ -72,8 +73,8 @@ class RunAll():
         # SHOW CHARTS + MAKE .PNG IMAGES
         take_cs = color_scheme_list
         take_cs.remove("photonwise")
-        take_cs = ["heatmap trans-normal"]
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
+        take_cs = ["heatmap trans-normal"]
         print()
         for do_cl in do_connect_lines_list:
             for i in range(len(take_cs)):

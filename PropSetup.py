@@ -18,6 +18,7 @@ class PropSetup:
         self.escaped_photons_weight = 0.0
         self.resultEnv = None
         self.resultRecords = None
+        self.resultShape = None
         self.photon_register = dict()
         self.config = None
         self.result_folder = ""
@@ -83,6 +84,7 @@ class PropSetup:
                     sh = self.propEnv.shape
                     arr = np.full(shape=sh, fill_value=0.0, dtype=np.float64)
                     self.resultEnv = PropEnv(arr=arr)
+                    self.resultShape = self.propEnv.shape.copy()
                 xyz_int = PropEnv.round_xyz(xyz)
                 self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         else:
@@ -94,6 +96,7 @@ class PropSetup:
                 # check if create resultRecords container
                 if self.resultRecords is None:
                     self.resultRecords = []
+                    self.resultShape = self.propEnv.shape.copy()
                 # float int conversion
                 if round:
                     xyz_save = PropEnv.round_xyz(xyz)

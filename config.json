@@ -19,8 +19,8 @@
     "use_proba_instead_of_splitting": true,
 
     "flag_result_records_pos_int": false,
-    "flag_seve_result_records": false,
-    "flag_save_result_env": true,
+    "flag_seve_result_records": true,
+    "flag_save_result_env": false,
     "flag_use_triangled_planes_from_file": true,
 
     "random_seed": 0,

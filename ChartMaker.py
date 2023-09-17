@@ -170,7 +170,7 @@ class ChartMaker():
 
 
         # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
-        sh = propSetup.resultEnv.shape
+        sh = propSetup.resultShape
         local_color_scheme = color_scheme
         local_color_scheme = "photonwise"
         drop_values = [0, 0.0]
@@ -273,9 +273,12 @@ class ChartMaker():
 
     @staticmethod
     def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="solid", cs_photons="loop"):
-        df = propSetup.make_result_preview_DF(cs_material, cs_photons)
-        vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights), photon color_scheme = " + cs_photons, connect_lines=None, draw_plane_triangles=False)
+        if propSetup.resultEnv is None:
+            print("Skipped show_simulation_result_preview_DF - propSetup.resultEnv is None")
+        else:
+            df = propSetup.make_result_preview_DF(cs_material, cs_photons)
+            vis = ByVispy()
+            vis.show_ColorPointDF(df, title="simulation result preview - propagation env + absorbed energy in volume (photon weights), photon color_scheme = " + cs_photons, connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
@@ -320,138 +323,153 @@ class ChartMaker():
 
     @staticmethod
     def sum_projections_show_body(resultEnv, bins_per_cm):
-        sump = SumProjection()
-        funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
-        projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
-        # used in loop
-        dir = os.path.join("slice_img", "sum_projection_img")
-        vis = ByVispy()
-        for fun, name in zip(funs, projs_names):
-            proj = fun(resultEnv)
-            chart_name = "sum_projection_" + name
-            vis.show_body(proj, title=chart_name)
-            ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
-            proj.save_png(dir=dir, filename=chart_name+".png")
+        if resultEnv is None:
+            print("Skipped sum_projections_show_body - resultEnv is None")
+        else:
+            sump = SumProjection()
+            funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
+            projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+            # used in loop
+            dir = os.path.join("slice_img", "sum_projection_img")
+            vis = ByVispy()
+            for fun, name in zip(funs, projs_names):
+                proj = fun(resultEnv)
+                chart_name = "sum_projection_" + name
+                vis.show_body(proj, title=chart_name)
+                ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                proj.save_png(dir=dir, filename=chart_name+".png")
 
 
     @staticmethod
     def sum_projections(resultEnv: PropEnv, bins_per_cm, color_scheme="loop", show=True, connect_lines=None, hide_points=False):
-        sump = SumProjection()
-        padf = ProjectionArrowsDF()
-        funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
-        arrow_funs = [padf.x_high, padf.x_low, padf.y_high, padf.y_low, padf.z_high, padf.z_low]
-        projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
-        # used in loop
-        dir = os.path.join("slice_img", "sum_projection_img")
-        for fun, line_fun, name in zip(funs, arrow_funs, projs_names):
-            proj = fun(resultEnv)
-            chart_name = "sum_projection_" + name
-            # add arrows
-            if connect_lines is not None:
-                flat_z_connect_lines, _, _ = line_fun(connect_lines, resultEnv.shape, set_z_as_flat_axis=True, set_z_idx_to_0=True)
-            else:
-                flat_z_connect_lines = None
-            if show:
-                ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
-                ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
-            proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
+        if resultEnv is None:
+            print("Skipped sum_projections - resultEnv is None")
+        else:
+            sump = SumProjection()
+            padf = ProjectionArrowsDF()
+            funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
+            arrow_funs = [padf.x_high, padf.x_low, padf.y_high, padf.y_low, padf.z_high, padf.z_low]
+            projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+            # used in loop
+            dir = os.path.join("slice_img", "sum_projection_img")
+            for fun, line_fun, name in zip(funs, arrow_funs, projs_names):
+                proj = fun(resultEnv)
+                chart_name = "sum_projection_" + name
+                # add arrows
+                if connect_lines is not None:
+                    flat_z_connect_lines, _, _ = line_fun(connect_lines, resultEnv.shape, set_z_as_flat_axis=True, set_z_idx_to_0=True)
+                else:
+                    flat_z_connect_lines = None
+                if show:
+                    ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
+                    ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
     @staticmethod
     def projections_from_resultRecords(resultRecords, input_shape, color_scheme="photonwise", drop_values=None, select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, png_dir=None, sum_same_idx=False, sum_axis=False, reset_png_colors=None, show=True, title_prefix="", do_connect_lines=False, reset_colors=None, color_points_by_root=False, color_arrows_by_root=False):
-        cDF = ColorPointDF()
-        df = cDF.from_resultRecords(resultRecords = resultRecords,
-                                    color_scheme = color_scheme,
-                                    drop_values = drop_values,
-                                    select_photon_id = select_photon_id,
-                                    photon_register = photon_register,
-                                    select_parent = select_parent,
-                                    select_child = select_child,
-                                    border_limits = border_limits,
-                                    sum_same_idx = sum_same_idx,
-                                    sort = True,
-                                    color_by_root=color_points_by_root)
-        if do_connect_lines:
-            df_arrows = cDF.from_resultRecords(resultRecords = resultRecords,
-                                               color_scheme = "photonwise",
-                                               drop_values = None,
-                                               select_photon_id = select_photon_id,
-                                               photon_register = photon_register,
-                                               select_parent = select_parent,
-                                               select_child = select_child,
-                                               border_limits = None,
-                                               sum_same_idx = False,
-                                               sort = False,
-                                               color_by_root=color_arrows_by_root)
-            ADF = ArrowsDF()
-            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
-            hide_points = False
+        if resultRecords is None:
+            print("Skipped projections_from_resultRecords - resultRecords is None")
         else:
-            connect_lines = None
-            hide_points = False
-        pDF = ProjectionResultRecordsDF()
-        funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
-        projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
-        # used in loop
-        if png_dir is None:
-            dir = os.path.join("slice_img", "photonwise_projection_img")
-        else:
-            dir = png_dir
-        vis = ByVispy()
-        for proj_fun, name in zip(funs, projs_names):
-            projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=reset_colors, connect_lines=connect_lines)
-            chart_name = title_prefix + "projections_from_resultRecords_" + name
-            if show:
-                vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
-            flat_z_proj, image_shape, flat_z_connect_lines = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors, connect_lines=proj_connect_lines)
-            Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png", connect_lines=flat_z_connect_lines, hide_points=hide_points)
+            cDF = ColorPointDF()
+            df = cDF.from_resultRecords(resultRecords = resultRecords,
+                                        color_scheme = color_scheme,
+                                        drop_values = drop_values,
+                                        select_photon_id = select_photon_id,
+                                        photon_register = photon_register,
+                                        select_parent = select_parent,
+                                        select_child = select_child,
+                                        border_limits = border_limits,
+                                        sum_same_idx = sum_same_idx,
+                                        sort = True,
+                                        color_by_root=color_points_by_root)
+            if do_connect_lines:
+                df_arrows = cDF.from_resultRecords(resultRecords = resultRecords,
+                                                color_scheme = "photonwise",
+                                                drop_values = None,
+                                                select_photon_id = select_photon_id,
+                                                photon_register = photon_register,
+                                                select_parent = select_parent,
+                                                select_child = select_child,
+                                                border_limits = None,
+                                                sum_same_idx = False,
+                                                sort = False,
+                                                color_by_root=color_arrows_by_root)
+                ADF = ArrowsDF()
+                connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
+                hide_points = False
+            else:
+                connect_lines = None
+                hide_points = False
+            pDF = ProjectionResultRecordsDF()
+            funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
+            projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+            # used in loop
+            if png_dir is None:
+                dir = os.path.join("slice_img", "photonwise_projection_img")
+            else:
+                dir = png_dir
+            vis = ByVispy()
+            for proj_fun, name in zip(funs, projs_names):
+                projDF, flat_ax, proj_connect_lines = proj_fun(df, input_shape, sum_axis=sum_axis, reset_colors=reset_colors, connect_lines=connect_lines)
+                chart_name = title_prefix + "projections_from_resultRecords_" + name
+                if show:
+                    vis.show_ColorPointDF(projDF, title=chart_name, connect_lines=proj_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
+                flat_z_proj, image_shape, flat_z_connect_lines = pDF.set_z_as_flat_axis(projDF, flataxis=flat_ax, input_shape=input_shape, post_transform=True, transform_preset=name, reset_colors=reset_png_colors, connect_lines=proj_connect_lines)
+                Print().projectionResultRecordsDF_to_png(flat_z_proj, image_shape=image_shape, dir=dir, filename=chart_name+".png", connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
     @staticmethod
     def show_resultEnv(resultEnv: Object3D, title=None, color_scheme="loop", connect_lines=None, hide_points=False, draw_plane_triangles=True):
-        colorPointDF = ColorPointDF()
-        df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0, 0.0])
-        vis = ByVispy()
-        if title is None:
-            title="Absorbed energy in volume"
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=draw_plane_triangles)
+        if resultEnv is None:
+            print("Skipped show_resultEnv - resultEnv is None")
+        else:
+            colorPointDF = ColorPointDF()
+            df = colorPointDF.from_Object3d(resultEnv, color_scheme=color_scheme, drop_values=[0, 0.0])
+            vis = ByVispy()
+            if title is None:
+                title="Absorbed energy in volume"
+            vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=draw_plane_triangles)
 
     @staticmethod
     def show_resultRecords(resultRecords, title=None, color_scheme="photonwise", select_photon_id=None, photon_register=None, select_parent=True, select_child=True, border_limits=None, sum_same_idx=False, do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False):
-        colorPointDF = ColorPointDF()
-        df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
-                                             color_scheme = color_scheme,
-                                             drop_values = None,
-                                             select_photon_id = select_photon_id,
-                                             photon_register = photon_register,
-                                             select_parent = select_parent,
-                                             select_child = select_child,
-                                             border_limits = border_limits,
-                                             sum_same_idx = sum_same_idx,
-                                             sort = True,
-                                             color_by_root = color_points_by_root)
-        if do_connect_lines:
-            df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
-                                                        color_scheme = "photonwise",
-                                                        drop_values = None,
-                                                        select_photon_id = select_photon_id,
-                                                        photon_register = photon_register,
-                                                        select_parent = select_parent,
-                                                        select_child = select_child,
-                                                        border_limits = None,
-                                                        sum_same_idx = False,
-                                                        sort = False,
-                                                        color_by_root = color_arrows_by_root)
-            ADF = ArrowsDF()
-            connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
-            hide_points = False
+        if resultRecords is None:
+            print("Skipped show_resultRecords - resultRecords is None")
         else:
-            connect_lines = None
-            hide_points = False
-        if title is None:
-            title="Absorbed energy in volume"
-        vis = ByVispy()
-        vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=True)
+            colorPointDF = ColorPointDF()
+            df = colorPointDF.from_resultRecords(resultRecords = resultRecords,
+                                                color_scheme = color_scheme,
+                                                drop_values = None,
+                                                select_photon_id = select_photon_id,
+                                                photon_register = photon_register,
+                                                select_parent = select_parent,
+                                                select_child = select_child,
+                                                border_limits = border_limits,
+                                                sum_same_idx = sum_same_idx,
+                                                sort = True,
+                                                color_by_root = color_points_by_root)
+            if do_connect_lines:
+                df_arrows = colorPointDF.from_resultRecords(resultRecords = resultRecords,
+                                                            color_scheme = "photonwise",
+                                                            drop_values = None,
+                                                            select_photon_id = select_photon_id,
+                                                            photon_register = photon_register,
+                                                            select_parent = select_parent,
+                                                            select_child = select_child,
+                                                            border_limits = None,
+                                                            sum_same_idx = False,
+                                                            sort = False,
+                                                            color_by_root = color_arrows_by_root)
+                ADF = ArrowsDF()
+                connect_lines = ADF.fromDF(df_arrows, photon_register=photon_register, add_start_arrows=True, color_by_root=color_arrows_by_root)
+                hide_points = False
+            else:
+                connect_lines = None
+                hide_points = False
+            if title is None:
+                title="Absorbed energy in volume"
+            vis = ByVispy()
+            vis.show_ColorPointDF(df, title=title, connect_lines=connect_lines, hide_points=hide_points, draw_plane_triangles=True)
 
 
     @staticmethod
@@ -461,28 +479,34 @@ class ChartMaker():
 
     @staticmethod
     def simple_show_object3d_asVolume(object3d: Object3D, title="object3d.body as Volume"):
-        vis = ByVispy()
-        vis.show_body_asVolume(object3d, title=title)
+        if object3d is None:
+            print("Skipped simple_show_object3d_asVolume - object3d is None")
+        else:
+            vis = ByVispy()
+            vis.show_body_asVolume(object3d, title=title)
 
     @staticmethod
     def prepare_standard_connect_lines(propSetup: PropSetup, color_by_root=False):
-        CPDF = ColorPointDF()
-        sh = propSetup.propEnv.shape
-        border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
-        df_arrows = CPDF.from_resultRecords(resultRecords = propSetup.resultRecords,
-                                            color_scheme = "photonwise",
-                                            drop_values = None,
-                                            select_photon_id = None,
-                                            photon_register = propSetup.photon_register,
-                                            select_parent = True,
-                                            select_child = True,
-                                            border_limits = None,
-                                            sum_same_idx = False,
-                                            sort = False,
-                                            color_by_root=False)
-        ADF = ArrowsDF()
-        standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=color_by_root, drop_excessive_columns=False)
-        return standard_connect_lines
+        if propSetup.resultRecords is None:
+            raise ValueError("resultRecords can not be None to prepare connect_lines")
+        else:
+            CPDF = ColorPointDF()
+            sh = propSetup.propEnv.shape
+            border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
+            df_arrows = CPDF.from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                color_scheme = "photonwise",
+                                                drop_values = None,
+                                                select_photon_id = None,
+                                                photon_register = propSetup.photon_register,
+                                                select_parent = True,
+                                                select_child = True,
+                                                border_limits = None,
+                                                sum_same_idx = False,
+                                                sort = False,
+                                                color_by_root=False)
+            ADF = ArrowsDF()
+            standard_connect_lines = ADF.fromDF(df_arrows, photon_register=propSetup.photon_register, add_start_arrows=True, color_by_root=color_by_root, drop_excessive_columns=False)
+            return standard_connect_lines
     
     @staticmethod
     def show_statistics(propSetup: PropSetup):
