@@ -1,6 +1,8 @@
 import json
+import os
 import numpy as np
 import math
+import time
 from Make import Make
 from PropSetup import PropSetup
 from MarchingCubes import MarchingCubes
@@ -12,67 +14,141 @@ from FeatureSampling import FeatureSampling, MyRandom
 class Sim():
 
     propSetup: PropSetup
+    result_folder = "resultRecords"
 
-    def __init__(self):
-        with open("config.json") as f:
-            # get simulation config parameters
-            self.config = json.load(f)
+    def __init__(self, load_last_dump=False):
+        if load_last_dump:
+            self.load_last_dump()
+        else:
+            with open("config.json") as f:
+                # get simulation config parameters
+                self.config = json.load(f)
 
-        # np.random.seed(self.config["random_seed"])
-        MyRandom.random_state_pool = self.config["random_seed"]
-        # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
-        # (seperate random states across Sim instances are prefered)
-        self.myRandom = MyRandom()
+            # np.random.seed(self.config["random_seed"])
+            MyRandom.random_state_pool = self.config["random_seed"]
+            # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
+            # (seperate random states across Sim instances are prefered)
+            self.myRandom = MyRandom()
 
-        # interface to class, that makes Object3D instances, fills it and saves them to files
-        make = Make()
-        # interface to random functions
-        # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
-        # (seperate random states across Sim instances are prefered)
-        self.featureSampling = FeatureSampling()
+            # interface to class, that makes Object3D instances, fills it and saves them to files
+            make = Make()
+            # interface to random functions
+            # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
+            # (seperate random states across Sim instances are prefered)
+            self.featureSampling = FeatureSampling()
+
+            # default paths
+            self.default_env_path = "envs/DefaultEnv.json"
+            self.default_light_surce_path = "lightSources/DefaultLightSource.json"
+            self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
+            make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
+
+            # make default settings files from scratch
+            if self.config["flag_make_default_env"]:
+                make.default_env_file(self.default_env_path)
+            if self.config["flag_make_default_light_source"]:
+                make.default_light_source_file(self.default_light_surce_path)
+            if self.config["flag_make_default_prop_setup_file"]:
+                make.default_prop_setup_file(self.default_prop_setup_path)
+
+            # set paths
+            if self.config["flag_use_default_env"]:
+                self.chosen_env_path = self.default_env_path
+            else:
+                self.chosen_env_path = self.config["alternative_env_path"]
+            if self.config["flag_use_default_light_surce"]:
+                self.chosen_light_source_path = self.default_light_surce_path
+            else:
+                self.chosen_light_source_path = self.config["alternative_light_source_path"]
+            if self.config["flag_use_default_prop_setup"]:
+                self.chosen_prop_setup_path = self.default_prop_setup_path
+            else:
+                self.chosen_prop_setup_path = self.config["alternative_prop_setup_path"]
+
+            # make propagation setup (environment + light source)
+            if self.config["flag_make_prop_setup_from_componentes"]:
+                self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
+            else:
+                self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
+            
+            # link config to PropSetup
+            self.propSetup.config = self.config
+            # link output folder
+            self.propSetup.result_folder = Sim.result_folder
+
+
+    def load_last_dump(self):
+        path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
+        with open(path_sim_dump, 'r') as f:
+            d = json.load(f)
+        
+        self.config = d["config"]
 
         # default paths
-        self.default_env_path = "envs/DefaultEnv.json"
-        self.default_light_surce_path = "lightSources/DefaultLightSource.json"
-        self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
-        self.result_folder = "resultRecords"
-        make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
-
-        # make default settings files from scratch
-        if self.config["flag_make_default_env"]:
-            make.default_env_file(self.default_env_path)
-        if self.config["flag_make_default_light_source"]:
-            make.default_light_source_file(self.default_light_surce_path)
-        if self.config["flag_make_default_prop_setup_file"]:
-            make.default_prop_setup_file(self.default_prop_setup_path)
+        self.default_env_path = d["default_env_path"]
+        self.default_light_surce_path = d["default_light_surce_path"]
+        self.default_prop_setup_path = d["default_prop_setup_path"]
 
         # set paths
-        if self.config["flag_use_default_env"]:
-            self.chosen_env_path = self.default_env_path
-        else:
-            self.chosen_env_path = self.config["alternative_env_path"]
-        if self.config["flag_use_default_light_surce"]:
-            self.chosen_light_source_path = self.default_light_surce_path
-        else:
-            self.chosen_light_source_path = self.config["alternative_light_source_path"]
-        if self.config["flag_use_default_prop_setup"]:
-            self.chosen_prop_setup_path = self.default_prop_setup_path
-        else:
-            self.chosen_prop_setup_path = self.config["alternative_prop_setup_path"]
+        self.chosen_env_path = d["chosen_env_path"]
+        self.chosen_light_source_path = d["chosen_light_source_path"]
+        self.chosen_prop_setup_path = d["chosen_prop_setup_path"]
 
-        # make propagation setup (environment + light source)
-        if self.config["flag_make_prop_setup_from_componentes"]:
-            self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
-        else:
-            self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
-        
-        # link config to PropSetup
+        MyRandom.generated_num = d["generated_num"]
+        MyRandom.random_state_pool = d["random_state_pool"]
+        # block off code from __init__
+        self.myRandom = MyRandom()
+        make = Make()
+        self.featureSampling = FeatureSampling()
+        make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
+        self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
         self.propSetup.config = self.config
-        # link output folder
-        self.propSetup.result_folder = self.result_folder
+        self.propSetup.result_folder = Sim.result_folder
 
+        # values from propSetup obtained during the simulation
+        self.propSetup.escaped_photons_weight = d["escaped_photons_weight"]
+        self.propSetup.resultShape = d["resultShape"]
+        self.propSetup.photon_register = d["photon_register"]
+        self.propSetup.generated_num = d["generated_num"]
+        self.propSetup.random_state_pool = d["random_state_pool"]
+
+        # load resultEnv and resultRecords
+        folder = Sim.result_folder
+        self.propSetup.load_result_json(folder)
+
+        self.simulation_calculation_time = d["simulation_calculation_time"]
+
+
+    def dump_sim_json(self):
+        d = {
+            "config": self.config,
+
+            # default paths
+            "default_env_path": self.default_env_path,
+            "default_light_surce_path": self.default_light_surce_path,
+            "default_prop_setup_path": self.default_prop_setup_path,
+
+            # set paths
+            "chosen_env_path": self.chosen_env_path,
+            "chosen_light_source_path": self.chosen_light_source_path,
+            "chosen_prop_setup_path": self.chosen_prop_setup_path,
+
+            # values from propSetup obtained during the simulation
+            "escaped_photons_weight": self.propSetup.escaped_photons_weight,
+            "resultShape": self.propSetup.resultShape,
+            "photon_register": self.propSetup.photon_register,
+            "random_state_pool": self.propSetup.random_state_pool,
+            "generated_num": self.propSetup.generated_num,
+
+            "simulation_calculation_time": self.simulation_calculation_time
+        }
+        path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
+        with open(path_sim_dump, "w") as f:
+            json.dump(d, f)
+        
 
     def start_sim(self):
+        start_time = time.time()
         photon_limits_list = self.propSetup.lightSource.photon_limits_list
         ls = self.propSetup.lightSource.light_source_list
         if photon_limits_list is not None:
@@ -86,19 +162,24 @@ class Sim():
                         # set start pos material label
                         photon.mat_label = self.propSetup.propEnv.get_label_from_float(photon.pos)
                         # register start position in photon_register
-                        self.propSetup.photon_register[photon.id] = {"start_pos": self.condition_round(photon.pos),
-                                                                     "parent": None,
-                                                                     "child": []
-                                                                     }
+                        self.propSetup.photon_register[str(photon.id)] = {"start_pos": self.condition_round(photon.pos),
+                                                                          "parent": None,
+                                                                          "child": []
+                                                                         }
                         # propagate
                         self.propagate_photon(photon)
                     else:
                         raise ValueError("ls is None")
         else:
             raise ValueError("photon_limits_list is None")
+        end_time = time.time()
+        self.simulation_calculation_time = end_time-start_time
         # save results
-        self.propSetup.save_result_json(self.result_folder)
-        return True
+        self.propSetup.random_state_pool = MyRandom.random_state_pool
+        self.propSetup.generated_num = MyRandom.generated_num
+        self.propSetup.save_result_json(Sim.result_folder)
+        self.dump_sim_json()
+        return self.propSetup
 
 
     def propagate_photon(self, photon: Photon):
@@ -235,11 +316,11 @@ class Sim():
                             # new photon to track
                             refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
                             refraction_photon.mat_label = label_out
-                            self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
+                            self.propSetup.photon_register[str(refraction_photon.id)] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                                     "parent": photon.id,
                                                                                     "child": []
                                                                                     }
-                            self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
+                            self.propSetup.photon_register[str(photon.id)]["child"].append(refraction_photon.id)
                             self.try_move(refraction_photon, rest_dist_refraction)
                             flag_terminate = self.after_hop(refraction_photon)
                             if not flag_terminate:

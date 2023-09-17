@@ -474,7 +474,7 @@ class ColorPointDF():
 
 
     def all_parents_in_photon_register(self, photon_register, photon_id):
-        parent_id = photon_register[photon_id]["parent"]
+        parent_id = photon_register[str(photon_id)]["parent"]
         if parent_id is None:
             return []
         else:
@@ -482,7 +482,7 @@ class ColorPointDF():
         
 
     def all_childs_in_photon_register(self, photon_register, photon_id):
-        childs = photon_register[photon_id]["child"]
+        childs = photon_register[str(photon_id)]["child"]
         if len(childs) > 0:
             bufor = []
             for one_child in childs:
@@ -522,7 +522,7 @@ class ColorPointDF():
     @staticmethod
     def find_root_path_photon_id(photon_id, photon_register, finded: list):
         finded += [photon_id]
-        parent_id = photon_register[photon_id]["parent"]
+        parent_id = photon_register[str(photon_id)]["parent"]
         if parent_id is not None:
             return ColorPointDF.find_root_path_photon_id(parent_id, photon_register, finded)
         else:

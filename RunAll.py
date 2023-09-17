@@ -49,6 +49,9 @@ class RunAll():
         """
         MAIN PHOTON SIMULATION
         """
+        # if true, just load last saved results 
+        LOAD_INSTEAD_OF_SIM = False
+        LOAD_INSTEAD_OF_SIM = True
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
@@ -56,19 +59,19 @@ class RunAll():
         do_connect_lines_list = [True]
         do_connect_lines_list = [False]
 
-        sim = Sim()
-        vis = ByVispy()
-
         # SIMULATION
-        start_time = time.time()
-        sim.start_sim()
-        end_time = time.time()
-        print("simulation calculation time:", end_time-start_time)
+        sim = Sim(load_last_dump=LOAD_INSTEAD_OF_SIM)
+        if LOAD_INSTEAD_OF_SIM:
+            result_propSetup = sim.propSetup
+            print("simulation dump loaded")
+        else:
+            result_propSetup = sim.start_sim()
+            print("simulation calculation time:", sim.simulation_calculation_time)
         
         # return
     
         # NORMALIZATION
-        RunAll.normalize_process(sim.propSetup)
+        RunAll.normalize_process(result_propSetup)
 
         # SHOW CHARTS + MAKE .PNG IMAGES
         take_cs = color_scheme_list
@@ -80,7 +83,7 @@ class RunAll():
             for i in range(len(take_cs)):
                 color_scheme = take_cs[i]
                 print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
-                ChartMaker.show_all(sim.propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
+                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True)
 
 
 if __name__ == '__main__':

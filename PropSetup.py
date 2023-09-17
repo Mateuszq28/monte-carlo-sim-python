@@ -22,6 +22,8 @@ class PropSetup:
         self.photon_register = dict()
         self.config = None
         self.result_folder = ""
+        self.random_state_pool = 0
+        self.generated_num = 0
 
     def make_preview(self):
         """
@@ -124,6 +126,23 @@ class PropSetup:
             json.dump(d_resultEnv, f)
         with open(path_resultRecords, "w") as f:
             json.dump(d_resultRecords, f)
+
+    def load_result_json(self, folder):
+        # path
+        path_resultEnv = os.path.join(folder, "resultEnv.json")
+        path_resultRecords = os.path.join(folder, "resultRecords.json")
+        # load from files
+        with open(path_resultEnv, "r") as f:
+            d_resultEnv = json.load(f)
+        with open(path_resultRecords, "r") as f:
+            d_resultRecords = json.load(f)
+        # change resultEnv to PropEnv object if needed and assign to variables
+        re = d_resultEnv["resultEnv"]
+        if re is None:
+            self.resultEnv = None
+        else:
+            self.resultEnv = PropEnv(arr=np.array(re))
+        self.resultRecords = d_resultRecords["resultRecords"]
 
 
     @staticmethod
