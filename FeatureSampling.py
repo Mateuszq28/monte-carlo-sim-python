@@ -10,44 +10,46 @@ from scipy.special import erf
 # - number of seperate random generator instances (MyRandom): 25
 
 
-class MyRandom_old():
-    """
-    by default it uses Mersenne Twister (MT19937)
-    generator period = 2^19937 = 4,3E6001
-    """
 
-    # random seed to be set in next instance of MyRandom class
-    random_state_pool = 0
-    # how many random numbers has been already generated
-    generated_num = 0
+# class MyRandom_old():
+#     """
+#     by default it uses Mersenne Twister (MT19937)
+#     generator period = 2^19937 = 4,3E6001
+#     """
 
-    def __init__(self):
-        self.random_state = MyRandom.random_state_pool
-        MyRandom.random_state_pool += 1
-        self.rng1 = np.random.RandomState(self.random_state)
+#     # random seed to be set in next instance of MyRandom class
+#     random_state_pool = 0
+#     # how many random numbers has been already generated
+#     generated_num = 0
 
-    def uniform_closed(self, low: int, high: int, precision):
-        """
-        Generate random float number from closed interval [a, b]
-        """
-        rnd = self.rng1.randint(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
-        MyRandom.generated_num += 1
-        return rnd
+#     def __init__(self):
+#         self.random_state = MyRandom.random_state_pool
+#         MyRandom.random_state_pool += 1
+#         self.rng1 = np.random.RandomState(self.random_state)
+
+#     def uniform_closed(self, low: int, high: int, precision):
+#         """
+#         Generate random float number from closed interval [a, b]
+#         """
+#         rnd = self.rng1.randint(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
+#         MyRandom.generated_num += 1
+#         return rnd
     
-    def uniform_half_open(self, low, high):
-        """
-        Generate random float number from half-open interval [a, b)
-        """
-        MyRandom.generated_num += 1
-        return self.rng1.uniform(low=low, high=high)
+#     def uniform_half_open(self, low, high):
+#         """
+#         Generate random float number from half-open interval [a, b)
+#         """
+#         MyRandom.generated_num += 1
+#         return self.rng1.uniform(low=low, high=high)
     
-    def randint(self, low, high, size=None):
-        """
-        Generate random int from half-open interval [a, b)
-        """
-        MyRandom.generated_num += 1
-        return self.rng1.randint(low=low, high=high, size=size)
+#     def randint(self, low, high, size=None):
+#         """
+#         Generate random int from half-open interval [a, b)
+#         """
+#         MyRandom.generated_num += 1
+#         return self.rng1.randint(low=low, high=high, size=size)
     
+
 
 class MyRandom():
     """
@@ -86,6 +88,9 @@ class MyRandom():
         """
         MyRandom.generated_num += 1
         return self.rng1.integers(low=low, high=high, size=size)
+    
+    def standard_normal(self, loc=0.0, scale=1.0, size=None):
+        return self.rng1.standard_normal(size=size) * scale + loc
         
 
 class FeatureSampling():
@@ -134,7 +139,7 @@ class FeatureSampling():
     
     def photon_theta(self):
         # try other functions
-        # return self.funSampling.normal(scale=1.0)
+        # return self.funSampling.normal(scale=1.0, myRandom=self.myRandom_photon_theta)
         # return self.funSampling.exp2(a=1, myRandom=self.myRandom_photon_theta) * math.pi
         return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g, myRandom=self.myRandom_photon_theta)
 
@@ -813,11 +818,17 @@ class FunSampling():
             result = roots_real
         return result
     
-    def normal(self, loc=0., scale=1.):
-        return norm.rvs(loc=loc, scale=scale)
+    def normal(self, loc=0., scale=1., myRandom=None):
+        if myRandom is None:
+            myRandom = MyRandom()
+        # return norm.rvs(loc=loc, scale=scale)
+        return myRandom.standard_normal(loc=loc, scale=scale)
         
-    def normals(self, loc=0, scale=1, size=1):
-        n = norm.rvs(loc=loc, scale=scale, size=size)
+    def normals(self, loc=0, scale=1, size=1, myRandom=None):
+        if myRandom is None:
+            myRandom = MyRandom()
+        # n = norm.rvs(loc=loc, scale=scale, size=size)
+        n = myRandom.standard_normal(loc=loc, scale=scale, size=size)
         if size == 1:
             return n[0]
         else:
