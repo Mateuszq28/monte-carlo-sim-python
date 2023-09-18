@@ -1,5 +1,6 @@
 from LightSource import LightSource
 from PropEnv import PropEnv
+from PropEnvOnMathFormulas import PropEnvOnMathFormulas
 from Object3D import Object3D
 import json
 import numpy as np
@@ -8,6 +9,9 @@ from ByVispy import ByVispy
 from ColorPointDF import ColorPointDF
 
 class PropSetup:
+
+    # it is overwritten in sim
+    flag_use_propenv_on_formulas = False
 
     def __init__(self, propEnv: PropEnv, lightSource: LightSource, offset):
         self.propEnv = propEnv
@@ -157,7 +161,10 @@ class PropSetup:
 
     @staticmethod
     def from_components(env_path, light_source_path, offset=None):
-        propEnv = PropEnv.load_json(env_path)
+        if PropSetup.flag_use_propenv_on_formulas:
+            propEnv = PropEnvOnMathFormulas.load_json(env_path)
+        else:
+            propEnv = PropEnv.load_json(env_path)
         lightSource = LightSource.load_json(light_source_path)
         if offset is None:
             offset = PropSetup.auto_offset(propEnv.shape, lightSource.shape)

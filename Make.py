@@ -3,14 +3,19 @@ from LightSource import LightSource
 from PropSetup import PropSetup
 from FillShapes import FillShapes
 import json
+from MakeMaterial import MakeMaterial
 
 
 class Make():
+        
+    # it is overwritten in sim
+    flag_use_propenv_on_formulas = False
 
     def __init__(self):
         self.default_env_path = None
         self.default_light_surce_path = None
         self.default_prop_setup_path = None
+        self.config = None
 
 
     def pass_default_paths(self, default_env_path, default_light_surce_path, default_prop_setup_path):
@@ -35,6 +40,15 @@ class Make():
 
 
     def default_env(self):
+        if Make.flag_use_propenv_on_formulas:
+            makeMat = MakeMaterial()
+            propEnv = makeMat.default_env()
+        else:
+            propEnv = self.default_env_on_points()
+        return propEnv
+
+
+    def default_env_on_points(self):
         propEnv = PropEnv(x=50, y=50, z=100)
         propEnv.fill_cube(fill=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # air
         propEnv.fill_cube(fill=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75]) # water

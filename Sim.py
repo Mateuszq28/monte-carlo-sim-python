@@ -23,6 +23,8 @@ class Sim():
             with open("config.json") as f:
                 # get simulation config parameters
                 self.config = json.load(f)
+            PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
+            Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
 
             # np.random.seed(self.config["random_seed"])
             MyRandom.random_state_pool = self.config["random_seed"]
