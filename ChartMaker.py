@@ -266,15 +266,20 @@ class ChartMaker():
 
     @staticmethod
     def show_simulation_preview_DF(propSetup: PropSetup, cs_material="solid", cs_light_source="solid"):
-        df = propSetup.make_preview_DF(cs_material, cs_light_source)
-        vis = ByVispy()
-        vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None, draw_plane_triangles=False)
+        if PropSetup.flag_use_propenv_on_formulas:
+            print("Skipped show_simulation_preview_DF - propEnv is on formulas")
+        else:
+            df = propSetup.make_preview_DF(cs_material, cs_light_source)
+            vis = ByVispy()
+            vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None, draw_plane_triangles=False)
 
 
     @staticmethod
     def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="solid", cs_photons="loop"):
         if propSetup.resultEnv is None:
             print("Skipped show_simulation_result_preview_DF - propSetup.resultEnv is None")
+        elif PropSetup.flag_use_propenv_on_formulas:
+            print("Skipped show_simulation_preview_DF - propEnv is on formulas")
         else:
             df = propSetup.make_result_preview_DF(cs_material, cs_photons)
             vis = ByVispy()

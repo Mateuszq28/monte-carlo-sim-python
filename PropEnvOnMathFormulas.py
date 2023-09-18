@@ -56,18 +56,22 @@ class PropEnvOnMathFormulas(PropEnv):
             raise ValueError("xyz and xyz_next should be lists")
         
         intersections = [[i, mat.fun_intersect(xyz, xyz_next)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
+        intersections = [inter for inter in intersections if inter[1] != None]
 
         if len(intersections) < 1:
             boundary_pos = xyz_next.copy()
             boundary_change = False
             boundary_norm_vec = None
-            return boundary_pos, boundary_change, boundary_norm_vec
+            label_out = None
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
         
         closest_idx, closest_inter = min(intersections, key = lambda x: math.dist(x[1], xyz))
         boundary_pos = closest_inter
         boundary_change = True
         boundary_norm_vec = self.material_stack[closest_idx].fun_plane_normal_vec()
-        return boundary_pos, boundary_change, boundary_norm_vec
+        label_out = self.material_stack[closest_idx].label
+        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+    
 
 
 
