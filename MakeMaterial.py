@@ -1,4 +1,5 @@
 from Material import Material
+from PropEnvOnMathFormulas import PropEnvOnMathFormulas
 import numpy as np
 import Geometry3D
 import math
@@ -14,6 +15,24 @@ class MakeMaterial():
             self.config = json.load(f)
 
     # --- MAKE COMPLEX MATERIALS ---
+
+    def default_env(self):
+        propEnv = PropEnvOnMathFormulas(x=50, y=50, z=100)
+        air = self.cuboid(label=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
+        water = self.cuboid(label=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75], propEnvShape=propEnv.shape)
+        skin = self.cuboid(label=8, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65], propEnvShape=propEnv.shape)
+        propEnv.material_stack = [air, water, skin]
+        self.vein(propEnv, z_pos=0.25)
+        return propEnv
+
+    def vein(self, propEnv: PropEnvOnMathFormulas, z_pos, r=0.25, vein_thickness=0.10):
+        x_pos_idx = propEnv.shape[0] // 2
+        z_pos_idx = z_pos * propEnv.shape[2]
+        radius = r * propEnv.shape[1]
+        vein_thick = vein_thickness * propEnv.shape[1]
+        vein_cyl = self.cylinder(label=9, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape)
+        blood_cyl = self.cylinder(label=10, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius-vein_thick, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape)
+        propEnv.material_stack += [vein_cyl, blood_cyl]
 
     # --- MAKE RAW SHAPES ---
     
