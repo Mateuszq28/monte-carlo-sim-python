@@ -58,7 +58,7 @@ def load_dump(dump):
     cl = dump["class"]
     if cl == "Cuboid":
         return Cuboid.load_dump(dump)
-    if cl == "Cuboid":
+    if cl == "Cylinder":
         return Cylinder.load_dump(dump)
 
 
@@ -181,8 +181,8 @@ class Cuboid(Material):
         start_p = dump["start_p"]
         end_p = dump["end_p"]
         propEnvShape = dump["propEnvShape"]
-        Cuboid(label=label, start_p=start_p, end_p=end_p, propEnvShape=propEnvShape)
-        return 
+        cub = Cuboid(label=label, start_p=start_p, end_p=end_p, propEnvShape=propEnvShape)
+        return cub 
     
 
 class Cylinder(Material):
@@ -313,8 +313,8 @@ class Cylinder(Material):
         radius = dump["radius"]
         height_vector = dump["height_vector"]
         propEnvShape = dump["propEnvShape"]
-        Cylinder(label=label, circle_center=circle_center, radius=radius, height_vector=height_vector, propEnvShape=propEnvShape)
-        return 
+        cyl = Cylinder(label=label, circle_center=circle_center, radius=radius, height_vector=height_vector, propEnvShape=propEnvShape)
+        return cyl 
 
 
 

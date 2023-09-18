@@ -51,11 +51,10 @@ class PropEnvOnMathFormulas(PropEnv):
     #             break
     #     return env_boundary_exceeded
     
-    def boundary_check(self, xyz:list, xyz_next:list):
+    def boundary_check(self, xyz:list, xyz_next:list, label_in):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
         
-        label_in = self.get_label_from_float(xyz)
         intersections = [[i, mat.fun_intersect(xyz, xyz_next)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
 
         if len(intersections) < 1:
@@ -73,7 +72,7 @@ class PropEnvOnMathFormulas(PropEnv):
 
 
 
-    def save_json(self, path):
+    def save_json(self, path, additional=True):
         material_dumps = [mat.make_dump() for mat in self.material_stack]
         d = dict()
         d["self.shape"] = self.shape
