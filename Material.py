@@ -67,6 +67,10 @@ def load_dump(dump):
 class Cuboid(Material):
         
     def __init__(self, label, start_p, end_p, propEnvShape=None):
+        with open("config.json") as f:
+            # get simulation config parameters
+            self.config = json.load(f)
+
         self.label = label
         self.start_p = start_p
         self.end_p = end_p
@@ -75,14 +79,14 @@ class Cuboid(Material):
         self.start_p_stat = self.point_relative2static(start_p, propEnvShape)
         self.end_p_stat = self.point_relative2static(end_p, propEnvShape)
 
-        ver1 = [end_p[0], start_p[1], start_p[2]]
-        ver2 = [start_p[0], end_p[1], start_p[2]]
-        ver3 = [start_p[0], start_p[1], end_p[2]]
-        vec1 = np.array(ver1) - np.array(start_p)
-        vec2 = np.array(ver2) - np.array(start_p)
-        vec3 = np.array(ver3) - np.array(start_p)
+        ver1 = [self.end_p_stat[0], self.start_p_stat[1], self.start_p_stat[2]]
+        ver2 = [self.start_p_stat[0], self.end_p_stat[1], self.start_p_stat[2]]
+        ver3 = [self.start_p_stat[0], self.start_p_stat[1], self.end_p_stat[2]]
+        vec1 = np.array(ver1) - np.array(self.start_p_stat)
+        vec2 = np.array(ver2) - np.array(self.start_p_stat)
+        vec3 = np.array(ver3) - np.array(self.start_p_stat)
         vec1, vec2, vec3 = [Geometry3D.Vector(vec) for vec in [vec1, vec2, vec3]]
-        self.geo_start_p = Geometry3D.Point(start_p)
+        self.geo_start_p = Geometry3D.Point(self.start_p_stat)
         self.cuboid = Geometry3D.geometry.Parallelepiped(base_point=self.geo_start_p, v1=vec1, v2=vec2, v3=vec3)
 
     def fun_in(self, point):
@@ -142,29 +146,28 @@ class Cuboid(Material):
             return [0, 1, 0]
         if boundary_flags[4]:
             return [0, 0, -1]
-        if boundary_flags[3]:
+        if boundary_flags[5]:
             return [0, 0, 1]
         raise NotImplementedError()
     
     def fun_vispy_obj(self, parent):
+        polygon = self.cuboid.convex_polygons[3]
+        polygon_points = np.array([[p.x, p.y, p.z] for p in polygon.points])
         c = self.config["tissue_properties"][str(self.label)]["print color"]
         # c = ImageColor.getrgb(c)
         # color = [c[0], c[1], c[2], 255]
         # color = [val/255 for val in color]
-        color = color_array.Color(c, alpha=1.0),
-        box = visuals.box.BoxVisual(width = self.end_p_stat[0] - self.start_p_stat[0],
-                                    height = self.end_p_stat[0] - self.start_p_stat[0],
-                                    depth = self.end_p_stat[0] - self.start_p_stat[0],
-                                    width_segments = 1,
-                                    height_segments = 1,
-                                    depth_segments = 1,
-                                    planes = None,
-                                    vertex_colors = None,
-                                    face_colors = None,
-                                    color = color,
-                                    edge_color=None,
-                                    parent = parent)
-        return box
+        color = color_array.Color(c, alpha=1.0)
+        scene.visuals.Mesh(vertices = polygon_points,
+                           faces=None,
+                           vertex_colors=None,
+                           face_colors=None,
+                           color=color,
+                           vertex_values=None,
+                           meshdata=None,
+                           shading=None,
+                           mode='triangle_fan',
+                           parent = parent)
     
     def make_dump(self):
         d = dict()
@@ -188,16 +191,20 @@ class Cuboid(Material):
 class Cylinder(Material):
         
     def __init__(self, label, circle_center, radius, height_vector, propEnvShape=None):
+        with open("config.json") as f:
+            # get simulation config parameters
+            self.config = json.load(f)
+
         self.label = label
         self.circle_center = circle_center
         self.radius = radius
         self.height_vector = height_vector
         self.propEnvShape = propEnvShape
 
-        circle_center = self.point_relative2static(circle_center, propEnvShape)
-        self.geo_circle_center = Geometry3D.Point(circle_center)
-        geo_height_vector = Geometry3D.Vector(height_vector)
-        self.cyl = Geometry3D.geometry.Cylinder(self.geo_circle_center, radius, geo_height_vector, n=10)
+        self.circle_center_stat = self.point_relative2static(self.circle_center, self.propEnvShape)
+        self.geo_circle_center = Geometry3D.Point(self.circle_center_stat)
+        self.geo_height_vector = Geometry3D.Vector(self.height_vector)
+        self.cyl = Geometry3D.geometry.Cylinder(self.geo_circle_center, self.radius, self.geo_height_vector, n=10)
     
     def fun_intersect(self, p1, p2):
         geo_p1 = Geometry3D.Point(p1)
@@ -246,15 +253,17 @@ class Cylinder(Material):
         top_bottom_center = [poly.center_point for poly in top_bottom]
         top_bottom_points = [[[p.x, p.y, p.z] for p in poly.points] for poly in top_bottom]
         top_bottom_points = [[[center.x, center.y, center.z]]+poly for poly, center in zip(top_bottom_points, top_bottom_center)]
+        top_bottom_points = np.array(top_bottom_points)
 
         walls = [poly for poly in polygons if len(poly.points) == 4]
         walls = [[[p.x, p.y, p.z] for p in poly.points] for poly in walls]
+        walls = np.array(walls)
 
         c = self.config["tissue_properties"][str(self.label)]["print color"]
         # c = ImageColor.getrgb(c)
         # color = [c[0], c[1], c[2], 255]
         # color = [val/255 for val in color]
-        color = color_array.Color(c, alpha=1.0),
+        color = color_array.Color(c, alpha=1.0)
 
         vis_walls = None
         for wall in walls:

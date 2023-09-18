@@ -68,7 +68,7 @@ class PropEnvOnMathFormulas(PropEnv):
         closest_idx, closest_inter = min(intersections, key = lambda x: math.dist(x[1], xyz))
         boundary_pos = closest_inter
         boundary_change = True
-        boundary_norm_vec = self.material_stack[closest_idx].fun_plane_normal_vec()
+        boundary_norm_vec = self.material_stack[closest_idx].fun_plane_normal_vec(closest_inter)
         label_out = self.material_stack[closest_idx].label
         return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
     

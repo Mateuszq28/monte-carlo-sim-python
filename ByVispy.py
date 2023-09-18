@@ -17,6 +17,7 @@ import pandas as pd
 class ByVispy(View):
 
     triangled_planes_dict = dict()
+    material_stack = []
 
     def __init__(self):
         super().__init__()
@@ -161,7 +162,7 @@ class ByVispy(View):
             print("Can not show empty object3D - " + title)
 
 
-    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False, draw_plane_triangles=False):
+    def show_ColorPointDF(self, colorPointDF: pd.DataFrame, title="", connect_lines=None, hide_points=False, draw_plane_triangles=False, draw_planes_from_material_stack=True):
         """
         Plot 3D interactive plot of points in colorPointDF data frame using Vispy
         :return: None
@@ -303,6 +304,11 @@ class ByVispy(View):
                                            shading=None,
                                            mode='triangles',
                                            parent = view.scene)
+                        
+            if draw_planes_from_material_stack:
+                if len(self.material_stack) > 0:
+                    for mat in self.material_stack:
+                        mat.fun_vispy_obj(parent = view.scene)
                                                           
                                                           
             # run

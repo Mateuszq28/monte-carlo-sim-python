@@ -25,7 +25,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False):
+    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False, draw_planes_from_material_stack=False):
 
         # TEST DUPLICATES IN RECORDS
         turn_on_test = False
@@ -74,6 +74,11 @@ class ChartMaker():
                     print("Triangles successfully loaded from json file.")
                     print()
                 ByVispy.triangled_planes_dict = triangls_dict
+
+
+        # ASSIGN MATERIAL STACK TO ByVispy
+        if draw_planes_from_material_stack:
+            ByVispy.material_stack = propSetup.propEnv.material_stack
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS

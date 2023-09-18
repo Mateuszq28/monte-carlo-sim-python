@@ -19,7 +19,7 @@ class MakeMaterial():
 
     def vein(self, propEnv: PropEnvOnMathFormulas, z_pos, r=0.25, vein_thickness=0.10):
         x_pos_idx = propEnv.shape[0] // 2
-        z_pos_idx = z_pos * propEnv.shape[2]
+        z_pos_idx = int(z_pos * propEnv.shape[2])
         radius = r * propEnv.shape[1]
         vein_thick = vein_thickness * propEnv.shape[1]
         vein_cyl = Cylinder(label=9, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape)

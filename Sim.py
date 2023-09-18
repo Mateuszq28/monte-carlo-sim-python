@@ -99,6 +99,8 @@ class Sim():
         MyRandom.generated_num = d["generated_num"]
         MyRandom.random_state_pool = d["random_state_pool"]
         # block off code from __init__
+        PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
+        Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
         self.myRandom = MyRandom()
         make = Make()
         self.featureSampling = FeatureSampling()
