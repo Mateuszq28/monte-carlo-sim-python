@@ -2,6 +2,7 @@ from PropEnv import PropEnv
 from Material import Material
 import json
 import numpy as np
+import math
 
 class PropEnvOnMathFormulas(PropEnv):
     def __init__(self, x=100, y=100, z=100):
@@ -10,10 +11,10 @@ class PropEnvOnMathFormulas(PropEnv):
             # get simulation config parameters
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
-        # MATERIAL LABELS, AFFILIATION FUNCTIONS, BOUNDARY FUNCTIONS ARE DESCRIBED IN MATERIAL STACK
+        # MATERIAL LABELS, AFFILIATION FUNCTIONS, BOUNDARY FUNCTIONS AND INTERSECTIONS ARE DESCRIBED IN MATERIAL STACK
         # EACH POSITION IN MATERIAL STACK IS ONE MATERIAL OBJECT OF CLASS MATERIAL
         # THE HIGHER INDEX, THE HIGHER PRIORITY
-        self.material_stack = []
+        self.material_stack : list[Material]
     
 
     def get_label_from_float(self, xyz):
@@ -53,6 +54,32 @@ class PropEnvOnMathFormulas(PropEnv):
     def boundary_check(self, xyz:list, xyz_next:list):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
+        
+        label_in = self.get_label_from_float(xyz)
+        intersections = [[i, mat.fun_intersect(xyz, xyz_next)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
+
+        if len(intersections) < 1:
+            boundary_pos = xyz_next.copy()
+            boundary_change = False
+            boundary_norm_vec = None
+            return boundary_pos, boundary_change, boundary_norm_vec
+        
+        closest_idx, closest_inter = min(intersections, key = lambda x: math.dist(x[1], xyz))
+        boundary_pos = closest_inter
+        boundary_change = True
+        boundary_norm_vec = self.material_stack[closest_idx].fun_plane_normal_vec()
+
+
+
+
+
+
+
+
+
+
+
+
         label_in = self.get_label_from_float(xyz)
         arr_xyz = np.array(xyz)
         arr_xyz_next = np.array(xyz_next)

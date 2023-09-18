@@ -18,8 +18,8 @@ class MakeMaterial():
 
     def default_env(self):
         propEnv = PropEnvOnMathFormulas(x=50, y=50, z=100)
-        air = self.cuboid(label=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
-        water = self.cuboid(label=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75], propEnvShape=propEnv.shape)
+        air = self.cuboid(label=1, start_p=[0.0, 0.0, 0.75], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
+        water = self.cuboid(label=2, start_p=[0.0, 0.0, 0.65], end_p=[1.0, 1.0, 0.75], propEnvShape=propEnv.shape)
         skin = self.cuboid(label=8, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65], propEnvShape=propEnv.shape)
         propEnv.material_stack = [air, water, skin]
         self.vein(propEnv, z_pos=0.25)
@@ -80,6 +80,9 @@ class MakeMaterial():
             elif isinstance(intersec, Geometry3D.Segment):
                 inter_p1 = intersec.start_point
                 inter_p2 = intersec.end_point
+                if inter_p1 == geo_p1 and inter_p2 == geo_p2:
+                    # whole segment is material, so there was no boundary cross
+                    return None
                 dist1 = geo_start_p.distance(inter_p1)
                 dist2 = geo_start_p.distance(inter_p2)
                 if dist1 < dist2:
