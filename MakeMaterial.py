@@ -2,10 +2,16 @@ from Material import Material
 import numpy as np
 import Geometry3D
 import math
+import json
+from vispy import visuals
+from PIL import ImageColor
+from vispy.color import color_array
 
 class MakeMaterial():
     def __init__(self):
-        pass
+        with open("config.json") as f:
+            # get simulation config parameters
+            self.config = json.load(f)
 
     # --- MAKE COMPLICATED MATERIALS ---
 
@@ -82,6 +88,26 @@ class MakeMaterial():
             if boundary_flags[3]:
                 return [0, 0, 1]
             raise NotImplementedError()
+        
+        def vispy_obj(parent):
+            c = self.config["tissue_properties"][str(label)]["print color"]
+            # c = ImageColor.getrgb(c)
+            # color = [c[0], c[1], c[2], 255]
+            # color = [val/255 for val in color]
+            color = color_array.Color(c, alpha=1.0),
+            box = visuals.box.BoxVisual(width = end_p[0] - start_p[0],
+                                        height = end_p[0] - start_p[0],
+                                        depth = end_p[0] - start_p[0],
+                                        width_segments = 1,
+                                        height_segments = 1,
+                                        depth_segments = 1,
+                                        planes = None,
+                                        vertex_colors = None,
+                                        face_colors = None,
+                                        color = color,
+                                        edge_color=None,
+                                        parent = parent)
+            return box
  
         material = Material(label=label, fun_in=fun_in, fun_boundary=fun_boundary, fun_intersect=fun_intersect, fun_plane_normal_vec=fun_plane_normal_vec)
         return material
