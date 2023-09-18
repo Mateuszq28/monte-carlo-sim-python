@@ -13,10 +13,11 @@ class MakeMaterial():
             # get simulation config parameters
             self.config = json.load(f)
 
-    # --- MAKE COMPLICATED MATERIALS ---
+    # --- MAKE COMPLEX MATERIALS ---
 
     # --- MAKE RAW SHAPES ---
     
+
     def cuboid(self, label, start_p, end_p, propEnvShape=None):
         start_p = self.point_relative2static(start_p, propEnvShape)
         end_p = self.point_relative2static(end_p, propEnvShape)
@@ -89,7 +90,7 @@ class MakeMaterial():
                 return [0, 0, 1]
             raise NotImplementedError()
         
-        def vispy_obj(parent):
+        def fun_vispy_obj(parent):
             c = self.config["tissue_properties"][str(label)]["print color"]
             # c = ImageColor.getrgb(c)
             # color = [c[0], c[1], c[2], 255]
@@ -109,7 +110,117 @@ class MakeMaterial():
                                         parent = parent)
             return box
  
-        material = Material(label=label, fun_in=fun_in, fun_boundary=fun_boundary, fun_intersect=fun_intersect, fun_plane_normal_vec=fun_plane_normal_vec)
+        material = Material(label=label, fun_in=fun_in, fun_boundary=fun_boundary, fun_intersect=fun_intersect, fun_plane_normal_vec=fun_plane_normal_vec, fun_vispy_obj=fun_vispy_obj)
+        return material
+    
+
+
+
+    def cylinder(self, label, circle_center, radius, height_vector, propEnvShape=None):
+        circle_center = self.point_relative2static(circle_center, propEnvShape)
+        geo_circle_center = Geometry3D.Point(circle_center)
+        geo_height_vector = Geometry3D.Vector(height_vector)
+        cyl = Geometry3D.geometry.Cylinder(geo_circle_center, radius, geo_height_vector, n=10)
+        
+        def fun_intersect(p1, p2):
+            geo_p1 = Geometry3D.Point(p1)
+            geo_p2 = Geometry3D.Point(p2)
+            seg = Geometry3D.Segment(geo_p1, geo_p2)
+            intersec = cyl.intersection(seg)
+            if intersec is None:
+                return None
+            elif isinstance(intersec, Geometry3D.Segment):
+                inter_p1 = intersec.start_point
+                inter_p2 = intersec.end_point
+                dist1 = geo_circle_center.distance(inter_p1)
+                dist2 = geo_circle_center.distance(inter_p2)
+                if dist1 < dist2:
+                    out_geo_p = inter_p1
+                else:
+                    out_geo_p = inter_p2
+            elif isinstance(intersec, Geometry3D.Point):
+                out_geo_p = intersec
+            else:
+                raise NotImplementedError()
+            out_p = [out_geo_p.x, out_geo_p.y, out_geo_p.z]
+            return out_p
+
+        def fun_in(point):
+            geo_p = Geometry3D.Point(point)
+            return geo_p in cyl
+        
+        def fun_boundary(point):
+            geo_p = Geometry3D.Point(point)
+            polygons = cyl.convex_polygons
+            ins = [(geo_p in pl) for pl in polygons]
+            return True in ins
+        
+        def fun_plane_normal_vec(point):
+            geo_p = Geometry3D.Point(point)
+            polygons = cyl.convex_polygons
+            ins = [(geo_p in pl) for pl in polygons]
+            normals_in = [pl.plane.n for pl, in_flag in zip(polygons, ins) if in_flag]
+            return normals_in[0]            
+        
+        def fun_vispy_obj(parent):
+            polygons = cyl.convex_polygons
+            
+            top_bottom = [poly for poly in polygons if len(poly.points) != 4]
+            top_bottom_center = [poly.center_point for poly in top_bottom]
+            top_bottom_points = [[[p.x, p.y, p.z] for p in poly.points] for poly in top_bottom]
+            top_bottom_points = [[[center.x, center.y, center.z]]+poly for poly, center in zip(top_bottom_points, top_bottom_center)]
+
+            walls = [poly for poly in polygons if len(poly.points) == 4]
+            walls = [[[p.x, p.y, p.z] for p in poly.points] for poly in walls]
+
+            c = self.config["tissue_properties"][str(label)]["print color"]
+            # c = ImageColor.getrgb(c)
+            # color = [c[0], c[1], c[2], 255]
+            # color = [val/255 for val in color]
+            color = color_array.Color(c, alpha=1.0),
+
+            vis_walls = None
+            for wall in walls:
+                visuals.Mesh(vertices = wall,
+                             faces=None,
+                             vertex_colors=None,
+                             face_colors=None,
+                             color=color,
+                             vertex_values=None,
+                             meshdata=None,
+                             shading=None,
+                             mode='triangle_fan',
+                             parent = parent)
+            
+            vis_top = None
+            vis_top = visuals.Mesh(vertices = top_bottom_points[0],
+                                   faces=None,
+                                   vertex_colors=None,
+                                   face_colors=None,
+                                   color=color,
+                                   vertex_values=None,
+                                   meshdata=None,
+                                   shading=None,
+                                   mode='triangle_fan',
+                                   parent = parent)
+            
+            vis_bottom = None
+            vis_bottom = visuals.Mesh(vertices = top_bottom_points[1],
+                                   faces=None,
+                                   vertex_colors=None,
+                                   face_colors=None,
+                                   color=color,
+                                   vertex_values=None,
+                                   meshdata=None,
+                                   shading=None,
+                                   mode='triangle_fan',
+                                   parent = parent)
+
+
+            return (vis_top, vis_bottom, vis_walls)
+        
+ 
+        material = Material(label=label, fun_in=fun_in, fun_boundary=fun_boundary, fun_intersect=fun_intersect, fun_plane_normal_vec=fun_plane_normal_vec, fun_vispy_obj=fun_vispy_obj)
         return material
 
 
@@ -129,6 +240,18 @@ class MakeMaterial():
                     raise ValueError("To change relative float point into static int point, propEnvShape is needed.")
         return point
     
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -152,8 +275,24 @@ class MakeMaterial():
 #     # not working
 #     # dist = cuboid.distance(seg)
 #     # print(name, dist)
-
                 
 
 
 
+
+# box = Geometry3D.Parallelepiped(Geometry3D.Point(0,0,0), Geometry3D.Vector(1,0,0), Geometry3D.Vector(0,1,0), Geometry3D.Vector(0,0,1))
+# polygons = box.convex_polygons
+# print()
+# print(polygons)
+# print()
+# planes = [pol.plane.n for pol in polygons]
+# print(planes)
+# print()
+
+# p_list = [Geometry3D.Point(0,0,0), Geometry3D.Point(0,0,1), Geometry3D.Point(0,1,0), Geometry3D.Point(0,1,1)]
+# polygon2 = Geometry3D.ConvexPolygon(pts=p_list)
+# print(polygon2.plane.n)
+# print()
+
+
+# polygon2.center_point
