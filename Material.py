@@ -121,8 +121,8 @@ class Cuboid(Material):
             if inter_p1 == geo_p1 and inter_p2 == geo_p2:
                 # whole segment is material, so there was no boundary cross
                 return None
-            dist1 = self.geo_start_p.distance(inter_p1)
-            dist2 = self.geo_start_p.distance(inter_p2)
+            dist1 = geo_p1.distance(inter_p1)
+            dist2 = geo_p1.distance(inter_p2)
             if dist1 < dist2:
                 out_geo_p = inter_p1
             else:
@@ -148,6 +148,7 @@ class Cuboid(Material):
             return [0, 0, -1]
         if boundary_flags[5]:
             return [0, 0, 1]
+        print(point)
         raise NotImplementedError()
     
     def fun_vispy_obj(self, parent):
