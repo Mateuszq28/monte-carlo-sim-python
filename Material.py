@@ -30,6 +30,13 @@ class Material():
     def fun_vispy_obj(self, parent):
         pass
 
+    def make_dump(self):
+        pass
+
+    @staticmethod
+    def load_dump(dump):
+        pass
+
     # --- TOOLS ---
 
     @staticmethod
@@ -45,6 +52,14 @@ class Material():
                 else:
                     raise ValueError("To change relative float point into static int point, propEnvShape is needed.")
         return point
+    
+
+def load_dump(dump):
+    cl = dump["class"]
+    if cl == "Cuboid":
+        return Cuboid.load_dump(dump)
+    if cl == "Cuboid":
+        return Cylinder.load_dump(dump)
 
 
 # --- SHAPES ---
@@ -53,9 +68,12 @@ class Cuboid(Material):
         
     def __init__(self, label, start_p, end_p, propEnvShape=None):
         self.label = label
+        self.start_p = start_p
+        self.end_p = end_p
+        self.propEnvShape = propEnvShape
 
-        self.start_p = self.point_relative2static(start_p, propEnvShape)
-        self.end_p = self.point_relative2static(end_p, propEnvShape)
+        self.start_p_stat = self.point_relative2static(start_p, propEnvShape)
+        self.end_p_stat = self.point_relative2static(end_p, propEnvShape)
 
         ver1 = [end_p[0], start_p[1], start_p[2]]
         ver2 = [start_p[0], end_p[1], start_p[2]]
@@ -69,12 +87,12 @@ class Cuboid(Material):
 
     def fun_in(self, point):
         for i in range(3):
-            if not (self.start_p[i] <= point[i] <= self.end_p[i]):
+            if not (self.start_p_stat[i] <= point[i] <= self.end_p_stat[i]):
                 return False
         return True
     
     def check_boundaries(self, point):
-        return [math.isclose(self.start_p[0], point[0]), math.isclose(self.end_p[0], point[0]), math.isclose(self.start_p[1], point[1]), math.isclose(self.end_p[1], point[1]), math.isclose(self.start_p[2], point[2]), math.isclose(self.end_p[2], point[2])]
+        return [math.isclose(self.start_p_stat[0], point[0]), math.isclose(self.end_p_stat[0], point[0]), math.isclose(self.start_p_stat[1], point[1]), math.isclose(self.end_p_stat[1], point[1]), math.isclose(self.start_p_stat[2], point[2]), math.isclose(self.end_p_stat[2], point[2])]
     
     def fun_boundary(self, point):
         return True in self.check_boundaries(point)
@@ -134,9 +152,9 @@ class Cuboid(Material):
         # color = [c[0], c[1], c[2], 255]
         # color = [val/255 for val in color]
         color = color_array.Color(c, alpha=1.0),
-        box = visuals.box.BoxVisual(width = self.end_p[0] - self.start_p[0],
-                                    height = self.end_p[0] - self.start_p[0],
-                                    depth = self.end_p[0] - self.start_p[0],
+        box = visuals.box.BoxVisual(width = self.end_p_stat[0] - self.start_p_stat[0],
+                                    height = self.end_p_stat[0] - self.start_p_stat[0],
+                                    depth = self.end_p_stat[0] - self.start_p_stat[0],
                                     width_segments = 1,
                                     height_segments = 1,
                                     depth_segments = 1,
@@ -148,11 +166,34 @@ class Cuboid(Material):
                                     parent = parent)
         return box
     
+    def make_dump(self):
+        d = dict()
+        d["class"] = "Cuboid"
+        d["label"] = self.label
+        d["start_p"] = self.start_p
+        d["end_p"] = self.end_p
+        d["propEnvShape"] = self.propEnvShape
+        return d
+
+    @staticmethod
+    def load_dump(dump):
+        label = dump["label"]
+        start_p = dump["start_p"]
+        end_p = dump["end_p"]
+        propEnvShape = dump["propEnvShape"]
+        Cuboid(label=label, start_p=start_p, end_p=end_p, propEnvShape=propEnvShape)
+        return 
+    
 
 class Cylinder(Material):
         
     def __init__(self, label, circle_center, radius, height_vector, propEnvShape=None):
         self.label = label
+        self.circle_center = circle_center
+        self.radius = radius
+        self.height_vector = height_vector
+        self.propEnvShape = propEnvShape
+
         circle_center = self.point_relative2static(circle_center, propEnvShape)
         self.geo_circle_center = Geometry3D.Point(circle_center)
         geo_height_vector = Geometry3D.Vector(height_vector)
@@ -254,6 +295,26 @@ class Cylinder(Material):
 
 
         return (vis_top, vis_bottom, vis_walls)
+    
+    def make_dump(self):
+        d = dict()
+        d["class"] = "Cylinder"
+        d["label"] = self.label
+        d["circle_center"] = self.circle_center
+        d["radius"] = self.radius
+        d["height_vector"] = self.height_vector
+        d["propEnvShape"] = self.propEnvShape
+        return d
+
+    @staticmethod
+    def load_dump(dump):
+        label = dump["label"]
+        circle_center = dump["circle_center"]
+        radius = dump["radius"]
+        height_vector = dump["height_vector"]
+        propEnvShape = dump["propEnvShape"]
+        Cylinder(label=label, circle_center=circle_center, radius=radius, height_vector=height_vector, propEnvShape=propEnvShape)
+        return 
 
 
 
