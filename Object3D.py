@@ -5,6 +5,7 @@ from FeatureSampling import MyRandom
 
 class Object3D():
 
+    myRandom = MyRandom()
 
     def __init__(self, x=100, y=100, z=100, arr=None):
         """
@@ -201,7 +202,7 @@ class Object3D():
                 end_pi[dimIdx] = self.shape[dimIdx]
 
         # Random generator
-        rnd = MyRandom()
+        rnd = Object3D.myRandom
 
         # fill in loop
         for i in range(start_pi[0], end_pi[0]):

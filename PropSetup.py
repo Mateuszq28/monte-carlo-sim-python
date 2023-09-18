@@ -18,8 +18,12 @@ class PropSetup:
         self.escaped_photons_weight = 0.0
         self.resultEnv = None
         self.resultRecords = None
+        self.resultShape = None
         self.photon_register = dict()
         self.config = None
+        self.result_folder = ""
+        self.random_state_pool = 0
+        self.generated_num = 0
 
     def make_preview(self):
         """
@@ -82,6 +86,7 @@ class PropSetup:
                     sh = self.propEnv.shape
                     arr = np.full(shape=sh, fill_value=0.0, dtype=np.float64)
                     self.resultEnv = PropEnv(arr=arr)
+                    self.resultShape = self.propEnv.shape.copy()
                 xyz_int = PropEnv.round_xyz(xyz)
                 self.resultEnv.body[xyz_int[0], xyz_int[1], xyz_int[2]] += weight
         else:
@@ -93,6 +98,7 @@ class PropSetup:
                 # check if create resultRecords container
                 if self.resultRecords is None:
                     self.resultRecords = []
+                    self.resultShape = self.propEnv.shape.copy()
                 # float int conversion
                 if round:
                     xyz_save = PropEnv.round_xyz(xyz)
@@ -120,6 +126,23 @@ class PropSetup:
             json.dump(d_resultEnv, f)
         with open(path_resultRecords, "w") as f:
             json.dump(d_resultRecords, f)
+
+    def load_result_json(self, folder):
+        # path
+        path_resultEnv = os.path.join(folder, "resultEnv.json")
+        path_resultRecords = os.path.join(folder, "resultRecords.json")
+        # load from files
+        with open(path_resultEnv, "r") as f:
+            d_resultEnv = json.load(f)
+        with open(path_resultRecords, "r") as f:
+            d_resultRecords = json.load(f)
+        # change resultEnv to PropEnv object if needed and assign to variables
+        re = d_resultEnv["resultEnv"]
+        if re is None:
+            self.resultEnv = None
+        else:
+            self.resultEnv = PropEnv(arr=np.array(re))
+        self.resultRecords = d_resultRecords["resultRecords"]
 
 
     @staticmethod

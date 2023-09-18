@@ -8,6 +8,8 @@ import numpy as np
 
 class LightSourcePoint():
 
+
+
     def __init__(self, source_type, source_anchor, photon_limit, loc_point, dir_vec=None, dir_phi=None, dir_theta=None):
 
         # dircetion vector in both cartesian and spherical
@@ -21,6 +23,9 @@ class LightSourcePoint():
             _, dir_phi, dir_theta = Space3dTools.cartesian2spherical(dir_vec[0], dir_vec[1], dir_vec[2])
 
         # set proba functions
+        # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
+        # (seperate random states across LightSourcePoint instances are prefered)
+        self.featureSampling = FeatureSampling()
         self.probaFun_phi, self.probaFun_theta, self.start_loc_shift_funs = self.proba_fun_decoder(source_type, source_anchor)
 
         # set object variables
@@ -39,27 +44,25 @@ class LightSourcePoint():
         self.photon_scattered = 0
 
 
-    @staticmethod
-    def proba_fun_decoder(source_type, source_anchor):
+    def proba_fun_decoder(self, source_type, source_anchor):
         # launch direction function - set proba direction function for each light point
-        featureSampling = FeatureSampling()
         if source_type == "straight":
-            probaFun_phi = featureSampling.photon_phi_constant
-            probaFun_theta = featureSampling.photon_theta_constant
+            probaFun_phi = self.featureSampling.photon_phi_constant
+            probaFun_theta = self.featureSampling.photon_theta_constant
         elif source_type == "isotropic":
-            probaFun_phi = featureSampling.photon_phi_isotropic
-            probaFun_theta = featureSampling.photon_theta_isotropic
+            probaFun_phi = self.featureSampling.photon_phi_isotropic
+            probaFun_theta = self.featureSampling.photon_theta_isotropic
         elif source_type == "photon_fun":
-            probaFun_phi = featureSampling.start_dir_phi
-            probaFun_theta = featureSampling.start_dir_theta
+            probaFun_phi = self.featureSampling.start_dir_phi
+            probaFun_theta = self.featureSampling.start_dir_theta
         else:
             raise ValueError("source_type should be in {straight, isotropic, photon_fun}")
         
         # launch localization function - set proba function for shift start localization
         if source_anchor == "point":
-            probaFun_loc_x = featureSampling.start_loc_shift_x_0
-            probaFun_loc_y = featureSampling.start_loc_shift_y_0
-            probaFun_loc_z = featureSampling.start_loc_shift_z_0
+            probaFun_loc_x = self.featureSampling.start_loc_shift_x_0
+            probaFun_loc_y = self.featureSampling.start_loc_shift_y_0
+            probaFun_loc_z = self.featureSampling.start_loc_shift_z_0
         else:
             raise ValueError("source_anchor should be in { point }")
         start_loc_shift_funs = [probaFun_loc_x, probaFun_loc_y, probaFun_loc_z]

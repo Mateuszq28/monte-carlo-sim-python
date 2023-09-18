@@ -1,72 +1,154 @@
 import json
+import os
 import numpy as np
 import math
+import time
 from Make import Make
 from PropSetup import PropSetup
 from MarchingCubes import MarchingCubes
 from Photon import Photon
 from Space3dTools import Space3dTools
-from FeatureSampling import FeatureSampling
-import random
+from FeatureSampling import FeatureSampling, MyRandom
 
 
 class Sim():
 
     propSetup: PropSetup
+    result_folder = "resultRecords"
 
-    def __init__(self):
-        with open("config.json") as f:
-            # get simulation config parameters
-            self.config = json.load(f)
+    def __init__(self, load_last_dump=False):
+        if load_last_dump:
+            self.load_last_dump()
+        else:
+            with open("config.json") as f:
+                # get simulation config parameters
+                self.config = json.load(f)
 
-        random.seed(self.config["random_seed"])
-        np.random.seed(self.config["random_seed"])
+            # np.random.seed(self.config["random_seed"])
+            MyRandom.random_state_pool = self.config["random_seed"]
+            # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
+            # (seperate random states across Sim instances are prefered)
+            self.myRandom = MyRandom()
 
-        # interface to class, that makes Object3D instances, fills it and saves them to files
-        make = Make()
-        # interface to random functions
-        self.featureSampling = FeatureSampling()
+            # interface to class, that makes Object3D instances, fills it and saves them to files
+            make = Make()
+            # interface to random functions
+            # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
+            # (seperate random states across Sim instances are prefered)
+            self.featureSampling = FeatureSampling()
+
+            # default paths
+            self.default_env_path = "envs/DefaultEnv.json"
+            self.default_light_surce_path = "lightSources/DefaultLightSource.json"
+            self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
+            make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
+
+            # make default settings files from scratch
+            if self.config["flag_make_default_env"]:
+                make.default_env_file(self.default_env_path)
+            if self.config["flag_make_default_light_source"]:
+                make.default_light_source_file(self.default_light_surce_path)
+            if self.config["flag_make_default_prop_setup_file"]:
+                make.default_prop_setup_file(self.default_prop_setup_path)
+
+            # set paths
+            if self.config["flag_use_default_env"]:
+                self.chosen_env_path = self.default_env_path
+            else:
+                self.chosen_env_path = self.config["alternative_env_path"]
+            if self.config["flag_use_default_light_surce"]:
+                self.chosen_light_source_path = self.default_light_surce_path
+            else:
+                self.chosen_light_source_path = self.config["alternative_light_source_path"]
+            if self.config["flag_use_default_prop_setup"]:
+                self.chosen_prop_setup_path = self.default_prop_setup_path
+            else:
+                self.chosen_prop_setup_path = self.config["alternative_prop_setup_path"]
+
+            # make propagation setup (environment + light source)
+            if self.config["flag_make_prop_setup_from_componentes"]:
+                self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
+            else:
+                self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
+            
+            # link config to PropSetup
+            self.propSetup.config = self.config
+            # link output folder
+            self.propSetup.result_folder = Sim.result_folder
+
+
+    def load_last_dump(self):
+        path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
+        with open(path_sim_dump, 'r') as f:
+            d = json.load(f)
+        
+        self.config = d["config"]
 
         # default paths
-        self.default_env_path = "envs/DefaultEnv.json"
-        self.default_light_surce_path = "lightSources/DefaultLightSource.json"
-        self.default_prop_setup_path = "propSetups/DefaultPropSetup.json"
-        self.result_folder = "resultRecords"
-        make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
-
-        # make default settings files from scratch
-        if self.config["flag_make_default_env"]:
-            make.default_env_file(self.default_env_path)
-        if self.config["flag_make_default_light_source"]:
-            make.default_light_source_file(self.default_light_surce_path)
-        if self.config["flag_make_default_prop_setup_file"]:
-            make.default_prop_setup_file(self.default_prop_setup_path)
+        self.default_env_path = d["default_env_path"]
+        self.default_light_surce_path = d["default_light_surce_path"]
+        self.default_prop_setup_path = d["default_prop_setup_path"]
 
         # set paths
-        if self.config["flag_use_default_env"]:
-            self.chosen_env_path = self.default_env_path
-        else:
-            self.chosen_env_path = self.config["alternative_env_path"]
-        if self.config["flag_use_default_light_surce"]:
-            self.chosen_light_source_path = self.default_light_surce_path
-        else:
-            self.chosen_light_source_path = self.config["alternative_light_source_path"]
-        if self.config["flag_use_default_prop_setup"]:
-            self.chosen_prop_setup_path = self.default_prop_setup_path
-        else:
-            self.chosen_prop_setup_path = self.config["alternative_prop_setup_path"]
+        self.chosen_env_path = d["chosen_env_path"]
+        self.chosen_light_source_path = d["chosen_light_source_path"]
+        self.chosen_prop_setup_path = d["chosen_prop_setup_path"]
 
-        # make propagation setup (environment + light source)
-        if self.config["flag_make_prop_setup_from_componentes"]:
-            self.propSetup = PropSetup.from_components(self.chosen_env_path, self.chosen_light_source_path)
-        else:
-            self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
-        
-        # link config to PropSetup
+        MyRandom.generated_num = d["generated_num"]
+        MyRandom.random_state_pool = d["random_state_pool"]
+        # block off code from __init__
+        self.myRandom = MyRandom()
+        make = Make()
+        self.featureSampling = FeatureSampling()
+        make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
+        self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)
         self.propSetup.config = self.config
+        self.propSetup.result_folder = Sim.result_folder
 
+        # values from propSetup obtained during the simulation
+        self.propSetup.escaped_photons_weight = d["escaped_photons_weight"]
+        self.propSetup.resultShape = d["resultShape"]
+        self.propSetup.photon_register = d["photon_register"]
+        self.propSetup.generated_num = d["generated_num"]
+        self.propSetup.random_state_pool = d["random_state_pool"]
+
+        # load resultEnv and resultRecords
+        folder = Sim.result_folder
+        self.propSetup.load_result_json(folder)
+
+        self.simulation_calculation_time = d["simulation_calculation_time"]
+
+
+    def dump_sim_json(self):
+        d = {
+            "config": self.config,
+
+            # default paths
+            "default_env_path": self.default_env_path,
+            "default_light_surce_path": self.default_light_surce_path,
+            "default_prop_setup_path": self.default_prop_setup_path,
+
+            # set paths
+            "chosen_env_path": self.chosen_env_path,
+            "chosen_light_source_path": self.chosen_light_source_path,
+            "chosen_prop_setup_path": self.chosen_prop_setup_path,
+
+            # values from propSetup obtained during the simulation
+            "escaped_photons_weight": self.propSetup.escaped_photons_weight,
+            "resultShape": self.propSetup.resultShape,
+            "photon_register": self.propSetup.photon_register,
+            "random_state_pool": self.propSetup.random_state_pool,
+            "generated_num": self.propSetup.generated_num,
+
+            "simulation_calculation_time": self.simulation_calculation_time
+        }
+        path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
+        with open(path_sim_dump, "w") as f:
+            json.dump(d, f)
+        
 
     def start_sim(self):
+        start_time = time.time()
         photon_limits_list = self.propSetup.lightSource.photon_limits_list
         ls = self.propSetup.lightSource.light_source_list
         if photon_limits_list is not None:
@@ -77,25 +159,32 @@ class Sim():
                         photon = ls[i].emit()
                         # global coordinates
                         photon.pos = (np.array(photon.pos) + self.propSetup.offset).tolist()
+                        # set start pos material label
+                        photon.mat_label = self.propSetup.propEnv.get_label_from_float(photon.pos)
                         # register start position in photon_register
-                        self.propSetup.photon_register[photon.id] = {"start_pos": self.condition_round(photon.pos),
-                                                                     "parent": None,
-                                                                     "child": []
-                                                                     }
+                        self.propSetup.photon_register[str(photon.id)] = {"start_pos": self.condition_round(photon.pos),
+                                                                          "parent": None,
+                                                                          "child": []
+                                                                         }
                         # propagate
                         self.propagate_photon(photon)
                     else:
                         raise ValueError("ls is None")
         else:
             raise ValueError("photon_limits_list is None")
+        end_time = time.time()
+        self.simulation_calculation_time = end_time-start_time
         # save results
-        self.propSetup.save_result_json(self.result_folder)
-        return True
+        self.propSetup.random_state_pool = MyRandom.random_state_pool
+        self.propSetup.generated_num = MyRandom.generated_num
+        self.propSetup.save_result_json(Sim.result_folder)
+        self.dump_sim_json()
+        return self.propSetup
 
 
     def propagate_photon(self, photon: Photon):
         while photon.weight > 0:
-            _, _, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+            _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
             # move photon to new position
             self.hop(photon, mu_t)
             # do the rest, get termination flag
@@ -113,7 +202,7 @@ class Sim():
         if photon.weight == 0:
             return True
         # absorb light in medium
-        mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties(photon.pos)
+        mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
         self.drop(photon, mu_a, mu_s, mu_t)
         self.spin(photon)
         flag_terminate = self.terminate(photon)
@@ -123,7 +212,7 @@ class Sim():
 
             
     def hop(self, photon: Photon, mu_t):
-        distance = photon.fun_hop(mu_t=mu_t)
+        distance = Photon.fun_hop(mu_t=mu_t)
         self.try_move(photon, distance)
 
 
@@ -134,7 +223,7 @@ class Sim():
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
             # check if there was change of a material
-            boundary_pos, boundary_change, boundary_norm_vec = self.propSetup.propEnv.boundary_check(photon.pos, next_pos)
+            boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
             # check if photon is in env shape range
             if boundary_change:
                 # photon interact with the tissue earlier
@@ -149,14 +238,6 @@ class Sim():
 
                     incident_vec = (np.array(boundary_pos) - np.array(photon.pos)).tolist()
                     reflect_vec = Space3dTools.reflect_vector(incident_vec, boundary_norm_vec)
-                    # min_step_correction = 0
-                    # min_step_correction = 0.000000001
-                    min_step_correction = self.config["min_step_when_boundary_cross"]
-                    if MarchingCubes.cmv <= 0.5:
-                        min_step = 0.5 - MarchingCubes.cmv + min_step_correction
-                    else:
-                        min_step = min_step_correction
-                    passed_boundary_pos = list(np.array(boundary_pos) + np.array(photon.dir) * min_step / np.linalg.norm(photon.dir))
 
                     # Total internal reflection
                     R = 0.0 # init value
@@ -164,8 +245,8 @@ class Sim():
                     alpha = Space3dTools.angle_between_vectors(neg_incident_vec, boundary_norm_vec)
                     refraction_vec = None
                         # refractive indices
-                    n1 = self.propSetup.propEnv.get_refractive_index(xyz=photon.pos)
-                    n2 = self.propSetup.propEnv.get_refractive_index(xyz=passed_boundary_pos)
+                    n1 = self.propSetup.propEnv.get_refractive_index_from_label(label_in)
+                    n2 = self.propSetup.propEnv.get_refractive_index_from_label(label_out)
                     if n2 < n1:
                         critical_alpha = math.asin(n2 / n1)
                         if alpha > critical_alpha:
@@ -183,7 +264,15 @@ class Sim():
                         R = Space3dTools.internal_reflectance(alpha, beta)
 
                     traveled_dist = math.dist(photon.pos, boundary_pos)
-                    rest_dist = distance - traveled_dist - min_step
+                    rest_dist_reflection = distance - traveled_dist
+                    # for refraction we need to change hop, because material has changed
+                    if rest_dist_reflection > 0:
+                        _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_in)
+                        F = Photon.hop_distribution(mu_t=mu_t, hop=rest_dist_reflection)
+                        _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_out)
+                        rest_dist_refraction = photon.fun_hop(mu_t=mu_t, F=F)
+                    else:
+                        rest_dist_refraction = 0
 
                     if R == 0.0:
                         # ONLY REFRACTION (OLD RAY)
@@ -191,8 +280,8 @@ class Sim():
                         photon.weight *= (1.0-R)
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
-                        self.just_move(photon, min_step)
-                        self.try_move(photon, rest_dist)
+                        photon.mat_label = label_out
+                        self.try_move(photon, rest_dist_refraction)
 
                     if 0.0 < R < 1.0:
 
@@ -210,29 +299,29 @@ class Sim():
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
-                                self.just_move(photon, min_step)
-                                self.try_move(photon, rest_dist)
+                                photon.mat_label = label_in
+                                self.try_move(photon, rest_dist_reflection)
                             else:
                                 # ONLY REFRACTION (OLD RAY)
                                 # penetration ray - refraction
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
-                                self.just_move(photon, min_step)
-                                self.try_move(photon, rest_dist)
+                                photon.mat_label = label_out
+                                self.try_move(photon, rest_dist_refraction)
 
                         else:
                             # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
                             # penetration ray - refraction
                             # new photon to track
                             refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
-                            self.propSetup.photon_register[refraction_photon.id] = {"start_pos": self.condition_round(refraction_photon.pos),
+                            refraction_photon.mat_label = label_out
+                            self.propSetup.photon_register[str(refraction_photon.id)] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                                     "parent": photon.id,
                                                                                     "child": []
                                                                                     }
-                            self.propSetup.photon_register[photon.id]["child"].append(refraction_photon.id)
-                            self.just_move(refraction_photon, min_step)
-                            self.try_move(refraction_photon, rest_dist)
+                            self.propSetup.photon_register[str(photon.id)]["child"].append(refraction_photon.id)
+                            self.try_move(refraction_photon, rest_dist_refraction)
                             flag_terminate = self.after_hop(refraction_photon)
                             if not flag_terminate:
                                 self.propagate_photon(refraction_photon)
@@ -240,16 +329,16 @@ class Sim():
                             photon.weight *= R
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
-                            self.just_move(photon, min_step)
-                            self.try_move(photon, rest_dist)
+                            photon.mat_label = label_in
+                            self.try_move(photon, rest_dist_reflection)
 
                     if R == 1.0:
                         # ONLY REFLECTION (OLD RAY)
                         photon.weight *= R
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
-                        self.just_move(photon, min_step)
-                        self.try_move(photon, rest_dist)
+                        photon.mat_label = label_in
+                        self.try_move(photon, rest_dist_reflection)
                 
                 else:
                     # photon just moved in the same tissue
@@ -265,7 +354,7 @@ class Sim():
 
 
     def just_move(self, photon: Photon, step):
-        vec = np.array(photon.dir) / np.linalg.norm(photon.dir) * step
+        vec = np.array(photon.dir) * step
         photon.pos = [p+s for p, s in zip(photon.pos, vec)]
 
 
@@ -276,8 +365,8 @@ class Sim():
 
 
     def spin(self, photon: Photon):
-        theta = self.featureSampling.photon_theta()
-        phi = self.featureSampling.photon_phi()
+        theta = Photon.featureSampling.photon_theta()
+        phi = Photon.featureSampling.photon_phi()
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
 
         do_method_from_book = False
@@ -317,7 +406,7 @@ class Sim():
         """
         threshold = self.config["photon_weight_threshold"]
         chance = self.config["photon_chance"]
-        rnd = random.random()
+        rnd = self.myRandom.uniform_half_open(0.0, 1.0)
         flag_terminate = False
         if photon.weight < threshold:
             if rnd <= chance:

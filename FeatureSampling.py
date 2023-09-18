@@ -1,4 +1,3 @@
-import random
 import json
 import math
 import numpy as np
@@ -6,27 +5,92 @@ from scipy.stats import norm
 from scipy.special import erf
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
+#   For 100 photons, enc shape = (50, 50, 100)
+# - number of generated random numbers: 3262
+# - number of seperate random generator instances (MyRandom): 25
+
+
+
+# class MyRandom_old():
+#     """
+#     by default it uses Mersenne Twister (MT19937)
+#     generator period = 2^19937 = 4,3E6001
+#     """
+
+#     # random seed to be set in next instance of MyRandom class
+#     random_state_pool = 0
+#     # how many random numbers has been already generated
+#     generated_num = 0
+
+#     def __init__(self):
+#         self.random_state = MyRandom.random_state_pool
+#         MyRandom.random_state_pool += 1
+#         self.rng1 = np.random.RandomState(self.random_state)
+
+#     def uniform_closed(self, low: int, high: int, precision):
+#         """
+#         Generate random float number from closed interval [a, b]
+#         """
+#         rnd = self.rng1.randint(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
+#         MyRandom.generated_num += 1
+#         return rnd
+    
+#     def uniform_half_open(self, low, high):
+#         """
+#         Generate random float number from half-open interval [a, b)
+#         """
+#         MyRandom.generated_num += 1
+#         return self.rng1.uniform(low=low, high=high)
+    
+#     def randint(self, low, high, size=None):
+#         """
+#         Generate random int from half-open interval [a, b)
+#         """
+#         MyRandom.generated_num += 1
+#         return self.rng1.randint(low=low, high=high, size=size)
+    
+
 
 class MyRandom():
+    """
+    by default it uses Permuted Congruential Generator (64-bit, PCG64)
+    generator period = 2^128 = 3,4E38
+    """
+
+    # random seed to be set in next instance of MyRandom class
+    random_state_pool = 0
+    # how many random numbers has been already generated
+    generated_num = 0
 
     def __init__(self):
-        pass
+        self.random_state = MyRandom.random_state_pool
+        MyRandom.random_state_pool += 1
+        self.rng1 = np.random.default_rng(seed=self.random_state)
 
-    def uniform_closed(self, a, b, precision):
+    def uniform_closed(self, low: int, high: int, precision):
         """
-        Generate random number from closed interval [a, b]
+        Generate random float number from closed interval [a, b]
         """
-        rnd = random.randint(a, (b-a) * (10 ** precision)) / float((b-a) * (10 ** precision))
+        rnd = self.rng1.integers(0, (high-low) * (10 ** precision) + 1) / (10 ** precision) + low
+        MyRandom.generated_num += 1
         return rnd
     
-    def uniform_half_open(self, a, b):
+    def uniform_half_open(self, low, high):
         """
-        Generate random number from half-open interval [a, b)
+        Generate random float number from half-open interval [a, b)
         """
-        return np.random.uniform(low=a, high=b)
+        MyRandom.generated_num += 1
+        return self.rng1.uniform(low=low, high=high)
     
-    def randint(self, a, b):
-        return random.randint(a, b)
+    def randint(self, low, high, size=None):
+        """
+        Generate random int from half-open interval [a, b)
+        """
+        MyRandom.generated_num += 1
+        return self.rng1.integers(low=low, high=high, size=size)
+    
+    def standard_normal(self, loc=0.0, scale=1.0, size=None):
+        return self.rng1.standard_normal(size=size) * scale + loc
         
 
 class FeatureSampling():
@@ -49,34 +113,47 @@ class FeatureSampling():
         self.bins_per_1_cm = config["bins_per_1_cm"] # [N/cm]
         self.anisotropy_of_scattering_g = config["anisotropy_of_scattering_g"]
         self.funSampling = FunSampling(self.precision)
-        self.myRandom = MyRandom()
+        self.funDistribution = FunDistibution()
 
-    def photon_hop(self, mu_t):
+        # seperate random generators
+        self.myRandom_photon_hop = MyRandom()
+        self.myRandom_photon_theta = MyRandom()
+        self.myRandom_photon_theta_isotropic = MyRandom()
+        self.myRandom_photon_phi = MyRandom()
+        self.myRandom_photon_phi_isotropic = MyRandom()
+        self.myRandom_proba_split = MyRandom()
+
+    def photon_hop(self, mu_t, F=None):
         # mu_t [1/cm]
         # try other functiuons
-        # hop = self.funSampling.exp2(a=mu_t) # [cm]
-        hop = self.funSampling.exp1_aprox(a=mu_t) # [cm]
+        # hop = self.funSampling.exp2(a=mu_t, myRandom=self.myRandom_photon_hop) # [cm]
+        hop = self.funSampling.exp1_aprox(a=mu_t, rnd=F, myRandom=self.myRandom_photon_hop) # [cm]
         # calculations in bins (voxels)
         hop *= self.bins_per_1_cm # [cm * N/cm = N]
         return hop
     
+    def photon_hop_distribution(self, mu_t, hop):
+        s = hop / self.bins_per_1_cm
+        F = self.funDistribution.exp1_aprox(a=mu_t, s=s) # F(s) = rnd 
+        return F
+    
     def photon_theta(self):
         # try other functions
-        # return self.funSampling.normal(scale=1.0)
-        # return self.funSampling.exp2(a=1) * math.pi
-        return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g)
+        # return self.funSampling.normal(scale=1.0, myRandom=self.myRandom_photon_theta)
+        # return self.funSampling.exp2(a=1, myRandom=self.myRandom_photon_theta) * math.pi
+        return self.funSampling.henyey_greenstein(g=self.anisotropy_of_scattering_g, myRandom=self.myRandom_photon_theta)
 
     def photon_theta_isotropic(self):
-        return self.myRandom.uniform_closed(0, math.pi, precision=self.precision)
+        return self.myRandom_photon_theta_isotropic.uniform_half_open(0, math.pi)
     
     def photon_theta_constant(self, const=0):
         return const
 
     def photon_phi(self):
-        return self.myRandom.uniform_half_open(-math.pi, math.pi)
+        return self.myRandom_photon_phi.uniform_half_open(-math.pi, math.pi)
     
     def photon_phi_isotropic(self):
-        return self.myRandom.uniform_half_open(-math.pi, math.pi)
+        return self.myRandom_photon_phi_isotropic.uniform_half_open(-math.pi, math.pi)
 
     def photon_phi_constant(self, const=0):
         return const
@@ -98,7 +175,7 @@ class FeatureSampling():
     
     def proba_split(self):
         """Returns random number from uniform distribution [low=0.0, high=1.0)"""
-        return self.myRandom.uniform_half_open(0.0, 1.0)
+        return self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
 
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---
@@ -518,6 +595,9 @@ class FunDistibution():
         distFun = funIntegral.exp1
         return distFun(a=a, s=s) - distFun(a=a, s=s1)
     
+    def exp1_aprox(self, a, s):
+        return 1 - math.exp(- a * s)
+    
     def parabola1(self, s):
         # constant integration scope <-pi, s> (in distribution)
         polyval = np.polynomial.polynomial.polyval(s, [2/3*(math.pi**3), math.pi**2, 0, -1/3])
@@ -551,7 +631,7 @@ class FunSampling():
     def __init__(self, precision=6):
         self.precision = precision
 
-    def exp1(self, a, rnd=None, min_rnd=0, max_rnd=1-math.exp(-10), min_scope=0, max_scope=10):
+    def exp1(self, a, rnd=None, min_rnd=0, max_rnd=1-math.exp(-10), min_scope=0, max_scope=10, myRandom=None):
         """
         constant integration scope <0, s> (in distribution)
         min_rnd=0 and min_scope=0 should not be changed
@@ -575,28 +655,30 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.exp1(a,s=max_scope)
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1(a,s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         s = math.log(1 - a**2 * rnd) / -a
         return s
     
-    def exp2(self, a, rnd=None):
+    def exp2(self, a, rnd=None, myRandom=None):
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
+            if myRandom is None:
+                myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         s = -math.log(1 - rnd*(1 - math.exp(-10*a))) / a
         return s
     
-    def exp1_d(self, a, min_rnd, max_rnd, min_scope, max_scope, rnd=None):
+    def exp1_d(self, a, min_rnd, max_rnd, min_scope, max_scope, rnd=None, myRandom=None):
         """
         dynamic integration scope <s1, s> (in distribution)
         min_rnd=0 and min_scope=0 CAN be changed
@@ -619,19 +701,20 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.exp1_d(a, s1=min_scope, s=max_scope)
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.exp1_d(a, s1=min_scope, s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         s = math.log(math.exp(-a*min_scope) - a**2 * rnd) / -a
         return s
     
-    def exp1_aprox(self, a, rnd=None, min_rnd=0, max_rnd=1):
+    def exp1_aprox(self, a, rnd=None, min_rnd=0.0, max_rnd=1.0, myRandom=None):
         """
         variant from the literature
         
@@ -650,14 +733,16 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
-            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) + 10**(-prec) # rand from (a,b]
+            if myRandom is None:
+                myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) # rand from (a,b]
         # else rnd is given for test reasons as a parameter
-        # s = -math.log(1-rnd) / a
-        s = -math.log(rnd) / a #flipped
+        s = -math.log(1-rnd) / a
+        #flipped
+        # s = -math.log(rnd) / a
         return s
     
-    def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi):
+    def parabola1(self, rnd=None, filt_roots=True, debug=False,  min_rnd=0, max_rnd=4*(math.pi**3)/3, min_scope=-math.pi, max_scope=math.pi, myRandom=None):
         """"
         constant integration scope <-pi, s> (in distribution)
         these values should not be changed:
@@ -668,14 +753,15 @@ class FunSampling():
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
+            if myRandom is None:
+                myRandom = MyRandom()
             if max_rnd is None:
                 funDistibution = FunDistibution()
                 max_rnd = funDistibution.parabola1(s=max_scope)
             if min_rnd is None:
                 funDistibution = FunDistibution()
                 min_rnd = funDistibution.parabola1(s=min_scope)
-            rnd = myRandom.uniform_closed(a=min_rnd, b=max_rnd, precision=prec)
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd)
         # else rnd is given for test reasons as a parameter
         poly = np.polynomial.polynomial.Polynomial([2/3*(math.pi**3)-rnd, math.pi**2, 0, -1/3])
         roots = poly.roots()
@@ -699,14 +785,15 @@ class FunSampling():
             result = roots_real
         return result
     
-    def parabola2(self, rnd=None, filt_roots=True, debug=False):
+    def parabola2(self, rnd=None, filt_roots=True, debug=False, myRandom=None):
         """"
         constant integration scope <-pi, s> (in distribution)  
         """
         prec = self.precision
         if rnd is None:
-            myRandom = MyRandom()
-            rnd = myRandom.uniform_closed(a=0, b=1, precision=prec)
+            if myRandom is None:
+                myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(low=0, high=1)
         # else rnd is given for test reasons as a parameter
         k = 3/(4*(math.pi**3))
         poly = np.polynomial.polynomial.Polynomial([k * (2/3*(math.pi**3)) - rnd, k * (math.pi**2), 0, k * (-1/3) ])
@@ -731,23 +818,30 @@ class FunSampling():
             result = roots_real
         return result
     
-    def normal(self, loc=0., scale=1.):
-        return norm.rvs(loc=loc, scale=scale)
+    def normal(self, loc=0., scale=1., myRandom=None):
+        if myRandom is None:
+            myRandom = MyRandom()
+        # return norm.rvs(loc=loc, scale=scale)
+        return myRandom.standard_normal(loc=loc, scale=scale)
         
-    def normals(self, loc=0, scale=1, size=1):
-        n = norm.rvs(loc=loc, scale=scale, size=size)
+    def normals(self, loc=0, scale=1, size=1, myRandom=None):
+        if myRandom is None:
+            myRandom = MyRandom()
+        # n = norm.rvs(loc=loc, scale=scale, size=size)
+        n = myRandom.standard_normal(loc=loc, scale=scale, size=size)
         if size == 1:
             return n[0]
         else:
             return n
         
-    def henyey_greenstein(self, g, rnd=None, min_rnd=0, max_rnd=1):
+    def henyey_greenstein(self, g, rnd=None, min_rnd=0, max_rnd=1, myRandom=None):
         """
         :param g: anisotropy of scattering
         """
         if rnd is None:
-            myRandom = MyRandom()
-            rnd = myRandom.uniform_half_open(a=min_rnd, b=max_rnd) # rand from [a,b]
+            if myRandom is None:
+                myRandom = MyRandom()
+            rnd = myRandom.uniform_half_open(low=min_rnd, high=max_rnd) # rand from [a,b]
         if g == 0:
             # theta = math.acos(2*rnd - 1)
             theta = rnd * math.pi

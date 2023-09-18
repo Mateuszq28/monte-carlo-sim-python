@@ -275,7 +275,7 @@ class ByVispy(View):
             # mark some positions (for debugging)
             put_markers = False
             if put_markers:
-                pos_to_mark = [[]]
+                pos_to_mark = [[18.084844079411813, 9.089343247806013, 27.583690503396138]]
                 pos_to_mark = np.array(pos_to_mark)
                 markers = scene.visuals.Markers(pos = pos_to_mark,
                                                 size= 3.0,
@@ -288,8 +288,9 @@ class ByVispy(View):
                 
 
             if draw_plane_triangles:
-                for label, dic in self.triangled_planes_dict.items():
-                    if label not in self.omit_labels:
+                str_omit = [str(l) for l in self.omit_labels]
+                for label, dic in ByVispy.triangled_planes_dict.items():
+                    if label not in str_omit:
                         color = dic["print color"]
                         position = np.array(dic["traingles"]).reshape(-1,3)
                         scene.visuals.Mesh(vertices=position,
@@ -310,5 +311,47 @@ class ByVispy(View):
 
         else:
             print("Can not show empty colorPointDF - " + title)
+
+    def show_body_asVolume(self, object3D: Object3D, title=""):
+        # data to visualize
+        # input x,y,z
+        # output z,y,x
+        vol = np.swapaxes(object3D.body, 0, 2)
+
+
+        # build your visuals, that's all
+        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+
+        # The real-things : plot using scene
+        # build canvas
+        canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
+
+        # Add a ViewBox to let the user zoom/rotate
+        view = canvas.central_widget.add_view()
+        view.camera = "turntable"
+        view.camera.fov = 45
+        view.camera.distance = 500
+
+        # camera rotating point
+        mid = [val/2 for val in object3D.shape]
+        view.camera.center = mid
+
+
+        # Add a 3D axis to keep us oriented
+        # Axes are x=red, y=green, z=blue
+        axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            # to enlarge it (scale by affine transformation)
+        shape = sorted(object3D.shape)[1]
+        s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+        affine = s.as_matrix()
+        axis_widget.transform = affine
+
+        
+        scene.visuals.Volume(vol, parent = view.scene)
+                                                        
+                                                        
+        # run
+        if sys.flags.interactive != 1:
+            app.run()
 
      
