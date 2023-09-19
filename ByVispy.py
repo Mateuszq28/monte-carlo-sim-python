@@ -326,9 +326,6 @@ class ByVispy(View):
         vol = vol.astype(np.float32)
 
 
-        # build your visuals, that's all
-        Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
-
         # The real-things : plot using scene
         # build canvas
         canvas = scene.SceneCanvas(keys="interactive",  title=title, show=True)
