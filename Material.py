@@ -8,8 +8,11 @@ from vispy.color import color_array
 
 
 class Material():
+        
     def __init__(self, label):
         self.label = label
+        self.parallelepiped : Geometry3D.ConvexPolyhedron
+        self.name : str
 
         with open("config.json") as f:
             # get simulation config parameters
@@ -21,8 +24,59 @@ class Material():
     def fun_boundary(self, point):
         pass
 
-    def fun_intersect(self, p1, p2):
-        pass
+    def fun_intersect(self, p1, p2, mat_in):
+        geo_p1 = Geometry3D.Point(p1)
+        geo_p2 = Geometry3D.Point(p2)
+        seg = Geometry3D.Segment(geo_p1, geo_p2)
+        intersec = self.parallelepiped.intersection(seg)
+        # print(self.name+" intersec", intersec)
+
+        # there is not intersection (common line part) segment
+        if intersec is None:
+            return None
+        intersec = mat_in.parallelepiped.intersection(intersec)
+        # print(self.name+" intersec", intersec)
+        if intersec is None:
+            return None
+        
+        # there is intersection segment (common line part)
+        elif isinstance(intersec, Geometry3D.Segment):
+            # take the farthest intersection point
+            inter_p1 = intersec.start_point
+            inter_p2 = intersec.end_point
+            dist1 = geo_p1.distance(inter_p1)
+            dist2 = geo_p1.distance(inter_p2)
+
+            if (inter_p1 == geo_p1 and inter_p2 == geo_p2) or (inter_p1 == geo_p2 and inter_p2 == geo_p1):
+                return None
+
+            if dist1 < dist2:
+                if inter_p1 != geo_p1:
+                    out_geo_p = inter_p1
+                else:
+                    out_geo_p = inter_p2
+            else:
+                out_geo_p = inter_p2
+            # check if photon was nat in this tissue at the start
+            # (it is important especially when there are more layers of materials)
+            if out_geo_p == geo_p1:
+                # photon was in this tissue at the beggining, so there was no boundary cross
+                return None
+            
+        # there is only intersection point
+        elif isinstance(intersec, Geometry3D.Point):
+            # check if photon was nat in this tissue at the start
+            if intersec == geo_p1:
+                return None
+            else:
+                out_geo_p = intersec
+
+        else:
+            raise NotImplementedError()
+        
+        # Geometry3D Point to list
+        out_p = [out_geo_p.x, out_geo_p.y, out_geo_p.z]
+        return out_p
 
     def fun_plane_normal_vec(self, point):
         pass
@@ -56,38 +110,50 @@ class Material():
 
 def load_dump(dump):
     cl = dump["class"]
-    if cl == "Cuboid":
+    if cl == Cuboid.name:
         return Cuboid.load_dump(dump)
-    if cl == "Cylinder":
+    if cl == Cylinder.name:
         return Cylinder.load_dump(dump)
-
+    
+def are_points_close(p1: Geometry3D.Point, p2: Geometry3D.Point):
+    p1_list = [p1.x, p1.y, p1.z]
+    p2_list = [p2.x, p2.y, p2.z]
+    if False in [math.isclose(val1, val2) for val1, val2 in zip(p1_list, p2_list)]:
+        return False
+    else:
+        return True
 
 # --- SHAPES ---
 
 class Cuboid(Material):
+        
+    name = "Cuboid"
         
     def __init__(self, label, start_p, end_p, propEnvShape=None):
         with open("config.json") as f:
             # get simulation config parameters
             self.config = json.load(f)
 
+        # require to make dict/json dump
         self.label = label
         self.start_p = start_p
         self.end_p = end_p
         self.propEnvShape = propEnvShape
 
+        # float (proportion of propEnvShape) to int (static coordinates)
         self.start_p_stat = self.point_relative2static(start_p, propEnvShape)
         self.end_p_stat = self.point_relative2static(end_p, propEnvShape)
 
         ver1 = [self.end_p_stat[0], self.start_p_stat[1], self.start_p_stat[2]]
         ver2 = [self.start_p_stat[0], self.end_p_stat[1], self.start_p_stat[2]]
         ver3 = [self.start_p_stat[0], self.start_p_stat[1], self.end_p_stat[2]]
-        vec1 = np.array(ver1) - np.array(self.start_p_stat)
-        vec2 = np.array(ver2) - np.array(self.start_p_stat)
-        vec3 = np.array(ver3) - np.array(self.start_p_stat)
+        vec1 = [ver - ps for ver, ps in zip(ver1, self.start_p_stat)]
+        vec2 = [ver - ps for ver, ps in zip(ver2, self.start_p_stat)]
+        vec3 = [ver - ps for ver, ps in zip(ver3, self.start_p_stat)]
         vec1, vec2, vec3 = [Geometry3D.Vector(vec) for vec in [vec1, vec2, vec3]]
         self.geo_start_p = Geometry3D.Point(self.start_p_stat)
-        self.cuboid = Geometry3D.geometry.Parallelepiped(base_point=self.geo_start_p, v1=vec1, v2=vec2, v3=vec3)
+        # cuboid
+        self.parallelepiped = Geometry3D.geometry.Parallelepiped(base_point=self.geo_start_p, v1=vec1, v2=vec2, v3=vec3)
 
     def fun_in(self, point):
         for i in range(3):
@@ -108,32 +174,6 @@ class Cuboid(Material):
         #         return False
         # return True
     
-    def fun_intersect(self, p1, p2):
-        geo_p1 = Geometry3D.Point(p1)
-        geo_p2 = Geometry3D.Point(p2)
-        seg = Geometry3D.Segment(geo_p1, geo_p2)
-        intersec = self.cuboid.intersection(seg)
-        if intersec is None:
-            return None
-        elif isinstance(intersec, Geometry3D.Segment):
-            inter_p1 = intersec.start_point
-            inter_p2 = intersec.end_point
-            if inter_p1 == geo_p1 and inter_p2 == geo_p2:
-                # whole segment is material, so there was no boundary cross
-                return None
-            dist1 = geo_p1.distance(inter_p1)
-            dist2 = geo_p1.distance(inter_p2)
-            if dist1 < dist2:
-                out_geo_p = inter_p1
-            else:
-                out_geo_p = inter_p2
-        elif isinstance(intersec, Geometry3D.Point):
-            out_geo_p = intersec
-        else:
-            raise NotImplementedError()
-        out_p = [out_geo_p.x, out_geo_p.y, out_geo_p.z]
-        return out_p
-    
     def fun_plane_normal_vec(self, point):
         boundary_flags = self.check_boundaries(point)
         if boundary_flags[0]:
@@ -148,17 +188,21 @@ class Cuboid(Material):
             return [0, 0, -1]
         if boundary_flags[5]:
             return [0, 0, 1]
-        print(point)
-        raise NotImplementedError()
+        # print(point)
+        # raise NotImplementedError()
+        return None
     
     def fun_vispy_obj(self, parent):
-        polygon = self.cuboid.convex_polygons[3]
-        polygon_points = np.array([[p.x, p.y, p.z] for p in polygon.points])
         c = self.config["tissue_properties"][str(self.label)]["print color"]
         # c = ImageColor.getrgb(c)
         # color = [c[0], c[1], c[2], 255]
         # color = [val/255 for val in color]
         color = color_array.Color(c, alpha=1.0)
+
+        # top
+        # 0-bottom, 1-back, 2-left, 3-top, 4-front, 5-right
+        polygon = self.parallelepiped.convex_polygons[3]
+        polygon_points = np.array([[p.x, p.y, p.z] for p in polygon.points])
         scene.visuals.Mesh(vertices = polygon_points,
                            faces=None,
                            vertex_colors=None,
@@ -169,10 +213,24 @@ class Cuboid(Material):
                            shading=None,
                            mode='triangle_fan',
                            parent = parent)
+
+        # # bottom
+        # polygon = self.parallelepiped.convex_polygons[0]
+        # polygon_points = np.array([[p.x, p.y, p.z] for p in polygon.points])
+        # scene.visuals.Mesh(vertices = polygon_points,
+        #                    faces=None,
+        #                    vertex_colors=None,
+        #                    face_colors=None,
+        #                    color=color,
+        #                    vertex_values=None,
+        #                    meshdata=None,
+        #                    shading=None,
+        #                    mode='triangle_fan',
+        #                    parent = parent)
     
     def make_dump(self):
         d = dict()
-        d["class"] = "Cuboid"
+        d["class"] = Cuboid.name
         d["label"] = self.label
         d["start_p"] = self.start_p
         d["end_p"] = self.end_p
@@ -191,69 +249,60 @@ class Cuboid(Material):
 
 class Cylinder(Material):
         
+    name = "Cylinder"
+
     def __init__(self, label, circle_center, radius, height_vector, propEnvShape=None):
         with open("config.json") as f:
             # get simulation config parameters
             self.config = json.load(f)
 
+        # require to make dict/json dump
         self.label = label
         self.circle_center = circle_center
         self.radius = radius
         self.height_vector = height_vector
         self.propEnvShape = propEnvShape
 
+        # float (proportion of propEnvShape) to int (static coordinates)
         self.circle_center_stat = self.point_relative2static(self.circle_center, self.propEnvShape)
         self.geo_circle_center = Geometry3D.Point(self.circle_center_stat)
         self.geo_height_vector = Geometry3D.Vector(self.height_vector)
-        self.cyl = Geometry3D.geometry.Cylinder(self.geo_circle_center, self.radius, self.geo_height_vector, n=10)
-    
-    def fun_intersect(self, p1, p2):
-        geo_p1 = Geometry3D.Point(p1)
-        geo_p2 = Geometry3D.Point(p2)
-        seg = Geometry3D.Segment(geo_p1, geo_p2)
-        intersec = self.cyl.intersection(seg)
-        if intersec is None:
-            return None
-        elif isinstance(intersec, Geometry3D.Segment):
-            inter_p1 = intersec.start_point
-            inter_p2 = intersec.end_point
-            dist1 = self.geo_circle_center.distance(inter_p1)
-            dist2 = self.geo_circle_center.distance(inter_p2)
-            if dist1 < dist2:
-                out_geo_p = inter_p1
-            else:
-                out_geo_p = inter_p2
-        elif isinstance(intersec, Geometry3D.Point):
-            out_geo_p = intersec
-        else:
-            raise NotImplementedError()
-        out_p = [out_geo_p.x, out_geo_p.y, out_geo_p.z]
-        return out_p
+        self.parallelepiped = Geometry3D.geometry.Cylinder(self.geo_circle_center, self.radius, self.geo_height_vector, n=10)
 
     def fun_in(self, point):
         geo_p = Geometry3D.Point(point)
-        return geo_p in self.cyl
+        return geo_p in self.parallelepiped
     
     def fun_boundary(self, point):
         geo_p = Geometry3D.Point(point)
-        polygons = self.cyl.convex_polygons
+        polygons = self.parallelepiped.convex_polygons
         ins = [(geo_p in pl) for pl in polygons]
         return True in ins
     
     def fun_plane_normal_vec(self, point):
         geo_p = Geometry3D.Point(point)
-        polygons = self.cyl.convex_polygons
+        polygons = self.parallelepiped.convex_polygons
         ins = [(geo_p in pl) for pl in polygons]
         normals_in = [pl.plane.n for pl, in_flag in zip(polygons, ins) if in_flag]
-        return normals_in[0]            
+        # print("cyl normals_in", normals_in)
+        if len(normals_in) > 0:
+            normal_p = [normals_in[0][0], normals_in[0][1], normals_in[0][2]]
+            return normal_p
+        else:
+            # print(point)
+            return None
     
     def fun_vispy_obj(self, parent):
-        polygons = self.cyl.convex_polygons
+        polygons = self.parallelepiped.convex_polygons
         
         top_bottom = [poly for poly in polygons if len(poly.points) != 4]
         top_bottom_center = [poly.center_point for poly in top_bottom]
         top_bottom_points = [[[p.x, p.y, p.z] for p in poly.points] for poly in top_bottom]
+        # add center point, to draw traingles in fan mode
         top_bottom_points = [[[center.x, center.y, center.z]]+poly for poly, center in zip(top_bottom_points, top_bottom_center)]
+        # repeat second point to close polygon fan
+        top_bottom_points[0].append(top_bottom_points[0][1])
+        top_bottom_points[1].append(top_bottom_points[1][1])
         top_bottom_points = np.array(top_bottom_points)
 
         walls = [poly for poly in polygons if len(poly.points) == 4]
@@ -266,7 +315,6 @@ class Cylinder(Material):
         # color = [val/255 for val in color]
         color = color_array.Color(c, alpha=1.0)
 
-        vis_walls = None
         for wall in walls:
             scene.visuals.Mesh(vertices = wall,
                                faces=None,
@@ -279,36 +327,31 @@ class Cylinder(Material):
                                mode='triangle_fan',
                                parent = parent)
         
-        vis_top = None
-        vis_top = scene.visuals.Mesh(vertices = top_bottom_points[0],
-                                     faces=None,
-                                     vertex_colors=None,
-                                     face_colors=None,
-                                     color=color,
-                                     vertex_values=None,
-                                     meshdata=None,
-                                     shading=None,
-                                     mode='triangle_fan',
-                                     parent = parent)
+        # scene.visuals.Mesh(vertices = top_bottom_points[0],
+        #                    faces=None,
+        #                    vertex_colors=None,
+        #                    face_colors=None,
+        #                    color=color,
+        #                    vertex_values=None,
+        #                    meshdata=None,
+        #                    shading=None,
+        #                    mode='triangle_fan',
+        #                    parent = parent)
         
-        vis_bottom = None
-        vis_bottom = scene.visuals.Mesh(vertices = top_bottom_points[1],
-                                        faces=None,
-                                        vertex_colors=None,
-                                        face_colors=None,
-                                        color=color,
-                                        vertex_values=None,
-                                        meshdata=None,
-                                        shading=None,
-                                        mode='triangle_fan',
-                                        parent = parent)
-
-
-        return (vis_top, vis_bottom, vis_walls)
+        # scene.visuals.Mesh(vertices = top_bottom_points[1],
+        #                    faces=None,
+        #                    vertex_colors=None,
+        #                    face_colors=None,
+        #                    color=color,
+        #                    vertex_values=None,
+        #                    meshdata=None,
+        #                    shading=None,
+        #                    mode='triangle_fan',
+        #                    parent = parent)
     
     def make_dump(self):
         d = dict()
-        d["class"] = "Cylinder"
+        d["class"] = Cylinder.name
         d["label"] = self.label
         d["circle_center"] = self.circle_center
         d["radius"] = self.radius

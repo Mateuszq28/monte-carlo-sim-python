@@ -323,6 +323,7 @@ class ByVispy(View):
         # input x,y,z
         # output z,y,x
         vol = np.swapaxes(object3D.body, 0, 2)
+        vol = vol.astype(np.float32)
 
 
         # build your visuals, that's all

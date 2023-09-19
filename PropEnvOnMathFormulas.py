@@ -3,6 +3,7 @@ from Material import Material, load_dump
 import json
 import numpy as np
 import math
+from Space3dTools import Space3dTools
 
 class PropEnvOnMathFormulas(PropEnv):
     def __init__(self, x=100, y=100, z=100):
@@ -52,11 +53,21 @@ class PropEnvOnMathFormulas(PropEnv):
     #     return env_boundary_exceeded
     
     def boundary_check(self, xyz:list, xyz_next:list, label_in):
+        debug = False
+        if debug:
+            print()
+            print("xyz", xyz)
+            print("xyz_next", xyz_next)
+            print("label_in", label_in)
+
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
         
-        intersections = [[i, mat.fun_intersect(xyz, xyz_next)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
+        mat_in = [mat for mat in self.material_stack if mat.label == label_in][-1]
+        intersections = [[i, mat.fun_intersect(xyz, xyz_next, mat_in)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
         intersections = [inter for inter in intersections if inter[1] != None]
+        if debug:
+            print("intersections", intersections)
 
         if len(intersections) < 1:
             boundary_pos = xyz_next.copy()
@@ -65,10 +76,24 @@ class PropEnvOnMathFormulas(PropEnv):
             label_out = None
             return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
         
-        closest_idx, closest_inter = min(intersections, key = lambda x: math.dist(x[1], xyz))
+        closest_idx, closest_inter = min(intersections[::-1], key = lambda x: math.dist(x[1], xyz))
         boundary_pos = closest_inter
         boundary_change = True
+        if debug:
+            print("closest_inter", closest_inter)
+            print("self.material_stack[closest_idx].label", self.material_stack[closest_idx].label)
+            print()
         boundary_norm_vec = self.material_stack[closest_idx].fun_plane_normal_vec(closest_inter)
+        if boundary_norm_vec is None:
+            boundary_norm_vec = mat_in.fun_plane_normal_vec(closest_inter)
+
+        # boundary plane normal vector should be directerd outside (towards material in point xyz (xyz in))
+        ray_vec_out = (np.array(xyz) - np.array(closest_inter)).tolist()
+        alfa = Space3dTools.angle_between_vectors(ray_vec_out, boundary_norm_vec)
+        # alfa should be in <0,90> deg
+        if alfa > math.pi / 2:
+            boundary_norm_vec = [-val for val in boundary_norm_vec]
+
         label_out = self.material_stack[closest_idx].label
         return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
     
