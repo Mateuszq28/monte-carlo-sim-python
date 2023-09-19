@@ -22,8 +22,10 @@ class MakeMaterial():
         z_pos_idx = int(z_pos * propEnv.shape[2])
         radius = r * propEnv.shape[1]
         vein_thick = vein_thickness * propEnv.shape[1]
-        vein_cyl = Cylinder(label=9, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape)
-        blood_cyl = Cylinder(label=10, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius-vein_thick, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape)
+        vein_hard_boundary = [x_pos_idx-radius, x_pos_idx+radius, 0, propEnv.shape[1], z_pos_idx-radius, z_pos_idx+radius]
+        vein_cyl = Cylinder(label=9, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape, hard_boundary=vein_hard_boundary)
+        blood_hard_boundary = [x_pos_idx-(radius-vein_thick), x_pos_idx+(radius-vein_thick), 0, propEnv.shape[1], z_pos_idx-(radius-vein_thick), z_pos_idx+(radius-vein_thick)]
+        blood_cyl = Cylinder(label=10, circle_center=[x_pos_idx, 0, z_pos_idx], radius=radius-vein_thick, height_vector=[0, propEnv.shape[1], 0], propEnvShape=propEnv.shape, hard_boundary=blood_hard_boundary)
         propEnv.material_stack += [vein_cyl, blood_cyl]
 
 

@@ -14,9 +14,37 @@ class Material():
         self.parallelepiped : Geometry3D.ConvexPolyhedron
         self.name : str
 
+        # to avoid calculation of excessive intersections
+        # if point is not in self.hard_boundary it is certain, that it is not in material scope
+        # [-x, x+, -y, y+, -z, z+]
+        self.hard_boundary : list
+
         with open("config.json") as f:
             # get simulation config parameters
             self.config = json.load(f)
+
+    def is_point_in_hard_boundary(self, p):
+        if self.hard_boundary is None:
+            return True
+        in_x = self.hard_boundary[0] <= p[0] <= self.hard_boundary[1]
+        in_y = self.hard_boundary[2] <= p[1] <= self.hard_boundary[3]
+        in_z = self.hard_boundary[4] <= p[2] <= self.hard_boundary[5]
+        return in_x and in_y and in_z
+    
+    def is_seg_out_of_hard_boundary(self, p1, p2):
+        if self.hard_boundary is None:
+            return False
+        # x axis
+        out_x_low = self.hard_boundary[0] > p1[0] and self.hard_boundary[0] > p2[0]
+        out_x_high = self.hard_boundary[1] < p1[0] and self.hard_boundary[1] < p2[0]
+        # y axis
+        out_y_low = self.hard_boundary[2] > p1[1] and self.hard_boundary[2] > p2[1]
+        out_y_high = self.hard_boundary[3] < p1[1] and self.hard_boundary[3] < p2[1]
+        # z axis
+        out_z_low = self.hard_boundary[4] > p1[2] and self.hard_boundary[4] > p2[2]
+        out_z_high = self.hard_boundary[5] < p1[2] and self.hard_boundary[5] < p2[2]
+        is_out = out_x_low or out_x_high or out_y_low or out_y_high or out_z_low or out_z_high
+        return is_out
         
     def fun_in(self, point):
         pass
@@ -25,6 +53,9 @@ class Material():
         pass
 
     def fun_intersect(self, p1, p2, mat_in):
+        if self.is_seg_out_of_hard_boundary(p1, p2):
+            return None
+
         geo_p1 = Geometry3D.Point(p1)
         geo_p2 = Geometry3D.Point(p2)
         seg = Geometry3D.Segment(geo_p1, geo_p2)
@@ -144,6 +175,8 @@ class Cuboid(Material):
         self.start_p_stat = self.point_relative2static(start_p, propEnvShape)
         self.end_p_stat = self.point_relative2static(end_p, propEnvShape)
 
+        self.hard_boundary = [self.start_p_stat[0], self.end_p_stat[0], self.start_p_stat[1], self.end_p_stat[1], self.start_p_stat[2], self.end_p_stat[2]]
+
         ver1 = [self.end_p_stat[0], self.start_p_stat[1], self.start_p_stat[2]]
         ver2 = [self.start_p_stat[0], self.end_p_stat[1], self.start_p_stat[2]]
         ver3 = [self.start_p_stat[0], self.start_p_stat[1], self.end_p_stat[2]]
@@ -251,10 +284,12 @@ class Cylinder(Material):
         
     name = "Cylinder"
 
-    def __init__(self, label, circle_center, radius, height_vector, propEnvShape=None):
+    def __init__(self, label, circle_center, radius, height_vector, propEnvShape=None, hard_boundary=None):
         with open("config.json") as f:
             # get simulation config parameters
             self.config = json.load(f)
+
+        self.hard_boundary = hard_boundary
 
         # require to make dict/json dump
         self.label = label
@@ -269,7 +304,10 @@ class Cylinder(Material):
         self.geo_height_vector = Geometry3D.Vector(self.height_vector)
         self.parallelepiped = Geometry3D.geometry.Cylinder(self.geo_circle_center, self.radius, self.geo_height_vector, n=10)
 
+
     def fun_in(self, point):
+        if not self.is_point_in_hard_boundary(point):
+            return False
         geo_p = Geometry3D.Point(point)
         return geo_p in self.parallelepiped
     

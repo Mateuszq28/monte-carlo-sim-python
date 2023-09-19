@@ -63,7 +63,11 @@ class PropEnvOnMathFormulas(PropEnv):
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
         
-        mat_in = [mat for mat in self.material_stack if mat.label == label_in][-1]
+        mat_in = [mat for mat in self.material_stack if mat.label == label_in]
+        if len(mat_in) == 1:
+            mat_in = mat_in[0]
+        else:
+            mat_in = [mat for mat in mat_in if mat.fun_in(xyz)][-1]
         intersections = [[i, mat.fun_intersect(xyz, xyz_next, mat_in)] for mat, i in zip(self.material_stack, range(len(self.material_stack))) if mat.label != label_in]
         intersections = [inter for inter in intersections if inter[1] != None]
         if debug:
