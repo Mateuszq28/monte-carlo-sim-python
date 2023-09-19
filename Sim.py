@@ -25,6 +25,7 @@ class Sim():
                 self.config = json.load(f)
             PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
             Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
+            self.boundary_check_calculation_time = 0
 
             # np.random.seed(self.config["random_seed"])
             MyRandom.random_state_pool = self.config["random_seed"]
@@ -121,6 +122,7 @@ class Sim():
         self.propSetup.load_result_json(folder)
 
         self.simulation_calculation_time = d["simulation_calculation_time"]
+        self.boundary_check_calculation_time = d["boundary_check_calculation_time"]
 
 
     def dump_sim_json(self):
@@ -144,7 +146,8 @@ class Sim():
             "random_state_pool": self.propSetup.random_state_pool,
             "generated_num": self.propSetup.generated_num,
 
-            "simulation_calculation_time": self.simulation_calculation_time
+            "simulation_calculation_time": self.simulation_calculation_time,
+            "boundary_check_calculation_time": self.boundary_check_calculation_time
         }
         path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
         with open(path_sim_dump, "w") as f:
@@ -227,7 +230,10 @@ class Sim():
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
             # check if there was change of a material
+            start_time = time.time()
             boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
+            end_time = time.time()
+            self.boundary_check_calculation_time += (end_time-start_time)
             # check if photon is in env shape range
             if boundary_change:
                 # photon interact with the tissue earlier

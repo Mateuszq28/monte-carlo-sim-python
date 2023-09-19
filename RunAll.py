@@ -50,8 +50,8 @@ class RunAll():
         MAIN PHOTON SIMULATION
         """
         # if true, just load last saved results 
-        LOAD_INSTEAD_OF_SIM = False
         LOAD_INSTEAD_OF_SIM = True
+        LOAD_INSTEAD_OF_SIM = False
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
@@ -67,6 +67,7 @@ class RunAll():
         else:
             result_propSetup = sim.start_sim()
             print("simulation calculation time:", sim.simulation_calculation_time)
+            print("boundary check calculation time:", sim.boundary_check_calculation_time)
         
         # return
     
