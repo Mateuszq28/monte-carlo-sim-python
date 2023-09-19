@@ -12,6 +12,8 @@
 
     "flag_make_prop_setup_from_componentes": false,
     "flag_use_propenv_on_formulas": true,
+    "flag_ignore_prop_env_labels": true,
+    "global_label_if_ignore_prop_env_labels": 11,
 
 
 
@@ -42,6 +44,7 @@
         "7": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Cuticle", "print color": "#FFF99A"},
         "8": {"mu_a": 2, "mu_s": 80, "n": 2.417, "name": "Skin", "print color": "#FFCB9A"},
         "9": {"mu_a": 30, "mu_s": 100, "n": 2.417, "name": "Vein", "print color": "#F3794B"},
-        "10": {"mu_a": 3, "mu_s": 50, "n": 2.417, "name": "Blood", "print color": "#FF1414"}
+        "10": {"mu_a": 3, "mu_s": 50, "n": 2.417, "name": "Blood", "print color": "#FF1414"},
+        "11": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "ignore label", "print color": "#AACB23"}
     }
 }

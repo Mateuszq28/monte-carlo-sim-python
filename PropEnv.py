@@ -13,8 +13,11 @@ class PropEnv(Object3D):
             # get simulation config parameters
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
+        self.config = config
     
     def get_label_from_float(self, xyz) -> int:
+        if self.config["flag_ignore_prop_env_labels"]:
+            return self.config["global_label_if_ignore_prop_env_labels"]
         xyz_int = self.round_xyz(xyz)
         label = self.body[xyz_int[0], xyz_int[1], xyz_int[2]]
         return label
@@ -65,8 +68,16 @@ class PropEnv(Object3D):
         return env_boundary_exceeded
     
     def boundary_check(self, xyz:list, xyz_next:list, label_in: int):
+        if self.config["flag_ignore_prop_env_labels"]:
+            boundary_pos = xyz_next.copy()
+            boundary_change = False
+            boundary_norm_vec = None
+            label_out = None
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+        
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
+        
         arr_xyz = np.array(xyz)
         arr_xyz_next = np.array(xyz_next)
         vec = arr_xyz_next - arr_xyz

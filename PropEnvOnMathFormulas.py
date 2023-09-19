@@ -12,6 +12,7 @@ class PropEnvOnMathFormulas(PropEnv):
             # get simulation config parameters
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
+        self.config = config
         # MATERIAL LABELS, AFFILIATION FUNCTIONS, BOUNDARY FUNCTIONS AND INTERSECTIONS ARE DESCRIBED IN MATERIAL STACK
         # EACH POSITION IN MATERIAL STACK IS ONE MATERIAL OBJECT OF CLASS MATERIAL
         # THE HIGHER INDEX, THE HIGHER PRIORITY
@@ -19,6 +20,8 @@ class PropEnvOnMathFormulas(PropEnv):
     
 
     def get_label_from_float(self, xyz):
+        if self.config["flag_ignore_prop_env_labels"]:
+            return self.config["global_label_if_ignore_prop_env_labels"]
         last_in_label = [material.label for material in self.material_stack if material.fun_in(xyz)][-1]
         return last_in_label
 
@@ -53,6 +56,13 @@ class PropEnvOnMathFormulas(PropEnv):
     #     return env_boundary_exceeded
     
     def boundary_check(self, xyz:list, xyz_next:list, label_in):
+        if self.config["flag_ignore_prop_env_labels"]:
+            boundary_pos = xyz_next.copy()
+            boundary_change = False
+            boundary_norm_vec = None
+            label_out = None
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+
         debug = False
         if debug:
             print()
