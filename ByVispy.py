@@ -49,7 +49,7 @@ class ByVispy(View):
                 pos_list.append(series)
                 n = len(series)
                 colors = np.ones((n, 4), dtype=np.float32)
-                rgb = PIL.ImageColor.getrgb(color_names[counter % len(color_names)])
+                rgb = ImageColor.getrgb(color_names[counter % len(color_names)])
                 rgb_norm = np.array(rgb) / 255.0
                 for i in range(n):
                     colors[i,0:3] = rgb_norm

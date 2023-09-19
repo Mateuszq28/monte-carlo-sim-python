@@ -11,7 +11,7 @@ from ArrowsDF import ArrowsDF
 from ProjectionArrowsDF import ProjectionArrowsDF
 import matplotlib.pyplot as plt
 import pandas as pd
-from IPython.display import display
+# from IPython.display import display
 import numpy as np
 import os
 import time

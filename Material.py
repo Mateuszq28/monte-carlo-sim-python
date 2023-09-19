@@ -17,7 +17,7 @@ class Material():
         # to avoid calculation of excessive intersections
         # if point is not in self.hard_boundary it is certain, that it is not in material scope
         # [-x, x+, -y, y+, -z, z+]
-        self.hard_boundary : list
+        self.hard_boundary : list | None
 
         with open("config.json") as f:
             # get simulation config parameters
