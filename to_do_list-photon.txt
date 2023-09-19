@@ -1,7 +1,4 @@
-light source point - x, y, z func zamienić
 
-
-random distance before interaction - photon hop [0-1]
 local attenuation coefficient of the medium
 At the end of each photon
 step, the weight of the photon is reduced by absorption
