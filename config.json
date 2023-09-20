@@ -19,7 +19,7 @@
 
 
 
-    "use_proba_instead_of_splitting": true,
+    "use_proba_instead_of_splitting": false,
     "recurention_if_split": false,
 
     "flag_result_records_pos_int": false,

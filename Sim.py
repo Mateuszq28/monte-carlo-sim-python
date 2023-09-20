@@ -180,9 +180,15 @@ class Sim():
 
                         # propagate photons from split list (refraction, reflection)
                         if len(self.splitted_photons_to_run) > 0:
-                            for _ in range(len(self.splitted_photons_to_run)):
-                                splitted_photon = self.splitted_photons_to_run.pop(0)
-                                self.propagate_photon(splitted_photon)
+                            for _ in range(len(self.splitted_photons_to_run)//2):
+                                # take values from stack
+                                refraction_photon = self.splitted_photons_to_run.pop(0)
+                                rest_dist_refraction = self.splitted_photons_to_run.pop(0)
+                                # propagate
+                                self.try_move(refraction_photon, rest_dist_refraction)
+                                flag_terminate = self.after_hop(refraction_photon)
+                                if not flag_terminate:
+                                    self.propagate_photon(refraction_photon)
                             
                     else:
                         raise ValueError("ls is None")
@@ -340,13 +346,16 @@ class Sim():
                                                                                     "child": []
                                                                                     }
                             self.propSetup.photon_register[str(photon.id)]["child"].append(refraction_photon.id)
-                            self.try_move(refraction_photon, rest_dist_refraction)
-                            flag_terminate = self.after_hop(refraction_photon)
-                            if not flag_terminate:
-                                if self.config["recurention_if_split"]:
+                            # --block of new photon propagation
+                            if self.config["recurention_if_split"]:
+                                self.try_move(refraction_photon, rest_dist_refraction)
+                                flag_terminate = self.after_hop(refraction_photon)
+                                if not flag_terminate:
                                     self.propagate_photon(refraction_photon)
-                                else:
-                                    self.splitted_photons_to_run.append(refraction_photon)
+                            else:
+                                self.splitted_photons_to_run.append(refraction_photon)
+                                self.splitted_photons_to_run.append(rest_dist_refraction)
+                            # --end block of new photon propagation
                             # update old photon (reflection one)
                             photon.weight *= R
                             photon.pos = boundary_pos
