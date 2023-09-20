@@ -26,6 +26,7 @@ class Sim():
             PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
             Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
             self.boundary_check_calculation_time = 0
+            self.splitted_photons_to_run = []
 
             # np.random.seed(self.config["random_seed"])
             MyRandom.random_state_pool = self.config["random_seed"]
@@ -86,6 +87,7 @@ class Sim():
             d = json.load(f)
         
         self.config = d["config"]
+        self.splitted_photons_to_run = []
 
         # default paths
         self.default_env_path = d["default_env_path"]
@@ -175,6 +177,13 @@ class Sim():
                                                                          }
                         # propagate
                         self.propagate_photon(photon)
+
+                        # propagate photons from split list (refraction, reflection)
+                        if len(self.splitted_photons_to_run) > 0:
+                            for _ in range(len(self.splitted_photons_to_run)):
+                                splitted_photon = self.splitted_photons_to_run.pop(0)
+                                self.propagate_photon(splitted_photon)
+                            
                     else:
                         raise ValueError("ls is None")
         else:
@@ -334,7 +343,10 @@ class Sim():
                             self.try_move(refraction_photon, rest_dist_refraction)
                             flag_terminate = self.after_hop(refraction_photon)
                             if not flag_terminate:
-                                self.propagate_photon(refraction_photon)
+                                if self.config["recurention_if_split"]:
+                                    self.propagate_photon(refraction_photon)
+                                else:
+                                    self.splitted_photons_to_run.append(refraction_photon)
                             # update old photon (reflection one)
                             photon.weight *= R
                             photon.pos = boundary_pos
