@@ -179,16 +179,15 @@ class Sim():
                         self.propagate_photon(photon)
 
                         # propagate photons from split list (refraction, reflection)
-                        if len(self.splitted_photons_to_run) > 0:
-                            for _ in range(len(self.splitted_photons_to_run)//2):
-                                # take values from stack
-                                refraction_photon = self.splitted_photons_to_run.pop(0)
-                                rest_dist_refraction = self.splitted_photons_to_run.pop(0)
-                                # propagate
-                                self.try_move(refraction_photon, rest_dist_refraction)
-                                flag_terminate = self.after_hop(refraction_photon)
-                                if not flag_terminate:
-                                    self.propagate_photon(refraction_photon)
+                        while len(self.splitted_photons_to_run) > 0:
+                            # take values from stack
+                            refraction_photon = self.splitted_photons_to_run.pop(0)
+                            rest_dist_refraction = self.splitted_photons_to_run.pop(0)
+                            # propagate
+                            self.try_move(refraction_photon, rest_dist_refraction)
+                            flag_terminate = self.after_hop(refraction_photon)
+                            if not flag_terminate:
+                                self.propagate_photon(refraction_photon)
                             
                     else:
                         raise ValueError("ls is None")
@@ -240,7 +239,8 @@ class Sim():
 
     def try_move(self, photon:Photon, distance):
         # photon.print_me()
-        if distance > 0:
+        while distance > 0 and photon.weight > 0:
+            # photon.print_me()
             step = [distance * ax for ax in photon.dir]
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
@@ -306,7 +306,9 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
                         photon.mat_label = label_out
-                        self.try_move(photon, rest_dist_refraction)
+                        # SET DISTANCE VALUE TO AVOID RECURENTION
+                        # self.try_move(photon, rest_dist_refraction)
+                        distance = rest_dist_refraction
 
                     if 0.0 < R < 1.0:
 
@@ -325,7 +327,9 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
                                 photon.mat_label = label_in
-                                self.try_move(photon, rest_dist_reflection)
+                                # SET DISTANCE VALUE TO AVOID RECURENTION
+                                # self.try_move(photon, rest_dist_reflection)
+                                distance = rest_dist_reflection
                             else:
                                 # ONLY REFRACTION (OLD RAY)
                                 # penetration ray - refraction
@@ -333,7 +337,9 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
                                 photon.mat_label = label_out
-                                self.try_move(photon, rest_dist_refraction)
+                                # SET DISTANCE VALUE TO AVOID RECURENTION
+                                # self.try_move(photon, rest_dist_refraction)
+                                distance = rest_dist_refraction
 
                         else:
                             # RAY IS SPLIT INTO REFRACTION RAY AND REFLECTION (OLD) RAY
@@ -361,7 +367,9 @@ class Sim():
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
                             photon.mat_label = label_in
-                            self.try_move(photon, rest_dist_reflection)
+                            # SET DISTANCE VALUE TO AVOID RECURENTION
+                            # self.try_move(photon, rest_dist_reflection)
+                            distance = rest_dist_reflection
 
                     if R == 1.0:
                         # ONLY REFLECTION (OLD RAY)
@@ -369,11 +377,15 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
                         photon.mat_label = label_in
-                        self.try_move(photon, rest_dist_reflection)
+                        # SET DISTANCE VALUE TO AVOID RECURENTION
+                        # self.try_move(photon, rest_dist_reflection)
+                        distance = rest_dist_reflection
                 
                 else:
                     # photon just moved in the same tissue
                     photon.pos = next_pos
+                    # REST DISTANCE, LOOP CONDITION
+                    distance = 0
             else:
                 # ignore the further path of the photon - photon escape from tissue
                 self.propSetup.save2resultRecords(xyz=next_pos, weight=photon.weight, photon_id=photon.id, round=self.config["flag_result_records_pos_int"])
@@ -382,6 +394,8 @@ class Sim():
                 # stop tracking
                 # with a weight of zero, the algorithm will finish tracking (loop condition)
                 photon.weight = 0.0
+                # REST DISTANCE, LOOP CONDITION
+                distance = 0
 
 
     def just_move(self, photon: Photon, step):

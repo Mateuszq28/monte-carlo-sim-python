@@ -108,9 +108,9 @@ class ChartMaker():
         sl = None
         sl = list(range(10,15))
         sl = list(range(0,100))
-        sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
         sl = [0,1]
         sl = [4, 48]
+        sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
         sh = propSetup.propEnv.shape
         border_limits = None
         border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
@@ -118,8 +118,8 @@ class ChartMaker():
         select_photon_id = [97, 98]
         very_close_photons = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
         select_photon_id = very_close_photons
-        select_photon_id = sl
         select_photon_id = None
+        select_photon_id = sl
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,

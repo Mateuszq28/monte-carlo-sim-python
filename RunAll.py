@@ -56,8 +56,8 @@ class RunAll():
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
         do_connect_lines_list = [True, False]
-        do_connect_lines_list = [True]
         do_connect_lines_list = [False]
+        do_connect_lines_list = [True]
 
         # SIMULATION
         sim = Sim(load_last_dump=LOAD_INSTEAD_OF_SIM)
@@ -79,12 +79,13 @@ class RunAll():
         take_cs.remove("photonwise")
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
         take_cs = ["heatmap trans-normal"]
+        take_cs = ["photonwise"]
         print()
         for do_cl in do_connect_lines_list:
             for i in range(len(take_cs)):
                 color_scheme = take_cs[i]
                 print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
-                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=False, draw_planes_from_material_stack=False)
+                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True, draw_planes_from_material_stack=False)
 
 
 if __name__ == '__main__':
