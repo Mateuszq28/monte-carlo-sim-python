@@ -49,15 +49,19 @@ class RunAll():
         """
         MAIN PHOTON SIMULATION
         """
+
+
         # if true, just load last saved results 
         LOAD_INSTEAD_OF_SIM = False
         LOAD_INSTEAD_OF_SIM = True
 
-        # used in every printing and charts
-        color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
-        do_connect_lines_list = [True, False]
-        do_connect_lines_list = [False]
-        do_connect_lines_list = [True]
+
+
+        # if False, new traingled planes to show in ByVispy will be calculated using data from propEnv.body array
+        USE_TRIANGLED_PLANES_FROM_FILE = False
+        USE_TRIANGLED_PLANES_FROM_FILE = True
+
+
 
         # SIMULATION
         sim = Sim(load_last_dump=LOAD_INSTEAD_OF_SIM)
@@ -69,23 +73,45 @@ class RunAll():
             print("simulation calculation time:", sim.simulation_calculation_time)
             print("boundary check calculation time:", sim.boundary_check_calculation_time)
         
+
+
         # return
     
+
+
         # NORMALIZATION
         RunAll.normalize_process(result_propSetup)
 
-        # SHOW CHARTS + MAKE .PNG IMAGES
+
+
+        # used in every printing and charts
+        color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
         take_cs = color_scheme_list
         take_cs.remove("photonwise")
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
         take_cs = ["photonwise"]
         take_cs = ["heatmap trans-normal"]
+
+        do_connect_lines_list = [True, False]
+        do_connect_lines_list = [False]
+        do_connect_lines_list = [True]
+
+
+
+        # SHOW CHARTS + MAKE .PNG IMAGES
         print()
-        for do_cl in do_connect_lines_list:
+        for cl_loop in do_connect_lines_list:
             for i in range(len(take_cs)):
-                color_scheme = take_cs[i]
-                print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
-                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=True, draw_planes_from_material_stack=False)
+                cs_loop = take_cs[i]
+                print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, cs_loop))
+                ChartMaker.show_all(result_propSetup,
+                                    cs_loop,
+                                    cl_loop,
+                                    color_points_by_root = False,
+                                    color_arrows_by_root = False,
+                                    do_triangled_planes = True,
+                                    draw_planes_from_material_stack = False,
+                                    use_triangled_planes_from_file = USE_TRIANGLED_PLANES_FROM_FILE)
 
 
 if __name__ == '__main__':

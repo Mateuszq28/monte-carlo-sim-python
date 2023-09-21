@@ -25,7 +25,7 @@ class ChartMaker():
 
 
     @staticmethod
-    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False, draw_planes_from_material_stack=False):
+    def show_all(propSetup: PropSetup, color_scheme="loop", do_connect_lines=False, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=False, draw_planes_from_material_stack=False, use_triangled_planes_from_file=True):
 
         # TEST DUPLICATES IN RECORDS
         turn_on_test = False
@@ -56,7 +56,7 @@ class ChartMaker():
         # PREPARE TRIANGLED PLANES
         if True:
             if do_triangled_planes:
-                if propSetup.config["flag_use_triangled_planes_from_file"]:
+                if use_triangled_planes_from_file:
                     triangls_dict = PlaneTriangles.load_json(propSetup.result_folder)
                     # if file not exsists triangls_dict is None
                 else:
