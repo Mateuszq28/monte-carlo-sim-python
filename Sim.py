@@ -129,8 +129,6 @@ class Sim():
 
     def dump_sim_json(self):
         d = {
-            "config": self.config,
-
             # default paths
             "default_env_path": self.default_env_path,
             "default_light_surce_path": self.default_light_surce_path,
@@ -144,12 +142,14 @@ class Sim():
             # values from propSetup obtained during the simulation
             "escaped_photons_weight": self.propSetup.escaped_photons_weight,
             "resultShape": self.propSetup.resultShape,
-            "photon_register": self.propSetup.photon_register,
             "random_state_pool": self.propSetup.random_state_pool,
             "generated_num": self.propSetup.generated_num,
 
             "simulation_calculation_time": self.simulation_calculation_time,
-            "boundary_check_calculation_time": self.boundary_check_calculation_time
+            "boundary_check_calculation_time": self.boundary_check_calculation_time,
+
+            "config": self.config,
+            "photon_register": self.propSetup.photon_register
         }
         path_sim_dump = os.path.join(Sim.result_folder, "sim_dump.json")
         with open(path_sim_dump, "w") as f:
