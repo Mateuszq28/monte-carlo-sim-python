@@ -176,18 +176,17 @@ class Sim():
                                                                           "child": []
                                                                          }
                         # propagate
+                        # print("normal")
                         self.propagate_photon(photon)
 
                         # propagate photons from split list (refraction, reflection)
                         while len(self.splitted_photons_to_run) > 0:
+                            # print("splitted")
                             # take values from stack
                             refraction_photon = self.splitted_photons_to_run.pop(0)
                             rest_dist_refraction = self.splitted_photons_to_run.pop(0)
                             # propagate
-                            self.try_move(refraction_photon, rest_dist_refraction)
-                            flag_terminate = self.after_hop(refraction_photon)
-                            if not flag_terminate:
-                                self.propagate_photon(refraction_photon)
+                            self.split_photon_actions(photon=refraction_photon, distance=rest_dist_refraction)
                             
                     else:
                         raise ValueError("ls is None")
@@ -212,6 +211,13 @@ class Sim():
             flag_break = self.after_hop(photon)
             if flag_break:
                 break
+
+
+    def split_photon_actions(self, photon, distance):
+        self.try_move(photon, distance)
+        flag_terminate = self.after_hop(photon)
+        if not flag_terminate:
+            self.propagate_photon(photon)
             
 
     def after_hop(self, photon: Photon):
@@ -239,8 +245,11 @@ class Sim():
 
     def try_move(self, photon:Photon, distance):
         # photon.print_me()
+        # print(distance)
         while distance > 0 and photon.weight > 0:
             # photon.print_me()
+            # print(distance)
+
             step = [distance * ax for ax in photon.dir]
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
@@ -302,7 +311,7 @@ class Sim():
                     if R == 0.0:
                         # ONLY REFRACTION (OLD RAY)
                         # penetration ray - refraction
-                        photon.weight *= (1.0-R)
+                        # photon.weight *= (1.0-R)
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
                         photon.mat_label = label_out
@@ -354,10 +363,7 @@ class Sim():
                             self.propSetup.photon_register[str(photon.id)]["child"].append(refraction_photon.id)
                             # --block of new photon propagation
                             if self.config["recurention_if_split"]:
-                                self.try_move(refraction_photon, rest_dist_refraction)
-                                flag_terminate = self.after_hop(refraction_photon)
-                                if not flag_terminate:
-                                    self.propagate_photon(refraction_photon)
+                                self.split_photon_actions(photon=refraction_photon, distance=rest_dist_refraction)
                             else:
                                 self.splitted_photons_to_run.append(refraction_photon)
                                 self.splitted_photons_to_run.append(rest_dist_refraction)
@@ -373,7 +379,7 @@ class Sim():
 
                     if R == 1.0:
                         # ONLY REFLECTION (OLD RAY)
-                        photon.weight *= R
+                        # photon.weight *= R
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
                         photon.mat_label = label_in

@@ -78,8 +78,8 @@ class RunAll():
         take_cs = color_scheme_list
         take_cs.remove("photonwise")
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
-        take_cs = ["heatmap trans-normal"]
         take_cs = ["photonwise"]
+        take_cs = ["heatmap trans-normal"]
         print()
         for do_cl in do_connect_lines_list:
             for i in range(len(take_cs)):
