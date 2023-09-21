@@ -223,10 +223,10 @@ class ColorPointDF():
         colors = [[rnd.randint(0, 255+1), rnd.randint(0, 255+1), rnd.randint(0, 255+1)] for _ in range(len(uniq_photon_id))]
         # id to color translator (dict)
         trans_color = dict(zip(uniq_photon_id, colors))
-        ColorPointDF.old_color_dict = trans_color
         if try_use_old_color_dict and ColorPointDF.old_color_dict is not None:
             old_trans_color = ColorPointDF.old_color_dict
             trans_color.update(old_trans_color)
+        ColorPointDF.old_color_dict = trans_color        
         # treanslate colors
         rgb = [trans_color[val] for val in df["photon_id"].values]
         # insert R, G, B columns

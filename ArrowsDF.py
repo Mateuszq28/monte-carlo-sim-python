@@ -19,9 +19,17 @@ class ArrowsDF():
         df.sort_values(by=['photon_id', "sort_idx"], inplace=True)
         # make pairs
         move_idx = [(i+1) % len(df) for i in range(len(df))]
-        df[["x_idx_2", "y_idx_2", "z_idx_2", "photon_id_2"]] = df.iloc[move_idx][["x_idx", "y_idx", "z_idx", "photon_id"]].to_numpy()
-        # drop last row (it's photon_idx_2 is hookeded up to the first row)
-        df = df.iloc[:-1]
+        df[["x_idx_2", "y_idx_2", "z_idx_2"]] = df.iloc[move_idx][["x_idx", "y_idx", "z_idx"]].to_numpy()
+        df["photon_id_2"] = df.iloc[move_idx]["photon_id"].to_numpy()
+        # change last row (it's photon_idx_2 is hookeded up to the first row)
+        df.loc[df.index[[-1]], "photon_id_2"] = df.loc[df.index[-1], ["photon_id"]].to_numpy()
+        df.loc[df.index[[-1]], ["x_idx_2", "y_idx_2", "z_idx_2"]] = df.loc[df.index[-1], ["x_idx", "y_idx", "z_idx"]].to_numpy()
+        # save single occurences
+        single_flag = ~df.duplicated(subset="photon_id", keep=False)
+        df.loc[single_flag, "photon_id_2"] = df["photon_id"][single_flag]
+        df.loc[single_flag, "x_idx_2"] = df["x_idx"][single_flag]
+        df.loc[single_flag, "y_idx_2"] = df["y_idx"][single_flag]
+        df.loc[single_flag, "z_idx_2"] = df["z_idx"][single_flag]
         # delete arrows, that are not connected to the same photon
         df = df[df["photon_id"] == df["photon_id_2"]]
         if add_start_arrows:

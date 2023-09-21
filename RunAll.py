@@ -50,8 +50,8 @@ class RunAll():
         MAIN PHOTON SIMULATION
         """
         # if true, just load last saved results 
-        LOAD_INSTEAD_OF_SIM = True
         LOAD_INSTEAD_OF_SIM = False
+        LOAD_INSTEAD_OF_SIM = True
 
         # used in every printing and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
@@ -85,7 +85,7 @@ class RunAll():
             for i in range(len(take_cs)):
                 color_scheme = take_cs[i]
                 print("({}) Run ChartMaker.show_all, color_scheme = {}".format(i, color_scheme))
-                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=True, color_arrows_by_root=True, do_triangled_planes=True, draw_planes_from_material_stack=False)
+                ChartMaker.show_all(result_propSetup, color_scheme, do_cl, color_points_by_root=False, color_arrows_by_root=False, do_triangled_planes=True, draw_planes_from_material_stack=False)
 
 
 if __name__ == '__main__':

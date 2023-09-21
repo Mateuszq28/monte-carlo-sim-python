@@ -99,7 +99,7 @@ class ChartMaker():
                                   title = "Absorbed energy in volume - color_scheme = " + color_scheme,
                                   color_scheme = color_scheme,
                                   connect_lines = standard_connect_lines)
-        ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
+        # ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
 
         
 
