@@ -84,7 +84,7 @@ class RunAll():
 
 
 
-        # used in every printing and charts
+        # used in every print .png and charts
         color_scheme_list = ["threshold", "loop", "solid", "photonwise", "random", "rainbow", "min-max", "median", "trans-normal", "logarithmic", "heatmap min-max", "heatmap median", "heatmap trans-normal", "heatmap logarithmic"]
         take_cs = color_scheme_list
         take_cs.remove("photonwise")

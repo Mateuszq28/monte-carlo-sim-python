@@ -246,7 +246,13 @@ class Sim():
     def try_move(self, photon:Photon, distance):
         # photon.print_me()
         # print(distance)
+        loop_iter = 0
         while distance > 0 and photon.weight > 0:
+            if loop_iter >= 5:
+                if self.terminate(photon):
+                    break
+            loop_iter += 1
+
             # photon.print_me()
             # print(distance)
 
@@ -325,7 +331,7 @@ class Sim():
                             # DECIDE BASED ON PROBABLITY WHICH RAY TO PROPAGATE
                             # (REFRACTION RAY OR REFLECTION RAY)
                             rnd_uniform = self.featureSampling.proba_split()
-                            if R < rnd_uniform:
+                            if rnd_uniform < R:
                                 flag_reflect = False
                             else:
                                 flag_reflect = True
@@ -460,7 +466,7 @@ class Sim():
         rnd = self.myRandom.uniform_half_open(0.0, 1.0)
         flag_terminate = False
         if photon.weight < threshold:
-            if rnd <= chance:
+            if rnd < chance:
                 new_weight = photon.weight / chance
                 self.propSetup.escaped_photons_weight -= (new_weight - photon.weight)
                 photon.weight = new_weight

@@ -10,6 +10,8 @@ WSTĘP TEORETYCZNY
     Metoda Monte Carlo
         Symulowanie propagacji światła
     Przykładowe implementacje symulacji światła
+    Algorytm maszerujących sześcianów
+
 
 
 
@@ -17,47 +19,107 @@ WSTĘP TEORETYCZNY
 DIAGRAM APLIKACJI
 
 ZARZĄDZANIE GENERATORAMI LICZB PSEUDOLOSOWYCH
+Interfejs generatorów
+Interfejs funkcji losujących
+    Wykorzystane funkcje losujące
+        - (funkcja gęstości prawdopodobieństwa, dystrybuanta, funkcja próbkująca cechy)
+    Alternatywne funkcje losujące
+
+- precyzja
+    - nieużywana w większości przypadków
+    - możliwa do wykorzystania przy użyciu alternatywnej funkcji losującej
+    - zamiast losować z liczby z rozkładu jednostajnego [low,high), losuje liczby całkowite z przedziału [0,(high-low)*10^prec], a następnie dzieli je przez 10^prec i dodaje low. Ma to zapewnić przedział obustronnie zamknięty wylosowanych liczb.
 
 IMPLEMENTACJA TRÓJWYMIAROWYCH MODELI SKÓRY
     Jednolity ośrodek propagacji
     Wielowarstowe modele ośrodka propagacji
         Implementacja bazująca na trójwymiarowej tablicy
-            Dwuwarstwowy model skóry
-            Wielowarstwowy model skóry
-            Ziarnisty model skóry
+            Identyfikacja przekroczenia granicy ośrodków
+            Modele skóry
+                Dwuwarstwowy model skóry
+                Wielowarstwowy model skóry
+                Ziarnisty model skóry
         Implementacja bazująca na opisie brył geometrycznych
+            Model materiału
             Zakładkowanie warstw
-            Dwuwarstwowy model skóry
-            Wielowarstwowy model skóry
+            Identyfikacja przekroczenia granicy ośrodków
+            Modele skóry
+                Dwuwarstwowy model skóry
+                Wielowarstwowy model skóry
     Zapis do pliku
     
 IMPLEMENTACJA ŹRÓDŁA ŚWIATŁA
     Agregowanie punktowych źródeł światła
     Punktowe źródło światła
-    Wiązka światła
+    Wiązka fotonów
     Zapis do pliku
+    Porównanie wpływu liczby wiązek fotonów na wynik symulacji
 
 AGREGACJA ELEMENTÓW STANU POCZĄTKOWEGO ŚRODOWISKA PROPAGACJI
     Zapis do pliku
 
 PRZECHOWYWANIE WYNIKÓW
-    Rejestr wiązek światła
+    Rejestr wiązek fotonów
     Rejestr pozycji fotonów
     Tablica absorpcji fotonów
 
 OBLICZENIA NUMERYCZNE PROPAGACJI ŚWIATŁA
     Plik konfiguracyjny
-        Porównanie ustawień
-            Ilości wiązek fotonów
-            Wpółczynnik anizotropii
+        - flagi tworzenia nowych plików domyślnych elementów stanu początkowego środowiska propagacji
+        - alternatywne ścieżki do plików z elementami stanu początkowego środowiska propagacji
+        - flagi wyboru plików domyślnych lub wczytania plików z wykorzystaniem ścieżek alternatywnych
+        - flagi wyboru sposobu wczytania stanu początkowego środowiska
+            - z wcześniej wybranych ścieżek
+            - z ścieżek zapisanych w pliku agregującym śrdodowisko propagacji
+        - Model opisu ośrodka symulacji
+            - opis przez tablicę / opis przez stos brył geometrycznych
+        - Ignorowanie ośrodka propagacji
+            - globalny materiał ośrodka symulacji
+        - Probabilistyczny podział wiązki
+        - Rekurencja przy podziale wiązki
+        - Zapis rejestru pozycji fotonów w liczbach całkowitych
+        - włączenie i wyłączenie zapisów do tablicy absorpcji oraz rejestru pozycji fotonów
+        - ziarno generatora liczb losowych
+        - precyzja
+            - możliwa do wykorzystania przy generowaniu liczb losowych
+        - rozdzielczość przestrzenna - liczba przedziałów ośrodka propagacji i tablicy absorpcji przypadająca na 1 cm
+        - Wpółczynnik anizotropii
+        - Szansa na ocalenie fotonu w ruletce
+        - parametry materiałów
+        
+        
+        Porównanie ważniejszych ustawień
+            Model opisu ośrodka symulacji
+                - opis przez tablicę / opis przez stos brył geometrycznych
             Probabilistyczny podział wiązki
                 Przypadek utknięcia w martwym punkcie
+            Zapis rejestru pozycji fotonów w liczbach całkowitych
+            Wpółczynnik anizotropii
+
+    Zarządzanie uruchamianiem symulacji oraz wyświetlaniem wyników
+        - Wczytywanie stanu symulacji
+        - podstawowe ustawienia wyświetlania wyników
+            - Wczytywanie triangularyzowanych powierzchni tkanek
+
+    Tworzenie plików determinujących stan początkowy
 
     Przebieg symulacji
+        Emisja wiązki światła
+        Propagacja
+            Losowanie długości skoku
+            Przesunięcie
+                Test przekroczenia granicy ośrodków
+                Test przekroczenia granicy obszaru obserwacji
+            Absorpcja
+            Rozproszenie
+            Test zakończenia propagacji metodą ruletki
+
     Zapis do plików
         Stan symulacji
         Wyniki propagacji światła
     Normalizacja wyników
+        Normalizacja tablicy absorpcji
+        Normalizacja rejestru pozycji fotonów
         Sprawdzenie spójności otrzymanych wartości
 
 WIZUALIZACJA WYNIKÓW
@@ -65,23 +127,41 @@ WIZUALIZACJA WYNIKÓW
         Strzałki zmiany pozycji fotonów
         Triangularyzowane powierzchnie tkanek
         Uniwersalne schematy kolorowania
-            - progowanie "threshold"
-            - pętla kolorów "loop"
-            - jednolity kolor "solid"
-            - według id wiązki "photonwise"
-            - losowo "random"
-            - tęcza "rainbow"
-            - normalizacja min-max "min-max"
-            - wyśrodkowanie mediany "median"
-            - transformacja danych do rozkładu normalnego "trans-normal"
-            - skala logarytmiczna "logarithmic"
-            - mapa ciepła normalizacji min-max "heatmap min-max"
-            - mapa ciepła po wyśrodkowaniu mediany "heatmap median"
-            - mapa ciepła rozkładu normalnego "heatmap trans-normal"
-            - mapa ciepła skali logarytmicznej "heatmap logarithmic"
+            Tworzenie schematów z innych obiektów
+                Tablice trójwymiarowe
+                Tablice dwuwymiarowe
+                Rejestr pozycji fotonów
+            Metody kolorowania
+                - progowanie "threshold"
+                - pętla kolorów "loop"
+                    Tworzenie palety kolorów
+                - jednolity kolor "solid"
+                - według id wiązki "photonwise"
+                - losowo "random"
+                - tęcza "rainbow"
+                - normalizacja min-max "min-max"
+                - wyśrodkowanie mediany "median"
+                - transformacja danych do rozkładu normalnego "trans-normal"
+                - skala logarytmiczna "logarithmic"
+                - mapa ciepła normalizacji min-max "heatmap min-max"
+                - mapa ciepła po wyśrodkowaniu mediany "heatmap median"
+                - mapa ciepła rozkładu normalnego "heatmap trans-normal"
+                - mapa ciepła skali logarytmicznej "heatmap logarithmic"
+            Narzędzia pomocnicze
+                Resetowanie kolorów
+                Stos schematów kolorowania
+                Szukanie przodków wiązki
+                Szukanie potomków wiązki
+                - Kolorowanie według najstarszego przodka
+                - Dodawanie wiązek pokrewnych do wyświetlenia 
+                Sumowanie wartości leżących na zbliżonych pozycjach
+                Rozproszenie wartości
+
         Przygotowanie do zapisu obrazów 2D
             Sumowanie wartości wzdłóż wybranej osi
             Projekcje obiektów 3D na płaszczyznę 2D
+                Projekcje tablic 3D
+                Projekcje rejestru pozycji fotonów
             Plastry tablicy 3D
         Zapis do obrazów 2D
             Rozproszenie pozycji fotonów
@@ -102,7 +182,11 @@ WIZUALIZACJA WYNIKÓW
         Przygotowanie triangularyzowanych powierzchni tkanek
         Przygotowanie stosu brył geometrycznych materiałów
         Podgląd środowiska symulacji
-        Podgląd absorpcji na tle 
+        Podgląd absorpcji na tle ośrodka propagacji
+        Wyświetlanie tablicy absorpcji
+        Wyświetlanie rejestru pozycji fotonów
+        Wyświetlanie tablicy absorpcji zsumowanej wzdłóż wybranej osi
+        Projekcje rejestru fotonów na płaszczyznę 2D
 
 
 
@@ -126,9 +210,10 @@ ANALIZA I DYSKUSJA UZYSKANYCH WYNIKÓW
             Porównanie wyników
             Wnioski
 
-        Test A = Dwuwarstwowy model skóry
-        Test B = Wielowarstwowy model skóry
-        Test C = Ziarnisty model skóry
+        Test A = Jednolity model skóry
+        Test B = Dwuwarstwowy model skóry
+        Test C = Wielowarstwowy model skóry
+        Test D = Ziarnisty model skóry
 
 
 
