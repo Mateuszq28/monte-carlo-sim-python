@@ -7,6 +7,7 @@ import numpy as np
 import os
 from ByVispy import ByVispy
 from ColorPointDF import ColorPointDF
+from ArrowsDF import ArrowsDF
 
 class PropSetup:
 
@@ -63,8 +64,10 @@ class PropSetup:
         df_material = cdf.from_Object3d(self.propEnv, color_scheme=cs_material, drop_values=[0])
         df_light_source = cdf.from_Object3d(self.lightSource, color_scheme=cs_light_source, drop_values=[0])
         cdf.add_offset(df_light_source, offset=self.offset)
+        arrows_DF = ArrowsDF().from_lightSource(self.lightSource, df_light_source, offset=self.offset, arrow_length=20.0)
+        # df_material['A'] = 20
         preview_DF = cdf.stack_color_scheme([df_material, df_light_source])
-        return preview_DF
+        return preview_DF, arrows_DF
 
 
     def make_result_preview_DF(self, cs_material="solid", cs_photons="loop"):
@@ -74,6 +77,7 @@ class PropSetup:
         """
         cdf = ColorPointDF()
         df_material = cdf.from_Object3d(self.propEnv, color_scheme=cs_material, drop_values=[0])
+        # df_material['A'] = 20
         df_photons = cdf.from_Object3d(self.resultEnv, color_scheme=cs_photons, drop_values=[0])
         result_preview_DF = cdf.stack_color_scheme([df_material, df_photons])
         return result_preview_DF

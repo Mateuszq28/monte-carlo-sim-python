@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from ColorPointDF import ColorPointDF
+from LightSource import LightSource
 
 class ArrowsDF():
 
@@ -46,6 +47,19 @@ class ArrowsDF():
         if drop_excessive_columns:
             df = df[["x_idx", "y_idx", "z_idx", "x_idx_2", "y_idx_2", "z_idx_2", "R", "G", "B", "A"]]
         return df
+    
+
+    def from_lightSource(self, lightSource: LightSource, lightSource_DF, offset, arrow_length):
+        df = pd.DataFrame()
+        loc = np.array([ls.loc_point for ls in lightSource.light_source_list]) + np.array(offset)
+        dir = np.array([ls.dir_vec for ls in lightSource.light_source_list])
+        next_loc = loc + dir * arrow_length
+        df[["x_idx", "y_idx", "z_idx"]] = loc
+        df[["x_idx_2", "y_idx_2", "z_idx_2"]] = next_loc
+        df.sort_values(["x_idx", "y_idx", "z_idx"], inplace=True)
+        lightSource_DF = lightSource_DF.sort_values(["x_idx", "y_idx", "z_idx"], inplace=False)
+        lightSource_DF[["x_idx_2", "y_idx_2", "z_idx_2"]] = df[["x_idx_2", "y_idx_2", "z_idx_2"]]
+        return lightSource_DF
 
 
     def start_points_arrows(self, first_arrow_records: pd.DataFrame, photon_register):

@@ -141,9 +141,7 @@ class ByVispy(View):
             # plot ! note the parent parameter
             p1 = Scatter3D(parent=view.scene)
             p1.set_gl_state("translucent", blend=True, depth_test=True)
-            p1.set_data(
-                pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue"
-            )
+            p1.set_data(pos, face_color=colors, symbol="o", size=10, edge_width=0.5, edge_color="blue")
 
             # Add a 3D axis to keep us oriented
             # Axes are x=red, y=green, z=blue

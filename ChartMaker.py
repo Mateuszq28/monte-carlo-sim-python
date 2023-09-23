@@ -274,9 +274,9 @@ class ChartMaker():
         if PropSetup.flag_use_propenv_on_formulas:
             print("Skipped show_simulation_preview_DF - propEnv is on formulas")
         else:
-            df = propSetup.make_preview_DF(cs_material, cs_light_source)
+            df, arrows_DF = propSetup.make_preview_DF(cs_material, cs_light_source)
             vis = ByVispy()
-            vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=None, draw_plane_triangles=False)
+            vis.show_ColorPointDF(df, title="simulation preview - propagation env + light sources", connect_lines=arrows_DF, draw_plane_triangles=False)
 
 
     @staticmethod
