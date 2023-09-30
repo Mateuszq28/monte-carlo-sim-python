@@ -7,6 +7,7 @@ WSTĘP TEORETYCZNY
     Metody symulacji światła
         Metody analityczne
         Metody statystyczne
+        Kryteria wyboru
     Metoda Monte Carlo
         Symulowanie propagacji światła
     Przykładowe implementacje symulacji światła
@@ -19,11 +20,11 @@ WSTĘP TEORETYCZNY
 DIAGRAM APLIKACJI
 
 ZARZĄDZANIE GENERATORAMI LICZB PSEUDOLOSOWYCH
-Interfejs generatorów
-Interfejs funkcji losujących
-    Wykorzystane funkcje losujące
-        - (funkcja gęstości prawdopodobieństwa, dystrybuanta, funkcja próbkująca cechy)
-    Alternatywne funkcje losujące
+    Interfejs generatorów
+    Interfejs funkcji losujących
+        Wykorzystane funkcje losujące
+            - (funkcja gęstości prawdopodobieństwa, dystrybuanta, funkcja próbkująca cechy)
+        Alternatywne funkcje losujące
 
 - precyzja
     - nieużywana w większości przypadków
@@ -132,28 +133,28 @@ WIZUALIZACJA WYNIKÓW
                 Tablice dwuwymiarowe
                 Rejestr pozycji fotonów
             Metody kolorowania
-                - progowanie "threshold"
-                - pętla kolorów "loop"
+                - Progowanie "threshold"
+                - Pętla kolorów "loop"
                     Tworzenie palety kolorów
-                - jednolity kolor "solid"
-                - według id wiązki "photonwise"
-                - losowo "random"
-                - tęcza "rainbow"
-                - normalizacja min-max "min-max"
-                - wyśrodkowanie mediany "median"
-                - transformacja danych do rozkładu normalnego "trans-normal"
-                - skala logarytmiczna "logarithmic"
-                - mapa ciepła normalizacji min-max "heatmap min-max"
-                - mapa ciepła po wyśrodkowaniu mediany "heatmap median"
-                - mapa ciepła rozkładu normalnego "heatmap trans-normal"
-                - mapa ciepła skali logarytmicznej "heatmap logarithmic"
-            Narzędzia pomocnicze
+                - Jednolity kolor "solid"
+                - Według id wiązki "photonwise"
+                - Losowo "random"
+                - Tęcza "rainbow"
+                - Normalizacja min-max "min-max"
+                - Wyśrodkowanie mediany "median"
+                - Transformacja danych do rozkładu normalnego "trans-normal"
+                - Skala logarytmiczna "logarithmic"
+                - Mapa ciepła normalizacji min-max "heatmap min-max"
+                - Mapa ciepła po wyśrodkowaniu mediany "heatmap median"
+                - Mapa ciepła rozkładu normalnego "heatmap trans-normal"
+                - Mapa ciepła skali logarytmicznej "heatmap logarithmic"
+            Narzędzia pomocnicze schematów kolorowania
                 Resetowanie kolorów
                 Stos schematów kolorowania
                 Szukanie przodków wiązki
-                Szukanie potomków wiązki
                 - Kolorowanie według najstarszego przodka
                 - Dodawanie wiązek pokrewnych do wyświetlenia 
+                Szukanie potomków wiązki
                 Sumowanie wartości leżących na zbliżonych pozycjach
                 Rozproszenie wartości
 
