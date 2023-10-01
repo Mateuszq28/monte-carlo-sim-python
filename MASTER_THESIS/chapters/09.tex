@@ -1,0 +1,58 @@
+\chapter{OBLICZENIA NUMERYCZNE PROPAGACJI ŚWIATŁA}
+\label{chpt:obliczenia-numeryczne-propagacji-światła}
+\section{Plik konfiguracyjny}
+- flagi tworzenia nowych plików domyślnych elementów stanu początkowego środowiska propagacji
+- alternatywne ścieżki do plików z elementami stanu początkowego środowiska propagacji
+- flagi wyboru plików domyślnych lub wczytania plików z wykorzystaniem ścieżek alternatywnych
+- flagi wyboru sposobu wczytania stanu początkowego środowiska
++    - z wcześniej wybranych ścieżek
++    - z ścieżek zapisanych w pliku agregującym śrdodowisko propagacji
+- Model opisu ośrodka symulacji
++    - opis przez tablicę / opis przez stos brył geometrycznych
+- Ignorowanie ośrodka propagacji
++    - globalny materiał ośrodka symulacji
+- Probabilistyczny podział wiązki
+- Rekurencja przy podziale wiązki
+- Zapis rejestru pozycji fotonów w liczbach całkowitych
+- włączenie i wyłączenie zapisów do tablicy absorpcji oraz rejestru pozycji fotonów
+- ziarno generatora liczb losowych
+- precyzja
++    - możliwa do wykorzystania przy generowaniu liczb losowych
+- rozdzielczość przestrzenna - liczba przedziałów ośrodka propagacji i tablicy absorpcji przypadająca na 1 cm
+- Wpółczynnik anizotropii
+- Szansa na ocalenie fotonu w ruletce
+- parametry materiałów
+
+\subsection{Porównanie ważniejszych ustawień}
+\subsubsection{Model opisu ośrodka symulacji}
+- opis przez tablicę / opis przez stos brył geometrycznych
+\subsubsection{Probabilistyczny podział wiązki}
+\paragraph{Przypadek utknięcia w martwym punkcie}
+\subsubsection{Zapis rejestru pozycji fotonów w liczbach całkowitych}
+\subsubsection{Wpółczynnik anizotropii}
+
+\section{Zarządzanie uruchamianiem symulacji oraz wyświetlaniem wyników}
+- Wczytywanie stanu symulacji
+- podstawowe ustawienia wyświetlania wyników
++    - Wczytywanie triangularyzowanych powierzchni tkanek
+
+\section{Tworzenie plików determinujących stan początkowy}
+
+\section{Przebieg symulacji}
+\subsection{Emisja wiązki światła}
+\subsection{Propagacja}
+\subsubsection{Losowanie długości skoku}
+\subsubsection{Przesunięcie}
+\paragraph{Test przekroczenia granicy ośrodków}
+\paragraph{Test przekroczenia granicy obszaru obserwacji}
+\subsubsection{Absorpcja}
+\subsubsection{Rozproszenie}
+\subsubsection{Test zakończenia propagacji metodą ruletki}
+
+\section{Zapis do plików}
+\subsection{Stan symulacji}
+\subsection{Wyniki propagacji światła}
+\section{Normalizacja wyników}
+\subsection{Normalizacja tablicy absorpcji}
+\subsection{Normalizacja rejestru pozycji fotonów}
+\subsection{Sprawdzenie spójności otrzymanych wartości}

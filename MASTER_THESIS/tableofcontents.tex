@@ -1,0 +1,271 @@
+\chapter{WYKAZ WAŻNIEJSZYCH OZNACZEŃ I SKRÓTÓW}
+\label{chpt:wykaz-ważniejszych-oznaczeń-i-skrótów}
+
+
+
+\chapter{WSTĘP I CEL PRACY}
+\label{chpt:wstęp-i-cel-pracy}
+
+
+
+\chapter{WSTĘP TEORETYCZNY}
+\label{chpt:wstęp-teoretyczny}
+\section{Zastosowania światła w medycynie}
+\subsection{Fototerapia}
+\section{Metody symulacji światła}
+\subsection{Metody analityczne}
+\subsection{Metody statystyczne}
+\subsection{Kryteria wyboru}
+\section{Metoda Monte Carlo}
+\subsection{Symulowanie propagacji światła}
+\section{Przykładowe implementacje symulacji światła}
+\section{Algorytm maszerujących sześcianów}
+
+
+
+\chapter{DIAGRAM APLIKACJI}
+\label{chpt:diagram-aplikacji}
+
+
+
+\chapter{ZARZĄDZANIE GENERATORAMI LICZB PSEUDOLOSOWYCH}
+\label{chpt:zarządzanie-generatorami-liczb-pseudolosowych}
+\section{Interfejs generatorów}
+\section{Interfejs funkcji losujących}
+\subsection{Wykorzystane funkcje losujące}
+- (funkcja gęstości prawdopodobieństwa, dystrybuanta, funkcja próbkująca cechy)
+\subsection{Alternatywne funkcje losujące}
+
+- precyzja
+- nieużywana w większości przypadków
+- możliwa do wykorzystania przy użyciu alternatywnej funkcji losującej
+- zamiast losować z liczby z rozkładu jednostajnego [low,high), losuje liczby całkowite z przedziału [0,(high-low)*10^prec], a następnie dzieli je przez 10^prec i dodaje low. Ma to zapewnić przedział obustronnie zamknięty wylosowanych liczb.
+
+
+
+\chapter{IMPLEMENTACJA TRÓJWYMIAROWYCH MODELI SKÓRY}
+\label{chpt:implementacja-trójwymiarowych-modeli-skóry}
+\section{Jednolity ośrodek propagacji}
+\section{Wielowarstowe modele ośrodka propagacji}
+\subsection{Implementacja bazująca na trójwymiarowej tablicy}
+\subsubsection{Identyfikacja przekroczenia granicy ośrodków}
+\subsubsection{Modele skóry}
+\paragraph{Dwuwarstwowy model skóry}
+\paragraph{Wielowarstwowy model skóry}
+\paragraph{Ziarnisty model skóry}
+\subsection{Implementacja bazująca na opisie brył geometrycznych}
+\subsubsection{Model materiału}
+\subsubsection{Zakładkowanie warstw}
+\subsubsection{Identyfikacja przekroczenia granicy ośrodków}
+\subsubsection{Modele skóry}
+\paragraph{Dwuwarstwowy model skóry}
+\paragraph{Wielowarstwowy model skóry}
+\section{Zapis do pliku}
+
+
+
+\chapter{IMPLEMENTACJA ŹRÓDŁA ŚWIATŁA}
+\label{chpt:implementacja-źródła-światła}
+\section{Agregowanie punktowych źródeł światła}
+\section{Punktowe źródło światła}
+\section{Wiązka fotonów}
+\section{Zapis do pliku}
+\section{Porównanie wpływu liczby wiązek fotonów na wynik symulacji}
+
+
+
+\chapter{AGREGACJA ELEMENTÓW STANU POCZĄTKOWEGO}
+\label{chpt:agregacja-elementów-stanu-początkowego}
+\section{Zapis do pliku}
+
+
+
+\chapter{PRZECHOWYWANIE WYNIKÓW}
+\label{chpt:przechowywanie-wyników}
+\section{Rejestr wiązek fotonów}
+\section{Rejestr pozycji fotonów}
+\section{Tablica absorpcji fotonów}
+
+
+
+\chapter{OBLICZENIA NUMERYCZNE PROPAGACJI ŚWIATŁA}
+\label{chpt:obliczenia-numeryczne-propagacji-światła}
+\section{Plik konfiguracyjny}
+- flagi tworzenia nowych plików domyślnych elementów stanu początkowego środowiska propagacji
+- alternatywne ścieżki do plików z elementami stanu początkowego środowiska propagacji
+- flagi wyboru plików domyślnych lub wczytania plików z wykorzystaniem ścieżek alternatywnych
+- flagi wyboru sposobu wczytania stanu początkowego środowiska
++    - z wcześniej wybranych ścieżek
++    - z ścieżek zapisanych w pliku agregującym śrdodowisko propagacji
+- Model opisu ośrodka symulacji
++    - opis przez tablicę / opis przez stos brył geometrycznych
+- Ignorowanie ośrodka propagacji
++    - globalny materiał ośrodka symulacji
+- Probabilistyczny podział wiązki
+- Rekurencja przy podziale wiązki
+- Zapis rejestru pozycji fotonów w liczbach całkowitych
+- włączenie i wyłączenie zapisów do tablicy absorpcji oraz rejestru pozycji fotonów
+- ziarno generatora liczb losowych
+- precyzja
++    - możliwa do wykorzystania przy generowaniu liczb losowych
+- rozdzielczość przestrzenna - liczba przedziałów ośrodka propagacji i tablicy absorpcji przypadająca na 1 cm
+- Wpółczynnik anizotropii
+- Szansa na ocalenie fotonu w ruletce
+- parametry materiałów
+
+\subsection{Porównanie ważniejszych ustawień}
+\subsubsection{Model opisu ośrodka symulacji}
+- opis przez tablicę / opis przez stos brył geometrycznych
+\subsubsection{Probabilistyczny podział wiązki}
+\paragraph{Przypadek utknięcia w martwym punkcie}
+\subsubsection{Zapis rejestru pozycji fotonów w liczbach całkowitych}
+\subsubsection{Wpółczynnik anizotropii}
+
+\section{Zarządzanie uruchamianiem symulacji oraz wyświetlaniem wyników}
+- Wczytywanie stanu symulacji
+- podstawowe ustawienia wyświetlania wyników
++    - Wczytywanie triangularyzowanych powierzchni tkanek
+
+\section{Tworzenie plików determinujących stan początkowy}
+
+\section{Przebieg symulacji}
+\subsection{Emisja wiązki światła}
+\subsection{Propagacja}
+\subsubsection{Losowanie długości skoku}
+\subsubsection{Przesunięcie}
+\paragraph{Test przekroczenia granicy ośrodków}
+\paragraph{Test przekroczenia granicy obszaru obserwacji}
+\subsubsection{Absorpcja}
+\subsubsection{Rozproszenie}
+\subsubsection{Test zakończenia propagacji metodą ruletki}
+
+\section{Zapis do plików}
+\subsection{Stan symulacji}
+\subsection{Wyniki propagacji światła}
+\section{Normalizacja wyników}
+\subsection{Normalizacja tablicy absorpcji}
+\subsection{Normalizacja rejestru pozycji fotonów}
+\subsection{Sprawdzenie spójności otrzymanych wartości}
+
+
+
+\chapter{WIZUALIZACJA WYNIKÓW}
+\label{chpt:wizualizacja-wyników}
+\section{Narzędzia pomocnicze}
+\subsection{Strzałki zmiany pozycji fotonów}
+\subsection{Triangularyzowane powierzchnie tkanek}
+\subsection{Uniwersalne schematy kolorowania}
+\subsubsection{Tworzenie schematów z innych obiektów}
+\paragraph{Tablice trójwymiarowe}
+\paragraph{Tablice dwuwymiarowe}
+\paragraph{Rejestr pozycji fotonów}
+\subsubsection{Metody kolorowania}
+\paragraph{Progowanie ,,threshold''}
+\paragraph{Pętla kolorów ,,loop''}
+\subparagraph{Tworzenie palety kolorów}
+\paragraph{Jednolity kolor ,,solid''}
+\paragraph{Według id wiązki ,,photonwise''}
+\paragraph{Losowo ,,random''}
+\paragraph{Tęcza ,,rainbow''}
+\paragraph{Normalizacja min-max ,,min-max''}
+\paragraph{Wyśrodkowanie mediany ,,median''}
+\paragraph{Transformacja danych do rozkładu normalnego ,,trans-normal''}
+\paragraph{Skala logarytmiczna ,,logarithmic''}
+\paragraph{Mapa ciepła normalizacji min-max ,,heatmap min-max''}
+\paragraph{Mapa ciepła po wyśrodkowaniu mediany ,,heatmap median''}
+\paragraph{Mapa ciepła rozkładu normalnego ,,heatmap trans-normal''}
+\paragraph{Mapa ciepła skali logarytmicznej ,,heatmap logarithmic''}
+\subsubsection{Narzędzia pomocnicze schematów kolorowania}
+\paragraph{Resetowanie kolorów}
+\paragraph{Stos schematów kolorowania}
+\paragraph{Szukanie przodków wiązki}
+- Kolorowanie według najstarszego przodka
+- Dodawanie wiązek pokrewnych do wyświetlenia 
+\paragraph{Szukanie potomków wiązki}
+\paragraph{Sumowanie wartości leżących na zbliżonych pozycjach}
+\paragraph{Rozproszenie wartości}
+
+\subsection{Przygotowanie do zapisu obrazów 2D}
+\subsubsection{Sumowanie wartości wzdłóż wybranej osi}
+\subsubsection{Projekcje obiektów 3D na płaszczyznę 2D}
+\paragraph{Projekcje tablic 3D}
+\paragraph{Projekcje rejestru pozycji fotonów}
+\subsubsection{Plastry tablicy 3D}
+\subsection{Zapis do obrazów 2D}
+\subsubsection{Rozproszenie pozycji fotonów}
+
+\section{Wykorzystanie biblioteki Matplotlib}
+\subsection{Proste wyświetlanie trójwymiarowej tablicy}
+\subsection{Próbkowanie trójwymiarowej tablicy}
+\subsection{Mapy ciepła}
+
+\section{Wykorzystanie biblioteki Vispy}
+\subsection{Proste wyświetlanie trójwymiarowej tablicy}
+\subsection{Wizualizacja objętości biblioteki Vispy}
+\subsection{Wizualizacja obiektów z wykorzystaniem biblioteki Pandas}
+
+\section{Zarządzanie wizualizacją wyników}
+\subsection{Wyświetlanie statystyk}
+\subsection{Przygotowanie schematów rysowania strzałek dla tablic}
+\subsection{Przygotowanie triangularyzowanych powierzchni tkanek}
+\subsection{Przygotowanie stosu brył geometrycznych materiałów}
+\subsection{Podgląd środowiska symulacji}
+\subsection{Podgląd absorpcji na tle ośrodka propagacji}
+\subsection{Wyświetlanie tablicy absorpcji}
+\subsection{Wyświetlanie rejestru pozycji fotonów}
+\subsection{Wyświetlanie tablicy absorpcji zsumowanej wzdłóż wybranej osi}
+\subsection{Projekcje rejestru fotonów na płaszczyznę 2D}
+
+
+
+\chapter{ANALIZA I DYSKUSJA UZYSKANYCH WYNIKÓW}
+\label{chpt:analiza-i-dyskusja-uzyskanych-wyników}
+
+\section{Przeprowadzone testy}
+
+Test A = Jednolity model skóry
+Test B = Dwuwarstwowy model skóry
+Test C = Wielowarstwowy model skóry
+Test D = Ziarnisty model skóry
+
+\subsection{Jednolity model skóry}
+\subsubsection{Własna implementacja}
+\paragraph{Nastawy pliku konfiguracyjnego}
+\paragraph{Otrzymane wyniki}
+\subsubsection{Przykładowa implementacja z literatury}
+\subsubsection{Porównanie wyników}
+\subsubsection{Wnioski}
+
+\subsection{Dwuwarstwowy model skóry}
+\subsubsection{Własna implementacja}
+\paragraph{Nastawy pliku konfiguracyjnego}
+\paragraph{Otrzymane wyniki}
+\subsubsection{Przykładowa implementacja z literatury}
+\subsubsection{Porównanie wyników}
+\subsubsection{Wnioski}
+
+\subsection{Wielowarstwowy model skóry}
+\subsubsection{Własna implementacja}
+\paragraph{Nastawy pliku konfiguracyjnego}
+\paragraph{Otrzymane wyniki}
+\subsubsection{Przykładowa implementacja z literatury}
+\subsubsection{Porównanie wyników}
+\subsubsection{Wnioski}
+
+\subsection{Ziarnisty model skóry}
+\subsubsection{Własna implementacja}
+\paragraph{Nastawy pliku konfiguracyjnego}
+\paragraph{Otrzymane wyniki}
+\subsubsection{Przykładowa implementacja z literatury}
+\subsubsection{Porównanie wyników}
+\subsubsection{Wnioski}
+
+
+
+\chapter{PODSUMOWANIE}
+\label{chpt:podsumowanie}
+
+
+
+\chapter{WYKAZ LITERATUR}
+\label{chpt:wykaz-literatur}

@@ -1,0 +1,12 @@
+\chapter{ZARZĄDZANIE GENERATORAMI LICZB PSEUDOLOSOWYCH}
+\label{chpt:zarządzanie-generatorami-liczb-pseudolosowych}
+\section{Interfejs generatorów}
+\section{Interfejs funkcji losujących}
+\subsection{Wykorzystane funkcje losujące}
+- (funkcja gęstości prawdopodobieństwa, dystrybuanta, funkcja próbkująca cechy)
+\subsection{Alternatywne funkcje losujące}
+
+- precyzja
+- nieużywana w większości przypadków
+- możliwa do wykorzystania przy użyciu alternatywnej funkcji losującej
+- zamiast losować z liczby z rozkładu jednostajnego [low,high), losuje liczby całkowite z przedziału [0,(high-low)*10^prec], a następnie dzieli je przez 10^prec i dodaje low. Ma to zapewnić przedział obustronnie zamknięty wylosowanych liczb.
