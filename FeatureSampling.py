@@ -58,13 +58,13 @@ class MyRandom():
     """
 
     # random seed to be set in next instance of MyRandom class
-    random_state_pool = 0
+    random_seed_pool = 0
     # how many random numbers has been already generated
     generated_num = 0
 
     def __init__(self):
-        self.random_state = MyRandom.random_state_pool
-        MyRandom.random_state_pool += 1
+        self.random_state = MyRandom.random_seed_pool
+        MyRandom.random_seed_pool += 1
         self.rng1 = np.random.default_rng(seed=self.random_state)
 
     def uniform_closed(self, low: int, high: int, precision):

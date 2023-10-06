@@ -27,7 +27,7 @@ class PropSetup:
         self.photon_register = dict()
         self.config = None
         self.result_folder = ""
-        self.random_state_pool = 0
+        self.random_seed_pool = 0
         self.generated_num = 0
 
     def make_preview(self):

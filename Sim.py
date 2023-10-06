@@ -29,7 +29,7 @@ class Sim():
             self.splitted_photons_to_run = []
 
             # np.random.seed(self.config["random_seed"])
-            MyRandom.random_state_pool = self.config["random_seed"]
+            MyRandom.random_seed_pool = self.config["random_seed"]
             # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
             # (seperate random states across Sim instances are prefered)
             self.myRandom = MyRandom()
@@ -100,7 +100,7 @@ class Sim():
         self.chosen_prop_setup_path = d["chosen_prop_setup_path"]
 
         MyRandom.generated_num = d["generated_num"]
-        MyRandom.random_state_pool = d["random_state_pool"]
+        MyRandom.random_seed_pool = d["random_seed_pool"]
         # block off code from __init__
         PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
         Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
@@ -117,7 +117,7 @@ class Sim():
         self.propSetup.resultShape = d["resultShape"]
         self.propSetup.photon_register = d["photon_register"]
         self.propSetup.generated_num = d["generated_num"]
-        self.propSetup.random_state_pool = d["random_state_pool"]
+        self.propSetup.random_seed_pool = d["random_seed_pool"]
 
         # load resultEnv and resultRecords
         folder = Sim.result_folder
@@ -142,7 +142,7 @@ class Sim():
             # values from propSetup obtained during the simulation
             "escaped_photons_weight": self.propSetup.escaped_photons_weight,
             "resultShape": self.propSetup.resultShape,
-            "random_state_pool": self.propSetup.random_state_pool,
+            "random_seed_pool": self.propSetup.random_seed_pool,
             "generated_num": self.propSetup.generated_num,
 
             "simulation_calculation_time": self.simulation_calculation_time,
@@ -195,7 +195,7 @@ class Sim():
         end_time = time.time()
         self.simulation_calculation_time = end_time-start_time
         # save results
-        self.propSetup.random_state_pool = MyRandom.random_state_pool
+        self.propSetup.random_seed_pool = MyRandom.random_seed_pool
         self.propSetup.generated_num = MyRandom.generated_num
         self.propSetup.save_result_json(Sim.result_folder)
         self.dump_sim_json()
