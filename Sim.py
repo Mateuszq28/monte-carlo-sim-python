@@ -426,7 +426,7 @@ class Sim():
         phi = Photon.featureSampling.photon_phi()
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
 
-        do_method_from_book = False
+        do_method_from_book = True
 
         # from Chapter 5 5.3.5
         # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
