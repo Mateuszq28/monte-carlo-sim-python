@@ -53,7 +53,11 @@ class Space3dTools():
     def angle_between_vectors(vec1, vec2):
         a = np.array(vec1)
         b = np.array(vec2)
-        alfa = math.acos(np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+        acos_arg = np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b))
+        if acos_arg > 1:
+            if math.isclose(acos_arg, 1.0):
+                acos_arg = 1.0
+        alfa = math.acos(acos_arg)
         return alfa
     
     @staticmethod
