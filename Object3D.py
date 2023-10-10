@@ -32,7 +32,7 @@ class Object3D():
 
         self.bodyThumb = None
         self.composition = dict()
-        self.analize_materials()
+        # self.analize_materials()
 
 
     def initialize_body_from_xyz(self, x, y, z):

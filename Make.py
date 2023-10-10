@@ -5,6 +5,7 @@ from FillShapes import FillShapes
 import json
 from MakeMaterial import MakeMaterial
 import numpy as np
+import time
 
 
 class Make():
@@ -41,6 +42,7 @@ class Make():
 
 
     def default_env(self):
+        start_time = time.time()
         env_idx = 4
         if Make.flag_use_propenv_on_formulas:
             makeMat = MakeMaterial()
@@ -62,6 +64,8 @@ class Make():
                 self.env_master_thesis_multilayers_table
             ]
             propEnv = env_fun_list[env_idx]()
+        end_time = time.time()
+        print("making default env calculation time:", end_time-start_time)
         return propEnv
 
 

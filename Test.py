@@ -1432,8 +1432,17 @@ class Test():
         @staticmethod
         def are_2_variants_equal_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
             print("TEST NORMALIZATION resultEnv")
+
+            start_time = time.time()
             normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            end_time = time.time()
+            print("norm1 calculation time:", end_time-start_time)
+
+            start_time = time.time()
             normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False, print_debug=True)
+            end_time = time.time()
+            print("norm2 calculation time:", end_time-start_time)
+
             test_result = np.allclose(normal_output_1.body, normal_output_2.body)
             if not test_result:
                 raise ValueError("Normalize methods are not equal!")
@@ -1442,8 +1451,17 @@ class Test():
         @staticmethod
         def are_2_variants_equal_resultRecords(resultRecords, photon_num, volume_per_bin, borders, escaped_photons_weight):
             print("TEST NORMALIZATION resultRecords")
+
+            start_time = time.time()
             normal_output_1 = ResultEnvProcessing.normalize_resultRecords(resultRecords, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            end_time = time.time()
+            print("norm1 calculation time:", end_time-start_time)
+
+            start_time = time.time()
             normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(resultRecords, volume_per_bin, borders, inplace=False, print_debug=True)
+            end_time = time.time()
+            print("norm2 calculation time:", end_time-start_time)
+
             arr1 = np.array([col[4] for col in normal_output_1])
             arr2 = np.array([col[4] for col in normal_output_2])
             test_result = np.allclose(arr1, arr2)
