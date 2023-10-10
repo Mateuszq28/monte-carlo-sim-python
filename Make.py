@@ -40,11 +40,21 @@ class Make():
 
 
     def default_env(self):
+        env_idx = 0
         if Make.flag_use_propenv_on_formulas:
             makeMat = MakeMaterial()
-            propEnv = makeMat.default_env()
+            env_fun_list = [
+                makeMat.default_env,
+                makeMat.env_master_thesis_2layers
+
+            ]
+            propEnv = env_fun_list[env_idx]()
         else:
-            propEnv = self.default_env_on_points()
+            env_fun_list = [
+                self.default_env_on_points,
+                self.env_master_thesis_2layers_table
+            ]
+            propEnv = env_fun_list[env_idx]()
         return propEnv
 
 
@@ -52,10 +62,17 @@ class Make():
         propEnv = PropEnv(x=50, y=50, z=100)
         propEnv.fill_cube(fill=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # air
         propEnv.fill_cube(fill=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75]) # water
-        propEnv.fill_cube(fill=8, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65]) # skin
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65]) # dermis
         FillShapes.fill_vein(propEnv, z_pos=0.25)
         return propEnv
+    
 
+    def env_master_thesis_2layers_table(self):
+        propEnv = PropEnv(x=100, y=100, z=300)
+        propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # epidermis
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75]) # dermis
+        return propEnv
+    
 
     def default_light_source(self):
         lightSource = LightSource(x=1, y=1, z=1)

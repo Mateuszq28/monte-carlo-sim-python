@@ -15,7 +15,7 @@ class FillShapes():
             for z_idx in range(propEnv.shape[2]):
                 eq = (x_pos_idx - x_idx)**2 + (z_pos_idx - z_idx)**2
                 if eq <= (radius - vein_thick)**2:
-                    propEnv.body[x_idx, :, z_idx] = 10
+                    propEnv.body[x_idx, :, z_idx] = 8 # blood
                 elif eq <= radius**2:
-                    propEnv.body[x_idx, :, z_idx] = 9
+                    propEnv.body[x_idx, :, z_idx] = 7 # vein
 

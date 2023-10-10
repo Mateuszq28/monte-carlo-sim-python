@@ -52,8 +52,8 @@ class RunAll():
 
 
         # if true, just load last saved results 
-        LOAD_INSTEAD_OF_SIM = False
         LOAD_INSTEAD_OF_SIM = True
+        LOAD_INSTEAD_OF_SIM = False
 
 
 

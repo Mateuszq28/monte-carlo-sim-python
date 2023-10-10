@@ -14,6 +14,7 @@ class PropEnv(Object3D):
             config = json.load(f)
         self.tissue_properties = config["tissue_properties"]
         self.config = config
+        self.max_hop = np.linalg.norm(self.body.shape)
     
     def get_label_from_float(self, xyz) -> int:
         if self.config["flag_ignore_prop_env_labels"]:
@@ -82,6 +83,11 @@ class PropEnv(Object3D):
         arr_xyz_next = np.array(xyz_next)
         vec = arr_xyz_next - arr_xyz
         dist = np.linalg.norm(vec)
+        if dist > self.max_hop:
+            vec = vec / dist
+            dist = self.max_hop
+            vec = vec * dist
+
         # photon steps from position xyz to xyz_next 
         # min step should be 0.5
         linspace = np.linspace(0.0, 1.0, num=int(dist)*2+2, endpoint=False)
@@ -226,10 +232,11 @@ class PropEnv(Object3D):
         Check if p2 is between (p1, p3].
         It doesn't check if all three are in line.
         """
-        x_between = (p1[0] < p2[0] <= p3[0]) or (p3[0] <= p2[0] < p1[0])
-        y_between = (p1[1] < p2[1] <= p3[1]) or (p3[1] <= p2[1] < p1[1])
-        z_between = (p1[2] < p2[2] <= p3[2]) or (p3[2] <= p2[2] < p1[2])
-        return x_between and y_between and z_between
+        p2_is_not_p1 = not PropEnv.are_lists_with_same_vals(p1, p2)
+        x_between = (p1[0] <= p2[0] <= p3[0]) or (p3[0] <= p2[0] <= p1[0])
+        y_between = (p1[1] <= p2[1] <= p3[1]) or (p3[1] <= p2[1] <= p1[1])
+        z_between = (p1[2] <= p2[2] <= p3[2]) or (p3[2] <= p2[2] <= p1[2])
+        return x_between and y_between and z_between and p2_is_not_p1
         
         
 

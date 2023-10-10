@@ -1035,7 +1035,7 @@ class Test():
 
         def exp1_aprox_master_thesis(self):
             funSampling = FunSampling()
-            a = 100
+            a = 24.26
             scope = np.arange(0,1,0.01)
             y = [funSampling.exp1_aprox(a=a, rnd=x) for x in scope]
             plt.plot(scope, y)
@@ -1708,7 +1708,7 @@ def main():
 
     # generator liczb losowych
     # test.test8() # exp1
-    test.test9() # parabola
+    # test.test9() # parabola
 
     # generator liczb losowych scope
     # test.test10() # exp1
@@ -1760,7 +1760,7 @@ def main():
     # test.test27()
 
     # exp1_aprox master thesis
-    # test.test28()
+    test.test28()
 
 
 

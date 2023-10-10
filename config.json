@@ -13,13 +13,13 @@
     "flag_make_prop_setup_from_componentes": false,
     "flag_use_propenv_on_formulas": false,
     "flag_ignore_prop_env_labels": false,
-    "global_label_if_ignore_prop_env_labels": 11,
+    "global_label_if_ignore_prop_env_labels": -2,
 
 
 
 
 
-    "use_proba_instead_of_splitting": false,
+    "use_proba_instead_of_splitting": true,
     "recurention_if_split": false,
 
     "flag_result_records_pos_int": false,
@@ -29,23 +29,21 @@
 
     "random_seed": 0,
     "precision": 8,
-    "bins_per_1_cm": 500,
-    "anisotropy_of_scattering_g": 0.5,
+    "bins_per_1_cm": 50,
+    "anisotropy_of_scattering_g": 0.9,
     "photon_weight_threshold": 1e-4,
     "photon_chance": 0.1,
     "tissue_properties": {
+        "-2": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "ignore label", "print color": "#AACB23"},
         "-1": {"mu_a": null, "mu_s": null, "n": null, "name": "light source", "print color": "#FFE800"},
-        "0": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "Vacuum", "print color": "#FF00F7"},
-        "1": {"mu_a": 0.5, "mu_s": 20, "n": 1.000293, "name": "Air", "print color": "#E4F6FF"},
-        "2": {"mu_a": 1, "mu_s": 30, "n": 1.333, "name": "Water", "print color": "#5091CE"},
-        "3": {"mu_a": 5, "mu_s": 95, "n": 1.47, "name": "Olive oil", "print color": "#DFD855"},
-        "4": {"mu_a": 5, "mu_s": 95, "n": 1.52, "name": "Window glass", "print color": "#D0FAF9"},
-        "5": {"mu_a": 5, "mu_s": 95, "n": 1.31, "name": "Ice", "print color": "#B1CDF9"},
-        "6": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Diamond", "print color": "#51DDDD"},
-        "7": {"mu_a": 5, "mu_s": 95, "n": 2.417, "name": "Cuticle", "print color": "#FFF99A"},
-        "8": {"mu_a": 2, "mu_s": 80, "n": 2.417, "name": "Skin", "print color": "#FFCB9A"},
-        "9": {"mu_a": 30, "mu_s": 100, "n": 2.417, "name": "Vein", "print color": "#F3794B"},
-        "10": {"mu_a": 3, "mu_s": 50, "n": 2.417, "name": "Blood", "print color": "#FF1414"},
-        "11": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "ignore label", "print color": "#AACB23"}
+        "0": {"mu_a": 0, "mu_s": 0, "n": 1.0, "name": "vacuum", "print color": "#FF00F7"},
+        "1": {"mu_a": 0.0000005, "mu_s": 0.000001, "n": 1.000293, "name": "air", "print color": "#E4F6FF"},
+        "2": {"mu_a": 0.000891, "mu_s": 0.021091, "n": 1.35, "name": "salt water", "print color": "#5091CE"},
+        "3": {"mu_a": 0.0835, "mu_s": 11.71, "n": 1.36, "name": "epidermis", "print color": "#FFF99A"},
+        "4": {"mu_a": 0.37, "mu_s": 23.8888943003376, "n": 1.4, "name": "dermis", "print color": "#FFCB9A"},
+        "5": {"mu_a": 1.1, "mu_s": 12.8426992965418, "n": 1.5, "name": "fatty subcutaneous tissue", "print color": "#F3FF33"},
+        "6": {"mu_a": 0.14, "mu_s": 12.3086801371514, "n": 1.37, "name": "mucous tissue", "print color": "#A9FFBF"},
+        "7": {"mu_a": 6.14, "mu_s": 17.07, "n": 1.55, "name": "vein", "print color": "#F3794B"},
+        "8": {"mu_a": 2.1, "mu_s": 773, "n": 1.36, "name": "blood", "print color": "#FF1414"}
     }
 }
