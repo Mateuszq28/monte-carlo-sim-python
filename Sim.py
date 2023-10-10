@@ -35,7 +35,7 @@ class Sim():
             self.myRandom = MyRandom()
 
             # interface to class, that makes Object3D instances, fills it and saves them to files
-            make = Make()
+            make = Make(self.config)
             # interface to random functions
             # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
             # (seperate random states across Sim instances are prefered)
@@ -105,7 +105,7 @@ class Sim():
         PropSetup.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
         Make.flag_use_propenv_on_formulas = self.config["flag_use_propenv_on_formulas"]
         self.myRandom = MyRandom()
-        make = Make()
+        make = Make(self.config)
         self.featureSampling = FeatureSampling()
         make.pass_default_paths(self.default_env_path, self.default_light_surce_path, self.default_prop_setup_path)
         self.propSetup = PropSetup.from_file(self.chosen_prop_setup_path)

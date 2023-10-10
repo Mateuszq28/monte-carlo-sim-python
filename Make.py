@@ -4,6 +4,7 @@ from PropSetup import PropSetup
 from FillShapes import FillShapes
 import json
 from MakeMaterial import MakeMaterial
+import numpy as np
 
 
 class Make():
@@ -11,11 +12,11 @@ class Make():
     # it is overwritten in sim
     flag_use_propenv_on_formulas = False
 
-    def __init__(self):
+    def __init__(self, config):
         self.default_env_path = None
         self.default_light_surce_path = None
         self.default_prop_setup_path = None
-        self.config = None
+        self.config = config
 
 
     def pass_default_paths(self, default_env_path, default_light_surce_path, default_prop_setup_path):
@@ -40,19 +41,25 @@ class Make():
 
 
     def default_env(self):
-        env_idx = 0
+        env_idx = 4
         if Make.flag_use_propenv_on_formulas:
             makeMat = MakeMaterial()
             env_fun_list = [
                 makeMat.default_env,
+                # makeMat.env_master_thesis_1layers,
                 makeMat.env_master_thesis_2layers
+                # makeMat.env_master_thesis_3layers,
+                # makeMat.env_master_thesis_multilayers
 
             ]
             propEnv = env_fun_list[env_idx]()
         else:
             env_fun_list = [
                 self.default_env_on_points,
-                self.env_master_thesis_2layers_table
+                self.env_master_thesis_1layers_table,
+                self.env_master_thesis_2layers_table,
+                self.env_master_thesis_3layers_table,
+                self.env_master_thesis_multilayers_table
             ]
             propEnv = env_fun_list[env_idx]()
         return propEnv
@@ -67,10 +74,63 @@ class Make():
         return propEnv
     
 
+    def env_master_thesis_1layers_table(self):
+        bins_per_1_cm = self.config["bins_per_1_cm"]
+        # size od propEnv [x,y,z] in cm
+        size_cm = [3,3,6]
+        size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
+        propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # dermis
+        return propEnv
+    
+
     def env_master_thesis_2layers_table(self):
-        propEnv = PropEnv(x=100, y=100, z=300)
+        bins_per_1_cm = self.config["bins_per_1_cm"]
+        # size od propEnv [x,y,z] in cm
+        size_cm = [3,3,6]
+        size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
+        propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # epidermis
-        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75]) # dermis
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.5]) # dermis
+        return propEnv
+    
+
+    def env_master_thesis_3layers_table(self):
+        bins_per_1_cm = self.config["bins_per_1_cm"]
+        # size od propEnv [x,y,z] in cm
+        size_cm = [3,3,6]
+        size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
+        propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # epidermis
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.66]) # dermis
+        propEnv.fill_cube(fill=5, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.33]) # dermis
+        return propEnv
+    
+
+    def env_master_thesis_multilayers_table(self):
+        bins_per_1_cm = self.config["bins_per_1_cm"]
+        # layer_names = ["air", "salt water (sweat)", "epidermis", "dermis", "vein", "blood", "vein", "dermis", "fatty subcutaneous tissue"]
+        # layer_idx = [1, 2, 3, 4, 7, 8, 7, 4, 5]
+        layer_size_cm = [0.01, 0.01, 0.01, 0.05, 0.05, 0.07, 0.05, 0.342, 0.6]
+        sum_z = sum(layer_size_cm)
+        upper_boundary = [float(sum(layer_size_cm[i:])/sum_z) for i in range(len(layer_size_cm))]
+        # size od propEnv [x,y,z] in cm
+        size_cm = [sum_z/2, sum_z/2, sum_z]
+        size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
+        propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        # cubes
+        propEnv.fill_cube(fill=1, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # air
+        propEnv.fill_cube(fill=2, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, upper_boundary[1]]) # salt water (sweat)
+        propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, upper_boundary[2]]) # epidermis
+        propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, upper_boundary[3]]) # dermis
+        propEnv.fill_cube(fill=5, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, upper_boundary[-1]]) # fatty subcutaneous tissue
+        # vein
+        z_pos = float((upper_boundary[4] + upper_boundary[6])/2)
+        # radius r is relative to y, not z
+        r = ((layer_size_cm[4]+layer_size_cm[5]+layer_size_cm[6])/2) / size_cm[1]
+        # same with vein_thickness
+        vein_thickness = layer_size_cm[4]/size_cm[1]
+        FillShapes.fill_vein(propEnv, z_pos=z_pos, r=r, vein_thickness=vein_thickness)
         return propEnv
     
 
