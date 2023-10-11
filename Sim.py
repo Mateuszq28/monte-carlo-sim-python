@@ -246,15 +246,16 @@ class Sim():
     def try_move(self, photon:Photon, distance):
         # photon.print_me()
         # print(distance)
+        min_step = self.config["min_step_when_boundary_cross"]
         loop_iter = 0
         while distance > 0 and photon.weight > 0:
             if loop_iter >= 5:
-                print(photon.id)
-                mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
-                self.drop(photon, mu_a, mu_s, mu_t)
+                # print(photon.id)
+                # mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
+                # self.drop(photon, mu_a, mu_s, mu_t)
                 # if self.terminate(photon):
                 #     break
-                # self.just_move(photon, step=0.00001)
+                # self.just_move(photon, step=min_step)
                 break
             loop_iter += 1
 
@@ -311,7 +312,7 @@ class Sim():
                         R = Space3dTools.internal_reflectance(alpha, beta)
 
                     traveled_dist = math.dist(photon.pos, boundary_pos)
-                    rest_dist_reflection = distance - traveled_dist
+                    rest_dist_reflection = distance - traveled_dist - min_step
                     # for refraction we need to change hop, because material has changed
                     if rest_dist_reflection > 0:
                         _, _, mu_t = self.propSetup.propEnv.get_properties_from_label(label_in)
@@ -328,6 +329,7 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
                         photon.mat_label = label_out
+                        self.just_move(photon, min_step)
                         # SET DISTANCE VALUE TO AVOID RECURENTION
                         # self.try_move(photon, rest_dist_refraction)
                         distance = rest_dist_refraction
@@ -349,6 +351,7 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = reflect_vec
                                 photon.mat_label = label_in
+                                self.just_move(photon, min_step)
                                 # SET DISTANCE VALUE TO AVOID RECURENTION
                                 # self.try_move(photon, rest_dist_reflection)
                                 distance = rest_dist_reflection
@@ -359,6 +362,7 @@ class Sim():
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
                                 photon.mat_label = label_out
+                                self.just_move(photon, min_step)
                                 # SET DISTANCE VALUE TO AVOID RECURENTION
                                 # self.try_move(photon, rest_dist_refraction)
                                 distance = rest_dist_refraction
@@ -374,6 +378,7 @@ class Sim():
                                                                                     "child": []
                                                                                     }
                             self.propSetup.photon_register[str(photon.id)]["child"].append(refraction_photon.id)
+                            self.just_move(refraction_photon, min_step)
                             # --block of new photon propagation
                             if self.config["recurention_if_split"]:
                                 self.split_photon_actions(photon=refraction_photon, distance=rest_dist_refraction)
@@ -386,6 +391,7 @@ class Sim():
                             photon.pos = boundary_pos
                             photon.dir = reflect_vec
                             photon.mat_label = label_in
+                            self.just_move(photon, min_step)
                             # SET DISTANCE VALUE TO AVOID RECURENTION
                             # self.try_move(photon, rest_dist_reflection)
                             distance = rest_dist_reflection
@@ -396,6 +402,7 @@ class Sim():
                         photon.pos = boundary_pos
                         photon.dir = reflect_vec
                         photon.mat_label = label_in
+                        self.just_move(photon, min_step)
                         # SET DISTANCE VALUE TO AVOID RECURENTION
                         # self.try_move(photon, rest_dist_reflection)
                         distance = rest_dist_reflection
@@ -429,6 +436,7 @@ class Sim():
 
 
     def spin(self, photon: Photon):
+        # print("photon.dir before spin", photon.dir)
         theta = Photon.featureSampling.photon_theta()
         phi = Photon.featureSampling.photon_phi()
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
@@ -460,6 +468,7 @@ class Sim():
 
         # update dir vec
         photon.dir = [uxx, uyy, uzz]
+        # print("photon.dir after spin", photon.dir)
 
 
     def terminate(self, photon:Photon):
