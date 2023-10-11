@@ -249,8 +249,13 @@ class Sim():
         loop_iter = 0
         while distance > 0 and photon.weight > 0:
             if loop_iter >= 5:
-                if self.terminate(photon):
-                    break
+                print(photon.id)
+                mu_a, mu_s, mu_t = self.propSetup.propEnv.get_properties_from_label(photon.mat_label)
+                self.drop(photon, mu_a, mu_s, mu_t)
+                # if self.terminate(photon):
+                #     break
+                # self.just_move(photon, step=0.00001)
+                break
             loop_iter += 1
 
             # photon.print_me()
@@ -262,6 +267,8 @@ class Sim():
             # check if there was change of a material
             start_time = time.time()
             boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
+            # print("nowy label_out fotonu otrzymany w sim!", label_out)
+            # print("nowy boundary_pos fotonu otrzymany w sim!", boundary_pos)
             end_time = time.time()
             self.boundary_check_calculation_time += (end_time-start_time)
             # check if photon is in env shape range

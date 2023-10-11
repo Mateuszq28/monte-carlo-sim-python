@@ -29,7 +29,7 @@
 
     "random_seed": 0,
     "precision": 8,
-    "bins_per_1_cm": 500,
+    "bins_per_1_cm": 100,
     "anisotropy_of_scattering_g": 0.9,
     "photon_weight_threshold": 1e-4,
     "photon_chance": 0.1,

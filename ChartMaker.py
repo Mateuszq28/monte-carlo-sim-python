@@ -82,23 +82,23 @@ class ChartMaker():
 
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
-        ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
-                                              cs_material="solid",
-                                              cs_light_source="solid")
+        # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
+        #                                       cs_material="solid",
+        #                                       cs_light_source="solid")
 
         # SHOW PHOTON WEIGHTS (RESULT ENV) + PROP ENV (MATERIAL LABELS)
-        ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
-                                                     cs_material="solid",
-                                                     cs_photons=color_scheme)
+        # ChartMaker.show_simulation_result_preview_DF(propSetup=propSetup,
+        #                                              cs_material="solid",
+        #                                              cs_photons=color_scheme)
 
 
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
-                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
-                                  color_scheme = color_scheme,
-                                  connect_lines = standard_connect_lines)
+        # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+        #                           title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+        #                           color_scheme = color_scheme,
+        #                           connect_lines = standard_connect_lines)
         # ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
 
         
@@ -107,9 +107,9 @@ class ChartMaker():
         sl = list(range(10,20)) + list(range(30,40))
         sl = None
         sl = list(range(10,15))
-        sl = list(range(0,100))
         sl = [4, 48]
         sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+        sl = list(range(0,100))
         sl = [0,1]
         sh = propSetup.propEnv.shape
         border_limits = None
@@ -118,8 +118,8 @@ class ChartMaker():
         select_photon_id = [97, 98]
         very_close_photons = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
         select_photon_id = very_close_photons
-        select_photon_id = None
         select_photon_id = sl
+        select_photon_id = None
         local_color_scheme = "loop"
         local_color_scheme = "photonwise"
         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
