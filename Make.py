@@ -48,10 +48,10 @@ class Make():
             makeMat = MakeMaterial()
             env_fun_list = [
                 makeMat.default_env,
-                # makeMat.env_master_thesis_1layers,
-                makeMat.env_master_thesis_2layers
-                # makeMat.env_master_thesis_3layers,
-                # makeMat.env_master_thesis_multilayers
+                makeMat.env_master_thesis_1layers,
+                makeMat.env_master_thesis_2layers,
+                makeMat.env_master_thesis_3layers,
+                makeMat.env_master_thesis_multilayers
 
             ]
             propEnv = env_fun_list[env_idx]()
@@ -81,7 +81,7 @@ class Make():
     def env_master_thesis_1layers_table(self):
         bins_per_1_cm = self.config["bins_per_1_cm"]
         # size od propEnv [x,y,z] in cm
-        size_cm = [3,3,6]
+        size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
         propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         propEnv.fill_cube(fill=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # dermis
@@ -91,7 +91,7 @@ class Make():
     def env_master_thesis_2layers_table(self):
         bins_per_1_cm = self.config["bins_per_1_cm"]
         # size od propEnv [x,y,z] in cm
-        size_cm = [3,3,6]
+        size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
         propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # epidermis
@@ -102,7 +102,7 @@ class Make():
     def env_master_thesis_3layers_table(self):
         bins_per_1_cm = self.config["bins_per_1_cm"]
         # size od propEnv [x,y,z] in cm
-        size_cm = [3,3,6]
+        size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
         propEnv = PropEnv(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         propEnv.fill_cube(fill=3, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0]) # epidermis
@@ -115,7 +115,7 @@ class Make():
         bins_per_1_cm = self.config["bins_per_1_cm"]
         # layer_names = ["air", "salt water (sweat)", "epidermis", "dermis", "vein", "blood", "vein", "dermis", "fatty subcutaneous tissue"]
         # layer_idx = [1, 2, 3, 4, 7, 8, 7, 4, 5]
-        layer_size_cm = [0.01, 0.01, 0.01, 0.05, 0.05, 0.07, 0.05, 0.342, 0.6]
+        layer_size_cm = [0.01, 0.01, 0.01, 0.22, 0.05, 0.07, 0.05, 0.08, 0.3]
         sum_z = sum(layer_size_cm)
         upper_boundary = [float(sum(layer_size_cm[i:])/sum_z) for i in range(len(layer_size_cm))]
         # size od propEnv [x,y,z] in cm
@@ -140,7 +140,7 @@ class Make():
 
     def default_light_source(self):
         lightSource = LightSource(x=1, y=1, z=1)
-        lightSource.initialize_source(photon_limit=100)
+        lightSource.initialize_source(photon_limit=1000)
         return lightSource
 
 

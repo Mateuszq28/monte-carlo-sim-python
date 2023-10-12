@@ -218,7 +218,7 @@ class PropEnv(Object3D):
             # if all labels are different in all 8 cubes, it means we have missed boundary!
             print("last_pos", last_pos)
             print("next_pos", next_pos)
-            print("wronf label_in!")
+            print("wrong label_in!")
             raise ValueError("wrong label_in!")
 
         # if return_norm_vec is not None:
