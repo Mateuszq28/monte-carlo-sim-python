@@ -198,17 +198,36 @@ class PropEnv(Object3D):
                 print("There was more than one material at the boundary! First was picked up as the return_label_out.")
                 print("boundary_labels_list:", boundary_labels_list)
 
-            return_norm_vec = normal_vec_and_intersect_from_all_cubes[0][0].copy()
+            # this block is important on the edge of two boundary planes
+            # filter out boundary planes with different intersection point, then the closest one
+            normal_vec_and_intersect_from_all_cubes = [[norm_vec, intersect] for norm_vec, intersect in normal_vec_and_intersect_from_all_cubes if self.are_lists_with_same_vals(intersect, normal_vec_and_intersect_from_all_cubes[0][1])]
+            # filter out duplicates
+            filt_out = [False]
+            for i in range(len(normal_vec_and_intersect_from_all_cubes)-1):
+                filt_out_flag = False
+                for j in range(i+1,len(normal_vec_and_intersect_from_all_cubes)):
+                    if self.are_lists_with_same_vals(normal_vec_and_intersect_from_all_cubes[i][0], normal_vec_and_intersect_from_all_cubes[j][0]):
+                        filt_out_flag = True
+                filt_out.append(filt_out_flag)
+            normal_vec_and_intersect_from_all_cubes = [val for val, out_flag in zip(normal_vec_and_intersect_from_all_cubes, filt_out) if not out_flag]
+
+            cube_boundary_pos = normal_vec_and_intersect_from_all_cubes[0][1]
+            ray_vec_out = (np.array(last_pos) - np.array(cube_boundary_pos)).tolist()
+            for i in range(len(normal_vec_and_intersect_from_all_cubes)):
+                cube_norm_vec = normal_vec_and_intersect_from_all_cubes[i][0]
+                # to be sure, that norm vector is directed outwards boundary plane
+                alfa = Space3dTools.angle_between_vectors(ray_vec_out, cube_norm_vec)
+                # alfa should be in <0,90> deg
+                if alfa > math.pi / 2:
+                    normal_vec_and_intersect_from_all_cubes[i][0] = (-np.array(cube_norm_vec)).tolist()
+                    
+            num_norm_vecs = len(normal_vec_and_intersect_from_all_cubes)
+            # average value of normal vectors
+            return_norm_vec = np.sum(np.array([nvi[0] for nvi in normal_vec_and_intersect_from_all_cubes]), axis=0) / num_norm_vecs
             return_boundary_pos = normal_vec_and_intersect_from_all_cubes[0][1].copy()
-            # to be sure, that norm vector is directed outwards boundary plane
-            ray_vec_out = (np.array(last_pos) - np.array(return_boundary_pos)).tolist()
-            alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
-            # alfa should be in <0,90> deg
-            if alfa > math.pi / 2:
-                return_norm_vec = (-np.array(return_norm_vec)).tolist()
-                alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
 
             if debug:
+                alfa = Space3dTools.angle_between_vectors(ray_vec_out, return_norm_vec)
                 print("return_norm_vec", return_norm_vec)
                 print("return_boundary_pos", return_boundary_pos)
                 print("ray_vec_out", ray_vec_out)
