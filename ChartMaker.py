@@ -296,7 +296,7 @@ class ChartMaker():
     def heatmap2d(arr: np.ndarray, bins_per_cm, title=None):
         if title is None:
             title = "absorbed fraction"
-        plt.imshow(arr, cmap='viridis')
+        plt.imshow(arr/1000, cmap='viridis')
         plt.title(title)
         cb = plt.colorbar()
         cb.set_label(r'$\mathregular{10^3 \cdot{ \frac{1}{cm^3} } }$')
