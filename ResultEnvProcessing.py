@@ -16,7 +16,7 @@ class ResultEnvProcessing():
             body_pointer = resultEnv.body
         else:
             body_pointer = resultEnv.body.copy()
-        sum_of_photon_weight_in_observed_area = n_photons * 1.0 - escaped_photons_weight
+        sum_of_photon_weight_in_observed_area = n_photons * 1.0
         if print_debug:
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
@@ -29,7 +29,7 @@ class ResultEnvProcessing():
             return PropEnv(arr=body_pointer)
         
     @staticmethod
-    def normalize_resultEnv_2(resultEnv: PropEnv, volume_per_bin, inplace=True, print_debug=False):
+    def normalize_resultEnv_2(resultEnv: PropEnv, volume_per_bin, escaped_photons_weight, inplace=True, print_debug=False):
         """
         variant with body sum instead of 
         NORMALIZE resultEnv.body VALUES
@@ -40,7 +40,7 @@ class ResultEnvProcessing():
             body_pointer = resultEnv.body
         else:
             body_pointer = resultEnv.body.copy()
-        sum_of_photon_weight_in_observed_area = body_pointer.sum()
+        sum_of_photon_weight_in_observed_area = body_pointer.sum() + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
         body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
@@ -60,7 +60,7 @@ class ResultEnvProcessing():
         """
         if not inplace:
             resultRecords = resultRecords.copy()
-        sum_of_photon_weight_in_observed_area = n_photons * 1.0 - escaped_photons_weight
+        sum_of_photon_weight_in_observed_area = n_photons * 1.0
         if print_debug:
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
@@ -70,7 +70,7 @@ class ResultEnvProcessing():
     
 
     @staticmethod
-    def normalize_resultRecords_2(resultRecords, volume_per_bin, borders, inplace=True, print_debug=False):
+    def normalize_resultRecords_2(resultRecords, volume_per_bin, escaped_photons_weight, borders, inplace=True, print_debug=False):
         """
         variant with values sum instead of 
         NORMALIZE resultRecords VALUES COLUMN
@@ -79,7 +79,7 @@ class ResultEnvProcessing():
         """
         if not inplace:
             resultRecords = resultRecords.copy()
-        sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)])
+        sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)]) + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
         resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin)] for col in resultRecords]

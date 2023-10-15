@@ -56,6 +56,7 @@ class RunAll():
         # - USE_TRIANGLED_PLANES_FROM_FILE
         # - ["heatmap trans-normal", "heatmap min-max"]
         # - do_connect_lines_list = [False]
+        # - photon limit in make
 
 
         # if true, just load last saved results

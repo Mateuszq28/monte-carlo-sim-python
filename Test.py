@@ -1439,7 +1439,7 @@ class Test():
             print("norm1 calculation time:", end_time-start_time)
 
             start_time = time.time()
-            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm2 calculation time:", end_time-start_time)
 
@@ -1458,7 +1458,7 @@ class Test():
             print("norm1 calculation time:", end_time-start_time)
 
             start_time = time.time()
-            normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(resultRecords, volume_per_bin, borders, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(resultRecords, volume_per_bin, escaped_photons_weight, borders, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm2 calculation time:", end_time-start_time)
 
