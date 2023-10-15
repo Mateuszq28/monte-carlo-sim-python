@@ -21,7 +21,7 @@ class ResultEnvProcessing():
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
             print("escaped_photons_weight:", escaped_photons_weight)
-        body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
+        body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin * 1000)
         if inplace:
             resultEnv.body = body_pointer
             return resultEnv
@@ -43,7 +43,7 @@ class ResultEnvProcessing():
         sum_of_photon_weight_in_observed_area = body_pointer.sum() + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
-        body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin)
+        body_pointer = resultEnv.body / (sum_of_photon_weight_in_observed_area * volume_per_bin * 1000)
         if inplace:
             resultEnv.body = body_pointer
             return resultEnv
@@ -65,7 +65,7 @@ class ResultEnvProcessing():
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
             print("escaped_photons_weight:", escaped_photons_weight)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin)] for col in resultRecords]
+        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * 1000)] for col in resultRecords]
         return resultRecords
     
 
@@ -82,7 +82,7 @@ class ResultEnvProcessing():
         sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)]) + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin)] for col in resultRecords]
+        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * 1000)] for col in resultRecords]
         return resultRecords
     
     @staticmethod

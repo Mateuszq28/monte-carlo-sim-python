@@ -299,7 +299,7 @@ class ChartMaker():
         plt.imshow(arr, cmap='viridis')
         plt.title(title)
         cb = plt.colorbar()
-        cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
+        cb.set_label(r'$\mathregular{10^3 \cdot{ \frac{1}{cm^3} } }$')
         # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
         # plt.ylabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
         plt.show()
