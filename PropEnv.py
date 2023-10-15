@@ -74,7 +74,8 @@ class PropEnv(Object3D):
             boundary_change = False
             boundary_norm_vec = None
             label_out = None
-            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+            forced_label_change = None
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, forced_label_change
         
         if type(xyz) != list or type(xyz_next) != list:
             raise ValueError("xyz and xyz_next should be lists")
@@ -89,6 +90,7 @@ class PropEnv(Object3D):
         boundary_change = False
         boundary_norm_vec = None
         label_out = None
+        forced_label_change = None
         # photon steps from position xyz to xyz_next 
         # min step should be 0.5
         step = 0.49
@@ -99,7 +101,7 @@ class PropEnv(Object3D):
                 break
             # print("check_pos", check_pos)
             # print("float label check_pos", self.get_label_from_float(check_pos))
-            proposed_norm_vec, proposed_boundary_pos, label_in, label_out = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), label_in, debug=False)
+            proposed_norm_vec, proposed_boundary_pos, label_in, label_out, forced_label_change = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), label_in, debug=False)
             if proposed_norm_vec is not None:
                 # boundary_pos = check_pos.tolist()
                 boundary_pos = proposed_boundary_pos
@@ -114,14 +116,14 @@ class PropEnv(Object3D):
             if not self.env_boundary_check(check_pos):
                 # print("(last chance) check_pos", check_pos)
                 # print("(last chance) float label check_pos", self.get_label_from_float(check_pos))
-                proposed_norm_vec, proposed_boundary_pos, label_in, label_out = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), label_in, debug=False)
+                proposed_norm_vec, proposed_boundary_pos, label_in, label_out, forced_label_change = self.plane_boundary_normal_vec(xyz, check_pos.tolist(), label_in, debug=False)
                 if proposed_norm_vec is not None:
                     # boundary_pos = check_pos.tolist()
                     boundary_pos = proposed_boundary_pos
                     boundary_change = True
                     boundary_norm_vec = proposed_norm_vec
 
-        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, forced_label_change
     
     def plane_boundary_normal_vec(self, last_pos, next_pos, label_in, debug=False):
         """
@@ -134,6 +136,7 @@ class PropEnv(Object3D):
         # - iter through marching cubes, find plane stretched on triangles,
         # - check if the ray intersect this plane, find its norm vector and intersection point
         # loop initiation values
+        forced_label_change = None
         return_label_in = label_in
         return_label_out = None
         return_norm_vec = None
@@ -148,6 +151,10 @@ class PropEnv(Object3D):
             corner_full_decimal = sum([2**bit for bit, val in zip(range(7,-1,-1), corner_full_binary_code) if val == True])
             if corner_full_decimal == 0:
                 WHOLE_CUBE_IN_DIFFERENT_LABEL += 1
+                continue
+            if corner_full_decimal == 255:
+                # the same tissue
+                continue
             # all triangles corners in one list
             triangles = MarchingCubes.TriangleTable[corner_full_decimal].copy()
             # split into triangles
@@ -238,13 +245,15 @@ class PropEnv(Object3D):
             print("last_pos", last_pos)
             print("next_pos", next_pos)
             print("wrong label_in!")
-            raise ValueError("wrong label_in!")
+            print("(forced label change)")
+            forced_label_change = self.get_label_from_float(next_pos)
+            # raise ValueError("wrong label_in!")
 
         # if return_norm_vec is not None:
         #     print("znaleziono granicę! label_out:", return_label_out)
         #     print("znaleziono granicę! return_boundary_pos:", return_boundary_pos)
 
-        return return_norm_vec, return_boundary_pos, return_label_in, return_label_out
+        return return_norm_vec, return_boundary_pos, return_label_in, return_label_out, forced_label_change
 
             
     def filter_normal_vec_and_intersect(self, normal_vec_and_intersect, cent, cmv, om, point_in, point_out):

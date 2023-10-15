@@ -1763,7 +1763,7 @@ def main():
     # print("exp2")
     # test.test_MonteCarloSampling_exp2()
     # print("parabola2")
-    # test.test_MonteCarloSampling_parabola2()
+    test.test_MonteCarloSampling_parabola2()
 
     # Reflectance function
     # test.test24()
@@ -1778,7 +1778,7 @@ def main():
     # test.test27()
 
     # exp1_aprox master thesis
-    test.test28()
+    # test.test28()
 
 
 

@@ -296,8 +296,12 @@ class ColorPointDF():
 
     def cs_transnormal(self, df):
         df = df.copy()
+        values = df["value"].to_numpy()
+        color = df["value"].to_numpy()
+        # to find bin_edges for very small and close to each other numbers
+        values = values * 100
         min_color = 15
-        hist, bin_edges = np.histogram(df["value"].to_numpy(), bins=256-min_color, density=False)
+        hist, bin_edges = np.histogram(values, bins=256-min_color, density=False)
         cumsum = np.cumsum(hist)
         cumsum_under = np.hstack((np.array([0]), cumsum))[:-1]
         # cumulative sum in the middle of the bins
@@ -314,8 +318,6 @@ class ColorPointDF():
         max = ppf.max()
         gray = (255-min_color) * ((ppf - min) / (max - min)) + min_color
         # set colors
-        values = df["value"].to_numpy()
-        color = df["value"].to_numpy()
         for i in range(len(hist)):
             # <= value <=
             # can be closed both side, because it will be overwritten
@@ -366,7 +368,9 @@ class ColorPointDF():
         # - hot - black, red, orange, yellow, white
         # - YlOrRd - yellow, orange, red
         # - inferno - purple, yellow
-        name = "inferno"
+        # - viridis - standard
+        # name = "inferno"
+        name = "viridis"
         gray = df['R'].to_numpy() / 255
         rgb = cm.get_cmap(plt.get_cmap(name))(gray) * 255
         # update values

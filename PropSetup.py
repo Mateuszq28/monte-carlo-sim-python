@@ -1,6 +1,6 @@
 from LightSource import LightSource
 from PropEnv import PropEnv
-from PropEnvOnMathFormulas import PropEnvOnMathFormulas
+from PropEnvVec import PropEnvVec
 from Object3D import Object3D
 import json
 import numpy as np
@@ -166,7 +166,7 @@ class PropSetup:
     @staticmethod
     def from_components(env_path, light_source_path, offset=None):
         if PropSetup.flag_use_propenv_on_formulas:
-            propEnv = PropEnvOnMathFormulas.load_json(env_path)
+            propEnv = PropEnvVec.load_json(env_path)
         else:
             propEnv = PropEnv.load_json(env_path)
         lightSource = LightSource.load_json(light_source_path)

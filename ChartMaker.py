@@ -10,6 +10,7 @@ from Print import Print
 from ArrowsDF import ArrowsDF
 from ProjectionArrowsDF import ProjectionArrowsDF
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import pandas as pd
 # from IPython.display import display
 import numpy as np
@@ -95,11 +96,11 @@ class ChartMaker():
 
         # SHOW RESULT ENV
         # ChartMaker.simple_show_object3d(propSetup.resultEnv)
-        # ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
-        #                           title = "Absorbed energy in volume - color_scheme = " + color_scheme,
-        #                           color_scheme = color_scheme,
-        #                           connect_lines = standard_connect_lines)
-        # ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
+        ChartMaker.show_resultEnv(resultEnv = propSetup.resultEnv,
+                                  title = "Absorbed energy in volume - color_scheme = " + color_scheme,
+                                  color_scheme = color_scheme,
+                                  connect_lines = standard_connect_lines)
+        ChartMaker.simple_show_object3d_asVolume(propSetup.resultEnv, title="resultEnv as Volume")
 
         
 
@@ -162,45 +163,45 @@ class ChartMaker():
 
         # SUM PROJECTIONS + MAKING .PNG IMAGES
         # old
-        ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
-                                             bins_per_cm = propSetup.config["bins_per_1_cm"])
+        # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
+        #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
         ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
                                    bins_per_cm = propSetup.config["bins_per_1_cm"],
                                    color_scheme = color_scheme,
-                                   show = False,
+                                   show = True,
                                    connect_lines = standard_connect_lines,
                                    hide_points = standard_hide_points)
 
 
 
-        # # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
-        # sh = propSetup.resultShape
-        # local_color_scheme = color_scheme
-        # local_color_scheme = "photonwise"
-        # drop_values = [0, 0.0]
-        # drop_values = None
-        # local_reset_colors = local_color_scheme
-        # local_reset_colors = None
-        # ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                           input_shape = sh,
-        #                                           color_scheme = local_color_scheme,
-        #                                           drop_values = drop_values,
-        #                                           select_photon_id = None,
-        #                                           photon_register = propSetup.photon_register,
-        #                                           select_parent = True,
-        #                                           select_child = True,
-        #                                           border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
-        #                                           png_dir = None,
-        #                                           sum_same_idx = False,
-        #                                           sum_axis = False,
-        #                                           reset_png_colors = None,
-        #                                           show = True,
-        #                                           title_prefix = "",
-        #                                           do_connect_lines = do_connect_lines,
-        #                                           reset_colors = local_reset_colors,
-        #                                           color_points_by_root = color_points_by_root,
-        #                                           color_arrows_by_root = color_arrows_by_root)
+        # [FROM RECORDS] PROJECTIONS + MAKING .PNG IMAGES
+        sh = propSetup.resultShape
+        local_color_scheme = color_scheme
+        local_color_scheme = "photonwise"
+        drop_values = [0, 0.0]
+        drop_values = None
+        local_reset_colors = local_color_scheme
+        local_reset_colors = None
+        ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
+                                                  input_shape = sh,
+                                                  color_scheme = local_color_scheme,
+                                                  drop_values = drop_values,
+                                                  select_photon_id = None,
+                                                  photon_register = propSetup.photon_register,
+                                                  select_parent = True,
+                                                  select_child = True,
+                                                  border_limits = [0, sh[0], 0, sh[1], 0, sh[2]],
+                                                  png_dir = None,
+                                                  sum_same_idx = False,
+                                                  sum_axis = False,
+                                                  reset_png_colors = None,
+                                                  show = False,
+                                                  title_prefix = "",
+                                                  do_connect_lines = do_connect_lines,
+                                                  reset_colors = local_reset_colors,
+                                                  color_points_by_root = color_points_by_root,
+                                                  color_arrows_by_root = color_arrows_by_root)
         
         # if sl is not None:
         #     take_group = 1
@@ -221,7 +222,7 @@ class ChartMaker():
         #                                                   sum_same_idx = False,
         #                                                   sum_axis = False,
         #                                                   reset_png_colors = None,
-        #                                                   show = True,
+        #                                                   show = False,
         #                                                   title_prefix = "({}) ".format(i),
         #                                                   do_connect_lines = do_connect_lines,
         #                                                   reset_colors = local_reset_colors,
@@ -301,6 +302,21 @@ class ChartMaker():
         cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
         # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
         # plt.ylabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
+        plt.show()
+
+
+    @staticmethod
+    def plot2_heatmap2d(arr1: np.ndarray, arr2: np.ndarray, title1=None, title2=None):
+        cmap = cm.get_cmap('viridis', 256)
+        fig, axs = plt.subplots(1, 2, constrained_layout=True)
+        arrs = [arr1, arr2]
+        tits = [title1, title2]
+        for ax, data, tit in zip(axs, arrs, tits):
+            min_value = np.min(data)
+            max_value = np.max(data)
+            psm = ax.pcolormesh(data, cmap=cmap, rasterized=True, vmin=min_value, vmax=max_value)
+            fig.colorbar(psm, ax=ax)
+            ax.set_title(tit)
         plt.show()
 
 

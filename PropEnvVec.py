@@ -5,7 +5,7 @@ import numpy as np
 import math
 from Space3dTools import Space3dTools
 
-class PropEnvOnMathFormulas(PropEnv):
+class PropEnvVec(PropEnv):
     def __init__(self, x=100, y=100, z=100):
         self.shape = [x, y, z]
         with open("config.json") as f:
@@ -61,7 +61,7 @@ class PropEnvOnMathFormulas(PropEnv):
             boundary_change = False
             boundary_norm_vec = None
             label_out = None
-            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, None
 
         debug = False
         if debug:
@@ -88,7 +88,7 @@ class PropEnvOnMathFormulas(PropEnv):
             boundary_change = False
             boundary_norm_vec = None
             label_out = None
-            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+            return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, None
         
         closest_idx, closest_inter = min(intersections[::-1], key = lambda x: math.dist(x[1], xyz))
         boundary_pos = closest_inter
@@ -109,7 +109,7 @@ class PropEnvOnMathFormulas(PropEnv):
             boundary_norm_vec = [-val for val in boundary_norm_vec]
 
         label_out = self.material_stack[closest_idx].label
-        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out
+        return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, None
     
 
 
@@ -127,7 +127,7 @@ class PropEnvOnMathFormulas(PropEnv):
     def load_json(path):
         with open(path, 'r') as f:
             d = json.load(f)
-        propEnv = PropEnvOnMathFormulas()
+        propEnv = PropEnvVec()
         propEnv.shape = d["self.shape"]
         propEnv.material_stack = [load_dump(mat_dump) for mat_dump in d["material_dumps"]]
         return propEnv

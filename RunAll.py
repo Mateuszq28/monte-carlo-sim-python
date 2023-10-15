@@ -29,7 +29,7 @@ class RunAll():
             Test.Test_ResultEnvProcessing.are_2_variants_equal_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
             # END OF TEST
 
-            ResultEnvProcessing.normalize_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
+            propSetup.resultEnv = ResultEnvProcessing.normalize_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
             # HERE NORMALIZATION ON propSetup.resultEnv INPLACE IS DONE
             # NORMALIZATION OF resultRecords
 
@@ -40,8 +40,10 @@ class RunAll():
             Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
             # END OF TEST
 
-            ResultEnvProcessing.normalize_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True, print_debug=False)
+            propSetup.resultRecords = ResultEnvProcessing.normalize_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True, print_debug=False)
             # HERE NORMALIZATION ON propSetup.resultRecords INPLACE IS DONE
+
+        return propSetup
 
 
     @staticmethod
@@ -49,11 +51,16 @@ class RunAll():
         """
         MAIN PHOTON SIMULATION
         """
+        # check list
+        # - LOAD_INSTEAD_OF_SIM
+        # - USE_TRIANGLED_PLANES_FROM_FILE
+        # - ["heatmap trans-normal", "heatmap min-max"]
+        # - do_connect_lines_list = [False]
 
 
         # if true, just load last saved results
-        LOAD_INSTEAD_OF_SIM = True
         LOAD_INSTEAD_OF_SIM = False
+        LOAD_INSTEAD_OF_SIM = True
 
 
 
@@ -80,7 +87,7 @@ class RunAll():
 
 
         # NORMALIZATION
-        RunAll.normalize_process(result_propSetup)
+        result_propSetup = RunAll.normalize_process(result_propSetup)
 
 
 
@@ -90,11 +97,11 @@ class RunAll():
         take_cs.remove("photonwise")
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
         take_cs = ["photonwise"]
-        take_cs = ["heatmap trans-normal"]
+        take_cs = ["heatmap trans-normal", "heatmap min-max"]
 
         do_connect_lines_list = [True, False]
-        do_connect_lines_list = [False]
         do_connect_lines_list = [True]
+        do_connect_lines_list = [False]
 
 
 

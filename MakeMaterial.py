@@ -1,5 +1,5 @@
 from Material import Material, Cuboid, Cylinder
-from PropEnvOnMathFormulas import PropEnvOnMathFormulas
+from PropEnvVec import PropEnvVec
 
 
 class MakeMaterial():
@@ -9,7 +9,7 @@ class MakeMaterial():
     # --- MAKE COMPLEX MATERIALS ---
 
     def default_env(self):
-        propEnv = PropEnvOnMathFormulas(x=50, y=50, z=100)
+        propEnv = PropEnvVec(x=50, y=50, z=100)
         air = Cuboid(label=1, start_p=[0.0, 0.0, 0.75], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
         water = Cuboid(label=2, start_p=[0.0, 0.0, 0.65], end_p=[1.0, 1.0, 0.75], propEnvShape=propEnv.shape)
         skin = Cuboid(label=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.65], propEnvShape=propEnv.shape)
@@ -17,7 +17,7 @@ class MakeMaterial():
         self.vein(propEnv, z_pos=0.25)
         return propEnv
 
-    def vein(self, propEnv: PropEnvOnMathFormulas, z_pos, r=0.25, vein_thickness=0.10):
+    def vein(self, propEnv: PropEnvVec, z_pos, r=0.25, vein_thickness=0.10):
         x_pos_idx = propEnv.shape[0] // 2
         z_pos_idx = int(z_pos * propEnv.shape[2])
         radius = r * propEnv.shape[1]
@@ -33,7 +33,7 @@ class MakeMaterial():
         # size od propEnv [x,y,z] in cm
         size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
-        propEnv = PropEnvOnMathFormulas(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv = PropEnvVec(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         dermis = Cuboid(label=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
         propEnv.material_stack = [dermis]
         return propEnv
@@ -43,7 +43,7 @@ class MakeMaterial():
         # size od propEnv [x,y,z] in cm
         size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
-        propEnv = PropEnvOnMathFormulas(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv = PropEnvVec(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         epidermis = Cuboid(label=3, start_p=[0.0, 0.0, 0.75], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
         dermis = Cuboid(label=4, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.75], propEnvShape=propEnv.shape)
         propEnv.material_stack = [epidermis, dermis]
@@ -54,7 +54,7 @@ class MakeMaterial():
         # size od propEnv [x,y,z] in cm
         size_cm = [1.5,1.5,2]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
-        propEnv = PropEnvOnMathFormulas(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv = PropEnvVec(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         epidermis = Cuboid(label=3, start_p=[0.0, 0.0, 0.666], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
         dermis = Cuboid(label=4, start_p=[0.0, 0.0, 0.333], end_p=[1.0, 1.0, 0.666], propEnvShape=propEnv.shape)
         fat = Cuboid(label=5, start_p=[0.0, 0.0, 0.0], end_p=[1.0, 1.0, 0.333], propEnvShape=propEnv.shape)
@@ -71,7 +71,7 @@ class MakeMaterial():
         # size od propEnv [x,y,z] in cm
         size_cm = [sum_z/2, sum_z/2, sum_z]
         size_bins = [int(round(s_cm * bins_per_1_cm)) for s_cm in size_cm]
-        propEnv = PropEnvOnMathFormulas(x=size_bins[0], y=size_bins[1], z=size_bins[2])
+        propEnv = PropEnvVec(x=size_bins[0], y=size_bins[1], z=size_bins[2])
         # cubes
         air = Cuboid(label=1, start_p=[0.0, 0.0, upper_boundary[1]], end_p=[1.0, 1.0, 1.0], propEnvShape=propEnv.shape)
         water = Cuboid(label=2, start_p=[0.0, 0.0, upper_boundary[2]], end_p=[1.0, 1.0, upper_boundary[1]], propEnvShape=propEnv.shape)

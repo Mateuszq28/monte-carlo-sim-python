@@ -393,7 +393,7 @@ class MonteCarloSampling():
         k_c = k_const
         t0 = "generator II"
         t1 = r"$\mathregular{roots(F(s) - RND)}$"
-        t2 = r'$\mathregular{roots(k\cdot{ -\frac{1}{3}s^3 + \pi^2 s + \frac{2}{3} \pi^3 - RND })}$'
+        t2 = r'$\mathregular{roots(k\cdot{ (-\frac{1}{3}s^3 + \pi^2 s + \frac{2}{3} \pi^3) - RND })}$'
         title = k_c + ' = '.join([t0, t1, t2]) + end_tit
         title = k_c + ' = '.join([t1, t2])
         xlabel = "RND"

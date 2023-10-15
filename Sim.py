@@ -267,7 +267,9 @@ class Sim():
 
             # check if there was change of a material
             start_time = time.time()
-            boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
+            boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, forced_label_change = self.propSetup.propEnv.boundary_check(photon.pos, next_pos, photon.mat_label)
+            if forced_label_change is not None:
+                photon.mat_label = forced_label_change
             # print("nowy label_out fotonu otrzymany w sim!", label_out)
             # print("nowy boundary_pos fotonu otrzymany w sim!", boundary_pos)
             end_time = time.time()
