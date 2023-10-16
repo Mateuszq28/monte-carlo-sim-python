@@ -68,8 +68,8 @@ class RunAll():
 
 
         # if False, new traingled planes to show in ByVispy will be calculated using data from propEnv.body array
-        USE_TRIANGLED_PLANES_FROM_FILE = True
         USE_TRIANGLED_PLANES_FROM_FILE = False
+        USE_TRIANGLED_PLANES_FROM_FILE = True
 
 
 
@@ -119,8 +119,8 @@ class RunAll():
                                     cl_loop,
                                     color_points_by_root = False,
                                     color_arrows_by_root = False,
-                                    do_triangled_planes = True,
-                                    draw_planes_from_material_stack = False,
+                                    do_triangled_planes = False,
+                                    draw_planes_from_material_stack = True,
                                     use_triangled_planes_from_file = USE_TRIANGLED_PLANES_FROM_FILE)
 
 
