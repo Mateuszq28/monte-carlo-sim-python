@@ -68,6 +68,18 @@ class PropSetup:
         # df_material['A'] = 20
         preview_DF = cdf.stack_color_scheme([df_material, df_light_source])
         return preview_DF, arrows_DF
+        
+
+    def make_empty_preview_DF(self, cs_light_source="solid"):
+        cdf = ColorPointDF()
+        # df_material = cdf.from_Object3d(np.zeros((1,1)), color_scheme="solid", drop_values=None)
+        df_light_source = cdf.from_Object3d(self.lightSource, color_scheme=cs_light_source, drop_values=[0])
+        cdf.add_offset(df_light_source, offset=self.offset)
+        arrows_DF = ArrowsDF().from_lightSource(self.lightSource, df_light_source, offset=self.offset, arrow_length=20.0)
+        # df_material['A'] = 20
+        # preview_DF = cdf.stack_color_scheme([df_material, df_light_source])
+        preview_DF = df_light_source
+        return preview_DF, arrows_DF
 
 
     def make_result_preview_DF(self, cs_material="solid", cs_photons="loop"):

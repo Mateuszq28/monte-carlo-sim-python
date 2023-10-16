@@ -23,7 +23,7 @@
     "recurention_if_split": false,
 
     "flag_result_records_pos_int": false,
-    "flag_seve_result_records": false,
+    "flag_seve_result_records": true,
     "flag_save_result_env": true,
 
 
@@ -33,7 +33,7 @@
 
     "random_seed": 0,
     "precision": 8,
-    "bins_per_1_cm": 400,
+    "bins_per_1_cm": 120,
     "anisotropy_of_scattering_g": 0.9,
     "photon_weight_threshold": 1e-4,
     "photon_chance": 0.1,

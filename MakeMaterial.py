@@ -3,8 +3,8 @@ from PropEnvVec import PropEnvVec
 
 
 class MakeMaterial():
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        self.config = config
 
     # --- MAKE COMPLEX MATERIALS ---
 

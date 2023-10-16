@@ -57,17 +57,19 @@ class RunAll():
         # - ["heatmap trans-normal", "heatmap min-max"]
         # - do_connect_lines_list = [False]
         # - photon limit in make
-
+        # - make env
+        # - save result records
+        # - flag_use_propenv_on_formulas
 
         # if true, just load last saved results
-        LOAD_INSTEAD_OF_SIM = False
         LOAD_INSTEAD_OF_SIM = True
+        LOAD_INSTEAD_OF_SIM = False
 
 
 
         # if False, new traingled planes to show in ByVispy will be calculated using data from propEnv.body array
-        USE_TRIANGLED_PLANES_FROM_FILE = False
         USE_TRIANGLED_PLANES_FROM_FILE = True
+        USE_TRIANGLED_PLANES_FROM_FILE = False
 
 
 
@@ -100,8 +102,8 @@ class RunAll():
         take_cs = ["photonwise"]
         take_cs = ["heatmap trans-normal", "heatmap min-max"]
 
-        do_connect_lines_list = [True, False]
         do_connect_lines_list = [True]
+        do_connect_lines_list = [True, False]
         do_connect_lines_list = [False]
 
 

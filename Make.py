@@ -43,9 +43,9 @@ class Make():
 
     def default_env(self):
         start_time = time.time()
-        env_idx = 4
+        env_idx = 2
         if Make.flag_use_propenv_on_formulas:
-            makeMat = MakeMaterial()
+            makeMat = MakeMaterial(self.config)
             env_fun_list = [
                 makeMat.default_env,
                 makeMat.env_master_thesis_1layers,
@@ -140,7 +140,7 @@ class Make():
 
     def default_light_source(self):
         lightSource = LightSource(x=1, y=1, z=1)
-        lightSource.initialize_source(photon_limit=100000)
+        lightSource.initialize_source(photon_limit=100)
         return lightSource
 
 

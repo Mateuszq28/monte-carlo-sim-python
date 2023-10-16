@@ -82,6 +82,12 @@ class ChartMaker():
             ByVispy.material_stack = propSetup.propEnv.material_stack
 
 
+
+
+        # SHOW JUST BOUNDARY PLANES + LIGHT SOURCE
+        ChartMaker.show_empty_simulation_preview_DF(propSetup = propSetup,
+                                                    cs_light_source="solid")
+
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
         ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
                                               cs_material="solid",
@@ -281,6 +287,19 @@ class ChartMaker():
 
 
     @staticmethod
+    def show_empty_simulation_preview_DF(propSetup: PropSetup, cs_light_source="solid"):
+        if PropSetup.flag_use_propenv_on_formulas:
+            draw_planes_from_material_stack = True
+            draw_plane_triangles = False
+        else:
+            draw_planes_from_material_stack = False
+            draw_plane_triangles = True
+        df, arrows_DF = propSetup.make_empty_preview_DF(cs_light_source)
+        vis = ByVispy()
+        vis.show_ColorPointDF(df, title="boundary planes + light source", hide_points=False, connect_lines=arrows_DF, draw_plane_triangles=draw_plane_triangles, draw_planes_from_material_stack=draw_planes_from_material_stack)
+
+
+    @staticmethod
     def show_simulation_result_preview_DF(propSetup: PropSetup, cs_material="solid", cs_photons="loop"):
         if propSetup.resultEnv is None:
             print("Skipped show_simulation_result_preview_DF - propSetup.resultEnv is None")
@@ -300,6 +319,19 @@ class ChartMaker():
         plt.title(title)
         cb = plt.colorbar()
         cb.set_label(r'$\mathregular{10^3 \cdot{ \frac{1}{cm^3} } }$')
+        # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
+        # plt.ylabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
+        plt.show()
+
+
+    @staticmethod
+    def heatmap2d_log10(arr: np.ndarray, bins_per_cm, title=None):
+        if title is None:
+            title = "absorbed fraction"
+        plt.imshow(arr, cmap='viridis', norm="log")
+        plt.title(r'$\log_{10}arr$')
+        cb = plt.colorbar()
+        cb.set_label(r'$\mathregular{ \frac{1}{cm^3} }$')
         # plt.xlabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
         # plt.ylabel = r'$\mathregular{x \frac{1}{bins_per_cm} cm}$'.replace("bins_per_cm", str(bins_per_cm))
         plt.show()
@@ -363,6 +395,7 @@ class ChartMaker():
                 chart_name = "sum_projection_" + name
                 vis.show_body(proj, title=chart_name)
                 ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
                 proj.save_png(dir=dir, filename=chart_name+".png")
 
 
@@ -389,6 +422,7 @@ class ChartMaker():
                 if show:
                     ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
                     ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                    ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
                 proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
