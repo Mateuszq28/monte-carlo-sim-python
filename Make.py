@@ -43,7 +43,7 @@ class Make():
 
     def default_env(self):
         start_time = time.time()
-        env_idx = 2
+        env_idx = 1
         if Make.flag_use_propenv_on_formulas:
             makeMat = MakeMaterial(self.config)
             env_fun_list = [
