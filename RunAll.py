@@ -101,6 +101,7 @@ class RunAll():
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
         take_cs = ["photonwise"]
         take_cs = ["heatmap trans-normal", "heatmap min-max"]
+        take_cs = ["logarithmic"]
 
         do_connect_lines_list = [True]
         do_connect_lines_list = [True, False]

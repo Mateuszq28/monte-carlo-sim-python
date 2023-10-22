@@ -12,8 +12,8 @@
 
     "flag_make_prop_setup_from_componentes": false,
     "flag_use_propenv_on_formulas": true,
-    "flag_ignore_prop_env_labels": false,
-    "global_label_if_ignore_prop_env_labels": -2,
+    "flag_ignore_prop_env_labels": true,
+    "global_label_if_ignore_prop_env_labels": 4,
 
 
 
