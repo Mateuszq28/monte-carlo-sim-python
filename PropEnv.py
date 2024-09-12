@@ -35,6 +35,14 @@ class PropEnv(Object3D):
         mu_t = mu_a + mu_s
         return mu_a, mu_s, mu_t
 
+    # Warning! xyz is rounded, so it can return wrong values if photon is near sloping boundary of materials
+    def get_mu_a(self, xyz):
+        label = self.get_label_from_float(xyz)
+        label_str = str(label)
+        # Absorption Coefficient in 1/cm
+        mu_a = self.tissue_properties[label_str]["mu_a"]
+        return mu_a
+
     def get_properties_from_label(self, label):
         label_str = str(label)
         # Absorption Coefficient in 1/cm

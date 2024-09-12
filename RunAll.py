@@ -26,10 +26,10 @@ class RunAll():
 
         if propSetup.config["flag_save_result_env"]:
             # TEST TO DELETE (inplace = False)
-            Test.Test_ResultEnvProcessing.are_2_variants_equal_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
+            Test.Test_ResultEnvProcessing.are_2_variants_equal_resultEnv(propSetup, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
             # END OF TEST
 
-            propSetup.resultEnv = ResultEnvProcessing.normalize_resultEnv(propSetup.resultEnv, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
+            propSetup.resultEnv = ResultEnvProcessing.normalize_resultEnv(propSetup, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True)
             # HERE NORMALIZATION ON propSetup.resultEnv INPLACE IS DONE
             # NORMALIZATION OF resultRecords
 
@@ -37,10 +37,10 @@ class RunAll():
             # TEST TO DELETE (inplace = False)
             sh = propSetup.resultShape
             borders = [0, sh[0], 0, sh[1], 0, sh[2]]
-            Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
+            Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
             # END OF TEST
 
-            propSetup.resultRecords = ResultEnvProcessing.normalize_resultRecords(propSetup.resultRecords, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True, print_debug=False)
+            propSetup.resultRecords = ResultEnvProcessing.normalize_resultRecords(propSetup, photon_num, volume_per_bin, propSetup.escaped_photons_weight, inplace=True, print_debug=False)
             # HERE NORMALIZATION ON propSetup.resultRecords INPLACE IS DONE
 
         return propSetup

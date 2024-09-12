@@ -1430,16 +1430,17 @@ class Test():
             pass
 
         @staticmethod
-        def are_2_variants_equal_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight):
+        def are_2_variants_equal_resultEnv(propSetup, photon_num, volume_per_bin, escaped_photons_weight):
             print("TEST NORMALIZATION resultEnv")
+            # resultEnv = propSetup.resultEnv
 
             start_time = time.time()
-            normal_output_1 = ResultEnvProcessing.normalize_resultEnv(resultEnv, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            normal_output_1 = ResultEnvProcessing.normalize_resultEnv(propSetup, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm1 calculation time:", end_time-start_time)
 
             start_time = time.time()
-            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(resultEnv, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultEnv_2(propSetup, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm2 calculation time:", end_time-start_time)
 
@@ -1449,16 +1450,17 @@ class Test():
             return test_result
         
         @staticmethod
-        def are_2_variants_equal_resultRecords(resultRecords, photon_num, volume_per_bin, borders, escaped_photons_weight):
+        def are_2_variants_equal_resultRecords(propSetup, photon_num, volume_per_bin, borders, escaped_photons_weight):
             print("TEST NORMALIZATION resultRecords")
+            # resultRecords = propSetup.resultRecords
 
             start_time = time.time()
-            normal_output_1 = ResultEnvProcessing.normalize_resultRecords(resultRecords, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
+            normal_output_1 = ResultEnvProcessing.normalize_resultRecords(propSetup, photon_num, volume_per_bin, escaped_photons_weight, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm1 calculation time:", end_time-start_time)
 
             start_time = time.time()
-            normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(resultRecords, volume_per_bin, escaped_photons_weight, borders, inplace=False, print_debug=True)
+            normal_output_2 = ResultEnvProcessing.normalize_resultRecords_2(propSetup, volume_per_bin, escaped_photons_weight, borders, inplace=False, print_debug=True)
             end_time = time.time()
             print("norm2 calculation time:", end_time-start_time)
 
