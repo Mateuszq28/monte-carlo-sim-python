@@ -18,7 +18,7 @@ class RunAll():
     @staticmethod
     def normalize_process(propSetup: PropSetup):
         # NORMALIZATION OF resultEnv
-        # normalize output [photon weight / bin] -> absorbed fraction [1/cm^3]
+        # normalize output [photon weight / bin] -> Relative fluence rate [1/cm^2]
         photon_limits_list = propSetup.lightSource.photon_limits_list
         photon_num = sum(photon_limits_list)
         bins_per_1_cm = propSetup.config["bins_per_1_cm"] # [N/cm]

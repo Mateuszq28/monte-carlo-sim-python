@@ -376,10 +376,11 @@ class ChartMaker():
         plt.ylabel(ylab)
         plt.title(title)
 
-        plt.imshow(arr/1000, cmap='viridis', interpolation="none", extent=extent)
+        # in past here was arr/1000
+        plt.imshow(arr, cmap='viridis', interpolation="none", extent=extent)
 
         cb = plt.colorbar(pad=0.010)
-        cb.set_label(r'$ 1/cm^3 $')
+        cb.set_label(r'$ 1/cm^2 $')
 
         manager = plt.get_current_fig_manager()
         manager.window.showMaximized()
@@ -425,8 +426,8 @@ class ChartMaker():
 
         # cb = plt.colorbar(fraction=0.046, pad=0.04)
         cb = plt.colorbar(pad=0.010)
-        # cb.set_label(r'$ \frac{1}{cm^3} $')
-        cb.set_label(r'$ 1/cm^3 $')
+        # cb.set_label(r'$ \frac{1}{cm^2} $')
+        cb.set_label(r'$ 1/cm^2 $')
 
         manager = plt.get_current_fig_manager()
         manager.window.showMaximized()
@@ -471,7 +472,7 @@ class ChartMaker():
 
         cb = fig.colorbar(img)
 
-        cb.set_label(r'$\mathregular{\frac{1}{cm^3}}$')
+        cb.set_label(r'$\mathregular{\frac{1}{cm^2}}$')
 
         ax.set_xlabel("cm")
         ax.set_ylabel("cm")
@@ -492,8 +493,8 @@ class ChartMaker():
                 proj = fun(resultEnv)
                 chart_name = "sum_projection_" + name
                 vis.show_body(proj, title=chart_name)
-                ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
-                ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                ChartMaker.heatmap2d(arr=proj.body[:,:,0]/len(proj.body[0,0,:]), bins_per_cm=bins_per_cm, title=chart_name)
+                ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0]/len(proj.body[0,0,:]), bins_per_cm=bins_per_cm, title=chart_name)
                 proj.save_png(dir=dir, filename=chart_name+".png")
 
 
@@ -522,8 +523,8 @@ class ChartMaker():
                     flat_z_connect_lines = None
                 if show:
                     # ChartMaker.show_resultEnv(resultEnv=proj, title=chart_name, color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points, draw_plane_triangles=False)
-                    ChartMaker.heatmap2d(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
-                    ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0], bins_per_cm=bins_per_cm, title=chart_name)
+                    ChartMaker.heatmap2d(arr=proj.body[:,:,0]/len(proj.body[0,0,:]), bins_per_cm=bins_per_cm, title=chart_name)
+                    ChartMaker.heatmap2d_log10(arr=proj.body[:,:,0]/len(proj.body[0,0,:]), bins_per_cm=bins_per_cm, title=chart_name)
                 proj.save_png(dir=dir, filename=chart_name+".png", color_scheme=color_scheme, connect_lines=flat_z_connect_lines, hide_points=hide_points)
 
 
