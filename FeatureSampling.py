@@ -176,6 +176,32 @@ class FeatureSampling():
     def proba_split(self):
         """Returns random number from uniform distribution [low=0.0, high=1.0)"""
         return self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
+    
+
+    # mc321.c
+    def get_spin(self):
+        rnd = self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
+        g = self.anisotropy_of_scattering_g
+        if (g == 0.0):
+            costheta = 2.0*rnd - 1.0
+        else:
+            temp = (1.0 - g*g)/(1.0 - g + 2*g*rnd)
+            costheta = (1.0 + g*g - temp*temp)/(2.0*g)
+        sintheta = math.sqrt(1.0 - costheta*costheta)
+        # --- Sample psi. ---
+        rnd2 = self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
+        phi = 2.0*math.pi*rnd2
+        cosphi = math.cos(phi)
+        if (phi < math.pi):
+            # sqrt() is faster than sin().
+            sinphi = math.sqrt(1.0 - cosphi*cosphi)
+        else:
+            # sqrt() is faster than sin().
+            sinphi = -math.sqrt(1.0 - cosphi*cosphi)
+        return costheta, sintheta, cosphi, sinphi
+            
+
+            
 
 
 # --- 1. IMPORTANT FOR UNDERSTANDING SIMULATION ---

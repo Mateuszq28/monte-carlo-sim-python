@@ -15,6 +15,7 @@ class Sim():
 
     propSetup: PropSetup
     result_folder = "resultRecords"
+    ONE_MINUS_COSZERO = 1.0E-12
 
     def __init__(self, load_last_dump=False):
         if load_last_dump:
@@ -437,36 +438,64 @@ class Sim():
         photon.weight = photon.weight * (mu_s / mu_t)
 
 
-    def spin(self, photon: Photon):
-        # print("photon.dir before spin", photon.dir)
-        theta = Photon.featureSampling.photon_theta()
-        phi = Photon.featureSampling.photon_phi()
+    def sign(self, x):
+        lambda x: 1 if x >= 0 else -1
+
+
+    def spin_mc321(self, photon: Photon):
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
+        costheta, sintheta, cosphi, sinphi = photon.fun_get_spin()
+        # --- New trajectory. ---
+        if (1 - abs(uz) <= self.ONE_MINUS_COSZERO): # close to perpendicular.
+            uxx = sintheta * cosphi
+            uyy = sintheta * sinphi
+            # SIGN() is faster than division.
+            uzz = costheta * self.sign(uz)
+        else: # usually use this option
+            temp = math.sqrt(1.0 - uz * uz)
+            uxx = sintheta * (ux * uz * cosphi - uy * sinphi) / temp + ux * costheta
+            uyy = sintheta * (uy * uz * cosphi + ux * sinphi) / temp + uy * costheta
+            uzz = -sintheta * cosphi * temp + uz * costheta
+        return [uxx, uyy, uzz]
 
-        do_method_from_book = True
 
-        # from Chapter 5 5.3.5
-        # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
-        if do_method_from_book:
-            if np.isclose(ux, 0) and np.isclose(uy, 0):
-                uxx = math.sin(theta) * math.cos(phi)
-                uyy = math.sin(theta) * math.sin(phi)
-                if uz > 0:
-                    uzz = math.cos(theta)
-                else:
-                    uzz = -math.cos(theta)
-            else:
-                temp = math.sqrt(1 - uz**2)
-                uxx = math.sin(theta) * (ux * uz * math.cos(phi) - uy * math.sin(phi)) / temp + ux * math.cos(theta)
-                uyy = math.sin(theta) * (uy * uz * math.cos(phi) + ux * math.sin(phi)) / temp + uy * math.cos(theta)
-                uzz = -math.sin(theta) * math.cos(phi) * temp + uz * math.cos(theta)
+    def spin(self, photon: Photon):
+        # =======================================================================================
+        # OLD METHOD
+        # =======================================================================================
+        # # print("photon.dir before spin", photon.dir)
+        # theta = Photon.featureSampling.photon_theta()
+        # phi = Photon.featureSampling.photon_phi()
+        # ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
 
-        # (my simple idea) why not that?
-        else:
-            _, old_phi, old_theta = Space3dTools.cartesian2spherical(ux, uy, uz)
-            new_phi = old_phi + phi
-            new_theta = old_theta + theta
-            uxx, uyy, uzz = Space3dTools.spherical2cartesian(R=1., theta=new_theta, phi=new_phi)
+        # do_method_from_book = True
+
+        # # from Chapter 5 5.3.5
+        # # Monte Carlo Modeling of Light Transport in Tissue (Steady State and Time of Flight)
+        # if do_method_from_book:
+        #     if np.isclose(ux, 0) and np.isclose(uy, 0):
+        #         uxx = math.sin(theta) * math.cos(phi)
+        #         uyy = math.sin(theta) * math.sin(phi)
+        #         if uz > 0:
+        #             uzz = math.cos(theta)
+        #         else:
+        #             uzz = -math.cos(theta)
+        #     else:
+        #         temp = math.sqrt(1 - uz**2)
+        #         uxx = math.sin(theta) * (ux * uz * math.cos(phi) - uy * math.sin(phi)) / temp + ux * math.cos(theta)
+        #         uyy = math.sin(theta) * (uy * uz * math.cos(phi) + ux * math.sin(phi)) / temp + uy * math.cos(theta)
+        #         uzz = -math.sin(theta) * math.cos(phi) * temp + uz * math.cos(theta)
+
+        # # (my simple idea) why not that?
+        # else:
+        #     _, old_phi, old_theta = Space3dTools.cartesian2spherical(ux, uy, uz)
+        #     new_phi = old_phi + phi
+        #     new_theta = old_theta + theta
+        #     uxx, uyy, uzz = Space3dTools.spherical2cartesian(R=1., theta=new_theta, phi=new_phi)
+        # =======================================================================================
+
+        # NEW METHOD
+        [uxx, uyy, uzz] = self.spin_mc321(photon)
 
         # update dir vec
         photon.dir = [uxx, uyy, uzz]

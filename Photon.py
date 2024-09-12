@@ -7,6 +7,7 @@ class Photon():
     hop_distribution = featureSampling.photon_hop_distribution
     fun_theta = featureSampling.photon_theta
     fun_phi = featureSampling.photon_phi
+    fun_get_spin = featureSampling.get_spin
     static_photon_id_counter = 0
 
     
