@@ -9,6 +9,7 @@ from MarchingCubes import MarchingCubes
 from Photon import Photon
 from Space3dTools import Space3dTools
 from FeatureSampling import FeatureSampling, MyRandom
+from tqdm import tqdm
 
 
 class Sim():
@@ -163,7 +164,8 @@ class Sim():
         ls = self.propSetup.lightSource.light_source_list
         if photon_limits_list is not None:
             for i in range(len(photon_limits_list)):
-                for _ in range(photon_limits_list[i]):
+                print("lightSource {i} progress:")
+                for _ in tqdm(range(photon_limits_list[i])):
                     if ls is not None:
                         # local coordiantes
                         photon = ls[i].emit()
