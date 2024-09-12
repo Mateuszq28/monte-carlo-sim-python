@@ -2,7 +2,7 @@
 Light simulation in 3D tissue using Monte Carlo method
 
 ```shell
-conda install PyOpenGL tabulate opencv matplotlib pillow vispy scipy numpypandas Geometry3D
+conda install PyOpenGL tabulate opencv matplotlib pillow vispy scipy numpy pandas Geometry3D tqdm
 ```
 If you have some problems with finding packages in Anaconda, try download conda-build from there:
 https://anaconda.org/anaconda/conda-build/files
