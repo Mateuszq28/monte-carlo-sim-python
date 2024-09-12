@@ -441,7 +441,10 @@ class Sim():
 
 
     def sign(self, x):
-        lambda x: 1 if x >= 0 else -1
+        if x >= 0:
+            return 1
+        else:
+            return -1
 
 
     def spin_mc321(self, photon: Photon):
