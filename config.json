@@ -35,7 +35,7 @@
     "precision": 8,
     "bins_per_1_cm": 120,
     "anisotropy_of_scattering_g": 0.9,
-    "photon_weight_threshold": 1e-4,
+    "photon_weight_threshold": 0.01,
     "photon_chance": 0.1,
     "tissue_properties": {
         "-2": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "ignore label", "print color": "#AACB23"},
