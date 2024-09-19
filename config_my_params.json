@@ -1,0 +1,53 @@
+{
+    "flag_make_default_env": true,
+    "flag_make_default_light_source": true,
+    "flag_make_default_prop_setup_file": true,
+
+    "flag_use_default_env": true,
+    "alternative_env_path": "",
+    "flag_use_default_light_surce": true,
+    "alternative_light_source_path": "",
+    "flag_use_default_prop_setup": true,
+    "alternative_prop_setup_path": "",
+
+    "flag_make_prop_setup_from_componentes": false,
+    "flag_use_propenv_on_formulas": true,
+    "flag_ignore_prop_env_labels": true,
+    "global_label_if_ignore_prop_env_labels": 4,
+
+
+
+
+
+    "use_proba_instead_of_splitting": true,
+    "recurention_if_split": false,
+
+    "flag_result_records_pos_int": false,
+    "flag_seve_result_records": false,
+    "flag_save_result_env": true,
+
+
+    "min_step_when_boundary_cross": 0.001,
+
+    
+
+    "random_seed": 0,
+    "precision": 8,
+    "bins_per_1_cm": 120,
+    "anisotropy_of_scattering_g": 0.9,
+    "photon_weight_threshold": 0.01,
+    "photon_chance": 0.1,
+    "tissue_properties": {
+        "-2": {"mu_a": 5, "mu_s": 95, "n": 1.0, "name": "ignore label", "print color": "#AACB23"},
+        "-1": {"mu_a": null, "mu_s": null, "n": null, "name": "light source", "print color": "#FFE800"},
+        "0": {"mu_a": 0, "mu_s": 0, "n": 1.0, "name": "vacuum", "print color": "#FF00F7"},
+        "1": {"mu_a": 0.0000019, "mu_s": 0.0000006, "n": 1.000293, "name": "air", "print color": "#E4F6FF"},
+        "2": {"mu_a": 0.001019, "mu_s": 0.029813, "n": 1.333, "name": "salt water", "print color": "#5091CE"},
+        "3": {"mu_a": 0.0835, "mu_s": 11.71, "n": 1.36, "name": "epidermis", "print color": "#FFF99A"},
+        "4": {"mu_a": 0.37, "mu_s": 23.8888943003376, "n": 1.36, "name": "dermis", "print color": "#FFCB9A"},
+        "5": {"mu_a": 1.1, "mu_s": 12.8426992965418, "n": 1.36, "name": "fatty subcutaneous tissue", "print color": "#F3FF33"},
+        "6": {"mu_a": 2.8, "mu_s": 12.3086801371514, "n": 1.36, "name": "mucous tissue", "print color": "#A9FFBF"},
+        "7": {"mu_a": 6.14, "mu_s": 17.07, "n": 1.36, "name": "vein", "print color": "#F3794B"},
+        "8": {"mu_a": 2.1, "mu_s": 773, "n": 1.37, "name": "blood", "print color": "#FF1414"}
+    }
+}
