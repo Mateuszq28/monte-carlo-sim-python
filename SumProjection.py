@@ -11,6 +11,8 @@ class SumProjection():
         ax = 0
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # transformations
         proj_arr2d = self.rotate_left(proj_arr2d)
         # reshape to 3d object plane (floor)
@@ -22,6 +24,8 @@ class SumProjection():
         ax = 0
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # transformations
         proj_arr2d = self.rotate_left(proj_arr2d)
         proj_arr2d = self.inverese_vertical(proj_arr2d)
@@ -34,6 +38,8 @@ class SumProjection():
         ax = 1
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # transformations
         proj_arr2d = self.rotate_left(proj_arr2d)
         proj_arr2d = self.inverese_vertical(proj_arr2d)
@@ -46,6 +52,8 @@ class SumProjection():
         ax = 1
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # transformations
         proj_arr2d = self.rotate_left(proj_arr2d)
         # reshape to 3d object plane (floor)
@@ -57,6 +65,8 @@ class SumProjection():
         ax = 2
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # no need for transformations
         # reshape to 3d object plane (floor)
         sh2 = proj_arr2d.shape
@@ -67,6 +77,8 @@ class SumProjection():
         ax = 2
         sh = object3D.body.shape
         proj_arr2d = np.sum(object3D.body, axis=ax)
+        # normalize
+        proj_arr2d /= sh[ax]
         # transformations
         proj_arr2d = self.inverese_horizontal(proj_arr2d)
         # reshape to 3d object plane (floor)

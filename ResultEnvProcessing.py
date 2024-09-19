@@ -17,7 +17,7 @@ class ResultEnvProcessing():
         Fsph = Csph[ir]/Nphotons/shellvolume/mua;
         [1/cm2]
         """
-        resultEnv = propSetup.propEnv
+        resultEnv = propSetup.resultEnv
         if inplace:
             body_pointer = resultEnv.body
         else:
@@ -47,7 +47,7 @@ class ResultEnvProcessing():
         Fsph = Csph[ir]/Nphotons/shellvolume/mua;
         [1/cm2]
         """
-        resultEnv = propSetup.propEnv
+        resultEnv = propSetup.resultEnv
         if inplace:
             body_pointer = resultEnv.body
         else:

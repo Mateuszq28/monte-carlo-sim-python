@@ -354,6 +354,9 @@ class ChartMaker():
 
     @staticmethod
     def heatmap2d(arr: np.ndarray, bins_per_cm, title=None):
+        # WARNING! if it's a sum along axis, remmember to divide by len(of this axis) (average)
+        # do it before giving it to heatmap2d function
+        # hint for debugging: search for this comment and go through function references
         if title is None:
             title = "absorbed fraction"
         extent=[0, arr.shape[1]/bins_per_cm, 0, arr.shape[0]/bins_per_cm]
@@ -390,6 +393,9 @@ class ChartMaker():
 
     @staticmethod
     def heatmap2d_log10(arr: np.ndarray, bins_per_cm, title=None):
+        # WARNING! if it's a sum along axis, remmember to divide by len(of this axis) (average)
+        # do it before giving it to heatmap2d function
+        # hint for debugging: search for this comment and go through function references
         if title is None:
             title = "absorbed fraction"
 
@@ -438,6 +444,9 @@ class ChartMaker():
 
     @staticmethod
     def plot2_heatmap2d(arr1: np.ndarray, arr2: np.ndarray, title1=None, title2=None):
+        # WARNING! if it's a sum along axis, remmember to divide by len(of this axis) (average)
+        # do it before giving it to heatmap2d function
+        # hint for debugging: search for this comment and go through function references
         cmap = cm.get_cmap('viridis', 256)
         fig, axs = plt.subplots(1, 2, constrained_layout=True)
         arrs = [arr1, arr2]
@@ -453,6 +462,9 @@ class ChartMaker():
 
     @staticmethod
     def heatmap2d_(arr: np.ndarray, bins_per_cm):
+        # WARNING! if it's a sum along axis, remmember to divide by len(of this axis) (average)
+        # do it before giving it to heatmap2d function
+        # hint for debugging: search for this comment and go through function references
         fig, ax = plt.subplots(1,1)
 
         # img = ax.imshow(arr, extent=[-1,1,-1,1])
@@ -483,6 +495,7 @@ class ChartMaker():
         if resultEnv is None:
             print("Skipped sum_projections_show_body - resultEnv is None")
         else:
+            # SumProjection functions have already have imlemented normalizing (scaling down) along the face axis (average)
             sump = SumProjection()
             funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
             projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
@@ -503,6 +516,7 @@ class ChartMaker():
         if resultEnv is None:
             print("Skipped sum_projections - resultEnv is None")
         else:
+            # SumProjection functions have already have imlemented normalizing (scaling down) along the face axis (average)
             sump = SumProjection()
             padf = ProjectionArrowsDF()
             funs = [sump.x_high, sump.x_low, sump.y_high, sump.y_low, sump.z_high, sump.z_low]
@@ -563,6 +577,7 @@ class ChartMaker():
             else:
                 connect_lines = None
                 hide_points = False
+            # ProjectionResultRecordsDF functions have already have imlemented normalizing (scaling down) along the face axis (average)
             pDF = ProjectionResultRecordsDF()
             funs = [pDF.x_high, pDF.x_low, pDF.y_high, pDF.y_low, pDF.z_high, pDF.z_low]
             projs_names = ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]

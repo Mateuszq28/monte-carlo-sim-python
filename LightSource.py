@@ -24,7 +24,7 @@ class LightSourcePoint():
 
         # set proba functions
         # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
-        # (seperate random states across LightSourcePoint instances are prefered)
+        # (seperate random states along LightSourcePoint instances are prefered)
         self.featureSampling = FeatureSampling()
         self.probaFun_phi, self.probaFun_theta, self.start_loc_shift_funs = self.proba_fun_decoder(source_type, source_anchor)
 

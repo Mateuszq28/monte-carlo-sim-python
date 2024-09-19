@@ -33,14 +33,14 @@ class Sim():
             # np.random.seed(self.config["random_seed"])
             MyRandom.random_seed_pool = self.config["random_seed"]
             # myRandom is defined in object, not in class, because sim is a object which uses many random numbers
-            # (seperate random states across Sim instances are prefered)
+            # (seperate random states along Sim instances are prefered)
             self.myRandom = MyRandom()
 
             # interface to class, that makes Object3D instances, fills it and saves them to files
             make = Make(self.config)
             # interface to random functions
             # featureSampling is defined in object, not in class, because sim is a object which uses many random numbers
-            # (seperate random states across Sim instances are prefered)
+            # (seperate random states along Sim instances are prefered)
             self.featureSampling = FeatureSampling()
 
             # default paths

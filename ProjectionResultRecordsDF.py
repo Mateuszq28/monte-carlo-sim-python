@@ -39,6 +39,8 @@ class ProjectionResultRecordsDF():
         if sum_axis:
             ColorPointDF.sum_same_idx(df = resultRecordsDF_copy,
                                       subset = ax_lvl_names_active)
+            # normalize - average
+            resultRecordsDF_copy[ax_lvl_names_active] /= input_shape[axis]
         # NEW FASTER METHOD FOR SCANNING
         # find first or last val on the search axis
         if xray == -1:
