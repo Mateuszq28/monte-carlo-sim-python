@@ -4,7 +4,6 @@ import json
 import time
 import shutil
 from datetime import datetime
-from Sim import Sim
 
 
 num_decoder = {
@@ -71,6 +70,7 @@ def test_log(data_dict, filename, iter_start_time, all_runs_start_time):
 
 
 def run_sim():
+    from Sim import Sim # po każdej zmienie kodu trzeba zaimportować od nowa
     # SIMULATION
     sim = Sim()
     sim.start_sim()
