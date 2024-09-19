@@ -366,15 +366,15 @@ class ChartMaker():
         if "x_high" in title:
             xlab = "y [cm]"
             ylab = "z [cm]"
-            title = "Absorpcja (x_high)"
+            title = "Współczynnik fluencji względnej (x_high)"
         if "y_high" in title:
             xlab = "x [cm]"
             ylab = "z [cm]"
-            title = "Absorpcja (y_high)"
+            title = "Współczynnik fluencji względnej (y_high)"
         if "z_high" in title:
             xlab = "x [cm]"
             ylab = "y [cm]"
-            title = "Absorpcja (z_high)"
+            title = "Współczynnik fluencji względnej (z_high)"
         plt.xlabel(xlab)
         plt.ylabel(ylab)
         plt.title(title)
@@ -414,15 +414,15 @@ class ChartMaker():
         if "x_high" in title:
             xlab = "y [cm]"
             ylab = "z [cm]"
-            title = "Absorpcja (x_high)"
+            title = "Współczynnik fluencji względnej (x_high)"
         if "y_high" in title:
             xlab = "x [cm]"
             ylab = "z [cm]"
-            title = "Absorpcja (y_high)"
+            title = "Współczynnik fluencji względnej (y_high)"
         if "z_high" in title:
             xlab = "x [cm]"
             ylab = "y [cm]"
-            title = "Absorpcja (z_high)"
+            title = "Współczynnik fluencji względnej (z_high)"
         plt.xlabel(xlab)
         plt.ylabel(ylab)
         # title = r'$\log_{10}arr$'
