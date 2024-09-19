@@ -2,22 +2,10 @@ import os
 import re
 import json
 import time
+import shutil
 from datetime import datetime
+from Sim import Sim
 
-t1 = { # example
-    "sim_c_filename": "mc456_mc.c",
-    "params_type": "original_params",
-    "n_photons": 10_000,
-
-    "out_log_default_name": "mc456_log.txt",
-    "out_cube_default_name": "mc456_mc_cube.json",
-    "out_log_change_name": "mc456_log_10k_original_params.txt",
-    "out_cube_change_name": "mc456_mc_10k_original_params_cube.json",
-
-    "script_dir": "original_params",
-    "time_wrapper_Dir_id": 1,
-    "time_wrapper_Sim_id": 3
-}
 
 num_decoder = {
     0: "0",
@@ -36,46 +24,17 @@ num_decoder = {
 }
 
 
-def make_test_dict(sim_c_filename, params_type, n_photon):
-    out_log_default_name = sim_c_filename[:-4] + "log.txt"
+def make_test_dict(params_type, n_photon):
     num = num_decoder[n_photon]
-    out_log_change_name = sim_c_filename[:-4] + "log" + "_" + num + "_" + params_type + ".txt"
-
-    if sim_c_filename == "mc456_mc.c":
-        out_cube_default_name = sim_c_filename[:-2] + "_cube.json"
-        out_cube_change_name = sim_c_filename[:-2] + "_" + num + "_" + params_type + "_cube.json"
-    else:
-        out_cube_default_name = None
-        out_cube_change_name = None
-
-    script_dir = "benchmark_sims" if params_type == "my_params" else params_type
-
-    time_wrapper_Sim_id = ["tiny", "small", "mc321", "mc456"].index(sim_c_filename[:-5])
-    time_wrapper_Dir_id = ["benchmark_sims", "original_params"].index(script_dir)
+    experiments_done_subfolder = "t_" + num + "_" + params_type
 
     d = {
-        "sim_c_filename": sim_c_filename,
         "params_type": params_type,
         "n_photons": n_photon,
-
-        "out_log_default_name": out_log_default_name,
-        "out_cube_default_name": out_cube_default_name,
-        "out_log_change_name": out_log_change_name,
-        "out_cube_change_name": out_cube_change_name,
-
-        # --- from time wrapper: ---
-        # sim_names_list = ["tiny", "small", "mc321", "mc456"]
-        # sim_name = sim_names_list[3]
-        # dirs = ["benchmark_sims", "original_params"]
-        # rel_scritpt_dir = dirs[1]
-
-        "script_dir": script_dir,
-        "time_wrapper_Dir_id": time_wrapper_Dir_id,
-        "time_wrapper_Sim_id": time_wrapper_Sim_id
+        "experiments_done_subfolder": experiments_done_subfolder
     }
 
     return d
-
 
 
 # Function to find and replace a line in a file based on a regex pattern
@@ -92,7 +51,6 @@ def replace_line_in_file(file_path, regex_pattern, new_sentence):
                 file.write(new_sentence + '\n')
             else:
                 file.write(line)
-
 
 
 def test_log(data_dict, filename, iter_start_time, all_runs_start_time):
@@ -112,94 +70,95 @@ def test_log(data_dict, filename, iter_start_time, all_runs_start_time):
         json.dump(data_dict, f)
 
 
+def run_sim():
+    # SIMULATION
+    sim = Sim()
+    sim.start_sim()
+    print("simulation calculation time:", sim.simulation_calculation_time)
+    print("boundary check calculation time:", sim.boundary_check_calculation_time)
+
+
+def copy_folder(source_folder, destination_folder):
+    if not os.path.exists(destination_folder):
+        os.makedirs(destination_folder)  # Tworzenie folderu docelowego, jeśli nie istnieje
+
+    # Przechodzimy przez wszystkie pliki i foldery w folderze źródłowym
+    for item in os.listdir(source_folder):
+        source_path = os.path.join(source_folder, item)
+        destination_path = os.path.join(destination_folder, item)
+
+        if os.path.isdir(source_path):
+            # Rekursywnie kopiujemy foldery
+            copy_folder(source_path, destination_path)
+        else:
+            # Kopiujemy pliki, zastępując istniejące
+            shutil.copy2(source_path, destination_path)
+
+
 
 def run():
-    sim_c_filenames = ["mc456_mc.c", "tiny_mc.c", "small_mc.c"]
-    params_types = ["original_params", "my_params"]
-    n_photons = [10**n for n in range(4,9)]
-
-    # small test
-    # sim_c_filenames = ["tiny_mc.c"]
-    # params_types = ["original_params"]
-    # n_photons = [10_000]
+    params_types = ["my_params", "original_params"]
+    n_photons = [10**n for n in range(2,3)]
 
     all_runs_start_time = time.time()
-    for n_photon in n_photons:
-        for sim_c_filename in sim_c_filenames:
-            for params_type in params_types:
-
-                print("iter start")
-                iter_start_time = time.time()
-                # setup dict that describes all features of the test
-                print("make_test_dict")
-                test_dict = make_test_dict(sim_c_filename, params_type, n_photon)
-                print()
-                print("===============================================")
-                print(test_dict['n_photons'])
-                print(test_dict)
-                # path to dir with script
-                print()
-                print("set paths")
-                self_path = os.path.dirname(os.path.abspath(__file__))
-                script_dir = os.path.join(self_path, test_dict['script_dir'])
-                # change nphotons in c source code
-                print("edit n photons in c source code")
-                cfile_path = os.path.join(script_dir, sim_c_filename)
-                exefile_path = os.path.join(script_dir, sim_c_filename[:-1] + "exe")
-                objfile_path = os.path.join(script_dir, sim_c_filename[:-1] + "obj")
-                if sim_c_filename == "tiny_mc.c":
-                    regex_pattern = r".*ID_EDIT_1_1.*"
-                    new_sentence = f"long   i, shell, photons = {n_photon}; /*ID_EDIT_1_1*/"
-                elif sim_c_filename == "small_mc.c":
-                    regex_pattern = r".*ID_EDIT_1_2.*"
-                    new_sentence = f"long   i, photons = {n_photon}; /*ID_EDIT_1_2*/"
-                elif sim_c_filename == "mc456_mc.c":
-                    regex_pattern = r".*ID_EDIT_1_3.*"
-                    new_sentence = f"Nphotons    = {n_photon}; /* set number of photons in simulation */ /*ID_EDIT_1_3*/"
-                else:
-                    print("break!")
-                    print(test_dict)
-                    break
-                replace_line_in_file(cfile_path, regex_pattern, new_sentence)
-                # compile
-                print("compile")
-                print()
-                # /Fe - flag to tell where put .exe output file
-                # /Fo - flag to tell where put .obj output file
-                # /O2 - maximum optimization for speed
-                os.system(f"cl {cfile_path} /Fe{exefile_path} /Fo{objfile_path} /O2")
-                print()
-                # change source code in time wrapper
-                print("change time_wrapper.py")
-                pywrap_path = os.path.join(self_path, "time_wrapper.py")
-                regex_pattern1 = r".*ID_EDIT_2.*"
-                regex_pattern2 = r".*ID_EDIT_3.*"
-                new_sentence1 = f"sim_name = sim_names_list[{ test_dict['time_wrapper_Sim_id'] }] # ID_EDIT_2"
-                new_sentence2 = f"rel_scritpt_dir = dirs[{ test_dict['time_wrapper_Dir_id'] }] # ID_EDIT_3"
-                replace_line_in_file(pywrap_path, regex_pattern1, new_sentence1)
-                replace_line_in_file(pywrap_path, regex_pattern2, new_sentence2)
-                # run using time wrapper
-                print("run in time wrapper")
-                os.system(f"python {pywrap_path}")
-                # rename
-                print("rename")
-                # rename cube.json
-                old_name = test_dict["out_cube_default_name"]
-                new_name = test_dict["out_cube_change_name"]
-                if old_name is not None:
-                    old_name = os.path.join(script_dir, old_name)
-                    new_name = os.path.join(script_dir, new_name)
-                    os.replace(old_name, new_name)
-                # rename log.txt
-                old_name = test_dict["out_log_default_name"]
-                old_name = os.path.join(script_dir, old_name)
-                new_name = test_dict["out_log_change_name"]
-                new_name = os.path.join(script_dir, new_name)
-                os.replace(old_name, new_name)
-                # save state log
-                print("log")
-                test_log(test_dict, "test_wrapper_log.txt", iter_start_time, all_runs_start_time)
-                print("iter done")
+    for params_type in params_types:
+        for n_photon in n_photons:
+            print("iter start")
+            iter_start_time = time.time()
+            # setup dict that describes all features of the test
+            print("make_test_dict")
+            test_dict = make_test_dict(params_type, n_photon)
+            print()
+            print("===============================================")
+            print(test_dict['n_photons'])
+            print(num_decoder[ test_dict['n_photons'] ] + " photons")
+            print(test_dict)
+            # path to dir with script
+            print()
+            print("set paths")
+            self_dir = os.path.dirname(os.path.abspath(__file__))
+            # change nphotons
+            print("edit n photons in source code")
+            make_light_script = os.path.join(self_dir, "Make.py")
+            regex_pattern = r".*ID_EDIT_1.*"
+            new_sentence = f"        lightSource.initialize_source(photon_limit={n_photon}) # ID_EDIT_1"
+            replace_line_in_file(make_light_script, regex_pattern, new_sentence)
+            # setup config file - rename to replace old one
+            print("setup (rename and replace) config file")
+            config_file = "config_" + params_type + ".json"
+            old_name = os.path.join(self_dir, config_file)
+            new_name = os.path.join(self_dir, "config.json")
+            os.replace(old_name, new_name)
+            # run
+            print("run sim")
+            run_sim()
+            # move files to subfolder
+            print("move result and setup files to subfolder")
+            main_out_dir = os.path.join(self_dir, "experiments_done", test_dict["experiments_done_subfolder"])
+                # config.json
+            source_path = os.path.join(self_dir, "config.json")
+            destination_path = os.path.join(main_out_dir, "config.json")
+            shutil.copy2(source_path, destination_path)
+                # envs/*
+            source_folder = os.path.join(self_dir, "envs")
+            destination_folder = os.path.join(main_out_dir, "envs")
+            copy_folder(source_folder, destination_folder)
+                # lightSources/*
+            source_folder = os.path.join(self_dir, "lightSources")
+            destination_folder = os.path.join(main_out_dir, "lightSources")
+            copy_folder(source_folder, destination_folder)
+                # propSetups/*
+            source_folder = os.path.join(self_dir, "propSetups")
+            destination_folder = os.path.join(main_out_dir, "propSetups")
+            copy_folder(source_folder, destination_folder)
+                # resultRecords/*
+            source_folder = os.path.join(self_dir, "resultRecords")
+            destination_folder = os.path.join(main_out_dir, "resultRecords")
+            copy_folder(source_folder, destination_folder)
+            # save state log
+            print("log")
+            test_log(test_dict, "test_wrapper_log.txt", iter_start_time, all_runs_start_time)
+            print("iter done")
                 
 
 
