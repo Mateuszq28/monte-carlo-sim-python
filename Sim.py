@@ -541,4 +541,8 @@ class Sim():
     
 
 
-    
+if __name__ == '__main__':
+    sim = Sim()
+    sim.start_sim()
+    print("simulation calculation time:", sim.simulation_calculation_time)
+    print("boundary check calculation time:", sim.boundary_check_calculation_time)

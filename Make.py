@@ -140,7 +140,7 @@ class Make():
 
     def default_light_source(self):
         lightSource = LightSource(x=1, y=1, z=1)
-        lightSource.initialize_source(photon_limit=100) # ID_EDIT_1
+        lightSource.initialize_source(photon_limit=100000) # ID_EDIT_1
         return lightSource
 
 

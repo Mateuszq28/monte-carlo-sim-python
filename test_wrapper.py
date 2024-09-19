@@ -69,15 +69,6 @@ def test_log(data_dict, filename, iter_start_time, all_runs_start_time):
         json.dump(data_dict, f)
 
 
-def run_sim():
-    from Sim import Sim # po każdej zmienie kodu trzeba zaimportować od nowa
-    # SIMULATION
-    sim = Sim()
-    sim.start_sim()
-    print("simulation calculation time:", sim.simulation_calculation_time)
-    print("boundary check calculation time:", sim.boundary_check_calculation_time)
-
-
 def copy_folder(source_folder, destination_folder):
     if not os.path.exists(destination_folder):
         os.makedirs(destination_folder)  # Tworzenie folderu docelowego, jeśli nie istnieje
@@ -131,7 +122,7 @@ def run():
             shutil.copy2(source_path, destination_path)
             # run
             print("run sim")
-            run_sim()
+            os.system("python Sim.py")
             # move files to subfolder
             print("move result and setup files to subfolder")
             main_out_dir = os.path.join(self_dir, "experiments_done", test_dict["experiments_done_subfolder"])
