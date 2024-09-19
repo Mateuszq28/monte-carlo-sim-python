@@ -1,6 +1,8 @@
 import os
 import re
 import json
+import time
+from datetime import datetime
 
 t1 = { # example
     "sim_c_filename": "mc456_mc.c",
@@ -18,6 +20,11 @@ t1 = { # example
 }
 
 num_decoder = {
+    0: "0",
+    1: "1",
+    10: "10",
+    100: "100",
+    1_000: "1k",
     10_000: "10k",
     100_000: "100k",
     1_000_000: "1mln",
@@ -88,7 +95,19 @@ def replace_line_in_file(file_path, regex_pattern, new_sentence):
 
 
 
-def test_log(data_dict, filename):
+def test_log(data_dict, filename, iter_start_time, all_runs_start_time):
+    datetime_log = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    end_time = time.time()
+    iter_time = str(end_time - iter_start_time) + " seconds"
+    all_runs_time_time = str(end_time - all_runs_start_time) + " seconds"
+    # add to log file
+    data_dict['datetime_log'] = datetime_log
+    data_dict['iter_time'] = iter_time
+    data_dict['all_runs_time_time'] = all_runs_time_time
+    # print
+    print('datetime_log', datetime_log)
+    print('iter_time', iter_time)
+    print('all_runs_time_time', all_runs_time_time)
     with open(filename, 'w') as f:
         json.dump(data_dict, f)
 
@@ -104,12 +123,13 @@ def run():
     # params_types = ["original_params"]
     # n_photons = [10_000]
 
-
+    all_runs_start_time = time.time()
     for n_photon in n_photons:
         for sim_c_filename in sim_c_filenames:
             for params_type in params_types:
 
                 print("iter start")
+                iter_start_time = time.time()
                 # setup dict that describes all features of the test
                 print("make_test_dict")
                 test_dict = make_test_dict(sim_c_filename, params_type, n_photon)
@@ -178,7 +198,7 @@ def run():
                 os.replace(old_name, new_name)
                 # save state log
                 print("log")
-                test_log(test_dict, "test_wrapper_log.txt")
+                test_log(test_dict, "test_wrapper_log.txt", iter_start_time, all_runs_start_time)
                 print("iter done")
                 
 
