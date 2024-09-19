@@ -98,7 +98,7 @@ def copy_folder(source_folder, destination_folder):
 
 def run():
     params_types = ["my_params", "original_params"]
-    n_photons = [10**n for n in range(2,3)]
+    n_photons = [10**n for n in range(4,9)]
 
     all_runs_start_time = time.time()
     for params_type in params_types:
