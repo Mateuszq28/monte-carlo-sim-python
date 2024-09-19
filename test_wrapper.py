@@ -123,12 +123,12 @@ def run():
             regex_pattern = r".*ID_EDIT_1.*"
             new_sentence = f"        lightSource.initialize_source(photon_limit={n_photon}) # ID_EDIT_1"
             replace_line_in_file(make_light_script, regex_pattern, new_sentence)
-            # setup config file - rename to replace old one
-            print("setup (rename and replace) config file")
+            # setup config file - copy and overwrite old one
+            print("setup config file - copy and overwrite old one")
             config_file = "config_" + params_type + ".json"
-            old_name = os.path.join(self_dir, config_file)
-            new_name = os.path.join(self_dir, "config.json")
-            os.replace(old_name, new_name)
+            source_path = os.path.join(self_dir, config_file)
+            destination_path = os.path.join(self_dir, "config.json")
+            shutil.copy2(source_path, destination_path)
             # run
             print("run sim")
             run_sim()
