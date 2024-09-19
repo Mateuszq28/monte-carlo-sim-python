@@ -1,7 +1,7 @@
-# .conda
-# .idea/
-# .vscode/
-# __pycache__/
+.conda
+.idea/
+.vscode/
+__pycache__/
 
 .png
 envs/
