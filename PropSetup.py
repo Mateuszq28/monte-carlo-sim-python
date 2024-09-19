@@ -90,7 +90,7 @@ class PropSetup:
         cdf = ColorPointDF()
         df_material = cdf.from_Object3d(self.propEnv, color_scheme=cs_material, drop_values=[0])
         # df_material['A'] = 20
-        df_photons = cdf.from_Object3d(self.resultEnv, color_scheme=cs_photons, drop_values=[0])
+        df_photons = cdf.from_Object3d(self.resultEnv, color_scheme=cs_photons, drop_values=[0]) # type: ignore
         result_preview_DF = cdf.stack_color_scheme([df_material, df_photons])
         return result_preview_DF
 

@@ -236,7 +236,7 @@ class Cuboid(Material):
         # 0-bottom, 1-back, 2-left, 3-top, 4-front, 5-right
         polygon = self.parallelepiped.convex_polygons[3]
         polygon_points = np.array([[p.x, p.y, p.z] for p in polygon.points])
-        scene.visuals.Mesh(vertices = polygon_points,
+        scene.visuals.Mesh(vertices = polygon_points, # type: ignore
                            faces=None,
                            vertex_colors=None,
                            face_colors=None,
@@ -354,7 +354,7 @@ class Cylinder(Material):
         color = color_array.Color(c, alpha=1.0)
 
         for wall in walls:
-            scene.visuals.Mesh(vertices = wall,
+            scene.visuals.Mesh(vertices = wall, # type: ignore
                                faces=None,
                                vertex_colors=None,
                                face_colors=None,

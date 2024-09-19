@@ -163,7 +163,7 @@ class Object3D():
         for i in range(3):
             if isinstance(float_point[i], float):
                 int_point.append(int(float_point[i] * self.shape[i]))
-            elif isinstance(float_point[i], int) or isinstance(float_point[i], np.int32):
+            elif isinstance(float_point[i], int) or isinstance(float_point[i], np.int32): # type: ignore
                 int_point.append(float_point[i])
             else:
                 print(type(float_point[i]))

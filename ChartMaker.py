@@ -72,11 +72,11 @@ class ChartMaker():
         # TEST DUPLICATES IN RECORDS
         turn_on_test = False
         if turn_on_test:
-            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0])
-            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 20.0])
-            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0])
-            propSetup.resultRecords.insert(0, [300, 0, 0, 0, 30.0])
-            propSetup.resultRecords.insert(0, [200, 0, 0, 0, 5.0])
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0]) # type: ignore
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 20.0]) # type: ignore
+            propSetup.resultRecords.insert(0, [100, 0, 0, 0, 10.0]) # type: ignore
+            propSetup.resultRecords.insert(0, [300, 0, 0, 0, 30.0]) # type: ignore
+            propSetup.resultRecords.insert(0, [200, 0, 0, 0, 5.0]) # type: ignore
 
         
         # SHOW STATISTICS
@@ -120,7 +120,7 @@ class ChartMaker():
 
         # ASSIGN MATERIAL STACK TO ByVispy
         if draw_planes_from_material_stack:
-            ByVispy.material_stack = propSetup.propEnv.material_stack
+            ByVispy.material_stack = propSetup.propEnv.material_stack # type: ignore
 
 
 
@@ -213,8 +213,8 @@ class ChartMaker():
         # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
         #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
-        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv,
-                                   bins_per_cm = propSetup.config["bins_per_1_cm"],
+        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv, # type: ignore
+                                   bins_per_cm = propSetup.config["bins_per_1_cm"], # type: ignore
                                    color_scheme = color_scheme,
                                    show = True,
                                    connect_lines = standard_connect_lines,
@@ -380,13 +380,13 @@ class ChartMaker():
         plt.title(title)
 
         # in past here was arr/1000
-        plt.imshow(arr, cmap='viridis', interpolation="none", extent=extent)
+        plt.imshow(arr, cmap='viridis', interpolation="none", extent=extent) # type: ignore
 
         cb = plt.colorbar(pad=0.010)
         cb.set_label(r'$ 1/cm^2 $')
 
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.window.showMaximized() # type: ignore
 
         plt.show()
 
@@ -428,7 +428,7 @@ class ChartMaker():
         # title = r'$\log_{10}arr$'
         plt.title(title)
 
-        plt.imshow(arr, cmap='viridis', norm="log", interpolation="none", extent=extent)
+        plt.imshow(arr, cmap='viridis', norm="log", interpolation="none", extent=extent) # type: ignore
 
         # cb = plt.colorbar(fraction=0.046, pad=0.04)
         cb = plt.colorbar(pad=0.010)
@@ -436,7 +436,7 @@ class ChartMaker():
         cb.set_label(r'$ 1/cm^2 $')
 
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.window.showMaximized() # type: ignore
         # manager.canvas.toolbar.save_figure()
 
         plt.show()
@@ -688,11 +688,11 @@ class ChartMaker():
     @staticmethod
     def show_statistics(propSetup: PropSetup):
         print("number of generated random numbers IN SIM:", propSetup.generated_num)
-        print("number of seperate random generator instances (MyRandom) IN SIM:", propSetup.random_seed_pool-propSetup.config["random_seed"])
+        print("number of seperate random generator instances (MyRandom) IN SIM:", propSetup.random_seed_pool-propSetup.config["random_seed"]) # type: ignore
         print("len(photon_register)", len(propSetup.photon_register))
-        if propSetup.config['flag_seve_result_records']:
-            print("len(resultRecords)", len(propSetup.resultRecords))
-            ids = set([col[0] for col in propSetup.resultRecords])
+        if propSetup.config['flag_seve_result_records']: # type: ignore
+            print("len(resultRecords)", len(propSetup.resultRecords)) # type: ignore
+            ids = set([col[0] for col in propSetup.resultRecords]) # type: ignore
             print("photons recorded:", len(ids))
             print("max photon_id:", max(ids))
             print("min photon_id:", min(ids))

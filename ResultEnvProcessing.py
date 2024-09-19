@@ -19,9 +19,9 @@ class ResultEnvProcessing():
         """
         resultEnv = propSetup.resultEnv
         if inplace:
-            body_pointer = resultEnv.body
+            body_pointer = resultEnv.body # type: ignore
         else:
-            body_pointer = resultEnv.body.copy()
+            body_pointer = resultEnv.body.copy() # type: ignore
         sum_of_photon_weight_in_observed_area = n_photons * 1.0
         if print_debug:
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
@@ -30,9 +30,9 @@ class ResultEnvProcessing():
         get_mu_a_element_wise = np.vectorize(propSetup.propEnv.get_mu_a)
         arr_of_mu_a = get_mu_a_element_wise(propSetup.propEnv)
         div = arr_of_mu_a * sum_of_photon_weight_in_observed_area * volume_per_bin
-        body_pointer = np.divide(resultEnv.body, div)
+        body_pointer = np.divide(resultEnv.body, div) # type: ignore
         if inplace:
-            resultEnv.body = body_pointer
+            resultEnv.body = body_pointer # type: ignore
             return resultEnv
         else:
             return PropEnv(arr=body_pointer)
@@ -49,18 +49,18 @@ class ResultEnvProcessing():
         """
         resultEnv = propSetup.resultEnv
         if inplace:
-            body_pointer = resultEnv.body
+            body_pointer = resultEnv.body # type: ignore
         else:
-            body_pointer = resultEnv.body.copy()
+            body_pointer = resultEnv.body.copy() # type: ignore
         sum_of_photon_weight_in_observed_area = body_pointer.sum() + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
         get_mu_a_element_wise = np.vectorize(propSetup.propEnv.get_mu_a)
         arr_of_mu_a = get_mu_a_element_wise(propSetup.propEnv)
         div = arr_of_mu_a * sum_of_photon_weight_in_observed_area * volume_per_bin
-        body_pointer = np.divide(resultEnv.body, div)
+        body_pointer = np.divide(resultEnv.body, div) # type: ignore
         if inplace:
-            resultEnv.body = body_pointer
+            resultEnv.body = body_pointer # type: ignore
             return resultEnv
         else:
             return PropEnv(arr=body_pointer)
@@ -78,13 +78,13 @@ class ResultEnvProcessing():
         """
         resultRecords = propSetup.resultRecords
         if not inplace:
-            resultRecords = resultRecords.copy()
+            resultRecords = resultRecords.copy() # type: ignore
         sum_of_photon_weight_in_observed_area = n_photons * 1.0
         if print_debug:
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
             print("escaped_photons_weight:", escaped_photons_weight)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords]
+        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords] # type: ignore
         return resultRecords
     
 
@@ -101,11 +101,11 @@ class ResultEnvProcessing():
         """
         resultRecords = propSetup.resultRecords
         if not inplace:
-            resultRecords = resultRecords.copy()
-        sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)]) + escaped_photons_weight
+            resultRecords = resultRecords.copy() # type: ignore
+        sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)]) + escaped_photons_weight # type: ignore
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords]
+        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords] # type: ignore
         return resultRecords
     
     @staticmethod

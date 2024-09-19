@@ -329,7 +329,7 @@ class MonteCarloSampling():
 
         # 3.5. exp2
         k_const = r'$\mathregular{k = \frac{a^2}{1-e^{-10a}} ,}$' + " "
-        end_tit = "$\mathregular{\/ dla \/ s \/ \in <0, 10>}$"
+        end_tit = "$\mathregular{\/ dla \/ s \/ \in <0, 10>}$" # type: ignore
 
         # 3.5.1. function origin
         k_c = k_const
@@ -379,7 +379,7 @@ class MonteCarloSampling():
         # 3.6. parabola2
         k_const = r'$\mathregular{k = \frac{3}{4\pi^3}} ,}$' + " "
         # k = 3/(4*(math.pi**3))
-        end_tit = "$\mathregular{\/ dla \/ s \/ \in <-\pi, \pi>}$"
+        end_tit = "$\mathregular{\/ dla \/ s \/ \in <-\pi, \pi>}$" # type: ignore
 
         # 3.6.1. function origin
         k_c = k_const
@@ -864,7 +864,7 @@ class FunSampling():
         # n = norm.rvs(loc=loc, scale=scale, size=size)
         n = myRandom.standard_normal(loc=loc, scale=scale, size=size)
         if size == 1:
-            return n[0]
+            return n[0] # type: ignore
         else:
             return n
         

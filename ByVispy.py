@@ -62,7 +62,7 @@ class ByVispy(View):
             colrs = np.concatenate(colrs_list)
 
             # build your visuals, that's all
-            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual) # type: ignore
 
             # The real-things : plot using scene
             # build canvas
@@ -71,8 +71,8 @@ class ByVispy(View):
             # Add a ViewBox to let the user zoom/rotate
             view = canvas.central_widget.add_view()
             view.camera = "turntable"
-            view.camera.fov = 45
-            view.camera.distance = 500
+            view.camera.fov = 45 # type: ignore
+            view.camera.distance = 500 # type: ignore
 
             # plot ! note the parent parameter
             p1 = Scatter3D(parent=view.scene)
@@ -83,10 +83,10 @@ class ByVispy(View):
 
             # Add a 3D axis to keep us oriented
             # Axes are x=red, y=green, z=blue
-            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene) # type: ignore
                 # to enlarge it (scale by affine transformation)
             shape = sorted(object3D.shape)[1]
-            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape)) # type: ignore
             affine = s.as_matrix()
             axis_widget.transform = affine
 
@@ -126,7 +126,7 @@ class ByVispy(View):
                 colors[i] = (i / n, 1.0 - i / n, 0, 0.8)
 
             # build your visuals, that's all
-            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual) # type: ignore
 
             # The real-things : plot using scene
             # build canvas
@@ -135,8 +135,8 @@ class ByVispy(View):
             # Add a ViewBox to let the user zoom/rotate
             view = canvas.central_widget.add_view()
             view.camera = "turntable"
-            view.camera.fov = 45
-            view.camera.distance = 500
+            view.camera.fov = 45 # type: ignore
+            view.camera.distance = 500 # type: ignore
 
             # plot ! note the parent parameter
             p1 = Scatter3D(parent=view.scene)
@@ -145,10 +145,10 @@ class ByVispy(View):
 
             # Add a 3D axis to keep us oriented
             # Axes are x=red, y=green, z=blue
-            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene) # type: ignore
                 # to enlarge it (scale by affine transformation)
             shape = sorted(object3D.shape)[1]
-            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape)) # type: ignore
             affine = s.as_matrix()
             axis_widget.transform = affine
 
@@ -174,7 +174,7 @@ class ByVispy(View):
 
 
             # build your visuals, that's all
-            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual)
+            Scatter3D = scene.visuals.create_visual_node(visuals.MarkersVisual) # type: ignore
 
             # The real-things : plot using scene
             # build canvas
@@ -183,14 +183,14 @@ class ByVispy(View):
             # Add a ViewBox to let the user zoom/rotate
             view = canvas.central_widget.add_view()
             view.camera = "turntable"
-            view.camera.fov = 45
-            view.camera.distance = 500
+            view.camera.fov = 45 # type: ignore
+            view.camera.distance = 500 # type: ignore
 
             # camera rotating point
             max_idx = colorPointDF[['x_idx', 'y_idx', 'z_idx']].max().to_numpy()
             min_idx = colorPointDF[['x_idx', 'y_idx', 'z_idx']].min().to_numpy()
             mid = (min_idx + max_idx) / 2
-            view.camera.center = mid
+            view.camera.center = mid # type: ignore
 
             # plot ! note the parent parameter
             if not hide_points:
@@ -200,10 +200,10 @@ class ByVispy(View):
 
             # Add a 3D axis to keep us oriented
             # Axes are x=red, y=green, z=blue
-            axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+            axis_widget = scene.visuals.XYZAxis(parent=view.scene) # type: ignore
                 # to enlarge it (scale by affine transformation)
             shape = sorted(colorPointDF[['x_idx', 'y_idx', 'z_idx']].max().values)[1]
-            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+            s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape)) # type: ignore
             affine = s.as_matrix()
             axis_widget.transform = affine
 
@@ -229,7 +229,7 @@ class ByVispy(View):
                 arrow_types = ["stealth", "curved", "triangle_30", "triangle_60", "triangle_90", "angle_30", "angle_60", "angle_90", "inhibitor_round"] # len = 9
                 # arrowhead color
                 arrow_arrow_color = arrow_color[0::2]
-                arrows = scene.visuals.Arrow(pos = arrow_pos,
+                arrows = scene.visuals.Arrow(pos = arrow_pos, # type: ignore
                                              color = arrow_color,
                                              parent = view.scene,
                                              width = 1,
@@ -244,13 +244,13 @@ class ByVispy(View):
             # manually added border plane (rectangle)
             flag_draw_plane = False
             if flag_draw_plane:
-                draw_plane = scene.visuals.Plane(width = 1.0,
+                draw_plane = scene.visuals.Plane(width = 1.0, # type: ignore
                                                  height = 1.0,
                                                  direction = '+z',
                                                  color = color_array.Color('white', alpha=1.0),
                                                  edge_color = None,
                                                  parent = view.scene)
-                s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50.5, 50.5, 1))
+                s = visuals.transforms.STTransform(translate=(25.0, 25.0, 49.5), scale=(50.5, 50.5, 1)) # type: ignore
                 affine = s.as_matrix()
                 draw_plane.transform = affine
                 
@@ -276,7 +276,7 @@ class ByVispy(View):
             if put_markers:
                 pos_to_mark = [[18.084844079411813, 9.089343247806013, 27.583690503396138]]
                 pos_to_mark = np.array(pos_to_mark)
-                markers = scene.visuals.Markers(pos = pos_to_mark,
+                markers = scene.visuals.Markers(pos = pos_to_mark, # type: ignore
                                                 size= 3.0,
                                                 # edge_width = 2,
                                                 face_color = color_array.Color('red', alpha=1.0),
@@ -292,7 +292,7 @@ class ByVispy(View):
                     if label not in str_omit:
                         color = dic["print color"]
                         position = np.array(dic["traingles"]).reshape(-1,3)
-                        scene.visuals.Mesh(vertices=position,
+                        scene.visuals.Mesh(vertices=position, # type: ignore
                                            faces=None,
                                            vertex_colors=None,
                                            face_colors=None,
@@ -331,25 +331,25 @@ class ByVispy(View):
         # Add a ViewBox to let the user zoom/rotate
         view = canvas.central_widget.add_view()
         view.camera = "turntable"
-        view.camera.fov = 45
-        view.camera.distance = 500
+        view.camera.fov = 45 # type: ignore
+        view.camera.distance = 500 # type: ignore
 
         # camera rotating point
         mid = [val/2 for val in object3D.shape]
-        view.camera.center = mid
+        view.camera.center = mid # type: ignore
 
 
         # Add a 3D axis to keep us oriented
         # Axes are x=red, y=green, z=blue
-        axis_widget = scene.visuals.XYZAxis(parent=view.scene)
+        axis_widget = scene.visuals.XYZAxis(parent=view.scene) # type: ignore
             # to enlarge it (scale by affine transformation)
         shape = sorted(object3D.shape)[1]
-        s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape))
+        s = visuals.transforms.STTransform(translate=(0, 0, 0), scale=(shape, shape, shape)) # type: ignore
         affine = s.as_matrix()
         axis_widget.transform = affine
 
         
-        scene.visuals.Volume(vol, parent = view.scene)
+        scene.visuals.Volume(vol, parent = view.scene) # type: ignore
                                                         
                                                         
         # run

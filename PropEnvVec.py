@@ -106,7 +106,7 @@ class PropEnvVec(PropEnv):
         alfa = Space3dTools.angle_between_vectors(ray_vec_out, boundary_norm_vec)
         # alfa should be in <0,90> deg
         if alfa > math.pi / 2:
-            boundary_norm_vec = [-val for val in boundary_norm_vec]
+            boundary_norm_vec = [-val for val in boundary_norm_vec] # type: ignore
 
         label_out = self.material_stack[closest_idx].label
         return boundary_pos, boundary_change, boundary_norm_vec, label_in, label_out, None
@@ -129,7 +129,7 @@ class PropEnvVec(PropEnv):
             d = json.load(f)
         propEnv = PropEnvVec()
         propEnv.shape = d["self.shape"]
-        propEnv.material_stack = [load_dump(mat_dump) for mat_dump in d["material_dumps"]]
+        propEnv.material_stack = [load_dump(mat_dump) for mat_dump in d["material_dumps"]] # type: ignore
         return propEnv
 
     # it is the same like in inheritance parent class

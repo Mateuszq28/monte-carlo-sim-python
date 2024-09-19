@@ -51,8 +51,8 @@ class ArrowsDF():
 
     def from_lightSource(self, lightSource: LightSource, lightSource_DF, offset, arrow_length):
         df = pd.DataFrame()
-        loc = np.array([ls.loc_point for ls in lightSource.light_source_list]) + np.array(offset)
-        dir = np.array([ls.dir_vec for ls in lightSource.light_source_list])
+        loc = np.array([ls.loc_point for ls in lightSource.light_source_list]) + np.array(offset) # type: ignore
+        dir = np.array([ls.dir_vec for ls in lightSource.light_source_list]) # type: ignore
         next_loc = loc + dir * arrow_length
         df[["x_idx", "y_idx", "z_idx"]] = loc
         df[["x_idx_2", "y_idx_2", "z_idx_2"]] = next_loc

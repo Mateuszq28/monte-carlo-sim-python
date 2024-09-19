@@ -21,7 +21,7 @@ class PropEnv(Object3D):
             return self.config["global_label_if_ignore_prop_env_labels"]
         xyz_int = self.round_xyz(xyz)
         label = self.body[xyz_int[0], xyz_int[1], xyz_int[2]]
-        return label
+        return label # type: ignore
 
     # Warning! xyz is rounded, so it can return wrong values if photon is near sloping boundary of materials
     def get_properties(self, xyz):

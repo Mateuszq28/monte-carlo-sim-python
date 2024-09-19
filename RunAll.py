@@ -20,11 +20,11 @@ class RunAll():
         # NORMALIZATION OF resultEnv
         # normalize output [photon weight / bin] -> Relative fluence rate [1/cm^2]
         photon_limits_list = propSetup.lightSource.photon_limits_list
-        photon_num = sum(photon_limits_list)
-        bins_per_1_cm = propSetup.config["bins_per_1_cm"] # [N/cm]
+        photon_num = sum(photon_limits_list) # type: ignore
+        bins_per_1_cm = propSetup.config["bins_per_1_cm"] # [N/cm] # type: ignore
         volume_per_bin = (1/bins_per_1_cm)**3
 
-        if propSetup.config["flag_save_result_env"]:
+        if propSetup.config["flag_save_result_env"]: # type: ignore
             # TEST TO DELETE (inplace = False)
             Test.Test_ResultEnvProcessing.are_2_variants_equal_resultEnv(propSetup, photon_num, volume_per_bin, propSetup.escaped_photons_weight)
             # END OF TEST
@@ -33,10 +33,10 @@ class RunAll():
             # HERE NORMALIZATION ON propSetup.resultEnv INPLACE IS DONE
             # NORMALIZATION OF resultRecords
 
-        if propSetup.config["flag_seve_result_records"]:
+        if propSetup.config["flag_seve_result_records"]: # type: ignore
             # TEST TO DELETE (inplace = False)
             sh = propSetup.resultShape
-            borders = [0, sh[0], 0, sh[1], 0, sh[2]]
+            borders = [0, sh[0], 0, sh[1], 0, sh[2]] # type: ignore
             Test.Test_ResultEnvProcessing.are_2_variants_equal_resultRecords(propSetup, photon_num, volume_per_bin, borders, propSetup.escaped_photons_weight)
             # END OF TEST
 

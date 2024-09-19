@@ -1444,7 +1444,7 @@ class Test():
             end_time = time.time()
             print("norm2 calculation time:", end_time-start_time)
 
-            test_result = np.allclose(normal_output_1.body, normal_output_2.body)
+            test_result = np.allclose(normal_output_1.body, normal_output_2.body) # type: ignore
             if not test_result:
                 raise ValueError("Normalize methods are not equal!")
             return test_result
