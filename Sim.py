@@ -265,7 +265,7 @@ class Sim():
             # photon.print_me()
             # print(distance)
 
-            step = [distance * ax for ax in photon.dir]
+            step = [distance * ax for ax in photon.dir] # type: ignore
             next_pos = (np.array(photon.pos) + np.array(step)).tolist()
 
             # check if there was change of a material
@@ -333,7 +333,7 @@ class Sim():
                         # photon.weight *= (1.0-R)
                         photon.pos = boundary_pos
                         photon.dir = refraction_vec
-                        photon.mat_label = label_out
+                        photon.mat_label = label_out # type: ignore
                         self.just_move(photon, min_step)
                         # SET DISTANCE VALUE TO AVOID RECURENTION
                         # self.try_move(photon, rest_dist_refraction)
@@ -366,7 +366,7 @@ class Sim():
                                 # photon weight is not changed
                                 photon.pos = boundary_pos
                                 photon.dir = refraction_vec
-                                photon.mat_label = label_out
+                                photon.mat_label = label_out # type: ignore
                                 self.just_move(photon, min_step)
                                 # SET DISTANCE VALUE TO AVOID RECURENTION
                                 # self.try_move(photon, rest_dist_refraction)
@@ -377,7 +377,7 @@ class Sim():
                             # penetration ray - refraction
                             # new photon to track
                             refraction_photon = Photon(boundary_pos.copy(), refraction_vec, weight=photon.weight*(1.0-R))
-                            refraction_photon.mat_label = label_out
+                            refraction_photon.mat_label = label_out # type: ignore
                             self.propSetup.photon_register[str(refraction_photon.id)] = {"start_pos": self.condition_round(refraction_photon.pos),
                                                                                     "parent": photon.id,
                                                                                     "child": []
