@@ -135,14 +135,14 @@ def run():
             # move files to subfolder
             print("move result and setup files to subfolder")
             main_out_dir = os.path.join(self_dir, "experiments_done", test_dict["experiments_done_subfolder"])
-                # config.json
-            source_path = os.path.join(self_dir, "config.json")
-            destination_path = os.path.join(main_out_dir, "config.json")
-            shutil.copy2(source_path, destination_path)
                 # envs/*
             source_folder = os.path.join(self_dir, "envs")
             destination_folder = os.path.join(main_out_dir, "envs")
             copy_folder(source_folder, destination_folder)
+                # config.json
+            source_path = os.path.join(self_dir, "config.json")
+            destination_path = os.path.join(main_out_dir, "config.json")
+            shutil.copy2(source_path, destination_path)
                 # lightSources/*
             source_folder = os.path.join(self_dir, "lightSources")
             destination_folder = os.path.join(main_out_dir, "lightSources")
