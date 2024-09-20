@@ -449,7 +449,7 @@ class Sim():
 
     def spin_mc321(self, photon: Photon):
         ux, uy, uz = Space3dTools.cart_vec_norm(photon.dir[0], photon.dir[1], photon.dir[2])
-        costheta, sintheta, cosphi, sinphi = photon.fun_get_spin()
+        costheta, sintheta = photon.fun_get_spin()
         # --- New trajectory. ---
         if (1 - abs(uz) <= self.ONE_MINUS_COSZERO): # close to perpendicular.
             uxx = sintheta * cosphi

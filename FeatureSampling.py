@@ -188,17 +188,8 @@ class FeatureSampling():
             temp = (1.0 - g*g)/(1.0 - g + 2*g*rnd)
             costheta = (1.0 + g*g - temp*temp)/(2.0*g)
         sintheta = math.sqrt(1.0 - costheta*costheta)
-        # --- Sample psi. ---
-        rnd2 = self.myRandom_proba_split.uniform_half_open(0.0, 1.0)
-        phi = 2.0*math.pi*rnd2
-        cosphi = math.cos(phi)
-        if (phi < math.pi):
-            # sqrt() is faster than sin().
-            sinphi = math.sqrt(1.0 - cosphi*cosphi)
-        else:
-            # sqrt() is faster than sin().
-            sinphi = -math.sqrt(1.0 - cosphi*cosphi)
-        return costheta, sintheta, cosphi, sinphi
+
+        return costheta, sintheta
             
 
             
