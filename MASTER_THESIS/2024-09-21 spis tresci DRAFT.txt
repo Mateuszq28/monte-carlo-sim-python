@@ -1,3 +1,8 @@
+
+
+WYKAZ WAŻNIEJSZYCH OZNACZEŃ I SKRÓTÓW
+
+
 Wstęp i cel pracy
 
 Wstęp teoretyczny
@@ -14,6 +19,6 @@ Metodologia
     jakie eksperymenty przeprowadzono? Jakie dane zebrano?
     
     W jaki sposób porównano wyniki
-    
+
 Analiza i dyskusja uzyskanych wyników
 Podsumowanie
