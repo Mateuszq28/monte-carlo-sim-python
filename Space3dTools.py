@@ -69,6 +69,13 @@ class Space3dTools():
         n = np.array(normal_vec)
         n = n / np.linalg.norm(n)
         r = n1/n2
+        # (Incident vec) inner product (normal vec) = |Incident vec||normal vec|cos(alpha)
+        # alpha = theta + 180
+        # cos(alpha) = cos(theta + 180) = -cos(theta)
+        # cos(theta) = -cos(alpha)
+        # c = cos(theta) = -cos(alpha) = -((Incident vec) inner product (normal vec))/(|Incident vec||normal vec|)
+        # vectors are normalized, so |Incident vec||normal vec| = 1
+        # c = cos(theta) = -cos(alpha) = -((Incident vec) inner product (normal vec))
         c = -np.dot(n,l)
         refraction = r*l + (r*c - math.sqrt(1 - r**2 * (1 - c**2))) * n
         return refraction.tolist()
