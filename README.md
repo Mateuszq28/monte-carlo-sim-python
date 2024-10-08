@@ -10,7 +10,7 @@ and then install (file for python 11):
 ```shell
 conda install win-64/conda-build-3.26.1-py311haa95532_0.tar.bz2
 ```
-Quick start: class RunAll.py and Sim.py
+Quick start: classes RunAll.py and Sim.py
 
 # Statistics
 number of python files: 30</br>
