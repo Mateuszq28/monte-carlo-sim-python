@@ -1,10 +1,10 @@
 # monte-carlo-sim-python
 
-<a href="#polish_lang">Polski<a/>
+<a href="#polish_lang">Polish<a/>
 <a href="#english_lang">English<a/>
 
 ## Polski
-<id="polish_lang">
+<span id="polish_lang"></span>
 
 Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry.
 
@@ -72,7 +72,7 @@ ls | grep \'.py^' |xargs wc -l
 ```
 
 ## English
-<id="english_lang">
+<span id="english_lang"></span>
 
 Light simulation in 3D tissue using Monte Carlo method
 
