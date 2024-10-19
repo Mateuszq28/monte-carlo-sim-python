@@ -10,7 +10,7 @@
 ## Polish
 <span id="polish_lang"></span>
 
-Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry. \
+Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry.
 
 #### Powiązane projekty
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - symulacja światła, moduł wizualizacji ścieżki fotonów w 3D (za pomocą Vispy)
