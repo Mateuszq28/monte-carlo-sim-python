@@ -173,10 +173,10 @@ ls | grep \'.py^' |xargs wc -l
 <i>Diagram modułu wizualizacji</i><br/>
 <i>Visualization module diagram</i></p><br/>
 
-<p align="center"><img src="readme_img/photon_register_100.jpg" alt="100 fotonów" align="center"><br/>
+<p align="center"><img src="readme_img/photon_register_100.png" alt="100 fotonów" align="center"><br/>
 <i>100 fotonów</i><br/>
 <i>100 photons</i></p><br/>
 
-<p align="center"><img src="readme_img/multilayer_photon_register_100.jpg" alt="Naświetlanie tkanki z żyłą - 100 fotonów" align="center"><br/>
+<p align="center"><img src="readme_img/multilayer_photon_register_100.png" alt="Naświetlanie tkanki z żyłą - 100 fotonów" align="center"><br/>
 <i>Naświetlanie tkanki z żyłą - 100 fotonów</i><br/>
 <i>Irradiation of tissue with vein - 100 photons</i></p><br/>
