@@ -1,6 +1,6 @@
 # monte-carlo-sim-python
 
-<p align="center"><img src="readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
+<p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
 <i>wizualizacja ścieżki fotonów w tkance naskórka</i><br/>
 <i>photon path visualization on epidermis tissue</i></p><br/>
 
@@ -158,3 +158,25 @@ ls | grep \'.py^' |xargs wc -l
 17 View.py
 9184 total
 ```
+
+## Galeria / Gallery
+
+<p align="center"><img src="readme_img/diagram-drawio-sim.jpg" alt="Diagram klas" align="center"><br/>
+<i>Diagram klas</i><br/>
+<i>Class Diagram</i></p><br/>
+
+<p align="center"><img src="readme_img/diagram-generatory.jpg" alt="Diagram interfejsu generatorów" align="center"><br/>
+<i>Diagram interfejsu generatorów</i><br/>
+<i>Generators interface diagram</i></p><br/>
+
+<p align="center"><img src="readme_img/diagram-wizualizacja.jpg" alt="Diagram modułu wizualizacji" align="center"><br/>
+<i>Diagram modułu wizualizacji</i><br/>
+<i>Visualization module diagram</i></p><br/>
+
+<p align="center"><img src="readme_img/photon_register_100.jpg" alt="100 fotonów" align="center"><br/>
+<i>100 fotonów</i><br/>
+<i>100 photons</i></p><br/>
+
+<p align="center"><img src="readme_img/multilayer_photon_register_100.jpg" alt="Naświetlanie tkanki z żyłą - 100 fotonów" align="center"><br/>
+<i>Naświetlanie tkanki z żyłą - 100 fotonów</i><br/>
+<i>Irradiation of tissue with vein - 100 photons</i></p><br/>
