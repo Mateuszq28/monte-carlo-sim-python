@@ -33,6 +33,9 @@ i uruchomienia przykładu:
 python RunAll.py
 ```
 
+### "U mnie działa"
+Jeśli możesz uruchomić ten projekt, po pomyślnej instalacji dodaj pull request z zainstalowanym środowiskiem - zrzutem listy pakietów - do folderu requirements_that_worked. Pomoże to nam w utrzymywaniu projektu, a innym użytkownikom w instalacji.
+
 ### Statistics
 number of python files: 31</br>
 number of classes: 41</br>
@@ -99,6 +102,9 @@ and try an example:
 ```shell
 python RunAll.py
 ```
+
+### Requirements that worked
+If you can run this project, after successful instalation, please add a pull request with your environment installed package list dump into requirements_that_worked folder. It will help us to maintain the project and the other users to run.
 
 ### Statistics
 number of python files: 31</br>

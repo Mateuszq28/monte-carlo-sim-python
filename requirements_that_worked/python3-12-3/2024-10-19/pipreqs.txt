@@ -1,0 +1,10 @@
+pipreqs.txt
+# how to make
+pipreqs --savepath pipreqs.txt .
+# how to install from
+pip install -r pipreqs.txt
+# =====================================================================
+
+
+
+
