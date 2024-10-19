@@ -1,10 +1,14 @@
 # monte-carlo-sim-python
 
+<a href="#polish_lang">Polski<a/>
+<a href="#english_lang">English<a/>
+
 ## Polski
+<id="polish_lang">
 
 Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry.
 
-przygotowanie środowiska
+### Przygotowanie środowiska
 
 ```shell
 conda install PyOpenGL tabulate opencv matplotlib pillow vispy scipy numpy pandas Geometry3D tqdm
@@ -26,7 +30,7 @@ przykład
 python RunAll.py
 ```
 
-# Statistics
+### Statistics
 number of python files: 31</br>
 number of classes: 41</br>
 lines of code: 9184</br>
@@ -68,10 +72,11 @@ ls | grep \'.py^' |xargs wc -l
 ```
 
 ## English
+<id="english_lang">
 
 Light simulation in 3D tissue using Monte Carlo method
 
-preparing the environment
+### preparing the environment
 
 ```shell
 conda install PyOpenGL tabulate opencv matplotlib pillow vispy scipy numpy pandas Geometry3D tqdm
@@ -93,7 +98,7 @@ example
 python RunAll.py
 ```
 
-# Statistics
+### Statistics
 number of python files: 31</br>
 number of classes: 41</br>
 lines of code: 9184</br>
