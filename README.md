@@ -3,7 +3,7 @@
 <a href="#polish_lang">Polish<a/>
 <a href="#english_lang">English<a/>
 
-## Polski
+## Polish
 <span id="polish_lang"></span>
 
 Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry.
