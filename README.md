@@ -1,8 +1,8 @@
 # monte-carlo-sim-python
 
-<img src="readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
-<i align="center">wizualizacja ścieżki fotonów w tkance naskórka</i>
-<i align="center">photon path visualization on epidermis tissue</i>
+<p align="center"><img src="readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center">><br/>
+<i>wizualizacja ścieżki fotonów w tkance naskórka</i><br/>
+<i>photon path visualization on epidermis tissue</i></p><br/>
 
 <a href="#polish_lang">Polish<a/>
 <a href="#english_lang">English<a/>
