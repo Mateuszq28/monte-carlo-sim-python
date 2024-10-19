@@ -22,9 +22,8 @@ a następnie zainstalować (plik dla python 11):
 conda install win-64/conda-build-3.26.1-py311haa95532_0.tar.bz2
 ```
 
-*Szybki start:* przegląd zacząć od klas RunAll.py and Sim.py
-
-przykład
+*Szybki start:* przegląd zacząć od klas RunAll.py and Sim.py \
+i uruchomienia przykładu
 
 ```shell
 python RunAll.py
@@ -90,9 +89,8 @@ and then install (file for python 11):
 conda install win-64/conda-build-3.26.1-py311haa95532_0.tar.bz2
 ```
 
-*Quick start:* read classes RunAll.py and Sim.py
-
-example
+*Quick start:* read classes RunAll.py and Sim.py \
+and try an example
 
 ```shell
 python RunAll.py
