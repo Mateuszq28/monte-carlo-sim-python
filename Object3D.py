@@ -205,12 +205,13 @@ class Object3D():
         rnd = Object3D.myRandom
 
         # fill in loop
-        for i in range(start_pi[0], end_pi[0]):
-            for j in range(start_pi[1], end_pi[1]):
-                for k in range(start_pi[2], end_pi[2]):
-                    if random_fill:
-                        fill = rnd.uniform_half_open(0.0, 1.0)
-                    self.body[i, j, k] = fill
+        # for i in range(start_pi[0], end_pi[0]):
+        #     for j in range(start_pi[1], end_pi[1]):
+        #         for k in range(start_pi[2], end_pi[2]):
+        #             if random_fill:
+        #                 fill = rnd.uniform_half_open(0.0, 1.0)
+        #             self.body[i, j, k] = fill
+        self.body[start_pi[0]:end_pi[0], start_pi[1]:end_pi[1], start_pi[2]:end_pi[2]] = fill
 
         self.analize_materials()
         

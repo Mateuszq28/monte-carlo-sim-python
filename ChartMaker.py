@@ -126,8 +126,8 @@ class ChartMaker():
 
 
         # SHOW JUST BOUNDARY PLANES + LIGHT SOURCE
-        # ChartMaker.show_empty_simulation_preview_DF(propSetup = propSetup,
-        #                                             cs_light_source="solid")
+        ChartMaker.show_empty_simulation_preview_DF(propSetup = propSetup,
+                                                    cs_light_source="solid")
 
         # MAKE AND SHOW OBJECT THAT CONTAIN MATERIAL LABELS + MARKED LIGHT SOURCES LOCATIONS
         # ChartMaker.show_simulation_preview_DF(propSetup = propSetup,
@@ -152,57 +152,57 @@ class ChartMaker():
         
 
         # SHOW RESULT RECORDS
-        # sl = list(range(10,20)) + list(range(30,40))
-        # sl = list(range(10,15))
-        # sl = None
-        # sl = [4, 48]
-        # sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
-        # sl = list(range(0,100))
-        # sl = [0,1]
-        # sh = propSetup.propEnv.shape
-        # border_limits = None
-        # border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
+        sl = list(range(10,20)) + list(range(30,40))
+        sl = list(range(10,15))
+        sl = None
+        sl = [4, 48]
+        sl = list(range(0,100))
+        sl = [0,1]
+        sl = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+        sh = propSetup.propEnv.shape
+        border_limits = None
+        border_limits = [0, sh[0], 0, sh[1], 0, sh[2]]
 
-        # select_photon_id = [97, 98]
-        # very_close_photons = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
-        # select_photon_id = very_close_photons
-        # select_photon_id = sl
-        # select_photon_id = None
-        # local_color_scheme = "loop"
-        # local_color_scheme = "photonwise"
-        # ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-        #                               title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
-        #                               color_scheme = local_color_scheme,
-        #                               select_photon_id = select_photon_id,
-        #                               photon_register = propSetup.photon_register,
-        #                               select_parent = True,
-        #                               select_child = True,
-        #                               border_limits = border_limits,
-        #                               sum_same_idx = False,
-        #                               do_connect_lines = do_connect_lines,
-        #                               color_points_by_root = color_points_by_root,
-        #                               color_arrows_by_root = color_arrows_by_root)
+        select_photon_id = [97, 98]
+        very_close_photons = [0, 16, 22, 38, 50, 68, 75, 78, 79, 91, 97, 98]
+        select_photon_id = very_close_photons
+        select_photon_id = None
+        select_photon_id = sl
+        local_color_scheme = "loop"
+        local_color_scheme = "photonwise"
+        ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+                                      title = "Absorbed energy in volume - color_scheme = " + local_color_scheme,
+                                      color_scheme = local_color_scheme,
+                                      select_photon_id = select_photon_id,
+                                      photon_register = propSetup.photon_register,
+                                      select_parent = True,
+                                      select_child = True,
+                                      border_limits = border_limits,
+                                      sum_same_idx = False,
+                                      do_connect_lines = do_connect_lines,
+                                      color_points_by_root = color_points_by_root,
+                                      color_arrows_by_root = color_arrows_by_root)
 
         
 
-        # if sl is not None:
-        #     take_group = 1
-        #     for i in range(len(sl)+1-take_group):
-        #         select_photon_id = sl[i:i+take_group]
-        #         select_photon_id = [sl[i]]
-        #         local_color_scheme = "photonwise"
-        #         ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
-        #                                       title = "({}) one photon path - color_scheme = ".format(i) + local_color_scheme,
-        #                                       color_scheme = local_color_scheme,
-        #                                       select_photon_id = select_photon_id,
-        #                                       photon_register = propSetup.photon_register,
-        #                                       select_parent = True,
-        #                                       select_child = True,
-        #                                       border_limits = border_limits,
-        #                                       sum_same_idx = False,
-        #                                       do_connect_lines = do_connect_lines,
-        #                                       color_points_by_root = color_points_by_root,
-        #                                       color_arrows_by_root = color_arrows_by_root)
+        if sl is not None:
+            take_group = 1
+            sl = sl[:3]
+            for i in range(len(sl)+1-take_group):
+                select_photon_id = sl[i:i+take_group]
+                local_color_scheme = "photonwise"
+                ChartMaker.show_resultRecords(resultRecords = propSetup.resultRecords,
+                                              title = "({}) one photon path - color_scheme = ".format(i) + local_color_scheme,
+                                              color_scheme = local_color_scheme,
+                                              select_photon_id = select_photon_id,
+                                              photon_register = propSetup.photon_register,
+                                              select_parent = True,
+                                              select_child = True,
+                                              border_limits = border_limits,
+                                              sum_same_idx = False,
+                                              do_connect_lines = do_connect_lines,
+                                              color_points_by_root = color_points_by_root,
+                                              color_arrows_by_root = color_arrows_by_root)
         
 
 
@@ -213,12 +213,14 @@ class ChartMaker():
         # ChartMaker.sum_projections_show_body(resultEnv = propSetup.resultEnv,
         #                                      bins_per_cm = propSetup.config["bins_per_1_cm"])
         # new
-        ChartMaker.sum_projections(resultEnv = propSetup.resultEnv, # type: ignore
-                                   bins_per_cm = propSetup.config["bins_per_1_cm"], # type: ignore
-                                   color_scheme = color_scheme,
-                                   show = True,
-                                   connect_lines = standard_connect_lines,
-                                   hide_points = standard_hide_points)
+        # local_color_scheme = color_scheme
+        # local_color_scheme = "logarithmic"
+        # ChartMaker.sum_projections(resultEnv = propSetup.resultEnv, # type: ignore
+        #                            bins_per_cm = propSetup.config["bins_per_1_cm"], # type: ignore
+        #                            color_scheme = local_color_scheme,
+        #                            show = True,
+        #                            connect_lines = standard_connect_lines,
+        #                            hide_points = standard_hide_points)
 
 
 
@@ -230,6 +232,7 @@ class ChartMaker():
         # drop_values = None
         # local_reset_colors = local_color_scheme
         # local_reset_colors = None
+        # local_reset_colors = "logarithmic"
         # ChartMaker.projections_from_resultRecords(resultRecords = propSetup.resultRecords,
         #                                           input_shape = sh,
         #                                           color_scheme = local_color_scheme,

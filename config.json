@@ -11,7 +11,7 @@
     "alternative_prop_setup_path": "",
 
     "flag_make_prop_setup_from_componentes": false,
-    "flag_use_propenv_on_formulas": true,
+    "flag_use_propenv_on_formulas": false,
     "flag_ignore_prop_env_labels": true,
     "global_label_if_ignore_prop_env_labels": 4,
 
@@ -23,7 +23,7 @@
     "recurention_if_split": false,
 
     "flag_result_records_pos_int": false,
-    "flag_seve_result_records": false,
+    "flag_seve_result_records": true,
     "flag_save_result_env": true,
 
 

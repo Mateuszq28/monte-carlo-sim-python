@@ -99,13 +99,13 @@ class RunAll():
         take_cs = color_scheme_list
         take_cs.remove("photonwise")
         take_cs = ["min-max", "heatmap min-max", "heatmap trans-normal"]
-        take_cs = ["photonwise"]
         take_cs = ["heatmap trans-normal", "heatmap min-max"]
         take_cs = ["heatmap logarithmic"]
+        take_cs = ["photonwise"]
 
-        do_connect_lines_list = [True]
         do_connect_lines_list = [True, False]
         do_connect_lines_list = [False]
+        do_connect_lines_list = [True]
 
 
 
@@ -121,7 +121,7 @@ class RunAll():
                                     color_points_by_root = False,
                                     color_arrows_by_root = False,
                                     do_triangled_planes = False,
-                                    draw_planes_from_material_stack = True,
+                                    draw_planes_from_material_stack = False,
                                     use_triangled_planes_from_file = USE_TRIANGLED_PLANES_FROM_FILE)
 
 

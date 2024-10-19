@@ -7,6 +7,22 @@ class ResultEnvProcessing():
     def __init__(self):
         pass
 
+
+    @staticmethod
+    def get_mu_a_element_wise(propEnv: PropEnv, config):
+        label_arr = propEnv.body
+        label_arr = np.asarray(label_arr)
+        # Function to map the array elements using the dictionary
+        def translate(val):
+            # Returns the original value if not found in dict
+            return config["tissue_properties"][str(val)]["mu_a"]
+        # Vectorize the function to apply it to all elements
+        translate_vectorized = np.vectorize(translate)
+        # Apply translation
+        mua_arr = translate_vectorized(label_arr)
+        return mua_arr
+
+
     @staticmethod
     def normalize_resultEnv(propSetup: PropSetup, n_photons, volume_per_bin, escaped_photons_weight, inplace=True, print_debug=False):
         """
@@ -27,8 +43,7 @@ class ResultEnvProcessing():
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
             print("escaped_photons_weight:", escaped_photons_weight)
-        get_mu_a_element_wise = np.vectorize(propSetup.propEnv.get_mu_a)
-        arr_of_mu_a = get_mu_a_element_wise(propSetup.propEnv)
+        arr_of_mu_a = ResultEnvProcessing.get_mu_a_element_wise(propSetup.propEnv, propSetup.config)
         div = arr_of_mu_a * sum_of_photon_weight_in_observed_area * volume_per_bin
         body_pointer = np.divide(resultEnv.body, div) # type: ignore
         if inplace:
@@ -55,8 +70,7 @@ class ResultEnvProcessing():
         sum_of_photon_weight_in_observed_area = body_pointer.sum() + escaped_photons_weight
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
-        get_mu_a_element_wise = np.vectorize(propSetup.propEnv.get_mu_a)
-        arr_of_mu_a = get_mu_a_element_wise(propSetup.propEnv)
+        arr_of_mu_a = ResultEnvProcessing.get_mu_a_element_wise(propSetup.propEnv, propSetup.config)
         div = arr_of_mu_a * sum_of_photon_weight_in_observed_area * volume_per_bin
         body_pointer = np.divide(resultEnv.body, div) # type: ignore
         if inplace:
@@ -64,6 +78,14 @@ class ResultEnvProcessing():
             return resultEnv
         else:
             return PropEnv(arr=body_pointer)
+        
+
+    @staticmethod
+    def normalize_one_photon_record(propEnv: PropEnv, xyz, val, sum_of_photon_weight_in_observed_area, volume_per_bin):
+        if propEnv.env_boundary_check(xyz):
+            return val
+        else:
+            return val / (sum_of_photon_weight_in_observed_area * volume_per_bin * propEnv.get_mu_a(xyz))
         
 
     @staticmethod
@@ -84,7 +106,7 @@ class ResultEnvProcessing():
             print("norm1 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
             print("n_photons:", n_photons)
             print("escaped_photons_weight:", escaped_photons_weight)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords] # type: ignore
+        resultRecords = [col[:4] + [ResultEnvProcessing.normalize_one_photon_record(propSetup.propEnv, col[1:4], col[4], sum_of_photon_weight_in_observed_area, volume_per_bin)] for col in resultRecords] # type: ignore
         return resultRecords
     
 
@@ -105,7 +127,7 @@ class ResultEnvProcessing():
         sum_of_photon_weight_in_observed_area = sum([col[4] for col in resultRecords if ResultEnvProcessing.is_in_borders(col, borders)]) + escaped_photons_weight # type: ignore
         if print_debug:
             print("norm2 sum_of_photon_weight_in_observed_area:", sum_of_photon_weight_in_observed_area)
-        resultRecords = [col[:4] + [col[4] / (sum_of_photon_weight_in_observed_area * volume_per_bin * propSetup.propEnv.get_mu_a(col[1:4]))] for col in resultRecords] # type: ignore
+        resultRecords = [col[:4] + [ResultEnvProcessing.normalize_one_photon_record(propSetup.propEnv, col[1:4], col[4], sum_of_photon_weight_in_observed_area, volume_per_bin)] for col in resultRecords] # type: ignore
         return resultRecords
     
     @staticmethod

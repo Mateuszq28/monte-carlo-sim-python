@@ -164,7 +164,7 @@ class Sim():
         ls = self.propSetup.lightSource.light_source_list
         if photon_limits_list is not None:
             for i in range(len(photon_limits_list)):
-                print("lightSource {i} progress:")
+                print(f"lightSource {i} progress:")
                 for _ in tqdm(range(photon_limits_list[i])):
                     if ls is not None:
                         # local coordiantes
