@@ -1,5 +1,9 @@
 # monte-carlo-sim-python
 
+<img src="readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
+<p align="center"><i>wizualizacja ścieżki fotonów w tkance naskórka</i></p><br/>
+<p align="center"><i>photon path visualization on epidermis tissue</i></p><br/>
+
 <a href="#polish_lang">Polish<a/>
 <a href="#english_lang">English<a/>
 
@@ -23,7 +27,7 @@ conda install win-64/conda-build-3.26.1-py311haa95532_0.tar.bz2
 ```
 
 *Szybki start:* przegląd zacząć od klas RunAll.py and Sim.py \
-i uruchomienia przykładu
+i uruchomienia przykładu:
 
 ```shell
 python RunAll.py
@@ -90,7 +94,7 @@ conda install win-64/conda-build-3.26.1-py311haa95532_0.tar.bz2
 ```
 
 *Quick start:* read classes RunAll.py and Sim.py \
-and try an example
+and try an example:
 
 ```shell
 python RunAll.py

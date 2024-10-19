@@ -4,6 +4,7 @@
 __pycache__/
 
 .png
+!readme_img.png
 envs/
 lightSources/
 propSetups/
