@@ -10,7 +10,7 @@ author: Mateusz Miler<br/>
 <p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
 <i>photon path visualization on epidermis tissue</i></p><br/>
 
-#### Related projects
+### Related projects
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - light simulation and 3D photon path visualization module (using Vispy)
 - [monte-carlo-sim-benchmark](https://github.com/Mateuszq28/monte-carlo-sim-benchmark) - adapted example simulations from literature (tiny, small, mc321), saving to a uniform "CUBES.json" format, post-processing and normalization, generating comparative tables, graphs, heat maps, 3D visualizations of orthogonal heat maps
 - [monte-carlo-sim-tables](https://github.com/Mateuszq28/monte-carlo-sim-tables) - tables with statistics of photon transport distributions for the conducted experiments
@@ -81,7 +81,7 @@ ls | grep \'.py^' |xargs wc -l
 9184 total
 ```
 
-## Gallery
+### Gallery
 
 <p align="center"><img src="readme_img/diagram-drawio-sim.jpg" alt="Diagram klas" align="center"><br/>
 <i>Class Diagram</i></p><br/>
