@@ -16,7 +16,7 @@ author: Mateusz Miler<br/>
 - [monte-carlo-sim-tables](https://github.com/Mateuszq28/monte-carlo-sim-tables) - tables with statistics of photon transport distributions for the conducted experiments
 - [CUBES](https://1drv.ms/f/c/7871da7edeb06dcc/Ei70d6guE4lBgMsf6FgGbJsBUcYmqrgZFZZxBHvQeMgqBQ) - results of the most important experiments saved in the unified CUBE.json format
 
-### preparing the environment
+### Preparing the environment
 
 ```shell
 conda install PyOpenGL tabulate opencv matplotlib pillow vispy scipy numpy pandas Geometry3D tqdm
