@@ -1,6 +1,6 @@
 <h1 align="center">monte-carlo-sim-python</h1>
 <p align="center">
-*Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry*\
+<i>Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry</i><br/>
 <a href="./README.md">Polish<a/>
 <a href="./readme_eng.md">English<a/>
 </p><br/>
