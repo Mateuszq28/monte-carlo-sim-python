@@ -1,6 +1,6 @@
+<h1 align="center">monte-carlo-sim-python</h1>
 <p align="center">
-# monte-carlo-sim-python
-*Light simulation in 3D tissue using Monte Carlo method*
+<i>Light simulation in 3D tissue using Monte Carlo method</i><br/>
 <a href="./README.md">Polish<a/>
 <a href="./readme_eng.md">English<a/>
 </p><br/>
