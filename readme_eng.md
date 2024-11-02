@@ -1,11 +1,12 @@
+<p align="center">
 # monte-carlo-sim-python
 *Light simulation in 3D tissue using Monte Carlo method*
+<a href="./README.md">Polish<a/>
+<a href="./readme_eng.md">English<a/>
+</p><br/>
 
 <p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
 <i>photon path visualization on epidermis tissue</i></p><br/>
-
-<a href="./README.md">Polish<a/>
-<a href="./readme_eng.md">English<a/>
 
 #### Related projects
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - light simulation and 3D photon path visualization module (using Vispy)

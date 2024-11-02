@@ -1,11 +1,12 @@
+<p align="center">
 # monte-carlo-sim-python
 *Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry*
+<a href="./README.md">Polish<a/>
+<a href="./readme_eng.md">English<a/>
+</p><br/>
 
 <p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
 <i>wizualizacja ścieżki fotonów w tkance naskórka</i><br/>
-
-<a href="./README.md">Polish<a/>
-<a href="./readme_eng.md">English<a/>
 
 #### Powiązane projekty
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - własna implementacja symulacji światła, moduł wizualizacji ścieżki przemieszczania się fotonów w 3D (za pomocą Vispy)
