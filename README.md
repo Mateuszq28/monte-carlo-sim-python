@@ -8,7 +8,7 @@ autor: Mateusz Miler<br/>
 </p><br/>
 
 <p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
-<i>wizualizacja ścieżki fotonów w tkance naskórka</i><br/>
+<i>Wizualizacja ścieżki ruchu 10 fotonów w tkance naskórka</i><br/>
 
 ### Powiązane projekty
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - własna implementacja symulacji światła, moduł wizualizacji ścieżki przemieszczania się fotonów w 3D (za pomocą Vispy)
@@ -169,7 +169,7 @@ ls | grep \'.py^' |xargs wc -l
 <i>Diagram modułu wizualizacji</i><br/>
 
 <p align="center"><img src="readme_img/photon_register_100.png" alt="100 fotonów" align="center"><br/>
-<i>100 fotonów</i><br/>
+<i>Wizualizacja ścieżki ruchu 100 fotonów</i><br/>
 
 <p align="center"><img src="readme_img/multilayer_photon_register_100.png" alt="Naświetlanie tkanki z żyłą - 100 fotonów" align="center"><br/>
-<i>Naświetlanie tkanki z żyłą - 100 fotonów</i><br/>
+<i>Strumień 100 fotonów skierowany na tkankę z naczyniem krwionośnym</i><br/>

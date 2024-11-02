@@ -8,7 +8,7 @@ author: Mateusz Miler<br/>
 </p><br/>
 
 <p align="center"><img src="readme_img/readme_img.jpg" alt="photon path visualization on epidermis tissue" align="center"><br/>
-<i>photon path visualization on epidermis tissue</i></p><br/>
+<i>Visualization of the 10-photon motion path on epidermal tissue</i></p><br/>
 
 ### Related projects
 - [monte-carlo-sim-python](https://github.com/Mateuszq28/monte-carlo-sim-python) - light simulation and 3D photon path visualization module (using Vispy)
@@ -93,7 +93,7 @@ ls | grep \'.py^' |xargs wc -l
 <i>Visualization module diagram</i></p><br/>
 
 <p align="center"><img src="readme_img/photon_register_100.png" alt="100 fotonów" align="center"><br/>
-<i>100 photons</i></p><br/>
+<i>Visualization of the motion path of 100 photons</i></p><br/>
 
 <p align="center"><img src="readme_img/multilayer_photon_register_100.png" alt="Naświetlanie tkanki z żyłą - 100 fotonów" align="center"><br/>
-<i>Irradiation of tissue with vein - 100 photons</i></p><br/>
+<i>A beam of 100 photons directed at tissue with a blood vessel</i></p><br/>
