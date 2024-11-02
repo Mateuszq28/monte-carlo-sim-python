@@ -81,7 +81,7 @@ ls | grep \'.py^' |xargs wc -l
 9184 total
 ```
 
-### Gallery
+<h2 align="center">Gallery</h1>
 
 <p align="center"><img src="readme_img/diagram-drawio-sim.jpg" alt="Diagram klas" align="center"><br/>
 <i>Class Diagram</i></p><br/>
