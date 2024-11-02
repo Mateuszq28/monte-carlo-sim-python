@@ -1,6 +1,8 @@
 <h1 align="center">monte-carlo-sim-python</h1>
 <p align="center">
 <i>Symulacja światła Metodą Monte Carlo w trójwymiarowej tkance skóry</i><br/>
+własna implementacja<br/>
+autor: Mateusz Miler<br/>
 <a href="./README.md">Polish<a/>
 <a href="./readme_eng.md">English<a/>
 </p><br/>

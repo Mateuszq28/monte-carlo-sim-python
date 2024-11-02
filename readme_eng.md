@@ -1,6 +1,8 @@
 <h1 align="center">monte-carlo-sim-python</h1>
 <p align="center">
 <i>Light simulation in 3D tissue using Monte Carlo method</i><br/>
+my own implementation<br/>
+author: Mateusz Miler<br/>
 <a href="./README.md">Polish<a/>
 <a href="./readme_eng.md">English<a/>
 </p><br/>
