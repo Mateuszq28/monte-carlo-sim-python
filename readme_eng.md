@@ -15,6 +15,7 @@ author: Mateusz Miler<br/>
 - [monte-carlo-sim-benchmark](https://github.com/Mateuszq28/monte-carlo-sim-benchmark) - simulations from literature (tiny, small, mc321), making arrays in `CUBES.json` format, post-processing and normalization, generating result tables, graphs, heat maps, 3D visualizations, heat maps
 - [monte-carlo-sim-tables](https://github.com/Mateuszq28/monte-carlo-sim-tables) - tables with statistics of photon transport distributions for all experiments
 - [CUBES](https://1drv.ms/f/c/7871da7edeb06dcc/Ei70d6guE4lBgMsf6FgGbJsBUcYmqrgZFZZxBHvQeMgqBQ) - results of the most important experiments saved in the unified CUBE.json format
+- [Drive](https://drive.google.com/drive/folders/1w5mu88Oztn0OJCEOYhBU6R8CN_KE6HxM?usp=sharing) - master's thesis text + all files
 
 ### Preparing the environment
 
