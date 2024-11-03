@@ -15,7 +15,7 @@ autor: Mateusz Miler<br/>
 - [monte-carlo-sim-benchmark](https://github.com/Mateuszq28/monte-carlo-sim-benchmark) - przykładowe symulacje z literatury (tiny, small, mc321) oraz ich porównanie z własną symulacją, zapis do jednolitego formatu `CUBES.json`, przetwarzanie końcowe i normalizacja, generowanie tabel porównawczych, wykresy, mapy ciepła, wizualizacje 3D, mapy ciepła
 - [monte-carlo-sim-tables](https://github.com/Mateuszq28/monte-carlo-sim-tables) - tabele ze statystykami rozkładów transportu fotonów dla przeprowadzonych eksperymentów
 - [CUBES](https://1drv.ms/f/c/7871da7edeb06dcc/Ei70d6guE4lBgMsf6FgGbJsBUcYmqrgZFZZxBHvQeMgqBQ) - wyniki najważniejszych eksperymentów zapisane w ujednoliconym formacie `CUBE.json`
-- [teskt pracy magisterskiej + wszystkie pliki](https://drive.google.com/drive/folders/1w5mu88Oztn0OJCEOYhBU6R8CN_KE6HxM?usp=sharing)
+- [Dysk](https://drive.google.com/drive/folders/1w5mu88Oztn0OJCEOYhBU6R8CN_KE6HxM?usp=sharing) - teskt pracy magisterskiej + wszystkie pliki
 
 ### Przygotowanie środowiska
 
