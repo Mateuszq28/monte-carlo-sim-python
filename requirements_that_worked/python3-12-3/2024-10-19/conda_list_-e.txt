@@ -80,7 +80,7 @@ packaging=24.1=pyhd8ed1ab_0
 pandas=2.2.2=py312h0158946_0
 pcre2=10.42=h0ff8eda_1
 pillow=10.4.0=py312h827c3e9_0
-pip=24.2=py312haa95532_0
+# pip=24.2=py312haa95532_0
 pixman=0.40.0=h2bbff1b_1
 ply=3.11=py312haa95532_1
 pybind11-abi=5=hd3eb1b0_0
